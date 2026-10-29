@@ -1318,8 +1318,9 @@ const dist2 = (ax, az, bx, bz) => { const dx = ax - bx, dz = az - bz; return dx 
 const angWrap = a => { while (a > Math.PI) a -= TAU; while (a < -Math.PI) a += TAU; return a; };
 function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 function hexc(h) { const n = parseInt(h.slice(1), 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255]; }
-function shade(c, k) { return [c[0] * k, c[1] * k, c[2] * k]; }
-function mixc(a, b, t) { return [lerp(a[0], b[0], t), lerp(a[1], b[1], t), lerp(a[2], b[2], t)]; }
+function shade(c, k) { const o = [c[0] * k, c[1] * k, c[2] * k]; if (c.tex) o.tex = c.tex; return o; }
+function mixc(a, b, t) { const o = [lerp(a[0], b[0], t), lerp(a[1], b[1], t), lerp(a[2], b[2], t)]; const tx = a.tex || b.tex; if (tx) o.tex = tx; return o; }
+const TEXIDX = {}; // texture name -> index (filled by TexGen)
 // cheap value noise
 function hash2(x, z) { const s = Math.sin(x * 127.1 + z * 311.7) * 43758.5453; return s - Math.floor(s); }
 function vnoise(x, z) {
@@ -1372,7 +1373,7 @@ const M4 = {
 
 /* ---------- Geometry builder (flat-shaded, vertex coloured) ---------- */
 class Geo {
-  constructor(seed) { this.d = []; this.m = M4.ident(); this.jit = 0.05; this.rng = mulberry32(seed || 7); this.emit = 0; }
+  constructor(seed) { this.d = []; this.m = M4.ident(); this.jit = 0.05; this.rng = mulberry32(seed || 7); this.emit = 0; this.tex = null; this.uvs = 1; this.noTex = false; }
   at(x, y, z, ry = 0, sx = 1, sy = 1, sz = 1, rx = 0, rz = 0) { M4.compose(this.m, x, y, z, rx, ry, rz, sx, sy, sz); return this; }
   reset() { this.m = M4.ident(); return this; }
   tri(a, b, c, col) {
@@ -1382,9 +1383,39 @@ class Geo {
     let nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx; const l = Math.hypot(nx, ny, nz) || 1; nx /= l; ny /= l; nz /= l;
     const k = 1 + (this.rng() - 0.5) * 2 * this.jit;
     const r = col[0] * k, g = col[1] * k, bb = col[2] * k;
-    this.d.push(A[0], A[1], A[2], nx, ny, nz, r, g, bb, B[0], B[1], B[2], nx, ny, nz, r, g, bb, C[0], C[1], C[2], nx, ny, nz, r, g, bb);
+    const tn = this.noTex ? null : (col.tex || this.tex); const ti = tn && TEXIDX[tn] !== undefined ? TEXIDX[tn] : -1;
+    // triplanar uv from the dominant normal axis (world units * uvs)
+    const ax = Math.abs(nx), ay = Math.abs(ny), az = Math.abs(nz); const s = this.uvs; const d = this.d;
+    const uv = ay >= ax && ay >= az ? (P => [P[0] * s, P[2] * s]) : ax >= az ? (P => [P[2] * s, P[1] * s]) : (P => [P[0] * s, P[1] * s]);
+    const ua = uv(A), ub = uv(B), uc = uv(C);
+    d.push(A[0], A[1], A[2], nx, ny, nz, r, g, bb, ua[0], ua[1], ti, B[0], B[1], B[2], nx, ny, nz, r, g, bb, ub[0], ub[1], ti, C[0], C[1], C[2], nx, ny, nz, r, g, bb, uc[0], uc[1], ti);
+  }
+  // quad with explicit uv rectangle (for cutout sprites such as grass tufts)
+  quadUV(a, b, c, dd, col, tex, u0 = 0, v0 = 0, u1 = 1, v1 = 1) {
+    const keep = this.tex, kn = this.noTex; this.tex = tex; this.noTex = false; const n0 = this.d.length;
+    this.tri(a, b, c, col); this.tri(a, c, dd, col); const d = this.d; const U = [[u0, v0], [u1, v0], [u1, v1], [u0, v0], [u1, v1], [u0, v1]];
+    for (let i = 0; i < 6; i++) { d[n0 + i * 12 + 9] = U[i][0]; d[n0 + i * 12 + 10] = U[i][1]; }
+    this.tex = keep; this.noTex = kn;
+  }
+  // weld coincident vertices and average their normals when faces meet at less than maxDeg
+  smoothNormals(maxDeg = 60) {
+    const d = this.d, n = d.length / 12, map = new Map(), cosT = Math.cos(maxDeg * Math.PI / 180);
+    const key = i => (Math.round(d[i * 12] * 200) + ',' + Math.round(d[i * 12 + 1] * 200) + ',' + Math.round(d[i * 12 + 2] * 200));
+    for (let i = 0; i < n; i++) { const k = key(i); let l = map.get(k); if (!l) { l = []; map.set(k, l); } l.push(i); }
+    const out = new Float32Array(n * 3);
+    for (const l of map.values()) {
+      for (const i of l) {
+        let sx = 0, sy = 0, sz = 0; const nx = d[i * 12 + 3], ny = d[i * 12 + 4], nz = d[i * 12 + 5];
+        for (const j of l) { const mx = d[j * 12 + 3], my = d[j * 12 + 4], mz = d[j * 12 + 5]; if (nx * mx + ny * my + nz * mz >= cosT) { sx += mx; sy += my; sz += mz; } }
+        const L = Math.hypot(sx, sy, sz) || 1; out[i * 3] = sx / L; out[i * 3 + 1] = sy / L; out[i * 3 + 2] = sz / L;
+      }
+    }
+    for (let i = 0; i < n; i++) { d[i * 12 + 3] = out[i * 3]; d[i * 12 + 4] = out[i * 3 + 1]; d[i * 12 + 5] = out[i * 3 + 2]; }
+    return this;
   }
   quad(a, b, c, d, col) { this.tri(a, b, c, col); this.tri(a, c, d, col); }
+  // triangle with a colour per vertex (smooth ground blending)
+  triC(a, b, c, ca, cb, cc) { const n0 = this.d.length; this.tri(a, b, c, ca); const d = this.d; const k = 1 + (this.rng() - .5) * 2 * this.jit; for (let v = 0; v < 3; v++) { const col = [ca, cb, cc][v]; d[n0 + v * 12 + 6] = col[0] * k; d[n0 + v * 12 + 7] = col[1] * k; d[n0 + v * 12 + 8] = col[2] * k; } }
   box(cx, cy, cz, w, h, d, col, top) {
     const x0 = cx - w / 2, x1 = cx + w / 2, y0 = cy - h / 2, y1 = cy + h / 2, z0 = cz - d / 2, z1 = cz + d / 2;
     const t = top || col, s = shade(col, 0.92);
@@ -1447,17 +1478,19 @@ class Geo {
 
 /* ---------- Renderer ---------- */
 const SH = {
-  litV: `attribute vec3 aP;attribute vec3 aN;attribute vec3 aC;uniform mat4 uVP;uniform mat4 uM;varying vec3 vC;varying vec3 vN;varying vec3 vW;
-void main(){vec4 w=uM*vec4(aP,1.);vW=w.xyz;vN=(uM*vec4(aN,0.)).xyz;vC=aC;gl_Position=uVP*w;}`,
-  litF: `precision highp float;varying vec3 vC;varying vec3 vN;varying vec3 vW;
-uniform vec3 uSun,uSunC,uSky,uGnd,uFogC,uCam,uEmis;uniform vec2 uFog;uniform vec4 uTint;uniform float uFlash,uAlpha,uTime,uWave;
+  litV: `attribute vec3 aP;attribute vec3 aN;attribute vec3 aC;attribute vec2 aUV;uniform mat4 uVP;uniform mat4 uM;uniform float uOut;varying vec3 vC;varying vec3 vN;varying vec3 vW;varying vec2 vUV;
+void main(){vec4 w=uM*vec4(aP+aN*uOut,1.);vW=w.xyz;vN=(uM*vec4(aN,0.)).xyz;vC=aC;vUV=aUV;gl_Position=uVP*w;}`,
+  litF: `precision highp float;varying vec3 vC;varying vec3 vN;varying vec3 vW;varying vec2 vUV;
+uniform vec3 uSun,uSunC,uSky,uGnd,uFogC,uCam,uEmis,uOutC;uniform vec2 uFog;uniform vec4 uTint;uniform float uFlash,uAlpha,uTime,uWave,uHasTex,uOut,uToon;uniform sampler2D uTex;
 uniform vec4 uPL[6];uniform vec3 uPC[6];
-void main(){vec3 n=normalize(vN);float d=max(dot(n,uSun),0.);vec3 l=mix(uGnd,uSky,n.y*.5+.5)+uSunC*d;
+void main(){if(uOut>0.){gl_FragColor=vec4(uOutC,uAlpha);return;}
+vec4 t=uHasTex>.5?texture2D(uTex,vUV):vec4(.8,.8,.8,1.);if(t.a<.4)discard;
+vec3 n=normalize(vN);float d=max(dot(n,uSun),0.);d=mix(d,smoothstep(.05,.55,d)*.85+d*.15,uToon);vec3 l=mix(uGnd,uSky,n.y*.5+.5)+uSunC*d;
 for(int i=0;i<6;i++){vec3 L=uPL[i].xyz-vW;float ds=length(L);float at=max(0.,1.-ds/max(uPL[i].w,.001));at*=at;l+=uPC[i]*at*(.35+.65*max(dot(n,L/max(ds,.001)),0.));}
-vec3 c=vC*uTint.rgb;
+vec3 c=vC*uTint.rgb*t.rgb*1.25;
 if(uWave>0.){float w=sin(vW.x*.7+uTime*1.6)*sin(vW.z*.9-uTime*1.1);c+=vec3(.08,.12,.14)*w+vec3(.15)*smoothstep(.75,1.,w);}
-c=c*l+uEmis;c=mix(c,vec3(1.,1.,.95),uFlash);
-float f=clamp((length(vW-uCam)-uFog.x)/(uFog.y-uFog.x),0.,1.);c=mix(c,uFogC,f);gl_FragColor=vec4(c,uAlpha);}`,
+c=c*l+uEmis;float lum=dot(c,vec3(.299,.587,.114));c=mix(vec3(lum),c,1.18);c=c*(1.04-.08*smoothstep(.0,.3,lum));c=mix(c,vec3(1.,1.,.95),uFlash);
+float f=clamp((length(vW-uCam)-uFog.x)/(uFog.y-uFog.x),0.,1.);c=mix(c,uFogC,f);gl_FragColor=vec4(c,uAlpha*t.a);}`,
   sprV: `attribute vec2 aC;uniform mat4 uVP;uniform vec3 uPos,uRight,uUp;uniform vec2 uSize;uniform vec4 uUV;uniform float uFlip;uniform vec4 uAnim;uniform vec2 uAnim2;varying vec2 vUV;varying vec3 vW;
 void main(){
  float ph=uAnim.x,amp=uAnim.y,lean=uAnim.z,br=uAnim.w,stride=uAnim2.x,sq=uAnim2.y;
@@ -1490,8 +1523,14 @@ gl_FragColor=vec4(uCol.rgb,uCol.a*a);}`,
   ptV: `attribute vec3 aP;attribute float aS;attribute vec4 aCol;uniform mat4 uVP;uniform float uScale;varying vec4 vCol;
 void main(){vec4 p=uVP*vec4(aP,1.);gl_Position=p;gl_PointSize=clamp(aS*uScale/max(p.w,.1),1.,96.);vCol=aCol;}`,
   ptF: `precision mediump float;varying vec4 vCol;void main(){vec2 d=gl_PointCoord-.5;float r=length(d)*2.;if(r>1.)discard;float a=(1.-r);a*=a;gl_FragColor=vec4(vCol.rgb*vCol.a*a,0.);}`,
-  skyV: `attribute vec2 aC;varying float vY;void main(){vY=aC.y*.5+.5;gl_Position=vec4(aC,.9999,1.);}`,
-  skyF: `precision mediump float;varying float vY;uniform vec3 uTop,uBot;void main(){gl_FragColor=vec4(mix(uBot,uTop,smoothstep(.25,1.,vY)),1.);}`
+  skyV: `attribute vec2 aC;varying vec2 vP;uniform vec3 uF,uRt,uUp;uniform vec2 uTan;varying vec3 vDir;void main(){vP=aC;vDir=uF+uRt*aC.x*uTan.x+uUp*aC.y*uTan.y;gl_Position=vec4(aC,.9999,1.);}`,
+  skyF: `precision highp float;varying vec2 vP;varying vec3 vDir;uniform vec3 uTop,uBot,uSun;uniform float uTime,uCloud;
+float h2(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h2(i),h2(i+vec2(1.,0.)),f.x),mix(h2(i+vec2(0.,1.)),h2(i+vec2(1.,1.)),f.x),f.y);}
+void main(){vec3 d=normalize(vDir);float y=clamp(d.y,-.1,1.);vec3 c=mix(uBot,uTop,smoothstep(-.05,.5,y));
+float sd=max(dot(d,uSun),0.);c+=vec3(1.,.9,.7)*pow(sd,180.)*1.2+vec3(1.,.8,.5)*pow(sd,8.)*.18;
+if(uCloud>0.&&d.y>.02){vec2 uv=d.xz/(d.y+.12)*1.6+vec2(uTime*.012,uTime*.004);float n=vn(uv)*.55+vn(uv*2.3+3.)*.3+vn(uv*5.1+9.)*.15;float cl=smoothstep(.5,.68,n)*uCloud*smoothstep(.02,.18,d.y);vec3 cc=mix(vec3(.85,.87,.92),vec3(1.,1.,1.),smoothstep(.6,.9,n));c=mix(c,cc,cl*.9);}
+gl_FragColor=vec4(c,1.);}`
 };
 
 class Renderer {
@@ -1530,7 +1569,24 @@ class Renderer {
     return { p, u, a };
   }
   buf(data) { const gl = this.gl, b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW); return b; }
-  mesh(geo) { return { b: this.buf(new Float32Array(geo.d)), n: geo.d.length / 9 }; }
+  mesh(geo) {
+    const d = geo.d, nt = d.length / 36; let mixed = false; const t0 = d[11];
+    for (let i = 0; i < nt && !mixed; i++) if (d[i * 36 + 11] !== t0) mixed = true;
+    if (!mixed) return { b: this.buf(new Float32Array(d)), n: nt * 3, parts: [{ t: t0 === undefined ? -1 : t0, s: 0, n: nt * 3 }] };
+    // group triangles by texture so each range binds one texture
+    const groups = new Map(); for (let i = 0; i < nt; i++) { const t = d[i * 36 + 11]; let l = groups.get(t); if (!l) { l = []; groups.set(t, l); } l.push(i); }
+    const out = new Float32Array(d.length); const parts = []; let o = 0;
+    for (const [t, l] of groups) { parts.push({ t, s: o / 12, n: l.length * 3 }); for (const i of l) { out.set(d.slice(i * 36, i * 36 + 36), o); o += 36; } }
+    return { b: this.buf(out), n: nt * 3, parts };
+  }
+  texRepeat(img) {
+    const gl = this.gl, t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img); gl.generateMipmap(gl.TEXTURE_2D);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+    const ext = gl.getExtension('EXT_texture_filter_anisotropic'); if (ext) gl.texParameterf(gl.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 4);
+    return t;
+  }
   texture(img) {
     const gl = this.gl, t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
@@ -1563,7 +1619,7 @@ class Renderer {
     gl.clearColor(...this.env.fogC, 1); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     // sky
     const S = this.P.sky; gl.useProgram(S.p); gl.disable(gl.DEPTH_TEST);
-    gl.uniform3fv(S.u.uTop, this.env.top); gl.uniform3fv(S.u.uBot, this.env.bot);
+    gl.uniform3fv(S.u.uTop, this.env.top); gl.uniform3fv(S.u.uBot, this.env.bot); { const ty = Math.tan((this.fov || .85) / 2), tx = ty * this.cv.width / this.cv.height; gl.uniform3fv(S.u.uF, this.camFwd); gl.uniform3fv(S.u.uRt, this.camRight); gl.uniform3fv(S.u.uUp, this.camUp); gl.uniform2f(S.u.uTan, tx, ty); } gl.uniform3fv(S.u.uSun, this.env.sun); gl.uniform1f(S.u.uTime, this.time); gl.uniform1f(S.u.uCloud, this.env.cloud === undefined ? 1 : this.env.cloud);
     this.attr(S.a.aC, this.skyBuf, 2, 0, 0); gl.drawArrays(gl.TRIANGLES, 0, 3); this.off(S.a.aC);
     gl.enable(gl.DEPTH_TEST);
   }
@@ -1575,7 +1631,12 @@ class Renderer {
     gl.uniform3fv(L.u.uSun, e.sun); gl.uniform3fv(L.u.uSunC, e.sunC); gl.uniform3fv(L.u.uSky, e.sky); gl.uniform3fv(L.u.uGnd, e.gnd);
     gl.uniform3fv(L.u.uFogC, e.fogC); gl.uniform2fv(L.u.uFog, e.fog); gl.uniform3fv(L.u.uCam, this.cam);
     gl.uniform4fv(L.u.uPL, this.pl); gl.uniform3fv(L.u.uPC, this.pc); gl.uniform1f(L.u.uTime, this.time);
+    gl.uniform1f(L.u.uOut, 0); gl.uniform1f(L.u.uToon, this.toon === undefined ? .6 : this.toon); gl.activeTexture(gl.TEXTURE0); gl.uniform1i(L.u.uTex, 0); this.curLitTex = null;
     this.litState = L;
+  }
+  bindTex(i) {
+    const gl = this.gl, L = this.litState; const t = i >= 0 && this.texs ? this.texs[i] : null;
+    if (t !== this.curLitTex) { this.curLitTex = t; if (t) gl.bindTexture(gl.TEXTURE_2D, t); gl.uniform1f(L.u.uHasTex, t ? 1 : 0); }
   }
   drawMesh(mesh, M, tint, emis, flash = 0, alpha = 1, wave = 0) {
     const gl = this.gl, L = this.litState;
@@ -1583,10 +1644,23 @@ class Renderer {
     gl.uniform4f(L.u.uTint, tint ? tint[0] : 1, tint ? tint[1] : 1, tint ? tint[2] : 1, 1);
     gl.uniform3fv(L.u.uEmis, emis || ZERO3); gl.uniform1f(L.u.uFlash, flash); gl.uniform1f(L.u.uAlpha, alpha); gl.uniform1f(L.u.uWave, wave);
     gl.bindBuffer(gl.ARRAY_BUFFER, mesh.b);
-    gl.enableVertexAttribArray(L.a.aP); gl.vertexAttribPointer(L.a.aP, 3, gl.FLOAT, false, 36, 0);
-    gl.enableVertexAttribArray(L.a.aN); gl.vertexAttribPointer(L.a.aN, 3, gl.FLOAT, false, 36, 12);
-    gl.enableVertexAttribArray(L.a.aC); gl.vertexAttribPointer(L.a.aC, 3, gl.FLOAT, false, 36, 24);
-    gl.drawArrays(gl.TRIANGLES, 0, mesh.n);
+    gl.enableVertexAttribArray(L.a.aP); gl.vertexAttribPointer(L.a.aP, 3, gl.FLOAT, false, 48, 0);
+    gl.enableVertexAttribArray(L.a.aN); gl.vertexAttribPointer(L.a.aN, 3, gl.FLOAT, false, 48, 12);
+    gl.enableVertexAttribArray(L.a.aC); gl.vertexAttribPointer(L.a.aC, 3, gl.FLOAT, false, 48, 24);
+    gl.enableVertexAttribArray(L.a.aUV); gl.vertexAttribPointer(L.a.aUV, 2, gl.FLOAT, false, 48, 36);
+    const parts = mesh.parts; if (!parts || parts.length === 1) { this.bindTex(parts ? parts[0].t : -1); gl.drawArrays(gl.TRIANGLES, 0, mesh.n); return; }
+    for (const p of parts) { this.bindTex(p.t); gl.drawArrays(gl.TRIANGLES, p.s, p.n); }
+  }
+  // toon outline: inverted hull pushed along normals
+  drawOutline(mesh, M, w = .022, col = OUTLINE_COL, alpha = 1) {
+    const gl = this.gl, L = this.litState; if (this.noOutline) return;
+    gl.uniformMatrix4fv(L.u.uM, false, M || IDM); gl.uniform1f(L.u.uOut, w); gl.uniform3fv(L.u.uOutC, col); gl.uniform1f(L.u.uAlpha, alpha); gl.cullFace(gl.FRONT);
+    gl.bindBuffer(gl.ARRAY_BUFFER, mesh.b);
+    gl.enableVertexAttribArray(L.a.aP); gl.vertexAttribPointer(L.a.aP, 3, gl.FLOAT, false, 48, 0);
+    gl.enableVertexAttribArray(L.a.aN); gl.vertexAttribPointer(L.a.aN, 3, gl.FLOAT, false, 48, 12);
+    gl.enableVertexAttribArray(L.a.aC); gl.vertexAttribPointer(L.a.aC, 3, gl.FLOAT, false, 48, 24);
+    gl.enableVertexAttribArray(L.a.aUV); gl.vertexAttribPointer(L.a.aUV, 2, gl.FLOAT, false, 48, 36);
+    gl.drawArrays(gl.TRIANGLES, 0, mesh.n); gl.cullFace(gl.BACK); gl.uniform1f(L.u.uOut, 0);
   }
   useSprite() {
     const gl = this.gl, S = this.P.spr, e = this.env; gl.useProgram(S.p);
@@ -1645,7 +1719,59 @@ class Renderer {
     if (cw <= 0.1) return null; return { x: (cx / cw * 0.5 + 0.5) * this.cv.clientWidth, y: (1 - (cy / cw * 0.5 + 0.5)) * this.cv.clientHeight, w: cw };
   }
 }
-const IDM = M4.ident(); const ZERO3 = new Float32Array(3);
+const IDM = M4.ident(); const ZERO3 = new Float32Array(3); const OUTLINE_COL = new Float32Array([.1, .07, .08]);
+
+/* ============================================================
+   Procedural tileable detail textures (multiplied over vertex colours)
+   ============================================================ */
+const TEX_NAMES = ['grass', 'rough', 'cobble', 'planks', 'tiles', 'bark', 'leaves', 'plaster', 'water', 'cloth', 'metal', 'leather', 'brick', 'thatch', 'tuft', 'moss', 'sand', 'scales'];
+TEX_NAMES.forEach((n, i) => TEXIDX[n] = i);
+const TexGen = {
+  size: 256, canv: {},
+  // periodic value noise on a lattice of period P cells
+  pn(x, y, P) {
+    const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi; const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+    const h = (a, b) => hash2(((a % P) + P) % P, ((b % P) + P) % P);
+    return lerp(lerp(h(xi, yi), h(xi + 1, yi), u), lerp(h(xi, yi + 1), h(xi + 1, yi + 1), u), v);
+  },
+  fbm(x, y, P, oct = 4) { let a = 0, w = .5, s = 0, f = 1; for (let i = 0; i < oct; i++) { a += this.pn(x * f, y * f, P * f) * w; s += w; w *= .5; f *= 2; } return a / s; },
+  make(name, fn) {
+    const N = this.size; const cv = document.createElement('canvas'); cv.width = cv.height = N; const ctx = cv.getContext('2d'); const img = ctx.createImageData(N, N); const d = img.data;
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) { const o = (y * N + x) * 4; const c = fn(x / N, y / N, x, y); d[o] = clamp(c[0], 0, 1) * 255; d[o + 1] = clamp(c[1], 0, 1) * 255; d[o + 2] = clamp(c[2], 0, 1) * 255; d[o + 3] = (c[3] === undefined ? 1 : clamp(c[3], 0, 1)) * 255; }
+    ctx.putImageData(img, 0, 0); this.canv[name] = cv; return cv;
+  },
+  gray(v, t) { return t ? [v * t[0], v * t[1], v * t[2]] : [v, v, v]; },
+  build() {
+    if (this._built) return; this._built = true; const T = this;
+    // cells helper: jittered grid Voronoi (F1, F2, cell id)
+    const vor = (u, v, n) => { const gx = u * n, gy = v * n; const ix = Math.floor(gx), iy = Math.floor(gy); let f1 = 9, f2 = 9, id = 0; for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) { const cx = ix + i, cy = iy + j; const wx = ((cx % n) + n) % n, wy = ((cy % n) + n) % n; const px = cx + .2 + hash2(wx, wy) * .6, py = cy + .2 + hash2(wy + 7, wx + 3) * .6; const d = Math.hypot(px - gx, py - gy); if (d < f1) { f2 = f1; f1 = d; id = wx * 31 + wy; } else if (d < f2) f2 = d; } return [f1, f2, id]; };
+    T.make('grass', (u, v) => { const n = T.fbm(u * 6, v * 6, 6, 4); const blade = Math.pow(T.pn(u * 48, v * 9, 48), 2.5) * .35; const b2 = Math.pow(T.pn(u * 24 + 3, v * 40, 24), 3) * .25; const g = .72 + n * .3 + blade + b2; return [g * .97, g * 1.02, g * .9]; });
+    T.make('rough', (u, v) => { const n = T.fbm(u * 5, v * 5, 5, 5); const sp = T.pn(u * 64, v * 64, 64) > .82 ? .12 : 0; const g = .7 + n * .35 + sp; return [g, g * .99, g * .96]; });
+    T.make('sand', (u, v) => { const n = T.fbm(u * 8, v * 8, 8, 3); const rip = Math.sin((u * 10 + T.pn(u * 4, v * 4, 4) * 1.5) * TAU) * .04; const g = .8 + n * .18 + rip; return [g, g, g * .97]; });
+    T.make('cobble', (u, v) => { const [f1, f2, id] = vor(u, v, 5); const edge = smoothstepF(0, .09, f2 - f1); const sh = .74 + hash2(id, 3) * .22 + T.fbm(u * 10, v * 10, 10, 3) * .14; const g = lerp(.42, sh, edge) * (1 - f1 * .18); return [g, g * .98, g * .95]; });
+    T.make('planks', (u, v) => { const row = Math.floor(v * 4); const off = (row % 2) * .5; const px = (u + off) % 1; const seamV = Math.min(1, Math.abs(v * 4 - Math.round(v * 4)) * 22); const seamU = Math.min(1, Math.abs(px - Math.round(px)) * 24); const grain = T.pn(u * 3 + row * 7, v * 60, 60) * .25 + T.fbm(u * 2 + row, v * 12, 12, 2) * .2; const g = (.7 + grain) * Math.min(seamV, seamU) * .8 + .2; return [g, g * .95, g * .88]; });
+    T.make('tiles', (u, v) => { const rows = 6; const r = Math.floor(v * rows); const off = (r % 2) * .5; const cx = (((u + off) * rows) % 1) - .5; const vy = (v * rows) % 1; const arc = Math.sqrt(Math.max(0, .25 - cx * cx)); const inTile = vy < .15 + arc * .7; const sh = inTile ? .75 + (vy * .6) + T.pn(u * 30, v * 30, 30) * .1 : .42; const edge = Math.abs(cx) > .47 ? .55 : 1; return [sh * edge, sh * edge * .97, sh * edge * .95]; });
+    T.make('bark', (u, v) => { const n = T.fbm(u * 10, v * 2.5, 10, 4); const st = Math.pow(T.pn(u * 40, v * 3, 40), 1.6); const g = .55 + n * .35 + st * .25; return [g, g * .96, g * .9]; });
+    T.make('leaves', (u, v) => { const [f1, f2, id] = vor(u, v, 7); const n = T.fbm(u * 8, v * 8, 8, 3); const blob = smoothstepF(.05, .25, f2 - f1); const g = .62 + hash2(id, 11) * .2 + n * .2 + blob * .12; return [g * .95, g * 1.04, g * .92]; });
+    T.make('plaster', (u, v) => { const n = T.fbm(u * 12, v * 12, 12, 4); const g = .84 + n * .14; return [g, g, g * .98]; });
+    T.make('water', (u, v) => { const w = Math.sin((u * 6 + v * 3) * TAU + T.pn(u * 5, v * 5, 5) * 3) * .5 + .5; const n = T.fbm(u * 6, v * 6, 6, 3); const g = .78 + w * .18 + n * .1; return [g * .95, g, g * 1.05]; });
+    T.make('cloth', (u, v) => { const wv = (Math.sin(u * 128 * TAU) * .5 + .5) * .08 + (Math.sin(v * 128 * TAU) * .5 + .5) * .08; const n = T.fbm(u * 8, v * 8, 8, 2) * .08; return T.gray(.84 + wv + n); });
+    T.make('metal', (u, v) => { const br = T.pn(u * 4, v * 200, 200) * .12; const sc = T.pn(u * 90, v * 90, 90) > .9 ? .1 : 0; const n = T.fbm(u * 3, v * 3, 3, 2) * .1; return T.gray(.8 + br + sc + n); });
+    T.make('leather', (u, v) => { const [f1, f2] = vor(u, v, 14); const n = T.fbm(u * 10, v * 10, 10, 3); const g = .74 + n * .2 + smoothstepF(0, .25, f2 - f1) * .1; return [g, g * .97, g * .93]; });
+    T.make('brick', (u, v) => { const rows = 8; const r = Math.floor(v * rows); const off = (r % 2) * .5; const bx = ((u + off) * 4) % 1; const by = (v * rows) % 1; const mortar = bx < .06 || by < .12; const n = T.fbm(u * 16, v * 16, 16, 3); const g = mortar ? .55 + n * .1 : .74 + n * .22 + hash2(Math.floor((u + off) * 4), r) * .1; return [g, g * .96, g * .92]; });
+    T.make('thatch', (u, v) => { const s = Math.pow(T.pn(u * 70 + v * 20, v * 6, 70), 1.4); const n = T.fbm(u * 6, v * 6, 6, 3); const g = .6 + s * .4 + n * .12; return [g, g * .95, g * .8]; });
+    T.make('moss', (u, v) => { const n = T.fbm(u * 7, v * 7, 7, 4); const m = smoothstepF(.45, .7, T.fbm(u * 3 + 5, v * 3, 3, 3)); const g = .72 + n * .3; return [g * lerp(1, .8, m), g * lerp(1, 1.06, m), g * lerp(.96, .72, m)]; });
+    T.make('scales', (u, v) => { const rows = 10; const r = Math.floor(v * rows); const off = (r % 2) * .5; const cx = (((u + off) * rows) % 1) - .5; const vy = (v * rows) % 1; const d = Math.hypot(cx, vy - .55); const g = d < .5 ? .72 + (1 - d) * .25 : .5; return [g, g, g * .96]; });
+    T.make('tuft', (u, v) => { // alpha cutout grass blades
+      let a = 0, sh = 0; for (let i = 0; i < 7; i++) { const bx = .1 + i * .13 + hash2(i, 2) * .06; const w = .035 * (1 - v) + .004; const lean = (hash2(i, 5) - .5) * .25 * (1 - v); const h = .55 + hash2(i, 9) * .45; if (v > 1 - h && Math.abs(u - bx - lean * (1 - v) / h) < w) { a = 1; sh = Math.max(sh, .55 + hash2(i, 3) * .35 + (1 - v) * .2); } }
+      return [sh * .95, sh * 1.05, sh * .8, a]; });
+  },
+  // GL textures for a renderer
+  init(R) { this.build(); R.texs = TEX_NAMES.map(n => R.texRepeat(this.canv[n])); }
+};
+function smoothstepF(a, b, x) { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); }
+/* material tags on shared palettes */
+function tagTex(col, tex) { if (col && !col.tex) col.tex = tex; return col; }
 
 /* ============================================================
    Game data: classes, skills, items, monsters, quests, quiz
@@ -2658,6 +2784,7 @@ const PAL = {
   wood: hexc('#8a6240'), wood2: hexc('#6d4a2f'), dark: hexc('#3a3029'), water: hexc('#3c8fc4'), cloth1: hexc('#d4483b'), cloth2: hexc('#f2e6c8'), cloth3: hexc('#3e7cc0'), gold: hexc('#e2b54a'),
   dstone: hexc('#4a4558'), dstone2: hexc('#3b3748'), dfloor: hexc('#57526a'), cry1: hexc('#6fe0f0'), cry2: hexc('#b07cf0')
 };
+{ const T = { bark: ['trunk'], leaves: ['leaf', 'leaf2', 'pine', 'pine2'], plaster: ['wall', 'wallTop', 'plaster', 'plaster2', 'plaster3'], tiles: ['roofR', 'roofB', 'roofT', 'roofP'], planks: ['wood', 'wood2'], cobble: ['stone', 'stone2', 'plaza'], rough: ['rock', 'dstone', 'dstone2', 'dfloor', 'dirt', 'path', 'snow'], sand: ['sand'], cloth: ['cloth1', 'cloth2', 'cloth3'], grass: ['grass', 'grass2', 'forest', 'forest2'], water: ['water'] }; for (const t in T) for (const k of T[t]) tagTex(PAL[k], t); }
 
 function groundColor(x, z, h) {
   const n = vnoise(x * .08, z * .08), n2 = vnoise(x * .31 + 9, z * .31);
@@ -2679,19 +2806,28 @@ function groundColor(x, z, h) {
   return c;
 }
 
+function groundTex(x, z, h) {
+  if (Math.hypot(x - TOWN.x, z - TOWN.z) < TOWN.r + 1) return 'cobble';
+  if (h > 2.5) return 'rough'; if (h < -0.5 || Math.abs(z - 4) < 7) return 'sand';
+  if (pathDist(x, z) < 2.4) return 'rough';
+  return 'grass';
+}
 function buildGround(g) {
   const S = 4, X0 = -224, X1 = 224, Z0 = -224, Z1 = 224;
   const nx = (X1 - X0) / S, nz = (Z1 - Z0) / S;
   const H = [], C = [];
-  for (let i = 0; i <= nx; i++) { H[i] = []; C[i] = []; for (let j = 0; j <= nz; j++) { const x = X0 + i * S, z = Z0 + j * S; const h = worldHeight(x, z); H[i][j] = h; C[i][j] = groundColor(x, z, h); } }
-  g.jit = 0.02;
+  for (let i = 0; i <= nx; i++) { H[i] = []; C[i] = []; for (let j = 0; j <= nz; j++) { const x = X0 + i * S, z = Z0 + j * S; const h = worldHeight(x, z); H[i][j] = h; const c = groundColor(x, z, h); C[i][j] = [c[0], c[1], c[2]]; } }
+  g.jit = 0.02; g.uvs = .5; const keepTex = g.tex;
+  const gg = new Geo(5); gg.jit = .02; gg.uvs = .5;
   for (let i = 0; i < nx; i++) for (let j = 0; j < nz; j++) {
     const x0 = X0 + i * S, z0 = Z0 + j * S, x1 = x0 + S, z1 = z0 + S;
     const a = [x0, H[i][j], z0], b = [x1, H[i + 1][j], z0], c = [x1, H[i + 1][j + 1], z1], d = [x0, H[i][j + 1], z1];
     const ca = C[i][j], cb = C[i + 1][j], cc = C[i + 1][j + 1], cd = C[i][j + 1];
-    g.tri(d, c, b, mixc(mixc(cd, cc, .5), cb, .33)); g.tri(d, b, a, mixc(mixc(cd, cb, .5), ca, .33));
+    gg.tex = groundTex(x0 + S / 2, z0 + S / 2, (H[i][j] + H[i + 1][j + 1]) / 2);
+    gg.triC(d, c, b, cd, cc, cb); gg.triC(d, b, a, cd, cb, ca);
   }
-  g.jit = 0.05;
+  gg.smoothNormals(80); for (let k = 0; k < gg.d.length; k++) g.d.push(gg.d[k]);
+  g.jit = 0.05; g.uvs = 1; g.tex = keepTex;
 }
 
 function addTree(g, x, z, kind, s, rng) {
@@ -3069,6 +3205,7 @@ const TPAL = {
   wood: hexc('#6a4a30'), wood2: hexc('#4e3423'), woodD: hexc('#3a281c'), bark: hexc('#54463a'), leaf: hexc('#2f4a2c'), leaf2: hexc('#3b5a33'), leaf3: hexc('#4d7340'),
   ruin: hexc('#9b5a42'), ruin2: hexc('#7d4634'), moss: hexc('#4d6a3a'), bone: hexc('#d8d0bc'), water: hexc('#2e5a6e')
 };
+{ const T = { grass: ['grass', 'grass2'], sand: ['sand', 'sand2'], brick: ['brick', 'brick2', 'ruin', 'ruin2'], rough: ['stone', 'mud', 'dry', 'dark'], plaster: ['wallW', 'wallW2', 'plaster'], tiles: ['tile', 'tile2', 'tileG', 'red'], metal: ['gold', 'gold2'], planks: ['wood', 'wood2', 'woodD'], bark: ['bark'], leaves: ['leaf', 'leaf2', 'leaf3'], moss: ['moss'], water: ['water'] }; for (const t in T) for (const k of T[t]) tagTex(TPAL[k], t); }
 function templeColor(lx, z, h) {
   const n = vnoise(lx * .09 + 30, z * .09), n2 = vnoise(lx * .3, z * .3 + 7);
   let c = mixc(TPAL.grass, TPAL.grass2, n);
@@ -3449,12 +3586,15 @@ function buildTempleZone(R) {
   // ground
   const S = 4, X0 = -112, X1 = 112, Z0 = -112, Z1 = 112, nx = (X1 - X0) / S, nz = (Z1 - Z0) / S, H = [], C = [];
   for (let i = 0; i <= nx; i++) { H[i] = []; C[i] = []; for (let j = 0; j <= nz; j++) { const lx = X0 + i * S, z = Z0 + j * S; const h = templeHeight(lx, z); H[i][j] = h; C[i][j] = templeColor(lx, z, h); } }
-  g.jit = .03;
+  const gg = new Geo(76); gg.jit = .02; gg.uvs = .5;
+  const tTex = (lx, z, h) => { if (Math.abs(lx) < 13.5 && z < 17.5 && z > -21.5) return 'cobble'; if (tPathDist(lx, z) < 1.4) return 'brick'; if (h < -.4) return 'rough'; if (z > 14 && z < 55 && Math.abs(lx) < 37) return 'sand'; return 'grass'; };
   for (let i = 0; i < nx; i++) for (let j = 0; j < nz; j++) {
     const x0 = TX + X0 + i * S, z0 = Z0 + j * S, x1 = x0 + S, z1 = z0 + S;
     const a = [x0, H[i][j], z0], b = [x1, H[i + 1][j], z0], c = [x1, H[i + 1][j + 1], z1], d = [x0, H[i][j + 1], z1];
-    g.tri(d, c, b, mixc(mixc(C[i][j + 1], C[i + 1][j + 1], .5), C[i + 1][j], .33)); g.tri(d, b, a, mixc(mixc(C[i][j + 1], C[i + 1][j], .5), C[i][j], .33));
+    const st = v => [v[0], v[1], v[2]]; gg.tex = tTex(X0 + i * S + S / 2, z0 + S / 2, (H[i][j] + H[i + 1][j + 1]) / 2);
+    gg.triC(d, c, b, st(C[i][j + 1]), st(C[i + 1][j + 1]), st(C[i + 1][j])); gg.triC(d, b, a, st(C[i][j + 1]), st(C[i + 1][j]), st(C[i][j]));
   }
+  gg.smoothNormals(80); for (let k = 0; k < gg.d.length; k++) g.d.push(gg.d[k]);
   g.jit = .05;
   tBuildUbosot(g, gw); tBuildChedi(g, gw, rng); tBuildViharn(g, rng); tBuildTakhian(g, gw, rng); tBuildBodhi(g, rng); tBuildBanana(g, rng); tBuildBamboo(g, rng);
   tBuildKuti(g, gw, rng); tBuildMeru(g, gw, rng); tBuildChineseGraves(g, gw, rng); tBuildPond(g, w, rng); tBuildCanal(g, w, gw, rng); tBuildSmall(g, gw, rng);
@@ -4100,6 +4240,7 @@ const CHAR_COL = {
   hair: hexc('#9ee63e'), hair2: hexc('#72c42c'), hair3: hexc('#cdf56a'), skin: hexc('#ffe1c8'), blush: hexc('#f3a6a0'), eye: hexc('#5a2a10'), iris: hexc('#d08a2c'), white: [1, 1, 1], mouth: hexc('#9a3a2a'),
   gold: hexc('#d9a845'), steel: hexc('#c9ced8'), steel2: hexc('#9aa1ae'), wood: hexc('#8a6240'), leather: hexc('#6b4428')
 };
+tagTex(CHAR_COL.gold, 'metal'); tagTex(CHAR_COL.steel, 'metal'); tagTex(CHAR_COL.steel2, 'metal'); tagTex(CHAR_COL.wood, 'planks'); tagTex(CHAR_COL.leather, 'leather');
 const OUTFITS = {
   adventurer: { shirt: hexc('#e6d2a6'), sleeve: hexc('#e6d2a6'), pants: hexc('#5a3a22'), boot: hexc('#7a4c2a'), glove: hexc('#6b4428'), belt: hexc('#6a4428'), cape: hexc('#8a5a32'), capelet: true, weapon: 'sword', pig: false },
   knight: { shirt: hexc('#c9ced8'), sleeve: hexc('#4a3528'), pants: hexc('#3b2c22'), boot: hexc('#c9ced8'), glove: hexc('#6b4428'), belt: hexc('#6a3a26'), cape: hexc('#a32f25'), armor: true, weapon: 'sword', shield: true, pig: true, band: 'helm' },
@@ -4115,7 +4256,9 @@ function buildCharModels(R) {
 }
 function buildCharModel(R, cls) {
   const O = OUTFITS[cls], C = Object.assign({}, CHAR_COL, O.col || {}); const like = O.like || cls; const parts = {};
-  const mk = (bone, fn) => { const g = new Geo(cls.length * 7 + bone.length); g.jit = .03; fn(g); if (O.add && O.add[bone]) O.add[bone](g, C, O); if (g.d.length) parts[bone] = R.mesh(g); };
+  for (const k of ['shirt', 'sleeve', 'pants', 'cape', 'robe', 'vest', 'capeletCol']) if (O[k] && O[k].length) tagTex(O[k], 'cloth');
+  for (const k of ['boot', 'glove', 'belt']) if (O[k] && O[k].length) tagTex(O[k], 'leather');
+  const mk = (bone, fn) => { const g = new Geo(cls.length * 7 + bone.length); g.jit = .015; g.uvs = 2.5; fn(g); if (O.add && O.add[bone]) O.add[bone](g, C, O); if (g.d.length) { g.smoothNormals(58); parts[bone] = R.mesh(g); } };
   // hips
   mk('hips', g => {
     g.box(0, -.04, 0, .36, .2, .25, O.pants);
@@ -4127,8 +4270,8 @@ function buildCharModel(R, cls) {
   });
   // chest / torso
   mk('chest', g => {
-    g.cyl(0, 0, 0, .2, .17, .42, 10, O.shirt);
-    g.cyl(0, .4, 0, .07, .07, .08, 6, C.skin);
+    g.cyl(0, 0, 0, .2, .17, .42, 14, O.shirt);
+    g.cyl(0, .4, 0, .07, .07, .08, 8, C.skin);
     if (O.armor) { g.cyl(0, .08, 0, .215, .19, .3, 10, C.steel, C.steel); g.cyl(0, .06, 0, .22, .22, .04, 10, C.gold, null, true); g.box(0, .2, .17, .2, .16, .06, C.gold); g.box(0, .2, .19, .14, .1, .03, C.steel2); }
     if (O.vest) { g.cyl(0, .02, 0, .21, .18, .34, 10, O.vest); g.push(0, .2, 0, 0, 0, .6); g.box(0, 0, .19, .05, .5, .03, C.leather); g.pop(); }
     if (like === 'ninja') { g.push(0, .21, .12, .1, 0, 0); g.box(-.05, 0, .07, .26, .36, .04, hexc('#3c2b20')); g.pop(); g.cyl(0, .02, 0, .205, .2, .07, 10, C.leather); }
@@ -4147,25 +4290,22 @@ function buildCharModel(R, cls) {
     if (!O.mask) g.ell(0, .2, .455, .04, .018, .02, C.mouth, 5, 3);
     for (const s of [-1, 1]) g.ell(s * .49, .4, 0, .05, .09, .07, C.skin, 5, 4);
     if (O.mask) { g.ell(0, .16, .06, .43, .17, .43, hexc('#262838'), 14, 8); }
-    // hair cap
+    // hair: smooth cap + layered locks (anime style)
     if (!O.nohair) {
-    g.sphereSkip(0, .47, -.03, .53, C.hair, 14, 10, c => (c[2] > .12 && c[1] < .2) || c[1] < -.32);
+    g.jit = .012;
+    g.sphereSkip(0, .49, -.03, .545, C.hair, 16, 12, c => (c[2] > .14 && c[1] < .18) || c[1] < -.3);
     const rnd = mulberry32(99 + like.length);
-    // layered spiky tufts: top tufts point up-back, side/back tufts point outward and down
-    for (let i = 0; i < 44; i++) {
-      const a = rnd() * TAU, e = -.35 + rnd() * 1.25;
-      let dx = Math.cos(a) * Math.cos(e), dy = Math.sin(e), dz = Math.sin(a) * Math.cos(e);
-      if (dz > .3 && dy < .5) continue; // keep face clear
-      const bx = dx * .47, by = .47 + dy * .47, bz = -.03 + dz * .47;
-      const out = [dx * 1.0, dy * .55 - .35 + (dy > .7 ? .6 : 0), dz * 1.0 - .15];
-      const top = dy > .55;
-      const col = top ? (i % 2 ? C.hair3 : C.hair) : (i % 3 === 0 ? C.hair2 : C.hair);
-      g.cone(bx, by, bz, out[0], out[1], out[2], .14 + rnd() * .05, (top ? .2 : .24) + rnd() * .14, 5, col);
-    }
-    for (let i = 0; i < 5; i++) { const a = -Math.PI / 2 + (i - 2) * .45; g.cone(Math.cos(a) * .2, .9, -.05 + Math.sin(a) * .2, Math.cos(a) * .6, .8, Math.sin(a) * .6 - .3, .13, .26 + rnd() * .1, 5, i % 2 ? C.hair3 : C.hair); }
-    // bangs falling over forehead
-    for (let i = 0; i < 7; i++) { const x = -.36 + i * .12; const y = .72 - Math.abs(x) * .25; g.cone(x, y, .3 + (.36 - Math.abs(x)) * .15, x * .4, -1, .35, .1, .3 + (i % 2) * .08, 5, i % 2 ? C.hair : C.hair2); }
-    for (const s of [-1, 1]) { g.cone(s * .43, .55, .12, s * .15, -1, .1, .1, .42, 5, C.hair2); g.cone(s * .4, .45, -.05, s * .2, -1, -.1, .11, .4, 5, C.hair); }
+    const lock = (a, y, len, w, tilt, col, out = .5) => { const cx = Math.cos(a) * out, cz = -.03 + Math.sin(a) * out; g.ell(cx, y, cz, w, len, w * .55, col, 8, 6, tilt * Math.cos(a), -a + Math.PI / 2, 0); };
+    // back and side locks hanging from the cap edge
+    for (let i = 0; i < 11; i++) { const a = Math.PI * .72 + i / 10 * Math.PI * 1.56; const dz = Math.sin(a); if (dz > .55) continue; const y = .28 - rnd() * .1 - (dz < -.5 ? .06 : 0); lock(a, y, .28 + rnd() * .1, .15, .35, i % 3 === 0 ? C.hair2 : C.hair, .47); }
+    // crown: swept locks pointing up-back
+    for (let i = 0; i < 5; i++) { const a = -Math.PI / 2 + (i - 2) * .5; g.ell(Math.cos(a) * .22, .98 + (i === 2 ? .06 : 0), -.1 + Math.sin(a) * .18, .13, .26 + rnd() * .08, .11, i % 2 ? C.hair3 : C.hair, 8, 6, -.75 - Math.sin(a) * .3, 0, Math.cos(a) * .55); }
+    g.ell(0, .9, -.38, .3, .2, .16, C.hair2, 8, 6, .9, 0, 0);
+    // bangs over the forehead
+    for (let i = 0; i < 5; i++) { const x = -.32 + i * .16; const y = .64 - Math.abs(x) * .3; g.ell(x, y, .36 + (.32 - Math.abs(x)) * .15, .12, .26 + (i % 2) * .05, .07, i % 2 ? C.hair : C.hair2, 8, 6, .25, 0, -x * .9); }
+    // locks framing the face
+    for (const s of [-1, 1]) { g.ell(s * .47, .36, .2, .11, .34, .09, C.hair2, 8, 6, .1, 0, s * .12); g.ell(s * .43, .5, -.08, .12, .32, .1, C.hair, 8, 6, 0, 0, s * .2); }
+    g.jit = .02;
     if (O.pig) for (const s of [-1, 1]) { g.ell(s * .42, .12, -.18, .05, .05, .05, hexc('#6b4428'), 5, 3); for (let k = 0; k < 3; k++) g.cone(s * .43, .1, -.18, s * (.2 + k * .15), -1, -.1 * k, .09, .26, 5, k % 2 ? C.hair : C.hair2); }
     }
     // headgear
@@ -4189,15 +4329,15 @@ function buildCharModel(R, cls) {
   });
   // arms
   const armU = (g, side) => {
-    g.cyl(0, -.24, 0, .062, .072, .24, 7, O.sleeve);
-    g.sphere(0, 0, 0, .075, O.sleeve, 6, 4);
+    g.cyl(0, -.24, 0, .062, .072, .24, 9, O.sleeve);
+    g.sphere(0, 0, 0, .075, O.sleeve, 8, 5);
     if (O.capelet && like === 'priest') g.cyl(0, -.24, 0, .1, .08, .2, 7, O.shirt);
   };
   const armL = (g, side) => {
-    g.cyl(0, -.2, 0, .052, .062, .2, 7, O.wraps ? hexc('#2b2422') : O.sleeve === C.skin ? C.skin : O.glove);
+    g.cyl(0, -.2, 0, .052, .062, .2, 9, O.wraps ? hexc('#2b2422') : O.sleeve === C.skin ? C.skin : O.glove);
     if (O.armor) g.cyl(0, -.18, 0, .075, .07, .16, 7, C.leather);
     if (like === 'mage' || like === 'priest') g.cyl(0, -.12, 0, .09, .065, .12, 7, O.sleeve);
-    g.sphere(0, -.25, 0, .075, O.glove, 6, 5);
+    g.sphere(0, -.25, 0, .075, O.glove, 8, 6);
   };
   mk('shL', g => armU(g, 1)); mk('shR', g => armU(g, -1));
   mk('elL', g => {
@@ -4215,9 +4355,9 @@ function buildCharModel(R, cls) {
     if (w === 'rod') { g.cyl(0, -.7, 0, .03, .035, 1.5, 6, C.gold); g.push(0, .95, 0, Math.PI / 2); g.cyl(0, -.02, 0, .2, .2, .04, 12, C.gold, null, false); g.pop(); g.ell(0, .95, 0, .07, .1, .07, hexc('#d65aa0'), 6, 4); }
   });
   // legs
-  const legU = g => { g.cyl(0, -.3, 0, .085, .095, .3, 8, O.robe && like === 'priest' ? O.pants : O.pants); };
+  const legU = g => { g.cyl(0, -.3, 0, .085, .095, .3, 10, O.pants); };
   const legL = g => {
-    g.cyl(0, -.28, 0, .072, .082, .28, 8, O.wraps ? hexc('#8a8378') : O.boot);
+    g.cyl(0, -.28, 0, .072, .082, .28, 10, O.wraps ? hexc('#8a8378') : O.boot);
     g.box(0, -.335, .045, .17, .13, .27, O.boot); g.box(0, -.39, .05, .18, .03, .29, shade(O.boot, .6));
     g.cyl(0, -.14, 0, .095, .09, .07, 8, O.armor ? C.gold : shade(O.boot, 1.15), null, true);
     if (O.armor) { g.ell(0, -.02, .05, .09, .09, .07, C.steel, 6, 4); }
@@ -4426,6 +4566,7 @@ class Rig {
   }
   draw(R, parts, opts = {}) {
     for (let i = 0; i < this.n; i++) { const mesh = parts[BONES[i][0]]; if (mesh) R.drawMesh(mesh, this.world[i], opts.tint, opts.emis || RIG_FILL, opts.flash || 0, opts.alpha || 1); }
+    if (!opts.noOutline && (opts.alpha || 1) >= 1) for (let i = 0; i < this.n; i++) { const mesh = parts[BONES[i][0]]; if (mesh && BONES[i][0] !== 'eyes') R.drawOutline(mesh, this.world[i], .02); }
   }
   boneM(name) { return this.world[BONE_IDX[name]]; }
   bonePos(name, lx = 0, ly = 0, lz = 0) { return M4.xform(this.world[BONE_IDX[name]], lx, ly, lz); }
@@ -4812,7 +4953,7 @@ SPECIAL_PACKS.push({ id: 'mshark', thb: 199, name: 'แพ็กฉลามด�
 /* ---- 3D models ---- */
 function buildMountMeshes(R) {
   const C = hexc, out = {};
-  const mk = fn => { const g = new Geo(31); g.jit = .02; fn(g); return R.mesh(g); };
+  const mk = fn => { const g = new Geo(31); g.jit = .015; g.uvs = 1.5; fn(g); g.smoothNormals(58); return R.mesh(g); };
   const eye = (g, x, y, z, r = .09) => { g.sphere(x, y, z, r, C('#1a1410'), 6, 4); g.sphere(x + Math.sign(x || 1) * r * .25, y + r * .35, z + r * .55, r * .35, [1, 1, 1], 4, 3); };
   const legQ = (len, r, col, foot) => mk(g => { g.cyl(0, -len, 0, r * .85, r, len, 6, col); g.ell(0, -len + .06, .05, r * 1.1, .1, r * 1.35, foot || col, 6, 4); });
   const quadLegs = (fx, fz, bx, bz, y, len, r, col, foot) => [
@@ -5020,8 +5161,9 @@ function drawMount(R, meshes, id, x, y, z, face, st, s = 1, flash = 0) {
     else if (p.a === 'wheel') rx = ph * 1.4;
     else if (p.a === 'prop') rz = t * (8 + a * 40);
     M4.compose(_mL, p.p[0], p.p[1], p.p[2], rx, ry, rz, 1, 1, 1); M4.mul(_mO, _mB, _mL);
-    R.drawMesh(p.mesh, _mO, null, RIG_FILL, flash);
+    R.drawMesh(p.mesh, _mO, null, RIG_FILL, flash); R.drawOutline(p.mesh, _mO, .02);
   }
+  R.drawOutline(m.body, _mB, .022);
   return M4.xform(_mB, 0, D.seat[0], D.seat[1]);
 }
 
@@ -5136,7 +5278,7 @@ const GHC = {
 /* parameterized chibi humanoid on the shared BONES skeleton */
 function buildGChar(R, o) {
   const parts = {}; let seed = 900;
-  const mk = (bone, fn) => { const g = new Geo(seed++); g.jit = .03; fn(g); if (g.d.length) parts[bone] = R.mesh(g); };
+  const mk = (bone, fn) => { const g = new Geo(seed++); g.jit = .02; fn(g); if (g.d.length) { g.smoothNormals(58); parts[bone] = R.mesh(g); } };
   const skin = o.skin || GHC.pale, hair = o.hair || GHC.hair;
   // hips: skirt / pants / loincloth / robe
   mk('hips', g => {
@@ -6642,7 +6784,7 @@ const CosMesh = {
   cache: new Map(),
   get(R, id) {
     let c = this.cache.get(R); if (!c) { c = {}; this.cache.set(R, c); }
-    if (c[id] === undefined) { const sp = COS_MESH[id]; if (!sp) c[id] = null; else { const g = new Geo(id.length * 13); g.jit = .03; sp.mk(g); c[id] = g.d.length ? R.mesh(g) : null; } }
+    if (c[id] === undefined) { const sp = COS_MESH[id]; if (!sp) c[id] = null; else { const g = new Geo(id.length * 13); g.jit = .02; g.uvs = 2.5; sp.mk(g); c[id] = g.d.length ? (g.smoothNormals(58), R.mesh(g)) : null; } }
     return c[id];
   }
 };
@@ -6657,8 +6799,8 @@ drawCosmetics3D = function (R, rig, o) {
     const mesh = CosMesh.get(R, id); if (!mesh) continue;
     const bob = sp.bob ? Math.sin(o.anim * 2) * sp.bob : 0; const flap = sp.flap ? Math.sin(o.anim * (3 + 7 * o.walk)) * (.22 + .18 * o.walk) * sp.flap : 0;
     const p = sp.pos || [0, 0, 0], r = sp.rot || [0, 0, 0], s = sp.s || 1; const y = p[1] + bob + (slot === 'head' && sp.bone === 'head' && !sp.cover && p[1] > .5 ? lift : 0);
-    M4.compose(_cl, p[0], y, p[2], r[0], r[1] + flap, r[2], s, s, s); M4.mul(_cm, rig.boneM(sp.bone), _cl); R.drawMesh(mesh, _cm, null, sp.emis || null);
-    if (sp.mirror) { M4.compose(_cl, -p[0], y, p[2], r[0], Math.PI - r[1] - flap, -r[2], s, s, s); M4.mul(_cm, rig.boneM(sp.bone), _cl); R.drawMesh(mesh, _cm, null, sp.emis || null); }
+    M4.compose(_cl, p[0], y, p[2], r[0], r[1] + flap, r[2], s, s, s); M4.mul(_cm, rig.boneM(sp.bone), _cl); R.drawMesh(mesh, _cm, null, sp.emis || null); R.drawOutline(mesh, _cm, .018);
+    if (sp.mirror) { M4.compose(_cl, -p[0], y, p[2], r[0], Math.PI - r[1] - flap, -r[2], s, s, s); M4.mul(_cm, rig.boneM(sp.bone), _cl); R.drawMesh(mesh, _cm, null, sp.emis || null); R.drawOutline(mesh, _cm, .018); }
   }
 };
 function legacyCosmetic(R, rig, id, slot, o) { // items whose mesh only exists in Models (built for the main renderer)
@@ -6672,6 +6814,7 @@ function legacyCosmetic(R, rig, id, slot, o) { // items whose mesh only exists i
   Rig.prototype.draw = function (R, parts, opts = {}) {
     const O = OUTFITS[this.cls]; if (!O || !O.skinEmis) return od.call(this, R, parts, opts);
     for (let i = 0; i < this.n; i++) { const nm = BONES[i][0], mesh = parts[nm]; if (!mesh) continue; const w = nm === 'elR' || nm === 'elL'; R.drawMesh(mesh, this.world[i], opts.tint, w ? O.skinEmis : (opts.emis || RIG_FILL), opts.flash || 0, opts.alpha || 1); }
+    if (!opts.noOutline && (opts.alpha || 1) >= 1) for (let i = 0; i < this.n; i++) { const mesh = parts[BONES[i][0]]; if (mesh && BONES[i][0] !== 'eyes') R.drawOutline(mesh, this.world[i], .02); }
   };
 }
 
@@ -6701,7 +6844,7 @@ MULTI_SEATS.forEach(id => GEM_ITEMS.push({ id: 'gmt_' + id, cat: 'mount', gems: 
 /* ---- meshes ---- */
 function buildMountMeshes2(R) {
   const C = hexc, out = {};
-  const mk = fn => { const g = new Geo(37); g.jit = .02; fn(g); return R.mesh(g); };
+  const mk = fn => { const g = new Geo(37); g.jit = .015; g.uvs = 1.5; fn(g); g.smoothNormals(58); return R.mesh(g); };
   const eye = (g, x, y, z, r = .09) => { g.sphere(x, y, z, r, C('#1a1410'), 6, 4); g.sphere(x + Math.sign(x || 1) * r * .25, y + r * .35, z + r * .55, r * .35, [1, 1, 1], 4, 3); };
   const wheel = (r, w, col, rim) => mk(g => { g.push(0, 0, 0, 0, 0, Math.PI / 2); g.cyl(0, -w / 2, 0, r, r, w, 12, col, col); g.cyl(0, -w / 2 - .01, 0, r * .55, r * .55, w + .02, 8, rim || C('#c9ced8')); for (let i = 0; i < 6; i++) { const a = i / 6 * TAU; g.box(Math.cos(a) * r * .3, 0, Math.sin(a) * r * .3, r * .12, w + .03, r * .5, rim || C('#c9ced8')); } g.pop(); });
   const legQ = (len, r, col, foot) => mk(g => { g.cyl(0, -len, 0, r * .85, r, len, 7, col); g.ell(0, -len + .06, .05, r * 1.1, .1, r * 1.35, foot || col, 6, 4); });
@@ -7539,7 +7682,7 @@ const Game = {
     for (const [k, im] of imgs) { if (im) { this.tex[k] = this.R.texture(im); this.images[k] = im; } }
     UI.makePortraits(this.images);
     await tick(.25, 'กำลังสร้างโมเดล 3 มิติ');
-    buildModels(this.R); buildCharModels(this.R); buildFxModels(this.R); buildGemModels(this.R); addSeasonModels(this.R); Object.assign(MountMeshes, buildMountMeshes(this.R));
+    TexGen.init(this.R); buildModels(this.R); buildCharModels(this.R); buildFxModels(this.R); buildGemModels(this.R); addSeasonModels(this.R); Object.assign(MountMeshes, buildMountMeshes(this.R));
     await tick(.5, 'กำลังเตรียมทวีป Aurelion');
     World.build(this.R);
     await tick(.7, 'กำลังวางเส้นทาง');
@@ -7582,8 +7725,8 @@ const Game = {
   shake(s) { this.shakeT = Math.max(this.shakeT, s); },
   setEnv(zone) {
     const e = this.R.env;
-    if (zone === 'dungeon') Object.assign(e, { sun: [.25, .9, .35], sunC: [.2, .2, .28], sky: [.24, .22, .34], gnd: [.11, .1, .14], fogC: [.06, .05, .1], fog: [26, 100], top: [.05, .04, .1], bot: [.09, .07, .15], sprLight: .9 });
-    else Object.assign(e, { sun: [.5, .78, .38], sunC: [.66, .6, .5], sky: [.44, .48, .56], gnd: [.27, .25, .21], fogC: [.74, .83, .9], fog: [80, 220], top: [.34, .56, .88], bot: [.78, .87, .94], sprLight: 1.0 });
+    if (zone === 'dungeon') Object.assign(e, { sun: [.25, .9, .35], sunC: [.2, .2, .28], sky: [.24, .22, .34], gnd: [.11, .1, .14], fogC: [.06, .05, .1], fog: [26, 100], top: [.05, .04, .1], bot: [.09, .07, .15], sprLight: .9, cloud: 0 });
+    else Object.assign(e, { sun: [.5, .78, .38], sunC: [.72, .66, .54], sky: [.48, .52, .6], gnd: [.3, .27, .22], fogC: [.76, .84, .92], fog: [90, 240], top: [.3, .52, .9], bot: [.8, .88, .96], sprLight: 1.0, cloud: 1 });
     const l = Math.hypot(...e.sun); e.sun = e.sun.map(v => v / l);
   },
   applyUnlocks() { const S = Save.d; World.setUnlocks(S.flags.bridge, S.flags.gate && S.level >= 5); },
@@ -7937,7 +8080,7 @@ Object.assign(MON_DEBUFF, { chakla: ['poison', .25, 4], saming: ['poison', .2, 5
   Game.setEnv = function (zone) {
     if (zone !== 'temple') return ose(zone);
     const e = this.R.env;
-    Object.assign(e, { sun: [-.4, .8, -.5], sunC: [.34, .38, .54], sky: [.26, .28, .4], gnd: [.13, .12, .16], fogC: [.075, .085, .15], fog: [24, 118], top: [.015, .02, .07], bot: [.12, .12, .22], sprLight: .85 });
+    Object.assign(e, { sun: [-.4, .8, -.5], sunC: [.34, .38, .54], sky: [.26, .28, .4], gnd: [.13, .12, .16], fogC: [.075, .085, .15], fog: [24, 118], top: [.015, .02, .07], bot: [.12, .12, .22], sprLight: .85, cloud: .35 });
     const l = Math.hypot(...e.sun); e.sun = e.sun.map(v => v / l);
   };
 }
@@ -9466,7 +9609,7 @@ const StableView = {
     if (this.R) return true;
     try {
       this.cv = document.createElement('canvas'); this.cv.className = 'stcv';
-      this.R = new Renderer(this.cv); this.meshes = buildMountMeshes(this.R);
+      this.R = new Renderer(this.cv); TexGen.init(this.R); this.meshes = buildMountMeshes(this.R);
       Object.assign(this.R.env, { sun: [.45, .8, .4], sunC: [.75, .72, .66], sky: [.62, .64, .76], gnd: [.36, .34, .4], fogC: [.86, .87, .95], fog: [40, 120], top: [.72, .78, .95], bot: [.93, .92, .98] });
       const l = Math.hypot(...this.R.env.sun); this.R.env.sun = this.R.env.sun.map(v => v / l);
       const R = this.R, orig = R.resize.bind(R);
@@ -10514,7 +10657,7 @@ const ThumbR = {
     if (this.R) return true;
     try {
       const cv = document.createElement('canvas'); cv.width = 160; cv.height = 160;
-      this.R = new Renderer(cv); const R = this.R;
+      this.R = new Renderer(cv); const R = this.R; TexGen.init(R);
       R.resize = function () { this.cv.width = this.fw || 160; this.cv.height = this.fh || 160; this.gl.viewport(0, 0, this.cv.width, this.cv.height); };
       this.gm = buildGhostModels(R); for (const k of ['monk', 'undertaker', 'kuman']) this.cm[k] = buildGChar(R, GCHAR_SPECS[k]);
       Object.assign(R.env, { sun: [.4, .8, .45], sunC: [.6, .58, .62], sky: [.5, .52, .62], gnd: [.25, .22, .26], fogC: [.1, .1, .16], fog: [60, 140], top: [.16, .14, .26], bot: [.36, .3, .4] });
@@ -10693,7 +10836,7 @@ const FashionThumb = {
     const g = new Geo(3); g.jit = 0; const sp = COS_MESH[id], W = WSKIN[id];
     if (sp) sp.mk(g); else if (W) { if (W.elR) W.elR(g); if (W.elL) { g.push(.3, 0, 0); W.elL(g); g.pop(); } }
     let mn = [1e9, 1e9, 1e9], mx = [-1e9, -1e9, -1e9]; const d = g.d;
-    for (let i = 0; i < d.length; i += 9) for (let k = 0; k < 3; k++) { if (d[i + k] < mn[k]) mn[k] = d[i + k]; if (d[i + k] > mx[k]) mx[k] = d[i + k]; }
+    for (let i = 0; i < d.length; i += 12) for (let k = 0; k < 3; k++) { if (d[i + k] < mn[k]) mn[k] = d[i + k]; if (d[i + k] > mx[k]) mx[k] = d[i + k]; }
     if (!d.length) mn = [0, 0, 0], mx = [1, 1, 1];
     const c = [(mn[0] + mx[0]) / 2, (mn[1] + mx[1]) / 2, (mn[2] + mx[2]) / 2]; const r = Math.max(.2, Math.hypot(mx[0] - mn[0], mx[1] - mn[1], mx[2] - mn[2]) / 2);
     return this.info[id] = { c, r, geo: g };
@@ -10859,6 +11002,27 @@ KIND_ICON.vehicle = 'star';
   const omb = UI.mountBtns.bind(UI);
   UI.mountBtns = function () { omb(); const el = $('#mountbtns'); if (!el || !Save.d) return; if (Seats.driver) { el.hidden = false; const rb = $('#mride'); rb.classList.add('on'); rb.querySelector('.tip').textContent = 'ลงจากพาหนะ (V)'; $('#mskill').hidden = true; } };
 }
+
+/* ============================================================
+   Patch notes & announcements — add an entry at the TOP of
+   PATCH_NEW for every game update (shown in lobby → บันทึกอัปเดต)
+   ============================================================ */
+const PATCH_NEW = [
+  { d: '30/10', ic: 'map', t: 'โลกสมจริงขึ้น: เท็กซ์เจอร์ แสงนุ่ม ขอบเส้นตัวละคร', x: 'พื้นหญ้า ดิน ทราย หินปูพื้น ผนังปูน หลังคากระเบื้อง ไม้ เปลือกไม้ ใบไม้ มีลายจริงทั้งแมพหลักและวัดร้าง ตัวละคร/พาหนะผิวเรียบไม่เหลี่ยม มีขอบเส้นแบบการ์ตูน แสงแบบเซล และทรงผมใหม่แบบอนิเมะ' },
+  { d: '29/10', ic: 'paw', t: 'พาหนะหลายที่นั่ง 2–4 คน 6 คัน', x: 'ไดโนเสาร์เร็กซ์ (2) รถตุ๊กๆ (3) รถจี๊ปลุยป่า (4) เรือหางยาว (4) ช้างศึกบุษบก (3) รถม้าราชสำนัก (4) เพื่อนกด "ขึ้นนั่งด้วย" จากการ์ดผู้เล่นแล้วเคลื่อนที่ตามผู้ขับ กดเดินเพื่อลง ล้อ/ใบพัดหมุนจริง' },
+  { d: '29/10', ic: 'person', t: 'แฟชั่นใส่ได้จริง 150+ ชิ้น + ตู้เสื้อผ้า (O)', x: 'ชุดเต็มตัว 44 แบบ หมวก 46 ใบหน้า 15 ของสะพายหลัง/ผ้าคลุม/หาง/ปีก 28 สกินอาวุธ 21 ทุกชิ้นเห็นบนตัวละครจริง ชุดใช้อาวุธของอาชีพปัจจุบัน ซื้อได้ที่ร้านตัดเสื้อ ร้านเพชร และรางวัลเควส' },
+  { d: '29/10', ic: 'star', t: 'นำเข้าโมเดล 3 มิติ .glb ของตัวเอง', x: 'ตั้งค่า → โมเดล 3 มิติ: นำไฟล์ .glb ที่ทำจาก Tripo/Meshy + Blender มาแทนตัวละครได้ ระบบจับคู่กระดูกมาตรฐานให้ขยับตามท่าทางทั้งหมดในเกม ปรับขนาด/ทิศได้ โมเดลกลางวางที่โฟลเดอร์ models/ ให้ทุกคนเห็น' },
+  { d: '29/10', ic: 'trophy', t: 'ฉายาจากเควสและการเติมเงิน', x: 'เควสหลัก/เสริม/วัดร้างให้ฉายาเฉพาะ เช่น ผู้เปิดสะพาน ผู้ส่งแม่นากสู่สุคติ แพ็กเติมเงินและยอดสะสมให้ฉายา ผู้อุปถัมภ์ เศรษฐีแห่ง Aurelion ราชันย์เพชร เลือกใส่ได้ที่หน้าตัวละคร' },
+  { d: '29/10', ic: 'star', t: 'เพลงและเสียงบรรยากาศเปลี่ยนตามแมพ + ฟองคำพูดผี', x: 'ทวีป ดันเจี้ยน และวัดร้างมีเพลงประกอบคนละแบบ ผีในวัดร้างพูดเป็นฟองคำพูด (แม่นาก "พี่มากขาาา" เปรต "ขอส่วนบุญ") ปิด/เปิดเพลงได้ในตั้งค่า' },
+  { d: '29/10', ic: 'person', t: 'ท่าทาง/อีโมต 13 แบบ', x: 'โค้งคำนับ หัวเราะ โชว์กล้าม เศร้า โกรธ หัวใจ เยี่ยม ขอบคุณ เต้น นั่งพัก ชี้ คุกเข่า ชัยชนะ ใช้ได้ในโหมดออนไลน์และเห็นกันทุกคน' },
+  { d: '29/10', ic: 'book', t: 'สายอาชีพขั้นสอง 12 อาชีพ + การตื่นรู้', x: 'Lv.10 เปลี่ยนอาชีพกับอาจารย์เซน (อาชีพละ 2 สาย เช่น อัศวิน → ลอร์ดไนท์/พาลาดิน) ได้สกิลใหม่ 3 สกิล Lv.20 ทำเควส "ปลดผนึกแห่งพลัง" เก็บหิน 4 ก้อนเพื่อตื่นรู้: สกิลสูงสุด Lv.10 สกิลตื่นรู้ +30% เลเวลสูงสุด 40 ออร่าเพลิง' },
+  { d: '29/10', ic: 'ghost', t: 'แมพวัดร้างกลางป่า ผีไทย 20 ชนิด บอสแม่นาก', x: 'เปรตหน้าวัด นางตะเคียน กระสือ กระหัง ผีปอบ ผีโขมด แม่นาก ฯลฯ แต่ละตัวมีท่าพิเศษและจุดที่อยู่ตามตำนาน ตำราผีไทย (B) เควสหลวงตาและสัปเหร่อ ร้านของกันผี' },
+  { d: '29/10', ic: 'phone', t: 'แก้ UI ล้นจอบน iPhone/Android (Chrome)', x: 'วัดขนาดจอจริงของเบราว์เซอร์มือถือ แถบปุ่มและแผงต่างๆ ไม่หลุดขอบจออีก' },
+  { d: '29/10', ic: 'gear', t: 'ระบบผู้ดูแลเกม (GM)', x: 'ล็อกอิน Google เพื่อยืนยันสิทธิ์ GM: ประกาศถึงทุกคน ปิดแชต เชิญออก ดูรายงาน และเครื่องมือทดสอบ' },
+  { d: '29/10', ic: 'star', t: 'เล่นออนไลน์ด้วยกัน', x: 'เชื่อมเซิร์ฟเวอร์ Firebase เห็นผู้เล่นคนอื่น แชต ปาร์ตี้ (EXP +10% เมื่ออยู่ใกล้กัน) ตัวนับผู้เล่นออนไลน์ และช่องเซิร์ฟเวอร์' }
+];
+PATCH.unshift(...PATCH_NEW);
+ANNOUNCE.unshift({ tag: 'อัปเดตใหญ่', title: 'อัปเดต 30 ต.ค.: อาชีพขั้นสอง แฟชั่น 150+ ชิ้น พาหนะหลายที่นั่ง โลกสมจริงขึ้น', body: 'เปลี่ยนอาชีพขั้นสองที่ Lv.10 ตื่นรู้ที่ Lv.20 · ตู้เสื้อผ้า (O) ใส่ชุด หมวก หน้ากาก ปีก สกินอาวุธ เห็นจริงบนตัวละคร · ขี่ไดโนเสาร์ ตุ๊กๆ จี๊ป เรือหางยาว ช้างศึก รถม้า กับเพื่อนได้ 2–4 คน · แมพมีเท็กซ์เจอร์และแสงใหม่ทั้งหมด · นำเข้าโมเดล .glb ของตัวเองได้ที่ตั้งค่า ดูรายละเอียดทั้งหมดที่แท็บ "บันทึกอัปเดต"' });
 
 /* ============================================================
    Boot
