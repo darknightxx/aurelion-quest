@@ -1137,6 +1137,37 @@ body.compact .jobcard img { width: 80px; height: 115px; } body.compact .jobcard 
 .plate .mbub { display: block; max-width: 190px; margin: 0 auto 4px; padding: 4px 9px; border-radius: 12px; background: rgba(245,236,220,.94); color: #2a1a26; font-size: 12.5px; line-height: 1.3; border: 1.5px solid #9a7ab0; position: relative; animation: bubin .25s ease-out; white-space: normal; }
 .plate .mbub::after { content: ""; position: absolute; left: 50%; bottom: -7px; width: 10px; height: 10px; background: inherit; border-right: 1.5px solid #9a7ab0; border-bottom: 1.5px solid #9a7ab0; transform: translateX(-50%) rotate(45deg); }
 @keyframes bubin { from { opacity: 0; transform: translateY(6px) scale(.9); } to { opacity: 1; } }
+/* 3D model manager */
+h3.sub { margin: 14px 0 6px; font-family: var(--f-display); font-size: 16px; color: var(--brasshi); }
+.mdllist { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.mdlrow { display: grid; grid-template-columns: 54px minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 6px 8px; border-radius: 10px; background: #1e1610; border: 1px solid var(--line2); }
+.mdlrow.cur { box-shadow: 0 0 0 1.5px var(--brass); }
+.mdlrow img { width: 54px; height: 76px; object-fit: cover; border-radius: 7px; background: radial-gradient(circle at 50% 40%, #3e3052, #120e18); }
+.mdlrow b { display: block; font-weight: 600; } .mdlrow small { display: block; color: var(--mute); font-size: 12px; } .mdlrow .warn { color: #ffb48c; }
+.mdlrow .tag { display: inline-block; font: 600 11px/1.5 var(--f-body); color: #2a1a08; background: var(--brass); padding: 0 7px; border-radius: 8px; margin-left: 4px; vertical-align: middle; }
+.mdlrow .tag.ok { background: var(--lime); } .mdlrow .tag.dim { background: #5a4a3a; color: #e8dcc8; }
+.mdlact { display: flex; flex-direction: column; gap: 4px; } .mdlact .btn { white-space: nowrap; }
+.mdltune { margin-top: 6px; padding: 8px; border-radius: 8px; background: rgba(0,0,0,.25); display: grid; gap: 4px; }
+.mdltune label { font-size: 12.5px; } .mdltune input[type=range] { width: 100%; }
+details.howto { margin: 6px 0 10px; padding: 6px 10px; border-radius: 9px; background: rgba(255,255,255,.04); border: 1px solid var(--line2); }
+details.howto summary { cursor: pointer; font-weight: 600; } details.howto ol { margin: 6px 0 2px; padding-left: 20px; font-size: 13px; line-height: 1.5; }
+body.compact .mdlrow { grid-template-columns: 44px minmax(0, 1fr); } body.compact .mdlact { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; }
+/* wardrobe */
+.wardrobe { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 12px; }
+.wprev img { width: 200px; height: 283px; object-fit: cover; border-radius: 12px; background: radial-gradient(circle at 50% 40%, #3e3052, #120e18); border: 1.5px solid var(--line); }
+.wname { margin: 6px 0 4px; font-weight: 600; text-align: center; }
+.wworn { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; } .wworn li { display: flex; align-items: center; gap: 6px; font-size: 12px; padding: 3px 6px; border-radius: 7px; background: rgba(255,255,255,.04); }
+.wworn small { color: var(--mute); width: 56px; flex: none; } .wworn b { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+.wtabs { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 6px; } .wtabs.small { margin: 6px 0; }
+.wgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 7px; }
+.wcard { position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 6px 6px; border-radius: 10px; background: #1e1610; border: 1.5px solid var(--line2); cursor: pointer; text-align: center; }
+.wcard:hover { border-color: var(--brass); } .wcard.on { border-color: var(--lime); box-shadow: 0 0 0 1px var(--lime) inset; } .wcard.locked { opacity: .55; } .wcard.bad { border-style: dashed; }
+.wcard .ic, .wcard img.ic { width: 56px; height: 56px; border-radius: 8px; background: radial-gradient(circle at 50% 40%, #3e3052, #120e18); object-fit: cover; }
+.wcard b { font-size: 12.5px; font-weight: 600; line-height: 1.2; } .wcard small { font-size: 11px; color: var(--mute); }
+.winfo { position: absolute; top: 4px; right: 4px; width: 18px; height: 18px; border-radius: 50%; background: rgba(255,255,255,.12); color: #e8dcc8; font: 700 11px/18px var(--f-body); text-align: center; }
+.winfo:hover { background: var(--brass); color: #1a1208; }
+body.compact .wardrobe { grid-template-columns: 1fr; } body.compact .wprev { display: flex; gap: 10px; align-items: flex-start; } body.compact .wprev img { width: 120px; height: 170px; } body.compact .wprev .wworn { flex: 1; } body.compact .wname { display: none; }
+body.compact .wgrid { grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); }
 </style>
 </head>
 <body>
@@ -3863,7 +3894,7 @@ const Player = {
     const st = { maxhp: c.hp + L * 12 + al.hp * 10, maxmp: c.mp + L * 5 + al.mp * 6, atk: c.atk + L * 2 + al.atk * 2, def: c.def + L * 1 + al.def * 1.5, spd: c.spd + al.spd * .12, range: c.range };
     for (const slot of ['weapon', 'armor', 'acc']) { const id = S.equip[slot]; if (!id) continue; const it = ITEMS[id]; st.atk += it.atk || 0; st.def += it.def || 0; st.maxhp += it.hp || 0; st.maxmp += it.mp || 0; st.spd += it.spd || 0; }
     if (S.perm) { st.atk += S.perm.atk || 0; st.maxhp += S.perm.hp || 0; }
-    let spdPct = 0; for (const slot of ['head', 'back', 'aura']) { const id = S.cos[slot]; if (id && ITEMS[id].bonus) spdPct += ITEMS[id].bonus.spdPct || 0; }
+    let spdPct = 0; for (const slot in S.cos) { const id = S.cos[slot]; if (id && ITEMS[id] && ITEMS[id].bonus) spdPct += ITEMS[id].bonus.spdPct || 0; }
     const B = S.buffs;
     if (B.spd) spdPct += .25; if (B.haste) spdPct += .3; if (B.assassin) spdPct += .3;
     st.spd *= 1 + spdPct;
@@ -4078,7 +4109,7 @@ const OUTFITS = {
   priest: { shirt: hexc('#f4f0e7'), sleeve: hexc('#f4f0e7'), pants: hexc('#4a3324'), boot: hexc('#7a4c2a'), glove: hexc('#6b4428'), belt: hexc('#6b4428'), robe: hexc('#f4f0e7'), weapon: 'rod', capelet: true, capeletCol: hexc('#a78a62'), pig: false }
 };
 
-const CharModels = {};
+const CharModels = new Proxy({}, { get(t, k) { if (t[k] === undefined && typeof k === 'string' && typeof Sheets !== 'undefined' && Game.R && Sheets.ensure(k)) t[k] = buildCharModel(Game.R, k); return t[k]; } });
 function buildCharModels(R) {
   for (const cls of CLASS_ORDER) CharModels[cls] = buildCharModel(R, cls);
 }
@@ -4117,6 +4148,7 @@ function buildCharModel(R, cls) {
     for (const s of [-1, 1]) g.ell(s * .49, .4, 0, .05, .09, .07, C.skin, 5, 4);
     if (O.mask) { g.ell(0, .16, .06, .43, .17, .43, hexc('#262838'), 14, 8); }
     // hair cap
+    if (!O.nohair) {
     g.sphereSkip(0, .47, -.03, .53, C.hair, 14, 10, c => (c[2] > .12 && c[1] < .2) || c[1] < -.32);
     const rnd = mulberry32(99 + like.length);
     // layered spiky tufts: top tufts point up-back, side/back tufts point outward and down
@@ -4135,6 +4167,7 @@ function buildCharModel(R, cls) {
     for (let i = 0; i < 7; i++) { const x = -.36 + i * .12; const y = .72 - Math.abs(x) * .25; g.cone(x, y, .3 + (.36 - Math.abs(x)) * .15, x * .4, -1, .35, .1, .3 + (i % 2) * .08, 5, i % 2 ? C.hair : C.hair2); }
     for (const s of [-1, 1]) { g.cone(s * .43, .55, .12, s * .15, -1, .1, .1, .42, 5, C.hair2); g.cone(s * .4, .45, -.05, s * .2, -1, -.1, .11, .4, 5, C.hair); }
     if (O.pig) for (const s of [-1, 1]) { g.ell(s * .42, .12, -.18, .05, .05, .05, hexc('#6b4428'), 5, 3); for (let k = 0; k < 3; k++) g.cone(s * .43, .1, -.18, s * (.2 + k * .15), -1, -.1 * k, .09, .26, 5, k % 2 ? C.hair : C.hair2); }
+    }
     // headgear
     if (O.band === 'helm') { g.cyl(0, .6, 0, .53, .53, .12, 14, C.steel, null, true); g.push(0, .7, .46, -.2); g.box(0, 0, 0, .34, .2, .06, C.steel); g.box(0, 0, .035, .1, .12, .02, C.gold); g.pop(); g.cyl(0, .57, 0, .535, .535, .025, 14, hexc('#6b4428'), null, true); }
     if (O.band === 'ninja') { g.cyl(0, .64, 0, .535, .53, .11, 14, hexc('#262838'), null, true); g.push(0, .69, .48, -.22); g.box(0, 0, 0, .3, .13, .04, C.steel); g.box(0, 0, .022, .26, .09, .01, C.steel2); g.pop(); }
@@ -4345,8 +4378,9 @@ class Rig {
     set('elL', -.25 - .5 * w * run, 0, 0); set('elR', -.25 - .5 * w * run, 0, 0);
     rootY += w * (.045 + .03 * run) * Math.cos(2 * ph) - .02 * w;
     // weapon-specific idle hold
-    if (this.cls === 'mage' || this.cls === 'priest') set('elR', -.6 * (1 - w * .5), 0, 0);
-    if (this.cls === 'archer') set('elL', -.3, 0, 0);
+    const hold = (OUTFITS[this.cls] && (OUTFITS[this.cls].hold || OUTFITS[this.cls].like)) || this.cls;
+    if (hold === 'mage' || hold === 'priest') set('elR', -.6 * (1 - w * .5), 0, 0);
+    if (hold === 'archer') set('elL', -.3, 0, 0);
     if (st.think) { set('shR', -1.9, .3, -.1); set('elR', -2.1, 0, 0); set('head', .12, -.15, .12); set('chest', .05, 0, 0); }
     if (st.wave) { set('shR', -2.7, 0, -.35 + .25 * Math.sin(this.t * 11)); set('elR', -.5, 0, 0); set('head', -.05, 0, .1); }
     if (st.dead) { set('chest', -.3, 0, 0); set('head', -.3, 0, 0); set('shL', -.8, 0, .9); set('shR', -.8, 0, -.9); }
@@ -4465,7 +4499,7 @@ const Fx = {
   star(x, y, z, r, col, dur = .3) { return this.add({ k: 'star', x, y, z, r, col, dur, rot: Math.random() * TAU }); },
   meteor(x, z, delay, onImpact) { return this.add({ k: 'meteor', x, z, dur: .55, delay, onImpact, sx: x + 6, sy: 26, sz: z - 10 }); },
   arrows(x, z, r, n, dur = .5) { for (let i = 0; i < n; i++) { const a = Math.random() * TAU, d = Math.sqrt(Math.random()) * r; this.add({ k: 'arrow', x: x + Math.cos(a) * d, z: z + Math.sin(a) * d, dur, delay: Math.random() * .35 }); } },
-  ghost(rig, parts, col, dur = .35) { this.ghosts.push({ mats: rig.world.map(m => Float32Array.from(m)), parts, col, t: 0, dur }); if (this.ghosts.length > 16) this.ghosts.shift(); },
+  ghost(rig, parts, col, dur = .35) { if (!parts || rig.isGlb) return; this.ghosts.push({ mats: rig.world.map(m => Float32Array.from(m)), parts, col, t: 0, dur }); if (this.ghosts.length > 16) this.ghosts.shift(); },
   flash(col, a = .35) { const f = document.getElementById('skflash'); if (!f) return; f.style.background = `radial-gradient(circle, transparent 30%, rgba(${col.map(v => Math.round(v * 255)).join(',')},${a}))`; f.classList.remove('on'); void f.offsetWidth; f.classList.add('on'); },
   update(dt) {
     for (let i = this.list.length - 1; i >= 0; i--) {
@@ -5883,6 +5917,763 @@ Object.assign(CLIPS, {
 const EMOTE_CLIP = { wave: null, cheer: 'cheer', laugh: 'laugh', love: 'love', good: 'good', thanks: 'thanks', sad: 'sad', angry: 'angry', bow: 'bow', flex: 'flex', dance: 'dance', sit: 'sit', point: 'point', kneel: 'kneel', victory: 'victory' };
 
 /* ============================================================
+   GLB (glTF 2.0 binary) models: loader, textured skinned draw,
+   humanoid retargeting of the game's procedural animation
+   ============================================================
+   A sheet (class / job / costume key) can be backed by a .glb file:
+   - models/index.json on the web host lists shared models
+   - players can import a .glb for their own character (IndexedDB)
+   Rig(sheet) transparently becomes a GlbRig when a model is registered.
+*/
+const GLBModels = {};               // sheet -> loaded model
+const MODEL_BASE = (typeof location !== 'undefined' && /darknightxx\.github\.io/.test(location.host)) ? './models/' : 'https://darknightxx.github.io/aurelion-quest/models/';
+
+/* ---------- small quaternion helpers ---------- */
+const Q = {
+  m(out, q, t, s) { // TRS -> mat4 (column major)
+    const x = q[0], y = q[1], z = q[2], w = q[3], x2 = x + x, y2 = y + y, z2 = z + z;
+    const xx = x * x2, xy = x * y2, xz = x * z2, yy = y * y2, yz = y * z2, zz = z * z2, wx = w * x2, wy = w * y2, wz = w * z2;
+    const sx = s ? s[0] : 1, sy = s ? s[1] : 1, sz = s ? s[2] : 1;
+    out[0] = (1 - (yy + zz)) * sx; out[1] = (xy + wz) * sx; out[2] = (xz - wy) * sx; out[3] = 0;
+    out[4] = (xy - wz) * sy; out[5] = (1 - (xx + zz)) * sy; out[6] = (yz + wx) * sy; out[7] = 0;
+    out[8] = (xz + wy) * sz; out[9] = (yz - wx) * sz; out[10] = (1 - (xx + yy)) * sz; out[11] = 0;
+    out[12] = t ? t[0] : 0; out[13] = t ? t[1] : 0; out[14] = t ? t[2] : 0; out[15] = 1; return out;
+  },
+  slerp(out, a, b, t) {
+    let ax = a[0], ay = a[1], az = a[2], aw = a[3], bx = b[0], by = b[1], bz = b[2], bw = b[3];
+    let cos = ax * bx + ay * by + az * bz + aw * bw; if (cos < 0) { cos = -cos; bx = -bx; by = -by; bz = -bz; bw = -bw; }
+    let s0, s1; if (1 - cos > 1e-5) { const om = Math.acos(cos), so = Math.sin(om); s0 = Math.sin((1 - t) * om) / so; s1 = Math.sin(t * om) / so; } else { s0 = 1 - t; s1 = t; }
+    out[0] = s0 * ax + s1 * bx; out[1] = s0 * ay + s1 * by; out[2] = s0 * az + s1 * bz; out[3] = s0 * aw + s1 * bw; return out;
+  },
+  // rotation part of a mat4 -> mat4 (no translation / scale)
+  rot(out, m) { const sx = Math.hypot(m[0], m[1], m[2]) || 1, sy = Math.hypot(m[4], m[5], m[6]) || 1, sz = Math.hypot(m[8], m[9], m[10]) || 1; out.fill(0); out[0] = m[0] / sx; out[1] = m[1] / sx; out[2] = m[2] / sx; out[4] = m[4] / sy; out[5] = m[5] / sy; out[6] = m[6] / sy; out[8] = m[8] / sz; out[9] = m[9] / sz; out[10] = m[10] / sz; out[15] = 1; return out; },
+  transpose(out, m) { const r = new Float32Array(16); for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) r[i * 4 + j] = m[j * 4 + i]; out.set(r); return out; },
+  // rotation taking unit vector a to unit vector b (mat4)
+  fromTo(out, a, b) {
+    const cx = a[1] * b[2] - a[2] * b[1], cy = a[2] * b[0] - a[0] * b[2], cz = a[0] * b[1] - a[1] * b[0]; const d = a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+    const l = Math.hypot(cx, cy, cz); if (l < 1e-6) { out.fill(0); out[0] = out[5] = out[10] = out[15] = d < 0 ? -1 : 1; if (d < 0) out[15] = 1; return out; }
+    const ang = Math.atan2(l, d), x = cx / l, y = cy / l, z = cz / l, c = Math.cos(ang), s = Math.sin(ang), t = 1 - c;
+    out[0] = t * x * x + c; out[1] = t * x * y + s * z; out[2] = t * x * z - s * y; out[3] = 0;
+    out[4] = t * x * y - s * z; out[5] = t * y * y + c; out[6] = t * y * z + s * x; out[7] = 0;
+    out[8] = t * x * z + s * y; out[9] = t * y * z - s * x; out[10] = t * z * z + c; out[11] = 0; out[12] = out[13] = out[14] = 0; out[15] = 1; return out;
+  }
+};
+
+/* ---------- parsing ---------- */
+const GLB = {
+  CT: { 5120: Int8Array, 5121: Uint8Array, 5122: Int16Array, 5123: Uint16Array, 5125: Uint32Array, 5126: Float32Array },
+  NT: { SCALAR: 1, VEC2: 2, VEC3: 3, VEC4: 4, MAT2: 4, MAT3: 9, MAT4: 16 },
+  parse(buf) {
+    const dv = new DataView(buf);
+    if (dv.getUint32(0, true) !== 0x46546C67) { // not binary: maybe .gltf json with embedded data
+      const json = JSON.parse(new TextDecoder().decode(new Uint8Array(buf))); return { json, bin: null };
+    }
+    const len = dv.getUint32(8, true); let off = 12, json = null, bin = null;
+    while (off < len) {
+      const cl = dv.getUint32(off, true), ct = dv.getUint32(off + 4, true); off += 8;
+      if (ct === 0x4E4F534A) json = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, off, cl)));
+      else if (ct === 0x004E4942) bin = buf.slice(off, off + cl);
+      off += cl;
+    }
+    return { json, bin };
+  },
+  buffer(g, i) {
+    if (g._bufs[i]) return g._bufs[i];
+    const b = g.json.buffers[i]; let out;
+    if (b.uri && b.uri.startsWith('data:')) { const s = atob(b.uri.slice(b.uri.indexOf(',') + 1)); const u = new Uint8Array(s.length); for (let k = 0; k < s.length; k++) u[k] = s.charCodeAt(k); out = u.buffer; }
+    else if (!b.uri) out = g.bin;
+    else throw new Error('ไฟล์ .gltf อ้างอิงไฟล์ภายนอก (' + b.uri + ') กรุณาส่งออกเป็น .glb ไฟล์เดียว');
+    return g._bufs[i] = out;
+  },
+  view(g, i) { const v = g.json.bufferViews[i]; const buf = this.buffer(g, v.buffer); return { buf, off: v.byteOffset || 0, len: v.byteLength, stride: v.byteStride || 0 }; },
+  // returns Float32Array (de-interleaved, normalized when flagged) or integer typed array for joints/indices
+  accessor(g, i, keepInt) {
+    const a = g.json.accessors[i]; if (a.sparse) throw new Error('sparse accessor ไม่รองรับ');
+    const n = a.count, sz = this.NT[a.type], T = this.CT[a.componentType]; const bpe = T.BYTES_PER_ELEMENT;
+    const out = keepInt && T !== Float32Array ? new (T === Uint8Array ? Uint16Array : T === Int8Array ? Int16Array : T === Int16Array ? Uint16Array : T)(n * sz) : new Float32Array(n * sz);
+    if (a.bufferView === undefined) return out;
+    const v = this.view(g, a.bufferView); const base = v.off + (a.byteOffset || 0); const stride = v.stride || sz * bpe;
+    const dv = new DataView(v.buf);
+    const rd = T === Float32Array ? o => dv.getFloat32(o, true) : T === Uint8Array ? o => dv.getUint8(o) : T === Int8Array ? o => dv.getInt8(o) : T === Uint16Array ? o => dv.getUint16(o, true) : T === Int16Array ? o => dv.getInt16(o, true) : o => dv.getUint32(o, true);
+    const norm = a.normalized && !keepInt; const k = norm ? (T === Uint8Array ? 1 / 255 : T === Uint16Array ? 1 / 65535 : T === Int8Array ? 1 / 127 : T === Int16Array ? 1 / 32767 : 1) : 1;
+    for (let e = 0; e < n; e++) { const o = base + e * stride; for (let c = 0; c < sz; c++) { let val = rd(o + c * bpe); if (norm) val = Math.max(-1, val * k); out[e * sz + c] = val; } }
+    return out;
+  },
+  async image(g, i) {
+    const im = g.json.images[i]; let blob;
+    if (im.bufferView !== undefined) { const v = this.view(g, im.bufferView); blob = new Blob([new Uint8Array(v.buf, v.off, v.len)], { type: im.mimeType || 'image/png' }); }
+    else if (im.uri && im.uri.startsWith('data:')) { const r = await fetch(im.uri); blob = await r.blob(); }
+    else return null;
+    if (typeof createImageBitmap === 'function') { try { return await createImageBitmap(blob, { premultiplyAlpha: 'none', colorSpaceConversion: 'none' }); } catch (e) { } }
+    return await new Promise((res, rej) => { const img = new Image(); img.onload = () => res(img); img.onerror = rej; img.src = URL.createObjectURL(blob); });
+  },
+  /* decode into a renderer-independent model */
+  async decode(buf, opts = {}) {
+    const p = this.parse(buf); if (!p.json) throw new Error('ไม่ใช่ไฟล์ glTF/GLB');
+    const g = { json: p.json, bin: p.bin, _bufs: [] }; const J = g.json;
+    if ((J.extensionsRequired || []).some(e => /draco/i.test(e))) throw new Error('โมเดลบีบอัดด้วย Draco กรุณาส่งออกแบบไม่บีบอัด (uncompressed)');
+    const nodes = (J.nodes || []).map((n, idx) => ({ idx, name: n.name || ('node' + idx), children: n.children || [], parent: -1, t: n.translation ? n.translation.slice() : [0, 0, 0], r: n.rotation ? n.rotation.slice() : [0, 0, 0, 1], s: n.scale ? n.scale.slice() : [1, 1, 1], mat: n.matrix ? Float32Array.from(n.matrix) : null, mesh: n.mesh, skin: n.skin }));
+    nodes.forEach(n => n.children.forEach(c => { nodes[c].parent = n.idx; }));
+    const scene = J.scenes && J.scenes[J.scene || 0] ? J.scenes[J.scene || 0].nodes : nodes.filter(n => n.parent < 0).map(n => n.idx);
+    // rest world matrices
+    const loc = nodes.map(n => n.mat ? n.mat : Q.m(M4.ident(), n.r, n.t, n.s));
+    const world = nodes.map(() => M4.ident());
+    const walk = (i, pm) => { M4.mul(world[i], pm, loc[i]); nodes[i].children.forEach(c => walk(c, world[i])); };
+    scene.forEach(i => walk(i, M4.ident()));
+    // materials + images
+    const imgs = {}; const mats = [];
+    for (const m of (J.materials || [])) {
+      const pbr = m.pbrMetallicRoughness || {}; const col = pbr.baseColorFactor || [1, 1, 1, 1]; let img = null;
+      const ti = pbr.baseColorTexture ? pbr.baseColorTexture.index : (m.extensions && m.extensions.KHR_materials_pbrSpecularGlossiness && m.extensions.KHR_materials_pbrSpecularGlossiness.diffuseTexture ? m.extensions.KHR_materials_pbrSpecularGlossiness.diffuseTexture.index : undefined);
+      if (ti !== undefined && J.textures && J.textures[ti] && J.textures[ti].source !== undefined) { const src = J.textures[ti].source; if (!(src in imgs)) imgs[src] = await this.image(g, src).catch(() => null); img = imgs[src]; }
+      mats.push({ col: [col[0], col[1], col[2], col[3]], img, emis: m.emissiveFactor || [0, 0, 0], mask: m.alphaMode === 'MASK' || m.alphaMode === 'BLEND', cutoff: m.alphaCutoff !== undefined ? m.alphaCutoff : .5 });
+    }
+    const defMat = { col: [1, 1, 1, 1], img: null, emis: [0, 0, 0], mask: false, cutoff: .5 };
+    // primitives
+    const prims = []; let tris = 0;
+    for (const n of nodes) {
+      if (n.mesh === undefined || !J.meshes[n.mesh]) continue;
+      for (const pr of J.meshes[n.mesh].primitives) {
+        if (pr.mode !== undefined && pr.mode !== 4) continue; const A = pr.attributes; if (A.POSITION === undefined) continue;
+        if (pr.extensions && pr.extensions.KHR_draco_mesh_compression) throw new Error('โมเดลบีบอัดด้วย Draco กรุณาส่งออกแบบไม่บีบอัด');
+        const pos = this.accessor(g, A.POSITION); const nv = pos.length / 3;
+        let nrm = A.NORMAL !== undefined ? this.accessor(g, A.NORMAL) : null;
+        const uv = A.TEXCOORD_0 !== undefined ? this.accessor(g, A.TEXCOORD_0) : null;
+        let col = null; if (A.COLOR_0 !== undefined) { const c = this.accessor(g, A.COLOR_0); const cs = J.accessors[A.COLOR_0].type === 'VEC4' ? 4 : 3; col = new Float32Array(nv * 3); for (let i = 0; i < nv; i++) { col[i * 3] = c[i * cs]; col[i * 3 + 1] = c[i * cs + 1]; col[i * 3 + 2] = c[i * cs + 2]; } }
+        const idx = pr.indices !== undefined ? this.accessor(g, pr.indices, true) : null;
+        const joints = A.JOINTS_0 !== undefined && n.skin !== undefined ? this.accessor(g, A.JOINTS_0, true) : null;
+        const weights = A.WEIGHTS_0 !== undefined && n.skin !== undefined ? this.accessor(g, A.WEIGHTS_0) : null;
+        if (!nrm) { // flat-ish normals from faces
+          nrm = new Float32Array(nv * 3); const ni = idx ? idx.length / 3 : nv / 3;
+          for (let f = 0; f < ni; f++) { const a = idx ? idx[f * 3] : f * 3, b = idx ? idx[f * 3 + 1] : f * 3 + 1, c = idx ? idx[f * 3 + 2] : f * 3 + 2; const ux = pos[b * 3] - pos[a * 3], uy = pos[b * 3 + 1] - pos[a * 3 + 1], uz = pos[b * 3 + 2] - pos[a * 3 + 2], vx = pos[c * 3] - pos[a * 3], vy = pos[c * 3 + 1] - pos[a * 3 + 1], vz = pos[c * 3 + 2] - pos[a * 3 + 2]; const x = uy * vz - uz * vy, y = uz * vx - ux * vz, z = ux * vy - uy * vx; for (const v of [a, b, c]) { nrm[v * 3] += x; nrm[v * 3 + 1] += y; nrm[v * 3 + 2] += z; } }
+          for (let i = 0; i < nv; i++) { const l = Math.hypot(nrm[i * 3], nrm[i * 3 + 1], nrm[i * 3 + 2]) || 1; nrm[i * 3] /= l; nrm[i * 3 + 1] /= l; nrm[i * 3 + 2] /= l; }
+        }
+        tris += idx ? idx.length / 3 : nv / 3;
+        prims.push({ node: n.idx, skin: n.skin !== undefined ? n.skin : -1, pos, nrm, uv, col, idx, joints, weights, mat: pr.material !== undefined ? mats[pr.material] || defMat : defMat, nv });
+      }
+    }
+    if (!prims.length) throw new Error('ไม่พบ mesh ในไฟล์');
+    // skins
+    const skins = (J.skins || []).map(s => ({ joints: s.joints.slice(), ibm: s.inverseBindMatrices !== undefined ? this.accessor(g, s.inverseBindMatrices) : null, skeleton: s.skeleton }));
+    // animations
+    const anims = (J.animations || []).map((a, ai) => {
+      const ch = []; let dur = 0;
+      for (const c of a.channels) { if (!c.target || c.target.node === undefined) continue; const sm = a.samplers[c.sampler]; const times = this.accessor(g, sm.input), vals = this.accessor(g, sm.output); const interp = sm.interpolation || 'LINEAR'; const path = c.target.path; if (path === 'weights') continue; const sz = path === 'rotation' ? 4 : 3; ch.push({ node: c.target.node, path, times, vals, interp, sz }); dur = Math.max(dur, times[times.length - 1] || 0); }
+      return { name: a.name || ('anim' + ai), dur: dur || 1, ch };
+    });
+    // bounds in rest pose (skinned verts: assume bind pose == rest pose)
+    let minY = 1e9, maxY = -1e9, minX = 1e9, maxX = -1e9, minZ = 1e9, maxZ = -1e9;
+    for (const p of prims) { const W = p.skin >= 0 ? null : world[p.node]; for (let i = 0; i < p.nv; i++) { let x = p.pos[i * 3], y = p.pos[i * 3 + 1], z = p.pos[i * 3 + 2]; if (W) { const v = M4.xform(W, x, y, z); x = v[0]; y = v[1]; z = v[2]; } if (y < minY) minY = y; if (y > maxY) maxY = y; if (x < minX) minX = x; if (x > maxX) maxX = x; if (z < minZ) minZ = z; if (z > maxZ) maxZ = z; } }
+    const h = Math.max(1e-3, maxY - minY);
+    const fit = { s: 2.15 / h * (opts.scale || 1), s0: 2.15 / h * (opts.scale || 1), minY, cx: (minX + maxX) / 2, cz: (minZ + maxZ) / 2, yaw: opts.yaw || 0, y: opts.y || 0 };
+    const model = { nodes, loc, world, scene, prims, skins, anims, fit, tris, name: opts.name || '', gl: new Map(), opts };
+    this.humanoid(model);
+    return model;
+  },
+  /* map the game's bones onto the model's joints by name */
+  humanoid(model) {
+    const map = {};
+    const norm = s => String(s).toLowerCase().replace(/^.*[|:]/, '').replace(/^(mixamorig|j_bip_|bip01_|bip_|cc_base_|def-|def_|bone_|b_)/, '').replace(/^c_/, '');
+    const side = s => /(^|[^a-z])l(eft)?([^a-z]|$)|[._-]l$|^l[._-]|left/.test(s) ? 'L' : /(^|[^a-z])r(ight)?([^a-z]|$)|[._-]r$|^r[._-]|right/.test(s) ? 'R' : '';
+    const cands = { hips: [], chest: [], head: [], shL: [], shR: [], elL: [], elR: [], thL: [], thR: [], knL: [], knR: [] };
+    for (const n of model.nodes) {
+      const s = norm(n.name); const sd = side(s);
+      const base = s.replace(/left|right/g, '').replace(/(^|[^a-z])[lr](?=[^a-z]|$)/g, '$1').replace(/[^a-z]/g, '');
+      if (/^(hips|pelvis|hip|root)$/.test(base)) cands.hips.push(n.idx);
+      else if (/^(spine|chest|torso|upperchest)$/.test(base)) cands.chest.push(n.idx);
+      else if (/^(head|headtop)$/.test(base)) cands.head.push(n.idx);
+      else if (sd && /^(upperarm|arm|uparm|shoulderarm|humerus)$/.test(base)) cands['sh' + sd].push(n.idx);
+      else if (sd && /^(forearm|lowerarm|lowarm|elbow|ulna)$/.test(base)) cands['el' + sd].push(n.idx);
+      else if (sd && /^(upleg|upperleg|thigh|uppleg|femur)$/.test(base)) cands['th' + sd].push(n.idx);
+      else if (sd && /^(leg|lowerleg|shin|calf|knee|lowleg|tibia)$/.test(base)) cands['kn' + sd].push(n.idx);
+    }
+    for (const k in cands) if (cands[k].length) map[k] = cands[k][0];
+    // chest: prefer the first spine joint (whole upper body bends); head: the one farthest from hips in hierarchy
+    model.bones = map; model.skinned = model.skins.length > 0 && Object.keys(map).length >= 4;
+    // arm-down correction for T/A-pose rest
+    model.fix = {};
+    if (map.shL !== undefined && map.elL !== undefined) model.fix.shL = this.armFix(model, map.shL, map.elL);
+    if (map.shR !== undefined && map.elR !== undefined) model.fix.shR = this.armFix(model, map.shR, map.elR);
+    // reference positions (character space, after fit) for cosmetics
+    const W = model.world, f = model.fit; const posOf = i => { const m = W[i]; return [(m[12] - f.cx) * f.s, (m[13] - f.minY) * f.s, (m[14] - f.cz) * f.s]; };
+    model.ref = {};
+    if (map.head !== undefined) { const hp = posOf(map.head); model.ref.head = { p: hp, k: Math.max(.3, (2.15 - hp[1]) / .9) }; }
+    if (map.chest !== undefined) { const cp = posOf(map.chest); const top = map.head !== undefined ? posOf(map.head)[1] : cp[1] + .9; model.ref.chest = { p: cp, k: Math.max(.3, (top - cp[1]) / .44) }; }
+    for (const b of ['elL', 'elR', 'shL', 'shR', 'hips', 'knL', 'knR', 'thL', 'thR']) if (map[b] !== undefined) model.ref[b] = { p: posOf(map[b]), k: model.ref.chest ? model.ref.chest.k : 1 };
+  },
+  armFix(model, sh, el) {
+    const a = model.world[sh], b = model.world[el]; let dx = b[12] - a[12], dy = b[13] - a[13], dz = b[14] - a[14]; const l = Math.hypot(dx, dy, dz) || 1; dx /= l; dy /= l; dz /= l;
+    if (dy < -.8) return null; // already hanging down
+    return Q.fromTo(M4.ident(), [dx, dy, dz], [0, -1, 0]);
+  },
+  async load(src, opts = {}) {
+    let buf;
+    if (src instanceof ArrayBuffer) buf = src;
+    else if (typeof Blob !== 'undefined' && src instanceof Blob) buf = await src.arrayBuffer();
+    else { const r = await fetch(src); if (!r.ok) throw new Error('โหลดไม่สำเร็จ ' + r.status); buf = await r.arrayBuffer(); }
+    return this.decode(buf, opts);
+  }
+};
+
+/* ---------- renderer support: textured lit program ---------- */
+SH.glbV = `attribute vec3 aP;attribute vec3 aN;attribute vec2 aUV;attribute vec3 aC;uniform mat4 uVP;uniform mat4 uM;varying vec3 vC;varying vec3 vN;varying vec3 vW;varying vec2 vUV;
+void main(){vec4 w=uM*vec4(aP,1.);vW=w.xyz;vN=(uM*vec4(aN,0.)).xyz;vC=aC;vUV=aUV;gl_Position=uVP*w;}`;
+SH.glbF = `precision highp float;varying vec3 vC;varying vec3 vN;varying vec3 vW;varying vec2 vUV;
+uniform vec3 uSun,uSunC,uSky,uGnd,uFogC,uCam,uEmis;uniform vec2 uFog;uniform vec4 uTint;uniform float uFlash,uAlpha,uHasTex,uCut;uniform sampler2D uTex;
+uniform vec4 uPL[6];uniform vec3 uPC[6];
+void main(){vec4 t=uHasTex>.5?texture2D(uTex,vUV):vec4(1.);if(t.a<uCut)discard;vec3 n=normalize(vN);float d=max(dot(n,uSun),0.);
+d=smoothstep(.0,.6,d)*.85+d*.15;vec3 l=mix(uGnd,uSky,n.y*.5+.5)*1.15+uSunC*d;
+for(int i=0;i<6;i++){vec3 L=uPL[i].xyz-vW;float ds=length(L);float at=max(0.,1.-ds/max(uPL[i].w,.001));at*=at;l+=uPC[i]*at*(.35+.65*max(dot(n,L/max(ds,.001)),0.));}
+vec3 c=vC*t.rgb*uTint.rgb;c=c*l+uEmis;c=mix(c,vec3(1.,1.,.95),uFlash);
+float f=clamp((length(vW-uCam)-uFog.x)/(uFog.y-uFog.x),0.,1.);c=mix(c,uFogC,f);gl_FragColor=vec4(c,uAlpha*t.a);}`;
+Renderer.prototype.useGlb = function () {
+  const gl = this.gl, e = this.env; if (!this.P.glb) this.P.glb = this.prog(SH.glbV, SH.glbF); const L = this.P.glb; gl.useProgram(L.p);
+  gl.uniformMatrix4fv(L.u.uVP, false, this.VP);
+  gl.uniform3fv(L.u.uSun, e.sun); gl.uniform3fv(L.u.uSunC, e.sunC); gl.uniform3fv(L.u.uSky, e.sky); gl.uniform3fv(L.u.uGnd, e.gnd);
+  gl.uniform3fv(L.u.uFogC, e.fogC); gl.uniform2fv(L.u.uFog, e.fog); gl.uniform3fv(L.u.uCam, this.cam);
+  gl.uniform4fv(L.u.uPL, this.pl); gl.uniform3fv(L.u.uPC, this.pc); gl.activeTexture(gl.TEXTURE0); gl.uniform1i(L.u.uTex, 0);
+  return L;
+};
+Renderer.prototype.textureAny = function (img) { // NPOT-safe
+  const gl = this.gl, t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+  const w = img.width || img.naturalWidth, h = img.height || img.naturalHeight; const pot = (w & (w - 1)) === 0 && (h & (h - 1)) === 0;
+  if (pot || this.gl2) { gl.generateMipmap(gl.TEXTURE_2D); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR); } else gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  const wrap = (pot || this.gl2) ? gl.REPEAT : gl.CLAMP_TO_EDGE; gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrap); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrap);
+  return t;
+};
+// per-renderer GPU resources of a model (textures, index buffers)
+function glbRes(R, model) {
+  let res = model.gl.get(R); if (res) return res;
+  const gl = R.gl; res = { tex: new Map(), idx: [] };
+  for (const p of model.prims) {
+    if (p.mat.img && !res.tex.has(p.mat.img)) res.tex.set(p.mat.img, R.textureAny(p.mat.img));
+    if (p.idx) { const b = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, b); const arr = p.idx instanceof Uint32Array && !R.gl2 && !gl.getExtension('OES_element_index_uint') ? Uint16Array.from(p.idx) : p.idx; gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, arr, gl.STATIC_DRAW); res.idx.push({ b, n: p.idx.length, type: arr instanceof Uint32Array ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT }); } else res.idx.push(null);
+  }
+  model.gl.set(R, res); return res;
+}
+
+/* ---------- animated instance (drop-in for Rig) ---------- */
+const _gm1 = M4.ident(), _gm2 = M4.ident(), _gm3 = M4.ident();
+class GlbRig {
+  constructor(cls, model) {
+    this.cls = cls; this.model = model; this.isGlb = true;
+    const like = (OUTFITS[cls] && OUTFITS[cls].like) || (CLASSES[cls] ? cls : 'adventurer');
+    this.base = new Rig(like, true); // procedural animation source
+    const N = model.nodes.length; this.loc = model.nodes.map((n, i) => Float32Array.from(model.loc[i])); this.world = model.nodes.map(() => M4.ident());
+    this.jm = model.skins.map(s => s.joints.map(() => M4.ident()));
+    this.rootM = M4.ident(); this.fitM = M4.ident(); this.t = Math.random() * 10; this.anim = null; this.animT = 0; this.animSpd = 1; this.animLoop = true; this.animWgt = 0;
+    this.buf = new Map(); // renderer -> [{b, data}]
+    this.dirty = true; this.tr = model.nodes.map(n => ({ t: n.t.slice(), r: n.r.slice(), s: n.s.slice() }));
+    this.locoAnim = { idle: this.find(/idle|stand|breath/i), walk: this.find(/walk/i), run: this.find(/run|sprint|jog/i) };
+    this.glbClip = null;
+  }
+  find(re) { const a = this.model.anims.find(x => re.test(x.name)); return a || null; }
+  get busy() { return this.base.busy; }
+  get clip() { return this.base.clip; } set clip(v) { this.base.clip = v; if (!v) this.glbClip = null; }
+  get clipName() { return this.base.clipName; }
+  get ang() { return this.base.ang; }
+  get rootZcarry() { return this.base.rootZcarry; } set rootZcarry(v) { this.base.rootZcarry = v; }
+  get walkAmp() { return this.base.walkAmp; }
+  play(name, speed = 1, onHit) {
+    this.base.play(name, speed, onHit);
+    // a clip of the same name inside the glb replaces the procedural pose for its duration
+    const alias = { slash: /slash|attack|strike|swing/i, throw: /throw|cast|punch/i, bow: /shoot|bow|aim/i, cast: /cast|spell|magic/i, slam: /slam|smash|cast/i, dash: /dash|roll|dodge/i, hurt: /hit|hurt|damage/i, cheer: /cheer|victory|win|celebrat/i, dance: /dance/i, sit: /sit/i, bow_emote: /bow/i, laugh: /laugh/i, sad: /sad|cry/i, angry: /angry/i, flex: /flex|pose/i, victory: /victory|win/i, kneel: /kneel/i };
+    const re = name === 'bow' && CLIPS.bow ? alias.bow : alias[name];
+    const a = re ? this.model.anims.find(x => re.test(x.name) && !/idle|walk|run/i.test(x.name)) : null;
+    this.glbClip = a ? { a, t: 0, dur: CLIPS[name] ? CLIPS[name].dur / (speed || 1) : a.dur } : null;
+  }
+  update(dt, st) {
+    this.t += dt; this.base.update(dt, st); this.dirty = true;
+    const w = st.walk || 0, run = clamp((st.speed || 0) / 7, 0, 1.2);
+    // pick a glb locomotion clip when the file has one
+    const L = this.locoAnim; const want = this.glbClip ? null : (w > .3 ? (run > .6 && L.run ? L.run : L.walk || L.run) : L.idle);
+    if (this.glbClip) { this.glbClip.t += dt; this.anim = this.glbClip.a; this.animT = this.glbClip.t / this.glbClip.dur * this.glbClip.a.dur; this.animWgt = Math.min(1, this.animWgt + dt * 8); if (this.glbClip.t >= this.glbClip.dur) this.glbClip = null; }
+    else if (want) { if (this.anim !== want) { this.anim = want; this.animT = 0; } this.animT += dt * (want === L.walk ? .6 + run : 1); this.animWgt = Math.min(1, this.animWgt + dt * 6); }
+    else this.animWgt = Math.max(0, this.animWgt - dt * 6);
+  }
+  sampleAnim() {
+    const a = this.anim; if (!a || this.animWgt <= 0) { for (let i = 0; i < this.tr.length; i++) { const n = this.model.nodes[i], o = this.tr[i]; o.t[0] = n.t[0]; o.t[1] = n.t[1]; o.t[2] = n.t[2]; o.r[0] = n.r[0]; o.r[1] = n.r[1]; o.r[2] = n.r[2]; o.r[3] = n.r[3]; o.s[0] = n.s[0]; o.s[1] = n.s[1]; o.s[2] = n.s[2]; } return; }
+    const t = a.dur > 0 ? (this.animT % a.dur) : 0; const wg = this.animWgt;
+    for (let i = 0; i < this.tr.length; i++) { const n = this.model.nodes[i], o = this.tr[i]; o.t[0] = n.t[0]; o.t[1] = n.t[1]; o.t[2] = n.t[2]; o.r[0] = n.r[0]; o.r[1] = n.r[1]; o.r[2] = n.r[2]; o.r[3] = n.r[3]; o.s[0] = n.s[0]; o.s[1] = n.s[1]; o.s[2] = n.s[2]; }
+    const tmpq = [0, 0, 0, 1];
+    for (const c of a.ch) {
+      const T = c.times, n = T.length; if (!n) continue; let k = 0; while (k < n - 1 && t >= T[k + 1]) k++;
+      const k1 = Math.min(n - 1, k + 1); const u = c.interp === 'STEP' ? 0 : clamp((t - T[k]) / Math.max(1e-6, T[k1] - T[k]), 0, 1);
+      const sz = c.sz, st = c.interp === 'CUBICSPLINE' ? 3 : 1, off = c.interp === 'CUBICSPLINE' ? sz : 0;
+      const o = this.tr[c.node]; const V = c.vals; const i0 = (k * st * sz) + off, i1 = (k1 * st * sz) + off;
+      if (c.path === 'rotation') { const qa = [V[i0], V[i0 + 1], V[i0 + 2], V[i0 + 3]], qb = [V[i1], V[i1 + 1], V[i1 + 2], V[i1 + 3]]; Q.slerp(tmpq, qa, qb, u); Q.slerp(o.r, o.r, tmpq, wg); }
+      else { const dst = c.path === 'translation' ? o.t : o.s; for (let j = 0; j < 3; j++) dst[j] = lerp(dst[j], lerp(V[i0 + j], V[i1 + j], u), wg); }
+    }
+  }
+  // compute node matrices: glb animation (if any) + the game's procedural bone rotations retargeted on top
+  solve() {
+    const M = this.model, B = M.bones, base = this.base; this.sampleAnim();
+    const rotFor = (bone) => { const a = base.ang[BONE_IDX[bone]]; return M4.compose(_gm1, 0, 0, 0, a[0], a[1], a[2], 1, 1, 1); };
+    const tmp = M4.ident(), fix = M4.ident(), rrest = M4.ident(), rrestT = M4.ident();
+    const walkN = (i, pm) => {
+      const n = M.nodes[i], o = this.tr[i]; const L = n.mat ? n.mat : Q.m(this.loc[i], o.r, o.t, o.s);
+      // retarget: find our bone mapped to this node
+      let bone = null; for (const k in B) if (B[k] === i) { bone = k; break; }
+      if (bone && M.skinned && bone !== 'hips') {
+        Q.rot(rrest, M.world[i]); Q.transpose(rrestT, rrest);
+        const R = rotFor(bone); // character-space rotation
+        if (M.fix[bone]) M4.mul(R, R, M.fix[bone]);
+        M4.mul(fix, rrestT, R); M4.mul(fix, fix, rrest); // local = inv(rest) * R * rest
+        M4.mul(tmp, L, fix); M4.mul(this.world[i], pm, tmp);
+      } else if (bone === 'hips' && M.skinned) {
+        Q.rot(rrest, M.world[i]); Q.transpose(rrestT, rrest); const R = rotFor('hips'); M4.mul(fix, rrestT, R); M4.mul(fix, fix, rrest); M4.mul(tmp, L, fix); M4.mul(this.world[i], pm, tmp);
+      } else M4.mul(this.world[i], pm, L);
+      for (const c of n.children) walkN(c, this.world[i]);
+    };
+    for (const i of M.scene) walkN(i, this.fitM);
+    // joint matrices
+    for (let s = 0; s < M.skins.length; s++) { const sk = M.skins[s]; for (let j = 0; j < sk.joints.length; j++) { const jm = this.jm[s][j]; if (sk.ibm) { M4.mul(jm, this.world[sk.joints[j]], sk.ibm.subarray(j * 16, j * 16 + 16)); } else jm.set(this.world[sk.joints[j]]); } }
+  }
+  pose(x, y, z, face, s, fall = 0) {
+    const b = this.base; b.pose(x, y, z, face, s, fall); // root motion (lunge, hop, spin, fall)
+    const f = this.model.fit; M4.compose(_gm2, -f.cx * f.s, -f.minY * f.s + f.y, -f.cz * f.s, 0, f.yaw, 0, f.s, f.s, f.s);
+    M4.mul(this.fitM, b.rootM, _gm2); this.solve(); this.dirty = true;
+  }
+  // skin on CPU into a per-renderer dynamic buffer; layout pos3 nrm3 uv2 col3 (11 floats)
+  skin(R) {
+    const M = this.model; let arr = this.buf.get(R);
+    if (!arr) { arr = M.prims.map(p => ({ b: R.gl.createBuffer(), d: new Float32Array(p.nv * 11) })); this.buf.set(R, arr); }
+    const gl = R.gl;
+    for (let pi = 0; pi < M.prims.length; pi++) {
+      const p = M.prims[pi], d = arr[pi].d; const col = p.col, uv = p.uv;
+      const Wn = this.world[p.node]; const J = p.skin >= 0 ? this.jm[p.skin] : null;
+      for (let i = 0; i < p.nv; i++) {
+        const px = p.pos[i * 3], py = p.pos[i * 3 + 1], pz = p.pos[i * 3 + 2], nx = p.nrm[i * 3], ny = p.nrm[i * 3 + 1], nz = p.nrm[i * 3 + 2];
+        let x = 0, y = 0, z = 0, a = 0, b = 0, c = 0;
+        if (J && p.joints) {
+          for (let k = 0; k < 4; k++) {
+            const w = p.weights[i * 4 + k]; if (w <= 0) continue; const m = J[p.joints[i * 4 + k]]; if (!m) continue;
+            x += w * (m[0] * px + m[4] * py + m[8] * pz + m[12]); y += w * (m[1] * px + m[5] * py + m[9] * pz + m[13]); z += w * (m[2] * px + m[6] * py + m[10] * pz + m[14]);
+            a += w * (m[0] * nx + m[4] * ny + m[8] * nz); b += w * (m[1] * nx + m[5] * ny + m[9] * nz); c += w * (m[2] * nx + m[6] * ny + m[10] * nz);
+          }
+        } else { const m = Wn; x = m[0] * px + m[4] * py + m[8] * pz + m[12]; y = m[1] * px + m[5] * py + m[9] * pz + m[13]; z = m[2] * px + m[6] * py + m[10] * pz + m[14]; a = m[0] * nx + m[4] * ny + m[8] * nz; b = m[1] * nx + m[5] * ny + m[9] * nz; c = m[2] * nx + m[6] * ny + m[10] * nz; }
+        const l = Math.hypot(a, b, c) || 1; const o = i * 11;
+        d[o] = x; d[o + 1] = y; d[o + 2] = z; d[o + 3] = a / l; d[o + 4] = b / l; d[o + 5] = c / l; d[o + 6] = uv ? uv[i * 2] : 0; d[o + 7] = uv ? uv[i * 2 + 1] : 0;
+        if (col) { d[o + 8] = col[i * 3]; d[o + 9] = col[i * 3 + 1]; d[o + 10] = col[i * 3 + 2]; } else { d[o + 8] = d[o + 9] = d[o + 10] = 1; }
+      }
+      gl.bindBuffer(gl.ARRAY_BUFFER, arr[pi].b); gl.bufferData(gl.ARRAY_BUFFER, d, gl.DYNAMIC_DRAW);
+    }
+    this.dirty = false; return arr;
+  }
+  draw(R, parts, opts = {}) {
+    const M = this.model, gl = R.gl; const res = glbRes(R, M); const arr = this.dirty || !this.buf.get(R) ? this.skin(R) : this.buf.get(R);
+    const L = R.useGlb();
+    gl.uniformMatrix4fv(L.u.uM, false, IDM);
+    gl.uniform4f(L.u.uTint, opts.tint ? opts.tint[0] : 1, opts.tint ? opts.tint[1] : 1, opts.tint ? opts.tint[2] : 1, 1);
+    gl.uniform1f(L.u.uFlash, opts.flash || 0); gl.uniform1f(L.u.uAlpha, opts.alpha || 1);
+    const emis = opts.emis && opts.emis !== RIG_FILL ? opts.emis : ZERO3;
+    if (opts.alpha && opts.alpha < 1) { gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); }
+    gl.disable(gl.CULL_FACE);
+    for (let pi = 0; pi < M.prims.length; pi++) {
+      const p = M.prims[pi]; const mat = p.mat; const tex = mat.img ? res.tex.get(mat.img) : null;
+      gl.uniform1f(L.u.uHasTex, tex ? 1 : 0); gl.uniform1f(L.u.uCut, mat.mask ? mat.cutoff : .02); if (tex) gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.uniform3f(L.u.uEmis, emis[0] + mat.emis[0] * .3, emis[1] + mat.emis[1] * .3, emis[2] + mat.emis[2] * .3);
+      gl.uniform4f(L.u.uTint, (opts.tint ? opts.tint[0] : 1) * mat.col[0], (opts.tint ? opts.tint[1] : 1) * mat.col[1], (opts.tint ? opts.tint[2] : 1) * mat.col[2], 1);
+      gl.bindBuffer(gl.ARRAY_BUFFER, arr[pi].b);
+      gl.enableVertexAttribArray(L.a.aP); gl.vertexAttribPointer(L.a.aP, 3, gl.FLOAT, false, 44, 0);
+      gl.enableVertexAttribArray(L.a.aN); gl.vertexAttribPointer(L.a.aN, 3, gl.FLOAT, false, 44, 12);
+      if (L.a.aUV !== undefined && L.a.aUV >= 0) { gl.enableVertexAttribArray(L.a.aUV); gl.vertexAttribPointer(L.a.aUV, 2, gl.FLOAT, false, 44, 24); }
+      gl.enableVertexAttribArray(L.a.aC); gl.vertexAttribPointer(L.a.aC, 3, gl.FLOAT, false, 44, 32);
+      const ix = res.idx[pi];
+      if (ix) { gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ix.b); gl.drawElements(gl.TRIANGLES, ix.n, ix.type, 0); } else gl.drawArrays(gl.TRIANGLES, 0, p.nv);
+    }
+    if (L.a.aUV !== undefined && L.a.aUV >= 0) gl.disableVertexAttribArray(L.a.aUV);
+    gl.enable(gl.CULL_FACE); if (opts.alpha && opts.alpha < 1) gl.disable(gl.BLEND);
+    R.useLit(); // restore the flat-shaded program for whatever draws next
+  }
+  // approximate frames of the game's bones for cosmetics / fx
+  boneM(name) {
+    const M = this.model, B = M.bones, ref = M.ref[name === 'eyes' ? 'head' : name];
+    const bn = name === 'eyes' ? 'head' : name; const out = M4.ident();
+    if (ref && B[bn] !== undefined) {
+      // frame = animatedWorld * inv(restWorld) * T(restPos) * S(k): a frame at the joint with identity rest rotation
+      const f = M.fit; M4.compose(_gm3, -f.cx * f.s, -f.minY * f.s + f.y, -f.cz * f.s, 0, f.yaw, 0, f.s, f.s, f.s);
+      const rest = M4.mul(M4.ident(), _gm3, M.world[B[bn]]); const inv = M4.invert(M4.ident(), rest) || M4.ident();
+      const k = ref.k * f.s / (f.s0 || f.s); const fr = M4.compose(M4.ident(), rest[12], rest[13], rest[14], 0, 0, 0, k, k, k);
+      M4.mul(out, this.world[B[bn]], inv); M4.mul(out, out, fr); return out;
+    }
+    return this.base.boneM(name);
+  }
+  bonePos(name, lx = 0, ly = 0, lz = 0) { return M4.xform(this.boneM(name), lx, ly, lz); }
+}
+// Rig(sheet) returns a GlbRig when a model is registered for that sheet
+// (a constructor may return another object, so every `new Rig(...)` in the game picks the glb automatically)
+Object.defineProperty(Rig.prototype, 'isGlb', { value: false, writable: true });
+{
+  const proto = Rig.prototype;
+  const orig = Rig;
+  // eslint-disable-next-line no-global-assign
+  Rig = function Rig(cls, raw) {
+    const r = new orig(cls);
+    if (!raw && GLBModels[cls]) return new GlbRig(cls, GLBModels[cls]);
+    return r;
+  };
+  Rig.prototype = proto; proto.constructor = Rig;
+}
+
+/* ---------- registry: shared models (web host) + personal imports ---------- */
+const GLBSys = {
+  list: [],          // entries from index.json
+  loading: {}, errors: {}, local: {},
+  async init() {
+    try { await this.loadLocal(); } catch (e) { }
+    try {
+      const r = await fetch(MODEL_BASE + 'index.json', { cache: 'no-cache' }); if (!r.ok) return;
+      const list = await r.json(); if (!Array.isArray(list)) return; this.list = list;
+      for (const e of list) if (e && e.sheet && e.file && !GLBModels[e.sheet]) this.loadUrl(e.sheet, MODEL_BASE + e.file, e);
+    } catch (e) { }
+  },
+  async loadUrl(sheet, url, opts) {
+    if (this.loading[sheet]) return; this.loading[sheet] = true;
+    try { const m = await GLB.load(url, Object.assign({ name: sheet }, opts || {})); this.register(sheet, m, 'shared'); }
+    catch (e) { this.errors[sheet] = e.message || String(e); console.warn('glb', sheet, e); }
+    this.loading[sheet] = false;
+  },
+  register(sheet, model, src) { model.src = src; GLBModels[sheet] = model; this.invalidate(sheet); },
+  unregister(sheet) { delete GLBModels[sheet]; this.invalidate(sheet); },
+  invalidate(sheet) {
+    if (typeof Player !== 'undefined' && Player.rig && Player.rig.cls === sheet) Player.rig = null;
+    if (typeof NPCList !== 'undefined') for (const n of NPCList) if (n.sheet === sheet) n.rig = null;
+    if (typeof Remote !== 'undefined' && Remote.map) for (const p of Remote.map.values()) if (p.rig && p.rig.cls === sheet) p.rig = null;
+    if (typeof UI !== 'undefined') { if (UI.bodies) delete UI.bodies[sheet]; if (UI.portraits) delete UI.portraits[sheet]; }
+    if (typeof ThumbR !== 'undefined' && ThumbR.cache) for (const k of ['cb_', 'cp_', 'n_']) delete ThumbR.cache[k + sheet];
+    if (typeof UI !== 'undefined' && UI.panelOpen === 'models' && UI.renderPanel) UI.renderPanel();
+  },
+  /* personal models in IndexedDB */
+  db() {
+    if (this._db) return this._db;
+    return this._db = new Promise((res, rej) => { if (typeof indexedDB === 'undefined') return rej(new Error('no idb')); const q = indexedDB.open('aq_models', 1); q.onupgradeneeded = () => { q.result.createObjectStore('m'); }; q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); });
+  },
+  async put(sheet, buf, opts) { const db = await this.db(); await new Promise((res, rej) => { const tx = db.transaction('m', 'readwrite'); tx.objectStore('m').put({ buf, opts: opts || {}, t: Date.now() }, sheet); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); },
+  async del(sheet) { const db = await this.db(); await new Promise((res, rej) => { const tx = db.transaction('m', 'readwrite'); tx.objectStore('m').delete(sheet); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); },
+  async all() { const db = await this.db(); return new Promise((res, rej) => { const tx = db.transaction('m', 'readonly'); const st = tx.objectStore('m'); const keys = st.getAllKeys(), vals = st.getAll(); tx.oncomplete = () => res(keys.result.map((k, i) => ({ sheet: k, rec: vals.result[i] }))); tx.onerror = () => rej(tx.error); }); },
+  async loadLocal() {
+    const rows = await this.all();
+    for (const r of rows) { try { const m = await GLB.decode(r.rec.buf, Object.assign({ name: r.sheet }, r.rec.opts || {})); this.local[r.sheet] = { opts: r.rec.opts || {}, tris: m.tris, t: r.rec.t }; this.register(r.sheet, m, 'local'); } catch (e) { this.errors[r.sheet] = e.message; } }
+  },
+  async importFile(sheet, file, opts) {
+    const buf = await file.arrayBuffer(); if (buf.byteLength > 24 * 1024 * 1024) throw new Error('ไฟล์ใหญ่เกิน 24 MB');
+    const m = await GLB.decode(buf, Object.assign({ name: sheet }, opts || {}));
+    await this.put(sheet, buf, opts); this.local[sheet] = { opts: opts || {}, tris: m.tris, t: Date.now() }; this.register(sheet, m, 'local'); return m;
+  },
+  async removeLocal(sheet) { await this.del(sheet); delete this.local[sheet]; this.unregister(sheet); const e = this.list.find(x => x.sheet === sheet); if (e) this.loadUrl(sheet, MODEL_BASE + e.file, e); },
+  async retune(sheet, opts) { const m = GLBModels[sheet]; if (!m) return; const buf = this.local[sheet] ? (await this.all()).find(r => r.sheet === sheet) : null; if (buf) { await this.put(sheet, buf.rec.buf, opts); this.local[sheet].opts = opts; } const f = m.fit; f.s = f.s / (m.opts.scale || 1) * (opts.scale || 1); f.yaw = opts.yaw || 0; f.y = opts.y || 0; m.opts = opts; this.invalidate(sheet); }
+};
+
+/* ============================================================
+   Fashion: wearable costumes, hats, face items, back items and
+   weapon skins that change the 3D model. All designs original.
+   ============================================================ */
+const FP = { black: '#1e1a22', white: '#f4f0e7', red: '#c8402a', navy: '#1f2a4a', gold: '#d9a845', pink: '#f0a0c0', brown: '#6b4428', skin: '#ffe1c8', orange: '#e8842a', green: '#4a8a3a', blue: '#3a6ad0', purple: '#6a3aa0', gray: '#8a8a94', steel: '#c9ced8', cream: '#efe3c4', teal: '#2aa0a0', yellow: '#f0d040', dark: '#2a2430', leaf: '#6ab04a', sky: '#8fd3ff', wine: '#7a1a30', khaki: '#b8a070', lime: '#b8e040', mint: '#8ae0c0', cyan: '#40e0ff', silver: '#e0e4ec', wood: '#8a6240', ice: '#bfeaff', lava: '#ff6a2a', coral: '#ff8a70', rose: '#e05080' };
+const F = {}; for (const k in FP) F[k] = hc(FP[k]);
+const dk = (c, k = .75) => shade(c, k);
+
+/* ---------- geometry helpers ---------- */
+const FH = {
+  ears(g, col, inner, kind = 'cat') {
+    for (const s of [-1, 1]) {
+      if (kind === 'cat') { g.cone(s * .3, .72, -.02, s * .35, 1, -.1, .15, .36, 4, col); g.cone(s * .3, .74, .0, s * .3, 1, -.05, .08, .26, 4, inner); }
+      else if (kind === 'fox') { g.cone(s * .33, .7, -.04, s * .45, 1, -.15, .17, .5, 4, col); g.cone(s * .33, .72, -.02, s * .4, 1, -.1, .09, .36, 4, inner); }
+      else if (kind === 'bunny') { g.ell(s * .2, 1.1, -.05, .11, .42, .07, col, 6, 5, .1, 0); g.ell(s * .2, 1.1, -.0, .06, .3, .04, inner, 5, 4, .1, 0); }
+      else if (kind === 'bear') { g.sphere(s * .4, .8, -.05, .17, col, 7, 5); g.sphere(s * .4, .8, .02, .1, inner, 6, 4); }
+      else if (kind === 'panda') { g.sphere(s * .4, .82, -.05, .16, F.black, 7, 5); }
+      else if (kind === 'mouse') { g.ell(s * .45, .8, -.05, .2, .2, .05, col, 8, 5); g.ell(s * .45, .8, -.0, .13, .13, .04, inner, 7, 4); }
+    }
+  },
+  hood(g, col, col2) { g.jit = .02; g.sphereSkip(0, .44, -.02, .58, col, 16, 12, c => (c[2] > .2 && c[1] < .25) || c[1] < -.4); g.cyl(0, -.05, 0, .56, .6, .1, 14, col2 || dk(col), null, true); g.jit = .03; },
+  hat(g, brimR, crownR, h, col, band) { g.cyl(0, 0, 0, brimR, brimR, .05, 16, col, shade(col, 1.08)); g.cyl(0, .04, 0, crownR, crownR * .92, h, 14, col, shade(col, 1.1)); if (band) g.cyl(0, .07, 0, crownR + .02, crownR + .02, .1, 14, band, null, true); },
+  ring(g, r, t, col, seg = 12, y = 0) { for (let i = 0; i < seg; i++) { const a = i / seg * TAU, a2 = (i + 1) / seg * TAU; g.push((Math.cos(a) + Math.cos(a2)) / 2 * r, y, (Math.sin(a) + Math.sin(a2)) / 2 * r, 0, -(a + a2) / 2, 0); g.box(0, 0, 0, t, t, r * TAU / seg + t * .4, col); g.pop(); } },
+  wing(g, col, col2, n = 4, L = .9, feather = true) { for (let i = 0; i < n; i++) { const rz = .85 - i * (1.2 / n), Ln = L - i * (L * .12); g.at(.1, 0, 0, 0, 1, 1, 1, 0, rz); g.box(Ln / 2 + .05, 0, 0, Ln, .07, .05, dk(col)); g.box(Ln / 2 + .05, -.12, 0, Ln * .92, .22, .03, i % 2 ? col : col2 || col); g.reset(); if (feather) g.cone(.05 + Ln, 0, 0, 1, -.25, 0, .05, .18, 3, col2 || col); } g.sphere(.1, 0, 0, .13, dk(col), 5, 4); },
+  tail(g, col, tip, L = .7, r = .07, curl = .3) { for (let i = 0; i < 6; i++) { const t = i / 5; g.sphere(0, -.05 - Math.sin(t * 2.2) * L * .35, -.1 - t * L, r * (1 - t * .3) + (tip && i > 3 ? .03 : 0), i > 3 && tip ? tip : col, 6, 4); } },
+  pom(g, x, y, z, r, col) { g.jit = .08; g.sphere(x, y, z, r, col, 7, 5); g.jit = .03; },
+  stripe(g, y, r, h, col, n = 6) { for (let i = 0; i < n; i++) { const a = i / n * TAU; g.push(Math.cos(a) * r, y, Math.sin(a) * r, 0, -a, 0); g.box(0, 0, 0, .03, h, .14, col); g.pop(); } },
+  glasses(g, lens, frame) { for (const s of [-1, 1]) { g.push(s * .19, .4, .47); g.box(0, 0, 0, .26, .17, .03, frame); g.box(0, 0, .01, .22, .13, .03, lens); g.pop(); } g.box(0, .41, .47, .14, .025, .025, frame); for (const s of [-1, 1]) g.box(s * .42, .42, .2, .025, .025, .5, frame); },
+  roundGlasses(g, lens, frame) { for (const s of [-1, 1]) { g.push(s * .19, .4, .47, Math.PI / 2, 0, 0); FH.ring(g, .12, .025, frame, 10, 0); g.cyl(0, -.005, 0, .11, .11, .01, 10, lens, null, true); g.pop(); } g.box(0, .41, .47, .14, .025, .025, frame); for (const s of [-1, 1]) g.box(s * .42, .42, .2, .025, .025, .5, frame); },
+  emblem(g, x, y, z, col) { g.box(x, y, z, .12, .12, .02, col); g.box(x, y, z + .005, .06, .18, .015, shade(col, .8)); }
+};
+
+/* ---------- head / face / back items: spec { slot, bone, pos, rot, s, emis, mirror, flap, bob, mk } ---------- */
+const COS_MESH = {
+  /* legacy items (geometry kept identical, now built per renderer) */
+  c_straw: { slot: 'head', bone: 'head', pos: [0, .9, -.02], rot: [-.08, 0, 0], s: 1.05, mk: g => { g.cyl(0, 0, 0, .95, .95, .06, 14, hexc('#e3c37a'), hexc('#ecd08e')); g.cyl(0, .06, 0, .5, .46, .42, 12, hexc('#e3c37a'), hexc('#ecd08e')); g.cyl(0, .08, 0, .52, .52, .12, 12, hexc('#c8473a')); } },
+  c_sheep: { slot: 'head', bone: 'head', pos: [0, .86, -.02], rot: [-.08, 0, 0], s: .95, mk: g => { for (let i = 0; i < 9; i++) { const a = i / 9 * TAU; g.sphere(Math.cos(a) * .42, .18 + (i % 2) * .08, Math.sin(a) * .42, .26, hexc('#f7f4ec'), 6, 4); } g.sphere(0, .4, 0, .38, hexc('#fbf9f3'), 7, 5); for (const s of [-1, 1]) { g.sphere(s * .62, .15, .05, .2, hexc('#b9a27c'), 6, 4); g.sphere(s * .72, .02, .2, .14, hexc('#a68f6a'), 5, 3); g.at(s * .5, .25, .15, 0, 1, 1, 1, 0, s * 1.3); g.box(0, 0, 0, .32, .14, .2, hexc('#e8c9b5')); g.reset(); } } },
+  c_crown: { slot: 'head', bone: 'head', pos: [0, 1.0, -.02], rot: [-.08, 0, 0], emis: [.15, .2, .25], mk: g => { g.cyl(0, 0, 0, .55, .55, .18, 10, F.gold); for (let i = 0; i < 6; i++) { const a = i / 6 * TAU; g.cyl(Math.cos(a) * .5, .15, Math.sin(a) * .5, .13, 0, .45, 4, i % 2 ? hexc('#8fd3ff') : hexc('#d65aa0')); } } },
+  c_kingcrown: { slot: 'head', bone: 'head', pos: [0, .98, -.02], rot: [-.08, 0, 0], mk: g => { g.cyl(0, 0, 0, .5, .5, .2, 12, hexc('#e2b54a'), hexc('#f3d27a'), false); for (let i = 0; i < 8; i++) { const a = i / 8 * TAU; g.cyl(Math.cos(a) * .46, .2, Math.sin(a) * .46, .1, 0, i % 2 ? .28 : .4, 4, hexc('#f3d27a')); g.sphere(Math.cos(a) * .51, .1, Math.sin(a) * .51, .05, i % 2 ? hexc('#d65aa0') : hexc('#6fe0f0'), 4, 3); } } },
+  c_halo: { slot: 'head', bone: 'head', pos: [0, 1.18, -.02], rot: [-.08, 0, 0], bob: .04, emis: [.7, .55, .2], mk: g => { g.jit = 0; for (let i = 0; i < 20; i++) { const a0 = i / 20 * TAU, a1 = (i + 1) / 20 * TAU; const P = (a, r, y) => [Math.cos(a) * r, y, Math.sin(a) * r]; const c = hexc('#f6d77e'); g.quad(P(a0, .32, .03), P(a1, .32, .03), P(a1, .4, .03), P(a0, .4, .03), c); g.quad(P(a0, .4, -.03), P(a1, .4, -.03), P(a1, .32, -.03), P(a0, .32, -.03), c); g.quad(P(a0, .4, .03), P(a1, .4, .03), P(a1, .4, -.03), P(a0, .4, -.03), c); g.quad(P(a0, .32, -.03), P(a1, .32, -.03), P(a1, .32, .03), P(a0, .32, .03), c); } } },
+  c_angel: { slot: 'back', bone: 'chest', pos: [.05, .3, -.2], rot: [0, .35, .25], s: .85, mirror: true, flap: 1, emis: [.12, .12, .14], mk: g => { for (let i = 0; i < 5; i++) { const rz = .95 - i * .34, L = .95 - i * .1; g.at(.1, 0, 0, 0, 1, 1, 1, 0, rz); g.box(L / 2 + .05, 0, 0, L, .2, .05, hexc(i % 2 ? '#ffffff' : '#e9f0fb')); g.reset(); } g.sphere(.12, 0, 0, .16, hexc('#f4f7fc'), 5, 4); } },
+  c_bat: { slot: 'back', bone: 'chest', pos: [.05, .3, -.2], rot: [0, .35, .25], s: .85, mirror: true, flap: 1, emis: [.04, .02, .06], mk: g => { for (let i = 0; i < 4; i++) { const rz = .7 - i * .38, L = .9 - i * .12; g.at(.1, 0, 0, 0, 1, 1, 1, 0, rz); g.box(L / 2 + .05, 0, 0, L, .06, .06, hexc('#2a1d3c')); g.box(L / 2 + .05, -.11, 0, L * .92, .2, .03, hexc('#5a3f84')); g.reset(); } } },
+  c_dragon: { slot: 'back', bone: 'chest', pos: [.05, .3, -.2], rot: [0, .35, .25], s: .85, mirror: true, flap: 1, emis: [.15, .03, .01], mk: g => { for (let i = 0; i < 4; i++) { const rz = .75 - i * .36, L = 1.05 - i * .12; g.at(.1, 0, 0, 0, 1, 1, 1, 0, rz); g.box(L / 2 + .05, 0, 0, L, .07, .07, hexc('#5a1a10')); g.box(L / 2 + .05, -.13, 0, L * .92, .24, .03, i % 2 ? hexc('#d8452e') : hexc('#b8321f')); g.reset(); } g.cone(.12, .05, 0, 0, 1, 0, .05, .2, 4, hexc('#f3d27a')); } },
+  c_crystalw: { slot: 'back', bone: 'chest', pos: [.05, .3, -.2], rot: [0, .35, .25], s: .85, mirror: true, flap: 1, emis: [.2, .45, .55], mk: g => { g.jit = .06; for (let i = 0; i < 5; i++) { const rz = .9 - i * .36, L = 1.0 - i * .1; g.at(.1, 0, 0, 0, 1, 1, 1, 0, rz - Math.PI / 2); g.cyl(0, .05, 0, .09, 0, L, 4, i % 2 ? hexc('#9ff2ff') : hexc('#6fd8f5')); g.reset(); } g.sphere(.1, 0, 0, .1, hexc('#e8fbff'), 5, 4); } },
+  /* ---- hats ---- */
+  h_cat: { slot: 'head', bone: 'head', pos: [0, 0, 0], mk: g => FH.ears(g, F.black, F.pink, 'cat') },
+  h_catw: { slot: 'head', bone: 'head', pos: [0, 0, 0], mk: g => FH.ears(g, F.white, F.pink, 'cat') },
+  h_fox: { slot: 'head', bone: 'head', pos: [0, 0, 0], mk: g => FH.ears(g, F.orange, F.cream, 'fox') },
+  h_bunny: { slot: 'head', bone: 'head', pos: [0, 0, 0], mk: g => FH.ears(g, F.white, F.pink, 'bunny') },
+  h_bear: { slot: 'head', bone: 'head', pos: [0, 0, 0], mk: g => FH.ears(g, F.brown, hexc('#d8b090'), 'bear') },
+  h_panda: { slot: 'head', bone: 'head', pos: [0, 0, 0], mk: g => FH.ears(g, F.black, F.black, 'panda') },
+  h_mouse: { slot: 'head', bone: 'head', pos: [0, 0, 0], mk: g => FH.ears(g, F.gray, F.pink, 'mouse') },
+  h_horns: { slot: 'head', bone: 'head', pos: [0, 0, 0], emis: [.08, .01, .01], mk: g => { for (const s of [-1, 1]) { g.cone(s * .3, .72, -.05, s * .5, 1, -.3, .09, .34, 5, F.red); g.cone(s * .42, .98, -.14, s * .2, 1, .3, .05, .2, 4, dk(F.red)); } } },
+  h_pumpkin: { slot: 'head', bone: 'head', pos: [0, .42, 0], cover: true, emis: [.12, .05, 0], mk: g => { g.jit = .04; for (let i = 0; i < 8; i++) { const a = i / 8 * TAU; g.ell(Math.cos(a) * .26, .02, Math.sin(a) * .26, .52, .66, .52, i % 2 ? F.orange : dk(F.orange, .88), 8, 6); } g.cyl(0, .64, 0, .07, .05, .2, 5, F.green); g.jit = 0; for (const s of [-1, 1]) g.cone(s * .2, .16, .72, 0, 1, .1, .11, .2, 3, F.black); g.box(0, -.14, .74, .38, .06, .04, F.black); g.box(.12, -.09, .74, .06, .06, .04, F.black); g.box(-.14, -.18, .74, .06, .06, .04, F.black); } },
+  h_witch: { slot: 'head', bone: 'head', pos: [0, .8, -.04], rot: [-.1, 0, 0], mk: g => { g.cyl(0, 0, 0, .9, .88, .06, 16, F.purple, dk(F.purple, .9)); g.cyl(0, .05, 0, .48, .4, .3, 12, F.purple); g.cyl(0, .08, 0, .5, .5, .12, 12, F.black, null, true); g.box(0, .14, .5, .12, .12, .03, F.gold); g.push(0, .35, -.04, -.25); g.cyl(0, 0, 0, .4, .14, .45, 10, F.purple, null, true); g.push(0, .45, 0, -.6); g.cyl(0, 0, 0, .14, 0, .4, 8, F.purple, null, true); g.pop(); g.pop(); } },
+  h_tophat: { slot: 'head', bone: 'head', pos: [0, .85, -.02], rot: [-.08, 0, .06], mk: g => { g.cyl(0, 0, 0, .64, .64, .05, 16, F.black, dk(F.black, 1.3)); g.cyl(0, .04, 0, .44, .46, .6, 14, F.black, dk(F.black, 1.3)); g.cyl(0, .08, 0, .47, .47, .12, 14, F.red, null, true); } },
+  h_tricorn: { slot: 'head', bone: 'head', pos: [0, .85, -.02], rot: [-.08, 0, 0], mk: g => { g.cyl(0, 0, 0, .55, .5, .3, 14, F.dark); for (let i = 0; i < 3; i++) { const a = i / 3 * TAU + Math.PI / 2; g.push(Math.cos(a) * .5, .15, Math.sin(a) * .5, .9, -a + Math.PI / 2, 0); g.box(0, .1, 0, .7, .28, .05, F.dark); g.box(0, .1, .02, .66, .22, .03, dk(F.gold, 1)); g.pop(); } g.sphere(0, .22, .52, .09, F.white, 6, 4); g.box(0, .08, .52, .2, .03, .03, F.white); } },
+  h_cowboy: { slot: 'head', bone: 'head', pos: [0, .84, -.02], rot: [-.1, 0, 0], mk: g => { g.cyl(0, 0, 0, .9, .85, .06, 16, F.brown, shade(F.brown, 1.1)); for (const s of [-1, 1]) { g.push(s * .8, .02, 0, 0, 0, s * .5); g.box(0, .08, 0, .25, .06, .9, F.brown); g.pop(); } g.cyl(0, .05, 0, .48, .42, .4, 12, F.brown); g.box(0, .4, 0, .3, .1, .7, dk(F.brown)); g.cyl(0, .08, 0, .5, .5, .09, 12, F.black, null, true); } },
+  h_police: { slot: 'head', bone: 'head', pos: [0, .84, 0], rot: [-.05, 0, 0], mk: g => { g.cyl(0, 0, 0, .52, .56, .22, 14, F.navy, dk(F.navy, 1.2)); g.cyl(0, .22, 0, .56, .58, .05, 14, F.navy, dk(F.navy, 1.2)); g.push(0, 0, .45, .3); g.box(0, 0, 0, .55, .03, .3, F.black); g.pop(); g.box(0, .14, .52, .14, .14, .03, F.gold); g.cyl(0, .02, 0, .54, .54, .05, 14, F.gold, null, true); } },
+  h_chef: { slot: 'head', bone: 'head', pos: [0, .84, 0], mk: g => { g.cyl(0, 0, 0, .5, .5, .22, 14, F.white); g.jit = .05; for (let i = 0; i < 7; i++) { const a = i / 7 * TAU; g.sphere(Math.cos(a) * .3, .5, Math.sin(a) * .3, .28, F.white, 7, 5); } g.sphere(0, .62, 0, .32, F.white, 7, 5); g.jit = .03; } },
+  h_tiara: { slot: 'head', bone: 'head', pos: [0, .84, .02], rot: [-.12, 0, 0], emis: [.1, .08, .02], mk: g => { FH.ring(g, .46, .035, F.gold, 14, 0); for (let i = -2; i <= 2; i++) { const a = Math.PI / 2 + i * .32; g.cone(Math.cos(a) * .44, .02, Math.sin(a) * .44, 0, 1, .1, .035, i === 0 ? .32 : .2 - Math.abs(i) * .03, 4, F.gold); g.sphere(Math.cos(a) * .44, (i === 0 ? .34 : .2 - Math.abs(i) * .03), Math.sin(a) * .44, .045, i === 0 ? F.pink : F.sky, 5, 4); } } },
+  h_flowers: { slot: 'head', bone: 'head', pos: [0, .82, 0], rot: [-.1, 0, 0], mk: g => { FH.ring(g, .5, .05, F.leaf, 14, 0); const cs = [F.pink, F.yellow, F.white, F.coral, F.sky]; for (let i = 0; i < 10; i++) { const a = i / 10 * TAU; const c = cs[i % cs.length]; for (let k = 0; k < 5; k++) { const b = k / 5 * TAU; g.sphere(Math.cos(a) * .5 + Math.cos(b) * .05, .04 + Math.sin(b) * .05, Math.sin(a) * .5, .045, c, 4, 3); } g.sphere(Math.cos(a) * .5, .06, Math.sin(a) * .5, .035, F.yellow, 4, 3); } } },
+  h_headphones: { slot: 'head', bone: 'head', pos: [0, .42, 0], emis: [.0, .15, .2], mk: g => { for (let i = 0; i < 9; i++) { const a = -.1 + i / 8 * (Math.PI + .2); g.push(Math.cos(a) * .55, Math.sin(a) * .55 + .05, -.04, 0, 0, a - Math.PI / 2); g.box(0, 0, 0, .09, .22, .1, F.dark); g.pop(); } for (const s of [-1, 1]) { g.push(s * .55, .02, -.02, 0, 0, s * Math.PI / 2); g.cyl(0, 0, 0, .18, .2, .1, 10, F.dark); g.cyl(0, .1, 0, .13, .13, .02, 10, F.cyan, null, true); g.pop(); } } },
+  h_goggles: { slot: 'head', bone: 'head', pos: [0, .42, 0], mk: g => { FH.ring(g, .52, .06, F.brown, 14, .3); for (const s of [-1, 1]) { g.push(s * .17, .42, .36, -.5, 0, 0); g.cyl(0, 0, 0, .13, .13, .1, 10, F.gold); g.cyl(0, .1, 0, .1, .1, .02, 10, F.cyan, null, true); g.pop(); } } },
+  h_bow: { slot: 'head', bone: 'head', pos: [.32, .8, -.06], rot: [0, 0, -.3], mk: g => { g.ell(-.22, 0, 0, .22, .13, .06, F.pink, 7, 5); g.ell(.22, 0, 0, .22, .13, .06, F.pink, 7, 5); g.sphere(0, 0, .01, .08, dk(F.pink), 6, 4); g.box(-.1, -.2, 0, .08, .3, .03, F.pink); g.box(.1, -.2, 0, .08, .3, .03, F.pink); } },
+  h_sombrero: { slot: 'head', bone: 'head', pos: [0, .85, -.02], rot: [-.08, 0, 0], mk: g => { g.cyl(0, 0, 0, 1.15, 1.05, .08, 16, F.khaki, shade(F.khaki, 1.1)); FH.ring(g, 1.0, .05, F.red, 16, .09); FH.ring(g, .85, .05, F.green, 16, .09); g.cyl(0, .06, 0, .5, .25, .5, 12, F.khaki); g.cyl(0, .08, 0, .52, .5, .1, 12, F.red, null, true); } },
+  h_viking: { slot: 'head', bone: 'head', pos: [0, .5, -.02], mk: g => { g.sphereSkip(0, 0, 0, .56, F.steel, 14, 8, c => c[1] < -.05); g.cyl(0, -.04, 0, .57, .57, .1, 14, F.gold, null, true); g.box(0, .1, .5, .1, .2, .06, F.gold); for (const s of [-1, 1]) { g.cone(s * .5, .15, 0, s * 1, .9, -.1, .09, .45, 6, F.cream); g.cone(s * .78, .5, -.03, s * .2, 1, 0, .05, .25, 5, dk(F.cream, .9)); } } },
+  h_kabuto: { slot: 'head', bone: 'head', pos: [0, .5, -.02], emis: [.05, .04, .01], mk: g => { g.sphereSkip(0, 0, 0, .57, F.red, 14, 8, c => c[1] < -.02); g.cyl(0, -.04, 0, .58, .62, .12, 14, dk(F.red), null, true); for (let i = 0; i < 3; i++) g.cyl(0, -.1 - i * .08, -.06, .6 + i * .06, .62 + i * .06, .07, 14, i % 2 ? F.black : F.red, null, true); g.push(0, .3, .5, -.3); g.box(0, 0, 0, .2, .06, .08, F.gold); for (const s of [-1, 1]) { g.cone(s * .1, .02, 0, s * .6, 1, -.1, .035, .5, 4, F.gold); } g.pop(); g.cyl(0, .55, 0, .05, .03, .14, 5, F.gold); } },
+  h_astro: { slot: 'head', bone: 'head', pos: [0, .42, 0], cover: true, emis: [.05, .08, .1], mk: g => { g.jit = 0; g.sphereSkip(0, .02, 0, .72, F.sky, 16, 12, c => (c[2] > .3 && Math.abs(c[1]) < .3 && Math.abs(c[0]) < .42) || c[1] < -.5); g.cyl(0, -.62, 0, .56, .62, .16, 14, F.white); for (const s of [-1, 1]) g.box(s * .55, .25, .42, .14, .1, .1, F.white); g.box(.42, -.25, .5, .2, .08, .06, F.red); g.jit = .03; } },
+  h_frog: { slot: 'head', bone: 'head', pos: [0, 0, 0], cover: true, mk: g => { FH.hood(g, F.leaf, dk(F.leaf)); for (const s of [-1, 1]) { g.sphere(s * .26, .98, .1, .17, F.leaf, 8, 6); g.sphere(s * .26, 1.0, .22, .09, F.white, 6, 4); g.sphere(s * .26, 1.0, .28, .045, F.black, 5, 3); } } },
+  h_duck: { slot: 'head', bone: 'head', pos: [0, 0, 0], cover: true, mk: g => { FH.hood(g, F.yellow, dk(F.yellow, .85)); g.ell(0, .8, .5, .24, .09, .22, F.orange, 8, 5); g.ell(0, .72, .48, .2, .06, .18, dk(F.orange, .85), 8, 5); for (const s of [-1, 1]) g.sphere(s * .2, .95, .36, .05, F.black, 5, 4); g.jit = .08; g.sphere(0, 1.02, -.1, .12, F.yellow, 6, 4); g.jit = .03; } },
+  h_bearhood: { slot: 'head', bone: 'head', pos: [0, 0, 0], cover: true, mk: g => { FH.hood(g, F.brown, dk(F.brown)); FH.ears(g, F.brown, hexc('#d8b090'), 'bear'); g.ell(0, .62, .5, .14, .1, .1, hexc('#d8b090'), 7, 5); g.sphere(0, .66, .58, .05, F.black, 5, 4); } },
+  h_pandahood: { slot: 'head', bone: 'head', pos: [0, 0, 0], cover: true, mk: g => { FH.hood(g, F.white, F.black); FH.ears(g, F.black, F.black, 'panda'); for (const s of [-1, 1]) g.ell(s * .19, .6, .46, .11, .13, .04, F.black, 6, 4); } },
+  h_santa: { slot: 'head', bone: 'head', pos: [0, .8, -.02], rot: [-.1, 0, .1], mk: g => { g.cyl(0, 0, 0, .56, .56, .16, 14, F.white); g.cyl(0, .12, 0, .5, .2, .45, 12, F.red, null, true); g.push(0, .55, 0, 0, 0, -.9); g.cyl(0, 0, 0, .2, .06, .5, 8, F.red, null, true); g.pop(); FH.pom(g, .42, .78, 0, .13, F.white); } },
+  h_mongkol: { slot: 'head', bone: 'head', pos: [0, .62, 0], mk: g => { FH.ring(g, .5, .09, F.red, 14, 0); FH.ring(g, .5, .04, F.gold, 14, .05); g.push(0, 0, -.5, .4); g.box(0, -.2, 0, .1, .4, .08, F.red); g.box(0, -.4, 0, .18, .1, .1, F.gold); g.pop(); } },
+  h_bucket: { slot: 'head', bone: 'head', pos: [0, .84, -.02], rot: [-.08, 0, 0], mk: g => { g.cyl(0, 0, 0, .7, .64, .08, 14, F.khaki); g.cyl(0, .06, 0, .54, .5, .3, 14, F.khaki); FH.ring(g, .55, .03, dk(F.khaki), 14, .25); } },
+  h_beret: { slot: 'head', bone: 'head', pos: [.1, .86, -.04], rot: [.08, 0, -.22], mk: g => { g.ell(0, .06, 0, .62, .14, .6, F.red, 12, 6); g.cyl(0, 0, 0, .45, .45, .06, 12, dk(F.red), null, true); g.cyl(0, .18, 0, .03, .02, .08, 4, F.red); } },
+  h_antenna: { slot: 'head', bone: 'head', pos: [0, .88, 0], emis: [.3, .05, .05], mk: g => { g.cyl(0, 0, 0, .12, .12, .06, 8, F.steel); g.cyl(0, .05, 0, .025, .02, .4, 5, F.gray); g.sphere(0, .5, 0, .09, F.red, 7, 5); } },
+  h_lotus: { slot: 'head', bone: 'head', pos: [.2, .86, .1], rot: [.2, 0, -.2], emis: [.06, .02, .03], mk: g => { for (let i = 0; i < 8; i++) { const a = i / 8 * TAU; g.cone(Math.cos(a) * .08, 0, Math.sin(a) * .08, Math.cos(a) * .7, 1, Math.sin(a) * .7, .07, .28, 4, i % 2 ? F.pink : shade(F.pink, 1.1)); } g.sphere(0, .1, 0, .07, F.yellow, 5, 4); g.ell(-.12, -.02, .1, .2, .02, .15, F.leaf, 7, 3); } },
+  h_chada: { slot: 'head', bone: 'head', pos: [0, .82, -.02], rot: [-.06, 0, 0], emis: [.1, .08, .02], mk: g => { g.cyl(0, 0, 0, .54, .5, .12, 14, F.gold, shade(F.gold, 1.1)); for (let i = 0; i < 4; i++) g.cyl(0, .1 + i * .22, 0, .46 - i * .1, .3 - i * .07, .22, 10, i % 2 ? shade(F.gold, 1.1) : F.gold); g.cone(0, .95, 0, 0, 1, 0, .1, .5, 6, F.gold); for (let i = 0; i < 8; i++) { const a = i / 8 * TAU; g.sphere(Math.cos(a) * .5, .08, Math.sin(a) * .5, .045, i % 2 ? F.red : F.green, 4, 3); } for (const s of [-1, 1]) g.cone(s * .4, .2, 0, s * .8, .6, 0, .05, .3, 4, F.gold); } },
+  h_crownflame: { slot: 'head', bone: 'head', pos: [0, .9, -.02], rot: [-.08, 0, 0], emis: [.25, .1, .02], bob: .02, mk: g => { FH.ring(g, .48, .07, F.gold, 12, 0); for (let i = 0; i < 7; i++) { const a = i / 7 * TAU; g.cone(Math.cos(a) * .42, .04, Math.sin(a) * .42, Math.cos(a) * .2, 1, Math.sin(a) * .2, .08, .35 + (i % 2) * .15, 4, i % 2 ? F.lava : F.yellow); } } },
+  h_slime: { slot: 'head', bone: 'head', pos: [0, .86, 0], mk: g => { g.jit = .05; g.ell(0, .15, 0, .42, .3, .42, F.lime, 10, 6); g.ell(.15, .4, 0, .12, .1, .12, F.lime, 6, 4); g.jit = .03; for (const s of [-1, 1]) g.sphere(s * .14, .2, .34, .05, F.black, 5, 4); } },
+  h_raincloud: { slot: 'head', bone: 'head', pos: [0, 1.25, 0], bob: .05, emis: [.02, .02, .05], mk: g => { g.jit = .04; g.sphere(0, 0, 0, .25, F.gray, 8, 6); g.sphere(.25, -.02, 0, .18, F.gray, 7, 5); g.sphere(-.25, -.02, 0, .18, F.gray, 7, 5); g.sphere(.05, .12, -.1, .17, F.gray, 7, 5); g.jit = 0; for (let i = 0; i < 3; i++) g.ell(-.15 + i * .15, -.3 - (i % 2) * .08, 0, .03, .07, .03, F.sky, 4, 3); g.jit = .03; } },
+  h_bandana: { slot: 'head', bone: 'head', pos: [0, .5, 0], mk: g => { g.sphereSkip(0, .02, -.02, .55, F.red, 14, 8, c => c[1] < 0); g.cyl(0, -.04, 0, .56, .56, .1, 14, F.red, null, true); g.push(-.3, 0, -.45, .6, .5, .4); g.box(0, -.25, 0, .14, .5, .03, F.red); g.pop(); for (let i = 0; i < 12; i++) { const a = i / 12 * TAU; g.sphere(Math.cos(a) * .55, .02, Math.sin(a) * .55 - .02, .03, F.white, 4, 3); } } },
+  /* ---- face ---- */
+  f_sunglass: { slot: 'face', bone: 'head', pos: [0, 0, 0], mk: g => FH.glasses(g, F.black, F.dark) },
+  f_round: { slot: 'face', bone: 'head', pos: [0, 0, 0], mk: g => FH.roundGlasses(g, hexc('#d8f0ff'), F.gold) },
+  f_3d: { slot: 'face', bone: 'head', pos: [0, 0, 0], mk: g => { g.push(-.19, .4, .47); g.box(0, 0, 0, .26, .17, .03, F.white); g.box(0, 0, .01, .22, .13, .03, F.red); g.pop(); g.push(.19, .4, .47); g.box(0, 0, 0, .26, .17, .03, F.white); g.box(0, 0, .01, .22, .13, .03, F.sky); g.pop(); g.box(0, .41, .47, .14, .025, .025, F.white); for (const s of [-1, 1]) g.box(s * .42, .42, .2, .025, .025, .5, F.white); } },
+  f_visor: { slot: 'face', bone: 'head', pos: [0, 0, 0], emis: [0, .25, .35], mk: g => { g.jit = 0; for (let i = -3; i <= 3; i++) { const a = i * .22; g.push(Math.sin(a) * .48, .4, Math.cos(a) * .48, 0, a, 0); g.box(0, 0, 0, .16, .16, .03, F.cyan); g.pop(); } g.jit = .03; FH.ring(g, .5, .04, F.dark, 14, .5); } },
+  f_maskcloth: { slot: 'face', bone: 'head', pos: [0, 0, 0], mk: g => { g.ell(0, .18, .06, .44, .18, .44, F.dark, 14, 8); g.push(-.2, .2, -.42, .3, .2, .2); g.box(0, -.2, 0, .12, .4, .03, F.dark); g.pop(); } },
+  f_surgical: { slot: 'face', bone: 'head', pos: [0, 0, 0], mk: g => { g.push(0, .2, .42, .1); g.box(0, 0, 0, .44, .3, .06, F.mint); g.box(0, .1, .03, .44, .03, .02, dk(F.mint)); g.pop(); for (const s of [-1, 1]) g.box(s * .45, .3, .1, .02, .02, .6, F.white); } },
+  f_eyepatch: { slot: 'face', bone: 'head', pos: [0, 0, 0], mk: g => { g.ell(-.19, .4, .47, .14, .12, .03, F.black, 7, 5); for (let i = 0; i < 10; i++) { const a = i / 10 * TAU; g.push(Math.cos(a) * .5, .44 + Math.sin(a) * .08, Math.sin(a) * .5, 0, -a, 0); g.box(0, 0, 0, .02, .03, .33, F.black); g.pop(); } } },
+  f_monocle: { slot: 'face', bone: 'head', pos: [0, 0, 0], mk: g => { g.push(.19, .4, .47, Math.PI / 2); FH.ring(g, .12, .025, F.gold, 10, 0); g.cyl(0, 0, 0, .11, .11, .01, 10, hexc('#d8f0ff'), null, true); g.pop(); for (let i = 0; i < 5; i++) g.sphere(.32 + i * .03, .3 - i * .06, .4, .012, F.gold, 4, 3); } },
+  f_mustache: { slot: 'face', bone: 'head', pos: [0, 0, 0], mk: g => { for (const s of [-1, 1]) { g.cone(s * .03, .27, .47, s * 1, .05, .1, .05, .22, 4, F.brown); g.cone(s * .22, .28, .48, s * .5, .8, 0, .03, .08, 3, F.brown); } } },
+  f_whiskers: { slot: 'face', bone: 'head', pos: [0, 0, 0], mk: g => { g.sphere(0, .3, .47, .045, F.pink, 5, 4); for (const s of [-1, 1]) for (let i = 0; i < 3; i++) { g.push(s * .3, .3 + (i - 1) * .05, .4, 0, 0, s * (i - 1) * .18); g.box(s * .14, 0, 0, .3, .012, .012, F.black); g.pop(); } } },
+  f_clown: { slot: 'face', bone: 'head', pos: [0, 0, 0], emis: [.1, 0, 0], mk: g => { g.sphere(0, .3, .48, .09, F.red, 7, 5); } },
+  f_yak: { slot: 'face', bone: 'head', pos: [0, 0, 0], cover: true, emis: [.06, .01, .01], mk: g => { g.jit = .02; g.sphereSkip(0, .42, .04, .52, F.green, 14, 10, c => c[2] < -.05 || c[1] > .3); for (const s of [-1, 1]) { g.ell(s * .19, .45, .5, .1, .12, .04, F.white, 6, 4); g.sphere(s * .19, .46, .53, .045, F.black, 5, 3); g.cone(s * .12, .22, .5, 0, -1, .1, .035, .14, 3, F.white); g.cone(s * .3, .78, .1, s * .3, 1, -.1, .06, .28, 4, F.gold); } g.box(0, .22, .52, .34, .05, .03, F.red); g.cone(0, .92, .05, 0, 1, 0, .09, .36, 5, F.gold); g.jit = .03; } },
+  f_foxmask: { slot: 'face', bone: 'head', pos: [0, 0, 0], cover: true, mk: g => { g.jit = .01; g.sphereSkip(0, .42, .04, .52, F.white, 14, 10, c => c[2] < -.05 || c[1] > .3); for (const s of [-1, 1]) { g.push(s * .19, .45, .52, 0, 0, s * .5); g.box(0, 0, 0, .16, .06, .02, F.red); g.pop(); g.box(s * .3, .3, .48, .06, .14, .02, F.red); g.cone(s * .3, .78, .05, s * .35, 1, -.1, .1, .3, 4, F.white); } g.box(0, .2, .55, .06, .06, .02, F.red); g.jit = .03; } },
+  f_blindfold: { slot: 'face', bone: 'head', pos: [0, 0, 0], mk: g => { for (let i = 0; i < 12; i++) { const a = i / 12 * TAU; g.push(Math.cos(a) * .5, .4, Math.sin(a) * .5, 0, -a, 0); g.box(0, 0, 0, .03, .14, .28, F.white); g.pop(); } g.push(0, .35, -.5, .3); g.box(.1, -.2, 0, .08, .4, .02, F.white); g.pop(); } },
+  f_scuba: { slot: 'face', bone: 'head', pos: [0, 0, 0], mk: g => { g.push(0, .42, .44); g.box(0, 0, 0, .5, .26, .08, F.sky); g.pop(); FH.ring(g, .5, .05, F.black, 14, .42); g.box(0, .12, .5, .1, .1, .1, F.dark); g.push(.3, .2, .38, 0, 0, -.5); g.cyl(0, -.3, 0, .035, .035, .4, 5, F.dark); g.pop(); } },
+  /* ---- back ---- */
+  b_backpack: { slot: 'back', bone: 'chest', pos: [0, .25, -.3], mk: g => { g.box(0, 0, 0, .4, .5, .22, F.red); g.box(0, -.1, -.13, .3, .22, .06, dk(F.red, .85)); g.box(0, .2, -.12, .26, .08, .04, F.black); for (const s of [-1, 1]) g.box(s * .13, .1, .14, .07, .4, .03, F.black); } },
+  b_schoolbag: { slot: 'back', bone: 'chest', pos: [0, .22, -.3], mk: g => { g.box(0, 0, 0, .38, .42, .2, F.brown); g.box(0, .05, -.12, .36, .2, .04, dk(F.brown)); g.box(0, -.05, -.14, .06, .08, .02, F.gold); for (const s of [-1, 1]) g.box(s * .13, .1, .13, .07, .36, .03, dk(F.brown)); } },
+  b_jetpack: { slot: 'back', bone: 'chest', pos: [0, .22, -.3], emis: [.08, .04, .0], mk: g => { for (const s of [-1, 1]) { g.cyl(s * .13, -.35, 0, .11, .11, .6, 8, F.steel); g.cyl(s * .13, -.45, 0, .07, .11, .1, 8, F.dark); g.sphere(s * .13, .25, 0, .11, F.red, 7, 5); g.cone(s * .13, -.45, 0, 0, -1, 0, .06, .2, 4, F.lava); } g.box(0, 0, .05, .2, .4, .1, F.gray); for (const s of [-1, 1]) g.box(s * .13, .12, .14, .07, .4, .03, F.black); } },
+  b_turtle: { slot: 'back', bone: 'chest', pos: [0, .2, -.26], rot: [.1, 0, 0], mk: g => { g.jit = .02; g.ell(0, 0, 0, .42, .44, .22, F.green, 10, 6); for (let i = 0; i < 7; i++) { const a = i / 7 * TAU; g.box(Math.cos(a) * .22, Math.sin(a) * .25, -.2, .1, .1, .03, dk(F.green, .8)); } g.cyl(0, -.44, 0, .45, .45, .05, 10, F.khaki, null, true); g.jit = .03; } },
+  b_basket: { slot: 'back', bone: 'chest', pos: [0, .2, -.32], mk: g => { g.cyl(0, -.25, 0, .18, .22, .55, 10, F.khaki); FH.ring(g, .22, .035, dk(F.khaki), 10, .28); FH.ring(g, .2, .035, dk(F.khaki), 10, 0); for (let i = 0; i < 5; i++) g.sphere(-.1 + i * .05, .32, (i % 2) * .06 - .03, .06, i % 2 ? F.leaf : F.green, 5, 4); for (const s of [-1, 1]) g.box(s * .12, .1, .2, .06, .4, .03, dk(F.khaki)); } },
+  b_sheath: { slot: 'back', bone: 'chest', pos: [0, .25, -.24], mk: g => { for (const s of [-1, 1]) { g.push(0, 0, 0, 0, 0, s * .5); g.box(0, 0, 0, .09, .9, .05, F.dark); g.box(0, .5, 0, .1, .12, .06, F.gold); g.box(0, .58, 0, .22, .04, .05, F.gold); g.cyl(0, .6, 0, .03, .03, .12, 5, F.brown); g.pop(); } g.box(0, .2, .1, .34, .06, .03, F.brown); } },
+  b_guitar: { slot: 'back', bone: 'chest', pos: [.05, .15, -.26], rot: [0, 0, .55], mk: g => { g.ell(0, -.1, 0, .24, .28, .06, F.wood, 10, 6); g.ell(0, .15, 0, .19, .2, .06, F.wood, 10, 6); g.cyl(0, .02, -.07, .07, .07, .02, 8, F.black, null, true); g.box(0, .5, 0, .06, .7, .04, dk(F.wood)); g.box(0, .88, 0, .09, .14, .05, F.black); for (let i = 0; i < 4; i++) g.box(-.03 + i * .02, .3, .035, .004, 1.0, .004, F.silver); g.box(0, .2, .1, .3, .05, .02, F.black); } },
+  b_balloons: { slot: 'back', bone: 'chest', pos: [0, .35, -.25], bob: .06, mk: g => { const cs = [F.red, F.yellow, F.sky]; for (let i = 0; i < 3; i++) { const x = (i - 1) * .22, y = 1.2 + (i % 2) * .15; g.box(x * .5, y / 2, 0, .006, y, .006, F.white); g.ell(x, y + .05, 0, .17, .21, .17, cs[i], 8, 6); g.cone(x, y - .16, 0, 0, -1, 0, .03, .05, 3, cs[i]); } } },
+  b_umbrella: { slot: 'back', bone: 'chest', pos: [-.12, .3, -.26], rot: [.35, 0, .25], mk: g => { g.cyl(0, -.5, 0, .02, .02, 1.3, 5, F.wood); for (let i = 0; i < 8; i++) { const a = i / 8 * TAU, a2 = (i + 1) / 8 * TAU; g.tri([0, .95, 0], [Math.cos(a2) * .55, .72, Math.sin(a2) * .55], [Math.cos(a) * .55, .72, Math.sin(a) * .55], i % 2 ? F.red : F.cream); g.tri([0, .95, 0], [Math.cos(a) * .55, .72, Math.sin(a) * .55], [Math.cos(a2) * .55, .72, Math.sin(a2) * .55], i % 2 ? dk(F.red) : dk(F.cream)); } g.sphere(0, .97, 0, .04, F.gold, 4, 3); g.push(0, -.5, 0, 0, 0, 0); g.cone(0, 0, 0, 1, -.3, 0, .02, .18, 4, F.wood); g.pop(); } },
+  b_cape_hero: { slot: 'back', bone: 'cape', pos: [0, 0, 0], mk: g => { g.box(0, -.5, -.03, .56, 1.0, .035, F.red); g.box(0, -.96, -.03, .58, .06, .04, dk(F.red, .8)); FH.emblem(g, 0, -.3, -.06, F.gold); } },
+  b_cape_star: { slot: 'back', bone: 'cape', pos: [0, 0, 0], emis: [.02, .02, .05], mk: g => { g.box(0, -.5, -.03, .6, 1.0, .035, F.navy); const rnd = mulberry32(5); for (let i = 0; i < 14; i++) g.sphere(-.25 + rnd() * .5, -.1 - rnd() * .8, -.06, .025, F.yellow, 4, 3); g.box(0, -.98, -.03, .62, .05, .04, F.gold); } },
+  b_cape_royal: { slot: 'back', bone: 'cape', pos: [0, 0, 0], mk: g => { g.box(0, -.5, -.03, .62, 1.0, .04, F.purple); g.box(0, -.08, -.03, .66, .14, .05, F.white); for (let i = 0; i < 5; i++) g.sphere(-.24 + i * .12, -.08, -.07, .03, F.black, 4, 3); g.box(0, -.98, -.03, .64, .06, .05, F.gold); } },
+  b_cape_leaf: { slot: 'back', bone: 'cape', pos: [0, 0, 0], mk: g => { g.box(0, -.45, -.03, .54, .9, .03, F.green); for (let i = 0; i < 9; i++) { const x = -.2 + (i % 3) * .2, y = -.2 - Math.floor(i / 3) * .25; g.ell(x, y, -.055, .07, .11, .01, F.leaf, 6, 4, 0, 0); } } },
+  b_wings_butterfly: { slot: 'back', bone: 'chest', pos: [.05, .32, -.2], rot: [0, .4, .2], s: .9, mirror: true, flap: 1.4, emis: [.06, .02, .08], mk: g => { g.jit = .02; g.ell(.42, .12, 0, .42, .3, .03, F.purple, 10, 6); g.ell(.32, -.3, 0, .3, .24, .03, dk(F.purple, 1.1), 10, 6); g.ell(.46, .14, -.02, .2, .13, .02, F.cyan, 8, 5); g.ell(.34, -.3, -.02, .12, .1, .02, F.yellow, 8, 5); g.jit = .03; } },
+  b_wings_bee: { slot: 'back', bone: 'chest', pos: [.05, .32, -.2], rot: [0, .4, .3], s: .7, mirror: true, flap: 2.5, emis: [.1, .14, .16], mk: g => { g.jit = 0; g.ell(.4, .05, 0, .45, .2, .02, F.ice, 10, 6); g.ell(.3, -.22, 0, .3, .14, .02, F.ice, 10, 6); g.jit = .03; } },
+  b_wings_phoenix: { slot: 'back', bone: 'chest', pos: [.05, .3, -.2], rot: [0, .35, .25], s: .9, mirror: true, flap: 1, emis: [.25, .08, .0], mk: g => FH.wing(g, F.lava, F.yellow, 5, 1.05, true) },
+  b_wings_mech: { slot: 'back', bone: 'chest', pos: [.05, .3, -.2], rot: [0, .35, .2], s: .85, mirror: true, flap: .5, emis: [.0, .12, .18], mk: g => { for (let i = 0; i < 3; i++) { const rz = .7 - i * .35, L = 1.0 - i * .15; g.at(.1, 0, 0, 0, 1, 1, 1, 0, rz); g.box(L / 2 + .05, 0, 0, L, .12, .05, F.steel); g.box(L / 2 + .05, -.1, 0, L * .9, .06, .03, F.cyan); g.reset(); } g.box(.1, 0, 0, .2, .25, .12, F.dark); } },
+  b_wings_leaf: { slot: 'back', bone: 'chest', pos: [.05, .3, -.2], rot: [0, .35, .25], s: .85, mirror: true, flap: .8, mk: g => FH.wing(g, F.leaf, F.green, 4, .85, false) },
+  b_tail_cat: { slot: 'back', bone: 'hips', pos: [0, -.02, -.1], mk: g => FH.tail(g, F.black, null, .7, .06) },
+  b_tail_fox: { slot: 'back', bone: 'hips', pos: [0, -.02, -.1], mk: g => FH.tail(g, F.orange, F.cream, .8, .13) },
+  b_tail_devil: { slot: 'back', bone: 'hips', pos: [0, -.02, -.1], mk: g => { FH.tail(g, F.red, null, .8, .035); g.cone(0, -.3, -.9, 0, -.4, -1, .09, .16, 3, F.red); } },
+  b_tail_dragon: { slot: 'back', bone: 'hips', pos: [0, -.02, -.1], mk: g => { FH.tail(g, F.green, null, .9, .13); for (let i = 0; i < 4; i++) g.cone(0, .02 - i * .05, -.15 - i * .18, 0, 1, -.3, .04, .12, 3, F.yellow); } },
+  b_cloud: { slot: 'back', bone: 'chest', pos: [-.45, .5, -.35], bob: .08, mk: g => { g.jit = .04; g.sphere(0, 0, 0, .2, F.white, 8, 6); g.sphere(.2, -.02, 0, .15, F.white, 7, 5); g.sphere(-.2, -.03, 0, .14, F.white, 7, 5); g.sphere(.04, .12, -.06, .14, F.white, 7, 5); g.jit = .03; } },
+  b_fairy: { slot: 'back', bone: 'chest', pos: [.5, .55, -.2], bob: .1, emis: [.2, .2, .1], mk: g => { g.sphere(0, 0, 0, .09, F.yellow, 7, 5); for (const s of [-1, 1]) g.ell(s * .1, .02, 0, .1, .06, .01, F.ice, 6, 4); } }
+};
+/* ---------- costumes (full outfits) ---------- */
+const at = id => g => { const sp = COS_MESH[id]; const p = sp.pos || [0, 0, 0], r = sp.rot || [0, 0, 0]; g.push(p[0], p[1], p[2], r[0], r[1], r[2], sp.s || 1); sp.mk(g); g.pop(); };
+const COSTUMES = {
+  cs_ninja_blue: { name: 'ชุดนินจาสายฟ้า', like: 'ninja', shirt: F.navy, sleeve: F.navy, pants: F.navy, boot: F.black, glove: F.dark, belt: F.gold, cape: F.sky, scarf: true, wraps: true, band: 'ninja', desc: 'ชุดนินจาน้ำเงินเข้ม ผ้าพันคอฟ้าสายฟ้า', add: { chest: g => { g.box(0, .1, .19, .2, .22, .03, F.sky); g.box(0, .1, .2, .04, .22, .02, F.gold); } } },
+  cs_ninja_shadow: { name: 'ชุดนินจาเงาม่วง', like: 'ninja', shirt: F.black, sleeve: F.black, pants: F.black, boot: F.black, glove: F.dark, belt: F.purple, cape: F.purple, scarf: true, mask: true, wraps: true, band: 'ninja', desc: 'นินจาเงาดำ ผ้าพันคอม่วง ปิดหน้า' },
+  cs_samurai: { name: 'ชุดซามูไรแดง', like: 'knight', shirt: F.red, sleeve: F.dark, pants: F.dark, boot: F.black, glove: F.dark, belt: F.gold, cape: F.red, armor: true, desc: 'เกราะแผ่นแดงขลิบทอง พร้อมหมวกคาบูโตะ', add: { head: at('h_kabuto'), chest: g => { for (const s of [-1, 1]) { g.push(s * .3, .32, 0, 0, 0, s * .3); for (let i = 0; i < 3; i++) g.box(0, -i * .08, 0, .22, .07, .2, i % 2 ? F.red : F.black); g.pop(); } } }, hatLift: true },
+  cs_robot: { name: 'ชุดหุ่นยนต์เหล็ก', like: 'knight', shirt: F.steel, sleeve: F.gray, pants: F.gray, boot: F.dark, glove: F.steel, belt: F.dark, cape: F.steel, armor: true, col: { hair: F.steel, hair2: F.gray, hair3: F.silver }, nohair: true, desc: 'หุ่นยนต์ชุบโครเมียม เสาอากาศไฟแดง', add: { head: g => { g.jit = 0; g.sphereSkip(0, .45, -.02, .55, F.steel, 14, 10, c => c[2] > .2 && c[1] < .2 && c[1] > -.3); g.cyl(0, .88, 0, .025, .02, .3, 5, F.gray); g.sphere(0, 1.2, 0, .08, F.red, 6, 4); g.box(0, .4, .5, .5, .16, .04, F.dark); g.box(0, .4, .52, .4, .06, .02, F.cyan); g.jit = .03; }, chest: g => { g.box(0, .18, .19, .22, .14, .04, F.dark); g.box(-.06, .18, .21, .04, .04, .02, F.cyan); g.box(.06, .18, .21, .04, .04, .02, F.lime); } } },
+  cs_cat: { name: 'ชุดแมวดำ', like: 'adventurer', shirt: F.black, sleeve: F.black, pants: F.black, boot: F.black, glove: F.white, belt: F.pink, cape: F.black, desc: 'ชุดแมวดำนุ่มฟู มีหูและหาง', add: { head: g => FH.ears(g, F.black, F.pink, 'cat'), hips: g => FH.tail(g, F.black, null, .7, .06), chest: g => g.ell(0, .1, .19, .14, .18, .03, F.white, 7, 5) } },
+  cs_fox: { name: 'ชุดจิ้งจอกแดง', like: 'adventurer', shirt: F.orange, sleeve: F.orange, pants: F.brown, boot: F.dark, glove: F.dark, belt: F.brown, cape: F.orange, desc: 'ชุดจิ้งจอกสีส้ม หางพวงใหญ่', add: { head: g => FH.ears(g, F.orange, F.cream, 'fox'), hips: g => FH.tail(g, F.orange, F.cream, .8, .13), chest: g => g.ell(0, .1, .19, .15, .2, .03, F.cream, 7, 5) } },
+  cs_student: { name: 'ชุดนักเรียน', like: 'adventurer', shirt: F.white, sleeve: F.white, pants: F.navy, boot: F.black, glove: F.skin, belt: F.brown, cape: F.navy, desc: 'เสื้อขาว กางเกงน้ำเงิน พร้อมกระเป๋าเป้', add: { chest: g => { g.box(0, .2, .19, .22, .03, .03, F.navy); g.box(0, .12, .19, .05, .16, .02, F.navy); g.push(0, .2, -.3); g.box(0, 0, 0, .34, .4, .18, F.navy); g.pop(); for (const s of [-1, 1]) g.box(s * .12, .25, -.18, .06, .3, .03, F.navy); } } },
+  cs_thai: { name: 'ชุดไทยราชสำนัก', like: 'priest', shirt: F.gold, sleeve: F.skin, pants: F.wine, boot: F.gold, glove: F.skin, belt: F.gold, cape: F.gold, robe: F.wine, desc: 'ผ้าสไบทองกับโจงกระเบนแดง เครื่องประดับทอง', add: { chest: g => { g.push(0, .2, 0, 0, 0, .55); g.box(0, 0, .19, .16, .5, .03, F.gold); g.pop(); g.cyl(0, .36, 0, .13, .11, .08, 8, F.gold); }, head: at('h_chada') }, hatLift: true },
+  cs_pirate: { name: 'ชุดโจรสลัด', like: 'adventurer', shirt: F.white, sleeve: F.wine, pants: F.dark, boot: F.black, glove: F.skin, belt: F.gold, cape: F.wine, capelet: false, desc: 'เสื้อคลุมยาวสีไวน์ หมวกสามมุม', add: { chest: g => { g.cyl(0, .02, 0, .215, .19, .36, 10, F.wine); g.box(0, .18, .19, .06, .3, .03, F.gold); for (let i = 0; i < 3; i++) g.sphere(.1, .05 + i * .1, .2, .025, F.gold, 4, 3); }, head: at('h_tricorn'), cape: g => { g.box(0, -.4, -.03, .5, .8, .035, F.wine); } }, hatLift: true },
+  cs_astro: { name: 'ชุดนักบินอวกาศ', like: 'knight', shirt: F.white, sleeve: F.white, pants: F.white, boot: F.gray, glove: F.gray, belt: F.gray, cape: F.white, nohair: true, desc: 'ชุดอวกาศสีขาว หมวกแก้วกลม', add: { head: at('h_astro'), chest: g => { g.box(0, .18, .19, .2, .12, .04, F.gray); g.box(-.05, .18, .21, .04, .04, .02, F.red); g.box(.05, .18, .21, .04, .04, .02, F.lime); g.push(0, .2, -.26); g.box(0, 0, 0, .36, .44, .16, F.white); g.pop(); } } },
+  cs_chef: { name: 'ชุดเชฟ', like: 'adventurer', shirt: F.white, sleeve: F.white, pants: F.dark, boot: F.black, glove: F.skin, belt: F.red, cape: F.red, desc: 'เสื้อเชฟสีขาว หมวกเชฟสูง', add: { chest: g => { for (let i = 0; i < 3; i++) { g.sphere(-.07, .05 + i * .12, .2, .025, F.black, 4, 3); g.sphere(.07, .05 + i * .12, .2, .025, F.black, 4, 3); } g.cyl(0, .36, 0, .13, .11, .08, 8, F.red); }, head: at('h_chef') }, hatLift: true },
+  cs_doctor: { name: 'ชุดคุณหมอ', like: 'priest', shirt: F.sky, sleeve: F.white, pants: F.dark, boot: F.black, glove: F.skin, belt: F.dark, cape: F.white, robe: F.white, desc: 'เสื้อกาวน์ขาว หูฟังแพทย์', add: { chest: g => { for (const s of [-1, 1]) g.box(s * .12, .3, .18, .03, .2, .02, F.dark); g.box(0, .1, .18, .26, .03, .03, F.dark); g.cyl(0, .02, .2, .05, .05, .02, 8, F.steel); } } },
+  cs_police: { name: 'ชุดตำรวจ', like: 'adventurer', shirt: F.navy, sleeve: F.navy, pants: F.navy, boot: F.black, glove: F.skin, belt: F.black, cape: F.navy, desc: 'เครื่องแบบน้ำเงิน หมวกตำรวจ', add: { chest: g => { g.box(.1, .22, .19, .08, .08, .03, F.gold); g.box(0, .3, .19, .2, .04, .03, F.gold); for (let i = 0; i < 3; i++) g.sphere(0, .02 + i * .1, .2, .025, F.gold, 4, 3); }, head: at('h_police') }, hatLift: true },
+  cs_fire: { name: 'ชุดนักดับเพลิง', like: 'knight', shirt: F.red, sleeve: F.red, pants: F.dark, boot: F.black, glove: F.dark, belt: F.black, cape: F.red, desc: 'เสื้อกันไฟแดงแถบสะท้อนแสง', add: { chest: g => { g.cyl(0, .1, 0, .215, .19, .06, 10, F.yellow, null, true); g.cyl(0, .26, 0, .2, .19, .05, 10, F.yellow, null, true); g.push(0, .2, -.26); g.cyl(0, -.2, 0, .1, .1, .5, 8, F.red); g.pop(); }, head: g => { g.cyl(0, .6, 0, .55, .56, .12, 14, F.red, null, true); g.sphereSkip(0, .42, -.02, .58, F.red, 14, 8, c => c[1] < .2); g.cyl(0, .55, 0, .66, .6, .05, 14, F.red, null, true); g.box(0, .66, .5, .2, .12, .03, F.gold); } }, hatLift: true },
+  cs_kimono: { name: 'ชุดยูกาตะดอกซากุระ', like: 'priest', shirt: F.pink, sleeve: F.pink, pants: F.pink, boot: F.wood, glove: F.skin, belt: F.red, cape: F.pink, robe: F.pink, desc: 'ยูกาตะชมพูลายดอก โอบิแดง', add: { chest: g => { g.cyl(0, .0, 0, .215, .19, .12, 10, F.red); g.push(0, .05, -.22); g.box(0, 0, 0, .3, .18, .1, F.red); g.pop(); const rnd = mulberry32(11); for (let i = 0; i < 8; i++) g.sphere(-.18 + rnd() * .36, .12 + rnd() * .28, .2, .03, F.white, 4, 3); }, hips: g => { const rnd = mulberry32(12); for (let i = 0; i < 6; i++) g.sphere(-.25 + rnd() * .5, -.4 + rnd() * .3, .36, .03, F.white, 4, 3); } } },
+  cs_dragon: { name: 'ชุดมังกรทอง', like: 'knight', shirt: F.gold, sleeve: F.red, pants: F.red, boot: F.gold, glove: F.gold, belt: F.red, cape: F.red, armor: true, col: { hair: F.red, hair2: dk(F.red), hair3: F.orange }, desc: 'เกราะเกล็ดมังกรทอง เขามังกร หางมังกร', add: { head: g => { for (const s of [-1, 1]) g.cone(s * .3, .72, -.05, s * .4, 1, -.4, .09, .4, 5, F.gold); }, hips: g => { FH.tail(g, F.red, null, .9, .12); for (let i = 0; i < 4; i++) g.cone(0, .02 - i * .05, -.15 - i * .18, 0, 1, -.3, .04, .12, 3, F.gold); }, chest: g => { for (let i = 0; i < 3; i++) for (let k = 0; k < 4; k++) g.ell(-.15 + k * .1, .3 - i * .1, .18, .05, .05, .02, dk(F.gold, .85), 5, 4); } } },
+  cs_skeleton: { name: 'ชุดโครงกระดูก', like: 'adventurer', shirt: F.black, sleeve: F.black, pants: F.black, boot: F.black, glove: F.white, belt: F.black, cape: F.black, desc: 'ชุดดำลายโครงกระดูกเรืองแสง', add: { chest: g => { for (let i = 0; i < 4; i++) g.box(0, .3 - i * .09, .19, .28 - i * .04, .035, .02, F.white); g.box(0, .2, .19, .05, .36, .015, F.white); }, hips: g => { g.box(0, -.04, .13, .3, .06, .02, F.white); }, thL: g => g.box(0, -.15, .09, .05, .28, .02, F.white), thR: g => g.box(0, -.15, .09, .05, .28, .02, F.white), knL: g => g.box(0, -.12, .08, .04, .2, .02, F.white), knR: g => g.box(0, -.12, .08, .04, .2, .02, F.white) } },
+  cs_pumpkin: { name: 'ชุดฟักทองฮาโลวีน', like: 'adventurer', shirt: F.orange, sleeve: F.green, pants: F.green, boot: F.dark, glove: F.green, belt: F.dark, cape: F.orange, nohair: true, desc: 'เสื้อฟักทองส้มกับหัวฟักทอง', add: { head: at('h_pumpkin'), chest: g => { g.cone(0, .18, .19, 0, 1, .2, .06, .14, 3, F.black); g.cone(-.12, .18, .19, 0, 1, .2, .05, .12, 3, F.black); g.cone(.12, .18, .19, 0, 1, .2, .05, .12, 3, F.black); } } },
+  cs_santa: { name: 'ชุดซานต้า', like: 'adventurer', shirt: F.red, sleeve: F.red, pants: F.red, boot: F.black, glove: F.white, belt: F.black, cape: F.red, desc: 'ชุดแดงขลิบขนขาว หมวกซานต้า', add: { chest: g => { g.cyl(0, .36, 0, .14, .12, .08, 8, F.white); g.cyl(0, -.02, 0, .21, .21, .06, 10, F.white, null, true); g.box(0, .2, .19, .06, .36, .02, F.white); g.box(0, .02, .2, .08, .08, .02, F.gold); }, head: at('h_santa'), knL: g => g.cyl(0, -.14, 0, .1, .1, .07, 8, F.white, null, true), knR: g => g.cyl(0, -.14, 0, .1, .1, .07, 8, F.white, null, true) }, hatLift: true },
+  cs_angel: { name: 'ชุดเทวดา', like: 'priest', shirt: F.white, sleeve: F.white, pants: F.white, boot: F.gold, glove: F.skin, belt: F.gold, cape: F.white, robe: F.white, capelet: true, capeletCol: F.sky, desc: 'ชุดขาวสะอาด สายคาดทอง รัศมีเหนือหัว', add: { head: at('c_halo') } },
+  cs_devil: { name: 'ชุดปีศาจน้อย', like: 'adventurer', shirt: F.red, sleeve: F.black, pants: F.black, boot: F.black, glove: F.red, belt: F.gold, cape: F.red, desc: 'ชุดแดงดำ เขาปีศาจ หางแหลม', add: { head: at('h_horns'), hips: at('b_tail_devil'), chest: g => { g.box(0, .18, .19, .06, .3, .02, F.black); g.box(0, .18, .19, .3, .05, .02, F.black); } } },
+  cs_princess: { name: 'ชุดเจ้าหญิง', like: 'priest', shirt: F.pink, sleeve: F.white, pants: F.pink, boot: F.white, glove: F.white, belt: F.gold, cape: F.pink, robe: F.pink, desc: 'กระโปรงชมพูบาน มงกุฎทอง', add: { head: at('h_tiara'), chest: g => { g.box(0, .18, .19, .2, .03, .02, F.gold); g.sphere(0, .3, .2, .04, F.sky, 5, 4); }, hips: g => { g.cyl(0, -.5, 0, .46, .3, .5, 12, F.pink, null, true); FH.ring(g, .46, .03, F.white, 12, -.5); } } },
+  cs_prince: { name: 'ชุดเจ้าชาย', like: 'knight', shirt: F.white, sleeve: F.navy, pants: F.navy, boot: F.black, glove: F.white, belt: F.gold, cape: F.red, capelet: false, desc: 'เสื้อคลุมขาวน้ำเงิน สายสะพายแดง มงกุฎ', add: { head: at('c_kingcrown'), chest: g => { g.push(0, .2, 0, 0, 0, .55); g.box(0, 0, .19, .1, .5, .03, F.red); g.pop(); for (let i = 0; i < 4; i++) g.sphere(.08, .02 + i * .1, .2, .025, F.gold, 4, 3); for (const s of [-1, 1]) g.box(s * .25, .38, 0, .1, .04, .14, F.gold); }, cape: g => { g.box(0, -.45, -.03, .52, .9, .035, F.red); g.box(0, -.9, -.03, .54, .05, .04, F.gold); } }, hatLift: true },
+  cs_frog: { name: 'ชุดกบเขียว', like: 'adventurer', shirt: F.leaf, sleeve: F.leaf, pants: F.leaf, boot: F.green, glove: F.leaf, belt: F.green, cape: F.leaf, nohair: true, desc: 'ชุดกบเขียวฮู้ดตาโต', add: { head: at('h_frog'), chest: g => g.ell(0, .1, .19, .15, .2, .03, F.cream, 7, 5) } },
+  cs_duck: { name: 'ชุดเป็ดเหลือง', like: 'adventurer', shirt: F.yellow, sleeve: F.yellow, pants: F.yellow, boot: F.orange, glove: F.yellow, belt: F.orange, cape: F.yellow, nohair: true, desc: 'ชุดเป็ดเหลืองปากส้ม', add: { head: at('h_duck'), hips: g => { g.jit = .08; g.sphere(0, -.08, -.18, .12, F.yellow, 6, 4); g.jit = .03; } } },
+  cs_bear: { name: 'ชุดหมีน้ำตาล', like: 'adventurer', shirt: F.brown, sleeve: F.brown, pants: F.brown, boot: dk(F.brown), glove: dk(F.brown), belt: F.brown, cape: F.brown, nohair: true, desc: 'ชุดหมีขนนุ่ม ฮู้ดหูกลม', add: { head: at('h_bearhood'), chest: g => g.ell(0, .08, .19, .16, .2, .03, hexc('#d8b090'), 7, 5), hips: g => { g.jit = .08; g.sphere(0, -.05, -.16, .09, F.brown, 6, 4); g.jit = .03; } } },
+  cs_panda: { name: 'ชุดแพนด้า', like: 'adventurer', shirt: F.white, sleeve: F.black, pants: F.black, boot: F.black, glove: F.black, belt: F.black, cape: F.white, nohair: true, desc: 'ชุดแพนด้าขาวดำ', add: { head: at('h_pandahood'), hips: g => { g.jit = .08; g.sphere(0, -.05, -.16, .08, F.black, 6, 4); g.jit = .03; } } },
+  cs_muaythai: { name: 'ชุดนักมวยไทย', like: 'adventurer', shirt: F.skin, sleeve: F.skin, pants: F.red, boot: F.skin, glove: F.red, belt: F.gold, cape: F.red, desc: 'กางเกงมวยแดงขลิบทอง มงคลและผ้าพันมือ', add: { head: at('h_mongkol'), hips: g => { g.box(0, -.04, .13, .14, .14, .02, F.gold); }, shL: g => FH.ring(g, .08, .03, F.red, 8, -.05), shR: g => FH.ring(g, .08, .03, F.red, 8, -.05), knL: g => g.cyl(0, -.3, 0, .085, .085, .14, 8, F.white, null, true), knR: g => g.cyl(0, -.3, 0, .085, .085, .14, 8, F.white, null, true) } },
+  cs_cyber: { name: 'ชุดไซเบอร์นีออน', like: 'ninja', shirt: F.dark, sleeve: F.dark, pants: F.dark, boot: F.black, glove: F.dark, belt: F.cyan, cape: F.cyan, col: { hair: F.cyan, hair2: F.teal, hair3: F.ice }, desc: 'ชุดดำเส้นไฟนีออนฟ้า', add: { chest: g => { g.box(0, .2, .19, .03, .36, .02, F.cyan); g.box(0, .3, .19, .3, .03, .02, F.cyan); for (const s of [-1, 1]) g.box(s * .2, .1, .1, .03, .3, .03, F.cyan); }, thL: g => g.box(0, -.15, .09, .03, .28, .02, F.cyan), thR: g => g.box(0, -.15, .09, .03, .28, .02, F.cyan), head: at('f_visor') } },
+  cs_detective: { name: 'ชุดนักสืบ', like: 'adventurer', shirt: F.khaki, sleeve: F.khaki, pants: F.brown, boot: F.black, glove: F.skin, belt: F.brown, cape: F.khaki, desc: 'เสื้อโค้ตสีกากี หมวกนักสืบ', add: { chest: g => { g.cyl(0, .02, 0, .215, .19, .36, 10, F.khaki); g.cyl(0, -.3, 0, .24, .22, .3, 10, F.khaki, null, true); g.box(0, .18, .19, .06, .3, .03, dk(F.khaki)); }, head: g => { g.cyl(0, .6, 0, .6, .58, .04, 14, F.khaki); g.sphereSkip(0, .5, -.02, .5, F.khaki, 12, 8, c => c[1] < .2); for (const s of [-1, 1]) g.box(0, .66, s * .55, .3, .06, .14, F.khaki); } }, hatLift: true },
+  cs_cowboy: { name: 'ชุดคาวบอย', like: 'adventurer', shirt: F.cream, sleeve: F.cream, pants: F.blue, boot: F.brown, glove: F.brown, belt: F.gold, cape: F.brown, vest: F.brown, desc: 'เสื้อกั๊กหนัง หมวกคาวบอย', add: { head: at('h_cowboy'), hips: g => g.box(0, .03, .2, .14, .1, .03, F.gold) }, hatLift: true },
+  cs_scientist: { name: 'ชุดนักวิทยาศาสตร์', like: 'priest', shirt: F.teal, sleeve: F.white, pants: F.dark, boot: F.black, glove: F.lime, belt: F.dark, cape: F.white, robe: F.white, desc: 'เสื้อกาวน์ขาว แว่นกันสารเคมี ถุงมือเขียว', add: { head: at('h_goggles'), chest: g => { g.box(.1, .2, .19, .08, .12, .02, F.lime); g.box(-.1, .2, .19, .08, .12, .02, F.sky); } } },
+  cs_witch: { name: 'ชุดแม่มด', like: 'mage', shirt: F.purple, sleeve: F.purple, pants: F.black, boot: F.black, glove: F.purple, belt: F.gold, cape: F.purple, robe: F.purple, cloak: true, desc: 'หมวกแม่มดปลายงอกับเสื้อคลุมม่วง', add: { head: at('h_witch'), chest: g => g.box(0, .18, .19, .06, .3, .03, F.gold) }, hatLift: true },
+  cs_mummy: { name: 'ชุดมัมมี่', like: 'adventurer', shirt: F.cream, sleeve: F.cream, pants: F.cream, boot: F.cream, glove: F.cream, belt: F.khaki, cape: F.cream, wraps: true, desc: 'ผ้าพันแผลทั้งตัว', add: { chest: g => { for (let i = 0; i < 5; i++) g.cyl(0, .02 + i * .08, 0, .215, .21, .035, 10, i % 2 ? F.khaki : F.cream, null, true); }, head: g => { for (let i = 0; i < 6; i++) { g.push(0, .2 + i * .12, 0, 0, i * .4, 0); FH.ring(g, .51, .05, i % 2 ? F.khaki : F.cream, 12, 0); g.pop(); } }, thL: g => FH.ring(g, .09, .035, F.khaki, 8, -.15), thR: g => FH.ring(g, .09, .035, F.khaki, 8, -.15) } },
+  cs_vampire: { name: 'ชุดแวมไพร์', like: 'knight', shirt: F.black, sleeve: F.black, pants: F.black, boot: F.black, glove: F.white, belt: F.red, cape: F.black, col: { hair: F.black, hair2: F.dark, hair3: F.gray }, desc: 'เสื้อคลุมดำซับในแดง คอตั้งสูง', add: { chest: g => { g.cyl(0, .36, 0, .22, .25, .12, 10, F.black, null, true); g.box(0, .18, .19, .06, .3, .02, F.red); g.sphere(0, .3, .2, .04, F.red, 5, 4); }, cape: g => { g.box(0, -.5, -.03, .6, 1.0, .035, F.black); g.box(0, -.5, -.005, .56, .96, .01, F.red); } } },
+  cs_knightgold: { name: 'ชุดอัศวินทองคำ', like: 'knight', shirt: F.gold, sleeve: F.dark, pants: F.dark, boot: F.gold, glove: F.dark, belt: F.red, cape: F.white, armor: true, band: 'helm', desc: 'เกราะทองคำทั้งชุด ผ้าคลุมขาว', add: { chest: g => JW.pauldrons(g, F.gold, F.red), cape: g => JW.cape(g, F.white, .54, .96) } },
+  cs_sailor: { name: 'ชุดกะลาสี', like: 'adventurer', shirt: F.white, sleeve: F.white, pants: F.navy, boot: F.black, glove: F.skin, belt: F.navy, cape: F.navy, desc: 'เสื้อกะลาสีปกน้ำเงิน หมวกกะลาสี', add: { chest: g => { g.box(0, .3, .19, .3, .06, .03, F.navy); g.push(0, .3, -.19); g.box(0, 0, 0, .34, .18, .03, F.navy); g.pop(); g.box(0, .18, .2, .04, .2, .02, F.red); }, head: g => { g.cyl(0, .76, 0, .5, .52, .1, 14, F.white); g.cyl(0, .86, 0, .52, .46, .08, 14, F.white); g.cyl(0, .78, 0, .51, .51, .03, 14, F.navy, null, true); } }, hatLift: true },
+  cs_farmer: { name: 'ชุดชาวนา', like: 'adventurer', shirt: F.navy, sleeve: F.navy, pants: F.navy, boot: F.skin, glove: F.skin, belt: F.red, cape: F.navy, desc: 'เสื้อม่อฮ่อมกับงอบ', add: { head: g => { g.cyl(0, .78, 0, .9, .3, .35, 14, F.khaki, shade(F.khaki, 1.1)); g.cyl(0, .8, 0, .52, .52, .06, 14, dk(F.khaki), null, true); }, hips: g => g.box(0, .03, .2, .12, .1, .03, F.red) }, hatLift: true },
+  cs_ghostsheet: { name: 'ชุดผีผ้าคลุม', like: 'priest', shirt: F.white, sleeve: F.white, pants: F.white, boot: F.white, glove: F.white, belt: F.white, cape: F.white, robe: F.white, nohair: true, desc: 'ผ้าขาวคลุมทั้งตัว เจาะรูตา', add: { head: g => { g.jit = .02; g.sphereSkip(0, .45, -.02, .58, F.white, 14, 10, c => c[1] < -.4); g.cyl(0, -.1, 0, .58, .62, .12, 14, F.white, null, true); for (const s of [-1, 1]) g.ell(s * .19, .45, .55, .1, .12, .03, F.black, 6, 4); g.jit = .03; } } },
+  cs_bee: { name: 'ชุดผึ้งน้อย', like: 'adventurer', shirt: F.yellow, sleeve: F.black, pants: F.black, boot: F.black, glove: F.yellow, belt: F.black, cape: F.yellow, desc: 'ชุดผึ้งลายเหลืองดำ ปีกใส หนวด', add: { chest: g => { for (let i = 0; i < 3; i++) g.cyl(0, .02 + i * .13, 0, .215, .21, .06, 10, F.black, null, true); }, head: g => { for (const s of [-1, 1]) { g.cone(s * .2, .85, 0, s * .3, 1, 0, .02, .3, 4, F.black); g.sphere(s * .3, 1.15, 0, .05, F.black, 5, 4); } }, hips: g => g.cone(0, -.05, -.12, 0, -.3, -1, .06, .2, 4, F.black) } },
+  cs_ladybug: { name: 'ชุดเต่าทอง', like: 'adventurer', shirt: F.red, sleeve: F.black, pants: F.black, boot: F.black, glove: F.black, belt: F.black, cape: F.red, desc: 'ชุดเต่าทองแดงจุดดำ', add: { chest: g => { for (let i = 0; i < 6; i++) { const a = i / 6 * TAU; g.sphere(Math.cos(a) * .17, .2 + Math.sin(a) * .1, .18, .03, F.black, 4, 3); } g.push(0, .2, -.22, .1); g.ell(0, 0, 0, .3, .32, .12, F.red, 10, 6); g.box(0, 0, -.12, .02, .5, .03, F.black); for (let i = 0; i < 4; i++) g.sphere(i % 2 ? .12 : -.12, .15 - i * .1, -.11, .04, F.black, 4, 3); g.pop(); }, head: g => { for (const s of [-1, 1]) { g.cone(s * .2, .85, 0, s * .3, 1, 0, .02, .3, 4, F.black); g.sphere(s * .3, 1.15, 0, .05, F.black, 5, 4); } } } },
+  cs_bunny: { name: 'ชุดกระต่ายขาว', like: 'adventurer', shirt: F.white, sleeve: F.white, pants: F.white, boot: F.pink, glove: F.pink, belt: F.pink, cape: F.white, desc: 'ชุดกระต่ายขาวหูยาว หางปุย', add: { head: g => FH.ears(g, F.white, F.pink, 'bunny'), hips: g => { g.jit = .08; g.sphere(0, -.05, -.17, .1, F.white, 6, 4); g.jit = .03; }, chest: g => g.ell(0, .1, .19, .15, .2, .03, F.pink, 7, 5) } },
+  cs_tiger: { name: 'ชุดเสือโคร่ง', like: 'adventurer', shirt: F.orange, sleeve: F.orange, pants: F.orange, boot: F.dark, glove: F.dark, belt: F.black, cape: F.orange, desc: 'ชุดเสือลายดำ หูกลม หางลาย', add: { head: g => FH.ears(g, F.orange, F.cream, 'bear'), chest: g => { for (let i = 0; i < 4; i++) g.box(.1 - (i % 2) * .2, .3 - i * .09, .19, .14, .035, .02, F.black); g.ell(0, .05, .19, .13, .12, .02, F.cream, 6, 4); }, hips: g => { FH.tail(g, F.orange, F.black, .8, .07); } } },
+  cs_crab: { name: 'ชุดปูแดง', like: 'adventurer', shirt: F.coral, sleeve: F.coral, pants: F.coral, boot: F.red, glove: F.red, belt: F.red, cape: F.coral, desc: 'ชุดปูแดงมีก้าม', add: { chest: g => { for (const s of [-1, 1]) { g.push(s * .33, .1, 0, 0, 0, s * .4); g.ell(0, 0, 0, .13, .18, .09, F.red, 7, 5); g.cone(0, .15, 0, s * .3, 1, 0, .06, .18, 4, F.red); g.pop(); } g.push(0, .2, -.22); g.ell(0, 0, 0, .3, .28, .1, F.red, 10, 6); g.pop(); }, head: g => { for (const s of [-1, 1]) { g.cyl(s * .2, .85, .1, .025, .025, .25, 5, F.red); g.sphere(s * .2, 1.12, .1, .06, F.black, 5, 4); } } } }
+};
+/* ---------- weapon skins ---------- */
+const WEAPON_FAM = { adventurer: 'sword', knight: 'sword', lordknight: 'greatsword', paladin: 'lance', whitesmith: 'hammer', creator: 'flask', ninja: 'kunai', stalker: 'kunai', assassinx: 'katar', archer: 'bow', sniper: 'bow', minstrel: 'harp', mage: 'staff', highwizard: 'staff', professor: 'staff', priest: 'rod', highpriest: 'rod', champion: 'knuckle' };
+const FAM_TH = { sword: 'ดาบ', greatsword: 'ดาบใหญ่', lance: 'หอก', hammer: 'ค้อน', flask: 'ขวดยา', kunai: 'คุไน', katar: 'คาตาร์', bow: 'ธนู', harp: 'พิณ', staff: 'ไม้เท้า', rod: 'คทา', knuckle: 'สนับมือ' };
+const sword = (g, blade, edge, guard, grip, pommel, L = .78, W = .08) => { g.push(0, -.26, 0, Math.PI / 2); g.box(0, L / 2 + .11, 0, W, L, .025, blade); g.box(0, L / 2 + .11, .016, W * .25, L * .95, .01, edge); g.box(0, .1, 0, .3, .05, .09, guard); g.cyl(0, -.12, 0, .035, .035, .22, 5, grip); g.sphere(0, -.13, 0, .05, pommel, 5, 3); g.pop(); };
+const WSKIN = {
+  ws_flame: { name: 'ดาบเพลิงนรก', fam: ['sword'], emis: [.2, .06, 0], elR: g => { sword(g, F.lava, F.yellow, F.dark, F.black, F.red); g.push(0, -.26, 0, Math.PI / 2); for (let i = 0; i < 5; i++) g.cone(0, .3 + i * .12, 0, (i % 2 ? 1 : -1) * .4, 1, 0, .035, .14, 3, i % 2 ? F.yellow : F.orange); g.pop(); } },
+  ws_ice: { name: 'ดาบน้ำแข็งนิรันดร์', fam: ['sword'], emis: [.05, .12, .18], elR: g => { sword(g, F.ice, F.white, F.steel, F.navy, F.sky, .8, .1); g.push(0, -.26, 0, Math.PI / 2); g.cone(0, .9, 0, .3, 1, 0, .04, .2, 3, F.ice); g.cone(0, .7, 0, -.4, 1, 0, .035, .16, 3, F.ice); g.pop(); } },
+  ws_wood: { name: 'ดาบไม้ฝึกหัด', fam: ['sword'], elR: g => sword(g, F.wood, shade(F.wood, 1.15), dk(F.wood), F.brown, dk(F.wood), .7, .09) },
+  ws_gold: { name: 'ดาบทองคำราชา', fam: ['sword'], emis: [.1, .07, .0], elR: g => { sword(g, F.gold, shade(F.gold, 1.2), F.red, F.wine, F.red, .8, .09); g.push(0, -.26, 0, Math.PI / 2); g.sphere(0, .1, .05, .04, F.red, 5, 4); g.pop(); } },
+  ws_fish: { name: 'ดาบปลาทูยักษ์', fam: ['sword'], elR: g => { g.push(0, -.26, 0, Math.PI / 2); g.ell(0, .5, 0, .09, .42, .05, F.sky, 8, 6); g.ell(0, .5, .02, .06, .3, .03, F.white, 7, 5); g.cone(0, .9, 0, .4, 1, 0, .05, .2, 3, F.sky); g.cone(0, .9, 0, -.4, 1, 0, .05, .2, 3, F.sky); g.sphere(.03, .78, .04, .02, F.black, 4, 3); g.cyl(0, -.12, 0, .035, .035, .22, 5, F.brown); g.pop(); } },
+  ws_neon: { name: 'ดาบพลังงานนีออน', fam: ['sword'], emis: [.1, .35, .45], elR: g => { g.push(0, -.26, 0, Math.PI / 2); g.cyl(0, .1, 0, .035, .03, .85, 7, F.cyan); g.cyl(0, .1, 0, .05, .045, .85, 7, F.ice); g.cyl(0, -.14, 0, .045, .045, .26, 7, F.dark); g.cyl(0, .08, 0, .06, .06, .04, 7, F.steel); g.pop(); } },
+  ws_dragonslayer: { name: 'ดาบมังกรยักษ์', fam: ['greatsword'], emis: [.1, .02, .02], elR: g => { g.push(0, -.26, 0, Math.PI / 2); g.box(0, .7, 0, .2, 1.35, .04, F.dark); g.box(0, .7, .025, .06, 1.3, .012, F.red); g.box(0, .02, 0, .46, .08, .1, F.gold); for (const s of [-1, 1]) g.cone(s * .22, .02, 0, s * 1, .5, 0, .04, .16, 4, F.gold); g.cone(0, 1.37, 0, 0, 1, 0, .1, .2, 4, F.dark); g.cyl(0, -.16, 0, .04, .04, .3, 5, F.wine); g.sphere(0, -.18, 0, .07, F.red, 5, 3); g.pop(); } },
+  ws_crystalbow: { name: 'ธนูผลึกสวรรค์', fam: ['bow'], hand: 'L', emis: [.05, .15, .2], elL: g => { g.push(0, -.26, .02, 0, 0, 0); for (let i = -6; i <= 6; i++) { const y = i * .1, z = .16 - i * i * .006; g.cyl(0, y - .05, z, .03, .03, .1, 4, i % 2 ? F.ice : F.cyan); } g.box(0, 0, -.04, .006, 1.2, .006, [1, 1, 1]); g.cone(0, .62, .0, 0, 1, 0, .04, .18, 4, F.ice); g.cone(0, -.62, .0, 0, -1, 0, .04, .18, 4, F.ice); g.pop(); } },
+  ws_rosebow: { name: 'ธนูกุหลาบ', fam: ['bow'], hand: 'L', elL: g => { g.push(0, -.26, .02, 0, 0, 0); for (let i = -5; i <= 5; i++) { const y = i * .1, z = .15 - i * i * .007; g.box(0, y, z, .045, .11, .045, F.green); } g.box(0, 0, -.03, .006, 1.0, .006, [1, 1, 1]); for (const y of [-.4, 0, .4]) { for (let k = 0; k < 5; k++) { const b = k / 5 * TAU; g.sphere(Math.cos(b) * .04, y, .18 + Math.sin(b) * .04, .035, F.rose, 4, 3); } } g.pop(); } },
+  ws_moonstaff: { name: 'ไม้เท้าจันทรา', fam: ['staff'], emis: [.08, .1, .2], elR: g => { g.cyl(0, -.7, 0, .03, .035, 1.55, 6, F.navy); g.push(0, .95, 0); FH.ring(g, .18, .05, F.yellow, 12, 0); g.sphere(.1, .08, 0, .07, F.navy, 5, 4); g.sphere(0, 0, 0, .05, F.ice, 5, 4); g.pop(); } },
+  ws_skullstaff: { name: 'ไม้เท้ากะโหลก', fam: ['staff'], emis: [.06, .12, .04], elR: g => { g.cyl(0, -.7, 0, .03, .035, 1.5, 6, F.dark); g.sphere(0, .9, 0, .12, F.white, 8, 6); for (const s of [-1, 1]) g.sphere(s * .05, .92, .1, .03, F.lime, 4, 3); g.box(0, .82, .1, .08, .03, .03, F.black); for (let i = 0; i < 4; i++) g.cone(0, .8, 0, Math.cos(i * 1.57) * .5, -.3, Math.sin(i * 1.57) * .5, .025, .16, 3, F.dark); } },
+  ws_lotusrod: { name: 'คทาดอกบัวทอง', fam: ['rod'], emis: [.1, .05, .06], elR: g => { g.cyl(0, -.7, 0, .03, .035, 1.5, 6, F.gold); g.push(0, .9, 0); for (let i = 0; i < 8; i++) { const a = i / 8 * TAU; g.cone(Math.cos(a) * .06, 0, Math.sin(a) * .06, Math.cos(a) * .6, 1, Math.sin(a) * .6, .05, .22, 4, i % 2 ? F.pink : F.white); } g.sphere(0, .08, 0, .06, F.yellow, 5, 4); g.pop(); } },
+  ws_sunrod: { name: 'คทาสุริยะ', fam: ['rod'], emis: [.2, .12, .0], elR: g => { g.cyl(0, -.7, 0, .03, .035, 1.5, 6, F.gold); g.sphere(0, .95, 0, .1, F.yellow, 8, 6); for (let i = 0; i < 8; i++) { const a = i / 8 * TAU; g.cone(0, .95, 0, Math.cos(a), 0, Math.sin(a), .025, .22 + (i % 2) * .08, 3, F.orange); } } },
+  ws_goldkunai: { name: 'คุไนทองคำ', fam: ['kunai'], emis: [.1, .07, 0], elR: g => { g.push(0, -.27, 0, Math.PI / 2 + .3); g.box(0, .16, 0, .05, .22, .015, F.gold); g.cyl(0, -.05, 0, .02, .02, .1, 4, F.wine); g.pop(); }, elL: g => { g.push(0, -.27, 0, Math.PI / 2 + .3); g.box(0, .16, 0, .05, .22, .015, F.gold); g.cyl(0, -.05, 0, .02, .02, .1, 4, F.wine); g.pop(); } },
+  ws_icekunai: { name: 'คุไนน้ำแข็ง', fam: ['kunai'], emis: [.05, .12, .18], elR: g => { g.push(0, -.27, 0, Math.PI / 2 + .3); g.cone(0, .05, 0, 0, 1, 0, .04, .3, 4, F.ice); g.cyl(0, -.05, 0, .02, .02, .1, 4, F.navy); g.pop(); }, elL: g => { g.push(0, -.27, 0, Math.PI / 2 + .3); g.cone(0, .05, 0, 0, 1, 0, .04, .3, 4, F.ice); g.cyl(0, -.05, 0, .02, .02, .1, 4, F.navy); g.pop(); } },
+  ws_bladefang: { name: 'คาตาร์เขี้ยวสัตว์', fam: ['katar'], elR: g => { g.push(0, -.25, 0, Math.PI / 2); g.cone(0, .1, 0, 0, 1, 0, .05, .7, 4, F.cream); g.cone(.07, .08, 0, .2, 1, 0, .03, .4, 4, F.cream); g.cone(-.07, .08, 0, -.2, 1, 0, .03, .4, 4, F.cream); g.box(0, .02, 0, .18, .05, .06, F.brown); g.pop(); }, elL: g => { g.push(0, -.25, 0, Math.PI / 2); g.cone(0, .1, 0, 0, 1, 0, .05, .7, 4, F.cream); g.cone(.07, .08, 0, .2, 1, 0, .03, .4, 4, F.cream); g.cone(-.07, .08, 0, -.2, 1, 0, .03, .4, 4, F.cream); g.box(0, .02, 0, .18, .05, .06, F.brown); g.pop(); } },
+  ws_thunderhammer: { name: 'ค้อนสายฟ้า', fam: ['hammer'], emis: [.1, .1, .2], elR: g => { g.push(0, -.26, 0, Math.PI / 2); g.cyl(0, -.2, 0, .04, .04, 1.1, 6, F.dark); g.box(0, .95, 0, .34, .3, .5, F.steel, F.silver); g.box(0, .95, 0, .36, .08, .1, F.cyan); g.cone(0, 1.1, 0, 0, 1, 0, .06, .2, 4, F.cyan); g.pop(); } },
+  ws_crystallance: { name: 'หอกผลึกนิล', fam: ['lance'], emis: [.08, .02, .12], elR: g => { g.push(0, -.26, 0, Math.PI / 2 + .12); g.cyl(0, -.3, 0, .035, .035, 1.6, 6, F.dark); g.cone(0, 1.3, 0, 0, 1, 0, .08, .5, 4, F.purple); for (let i = 0; i < 3; i++) g.cone(0, 1.2, 0, Math.cos(i * 2.1) * .6, .4, Math.sin(i * 2.1) * .6, .03, .2, 3, F.purple); g.pop(); } },
+  ws_tigerfist: { name: 'สนับมือเสือ', fam: ['knuckle'], elR: g => { for (let i = 0; i < 3; i++) g.cone(-.03 + i * .03, -.27, .05, 0, -.3, 1, .02, .2, 3, F.cream); g.box(0, -.26, .03, .15, .1, .11, F.orange); g.box(0, -.26, .09, .15, .03, .02, F.black); }, elL: g => { for (let i = 0; i < 3; i++) g.cone(-.03 + i * .03, -.27, .05, 0, -.3, 1, .02, .2, 3, F.cream); g.box(0, -.26, .03, .15, .1, .11, F.orange); g.box(0, -.26, .09, .15, .03, .02, F.black); } },
+  ws_goldharp: { name: 'พิณทองสวรรค์', fam: ['harp'], hand: 'L', emis: [.1, .07, 0], elL: g => { g.push(0, -.26, .03, 0, 0, 0); g.box(0, .25, 0, .05, .6, .06, F.gold); g.box(.18, .25, 0, .05, .55, .06, F.gold); g.box(.09, .55, 0, .26, .06, .06, F.gold); g.box(.09, -.03, 0, .26, .06, .06, F.gold); for (let i = 1; i < 6; i++) g.box(.03 + i * .025, .25, 0, .004, .5, .004, F.white); for (const s of [-1, 1]) g.ell(.09, .55 + s * .04, 0, .06, .04, .04, F.white, 6, 4); g.pop(); } },
+  ws_rainbowflask: { name: 'ขวดยาสายรุ้ง', fam: ['flask'], hand: 'L', emis: [.1, .05, .12], elL: g => { g.push(0, -.3, .05, 0, 0, 0); g.sphere(0, 0, 0, .11, F.purple, 7, 5); g.sphere(0, .02, 0, .08, F.pink, 7, 5); g.cyl(0, .08, 0, .035, .035, .1, 6, F.ice); g.cyl(0, .17, 0, .03, .03, .03, 6, F.gold); for (let i = 0; i < 4; i++) g.sphere(Math.cos(i * 1.57) * .15, .12 + i * .04, Math.sin(i * 1.57) * .15, .02, [F.red, F.yellow, F.lime, F.sky][i], 4, 3); g.pop(); } }
+};
+/* ---------- sheets: composite outfit keys  cos@job#skin ---------- */
+const FASHION_SHEETS = Object.keys(COSTUMES);
+for (const k in COSTUMES) { const c = COSTUMES[k]; OUTFITS[k] = Object.assign({ pig: false, weapon: null }, c, { col: c.col || HAIR.adventurer, colOwn: !!c.col }); }
+const Sheets = {
+  parse(key) { const [main, flags] = String(key).split('!'); const [body, skin] = main.split('#'); const [cos, job] = body.split('@'); return { cos, job: job || cos, skin, nohair: flags === 'nh' }; },
+  ensure(key) {
+    if (OUTFITS[key]) return true; if (typeof key !== 'string' || !/[@#!]/.test(key)) return false;
+    const { cos, job, skin, nohair } = this.parse(key); const C = OUTFITS[cos], J = OUTFITS[job]; if (!C || !J) return false;
+    const O = Object.assign({}, C); const add = Object.assign({}, C.add || {});
+    if (job !== cos) { O.weapon = J.weapon; O.shield = J.shield; O.hold = J.hold || J.like || job; if (!C.colOwn) O.col = J.col; if (J.add) for (const h of ['elR', 'elL']) if (J.add[h]) add[h] = J.add[h]; }
+    if (skin && WSKIN[skin]) { const W = WSKIN[skin]; O.weapon = null; if (W.elR) add.elR = W.elR; else if (!W.hand) delete add.elR; if (W.elL) add.elL = W.elL; O.skinEmis = W.emis; }
+    if (nohair) O.nohair = true;
+    O.add = add; OUTFITS[key] = O; return true;
+  },
+  // sheet key for a save (outfit + job + weapon skin)
+  key(S) {
+    const job = S.job || S.cls; const o = S.cos && S.cos.outfit; const oi = o && ITEMS[o];
+    let k = oi ? (oi.fashion ? oi.sheet + '@' + job : oi.sheet) : job;
+    const w = S.cos && S.cos.wskin; const wi = w && ITEMS[w];
+    if (wi && WSKIN[wi.skin] && (!oi || oi.fashion) && WSKIN[wi.skin].fam.includes(WEAPON_FAM[job])) k += '#' + wi.skin;
+    const h = S.cos && S.cos.head; if (h && COS_MESH[h] && COS_MESH[h].cover) k += '!nh';
+    return k;
+  },
+  base(key) { return this.parse(key).cos; },
+  name(key) { const { cos } = this.parse(key); return COSTUMES[cos] ? COSTUMES[cos].name : JOBS[cos] ? JOBS[cos].name : CLASSES[cos] ? CLASSES[cos].name : cos; }
+};
+Object.defineProperty(Player, 'sheet', { get() { return Sheets.key(Save.d); }, configurable: true });
+
+/* ---------- items ---------- */
+const FASHION = {
+  sheetName(k) { return Sheets.name(k); },
+  price(id) { return ITEMS[id].price || 0; }
+};
+{
+  const put = (id, def) => { ITEMS[id] = Object.assign({ kind: 'cos', price: 0, fx3d: true }, ITEMS[id] || {}, def); };
+  for (const k in COSTUMES) put('o_' + k, { name: COSTUMES[k].name, slot: 'outfit', sheet: k, fashion: true, desc: COSTUMES[k].desc, icon: 'outfit' });
+  const H = {
+    h_cat: ['หูแมวดำ', 'หูแมวดำปลายชมพู'], h_catw: ['หูแมวขาว', 'หูแมวขาวนุ่มๆ'], h_fox: ['หูจิ้งจอก', 'หูจิ้งจอกส้มปลายขาว'], h_bunny: ['หูกระต่าย', 'หูกระต่ายยาวสีขาว'], h_bear: ['หูหมี', 'หูหมีกลมน้ำตาล'], h_panda: ['หูแพนด้า', 'หูกลมสีดำ'], h_mouse: ['หูหนู', 'หูหนูกลมใหญ่'],
+    h_horns: ['เขาปีศาจแดง', 'เขาแดงโค้ง เรืองแสงจางๆ'], h_pumpkin: ['หัวฟักทอง', 'หัวฟักทองแกะสลักเรืองแสง (ปิดทั้งหัว)'], h_witch: ['หมวกแม่มด', 'หมวกแม่มดปลายงอ หัวเข็มขัดทอง'], h_tophat: ['หมวกทรงสูง', 'หมวกสุภาพบุรุษ แถบแดง'], h_tricorn: ['หมวกโจรสลัด', 'หมวกสามมุมหัวกะโหลก'], h_cowboy: ['หมวกคาวบอย', 'หมวกปีกกว้างหนังสีน้ำตาล'],
+    h_police: ['หมวกตำรวจ', 'หมวกเครื่องแบบน้ำเงิน ตราทอง'], h_chef: ['หมวกเชฟ', 'หมวกเชฟสูงสีขาว'], h_tiara: ['มงกุฎเจ้าหญิง', 'มงกุฎเล็กฝังอัญมณีชมพู'], h_flowers: ['มงกุฎดอกไม้', 'ดอกไม้หลากสีถักเป็นวง'], h_headphones: ['หูฟังนีออน', 'หูฟังดำไฟฟ้า'], h_goggles: ['แว่นกันลมบนหัว', 'แว่นทองเลนส์ฟ้า คาดบนหัว'],
+    h_bow: ['โบว์ชมพูใหญ่', 'โบว์ผ้าชมพูติดข้างหัว'], h_sombrero: ['หมวกซอมเบรโร', 'หมวกปีกกว้างสุดๆ ลายแดงเขียว'], h_viking: ['หมวกไวกิ้ง', 'หมวกเหล็กมีเขา'], h_kabuto: ['หมวกซามูไร', 'หมวกคาบูโตะแดง เขาทอง'], h_astro: ['หมวกอวกาศ', 'หมวกแก้วกลมสำหรับอวกาศ (ปิดทั้งหัว)'],
+    h_frog: ['ฮู้ดกบ', 'ฮู้ดกบเขียวตาโต'], h_duck: ['ฮู้ดเป็ด', 'ฮู้ดเป็ดเหลืองปากส้ม'], h_bearhood: ['ฮู้ดหมี', 'ฮู้ดหมีน้ำตาลหูกลม'], h_pandahood: ['ฮู้ดแพนด้า', 'ฮู้ดแพนด้าขาวดำ'], h_santa: ['หมวกซานต้า', 'หมวกแดงปลายปุยขาว'], h_mongkol: ['มงคลมวยไทย', 'มงคลแดงทองของนักมวย'],
+    h_bucket: ['หมวกบักเก็ต', 'หมวกบักเก็ตสีกากี'], h_beret: ['หมวกเบเร่ต์', 'หมวกเบเร่ต์แดงเอียงๆ'], h_antenna: ['เสาอากาศหุ่นยนต์', 'เสาอากาศไฟแดงกะพริบ'], h_lotus: ['ดอกบัวทัดหู', 'ดอกบัวชมพูบานทัดหู'], h_chada: ['ชฎาทอง', 'ชฎาทองยอดแหลมแบบไทย'], h_crownflame: ['มงกุฎเปลวไฟ', 'มงกุฎทองเปลวไฟลุกโชน'],
+    h_slime: ['หมวกสไลม์', 'สไลม์เขียวเกาะหัว'], h_raincloud: ['เมฆฝนน้อย', 'เมฆเทาลอยเหนือหัว มีหยดฝน'], h_bandana: ['ผ้าโพกหัวแดง', 'ผ้าโพกลายจุดขาว'],
+    f_sunglass: ['แว่นกันแดดดำ', 'แว่นดำสุดเท่'], f_round: ['แว่นกลมทอง', 'แว่นกลมกรอบทอง'], f_3d: ['แว่นสามมิติ', 'แว่นกระดาษเลนส์แดงฟ้า'], f_visor: ['ไวเซอร์ไซเบอร์', 'แผ่นบังตาเรืองแสงฟ้า'], f_maskcloth: ['ผ้าปิดหน้าดำ', 'ผ้าปิดครึ่งหน้าแบบนินจา'], f_surgical: ['หน้ากากอนามัย', 'หน้ากากสีเขียวมิ้นต์'],
+    f_eyepatch: ['ผ้าปิดตาโจรสลัด', 'ผ้าปิดตาข้างซ้าย'], f_monocle: ['แว่นตาเดียว', 'แว่นตาเดียวกรอบทองมีสาย'], f_mustache: ['หนวดโค้ง', 'หนวดสุภาพบุรุษปลายงอน'], f_whiskers: ['หนวดแมว', 'จมูกชมพูกับหนวดแมว'], f_clown: ['จมูกตัวตลก', 'จมูกแดงกลม'], f_yak: ['หน้ากากยักษ์', 'หน้ากากยักษ์เขียวเขี้ยวขาว (ปิดหน้า)'],
+    f_foxmask: ['หน้ากากจิ้งจอกขาว', 'หน้ากากขาวลายแดง (ปิดหน้า)'], f_blindfold: ['ผ้าปิดตาขาว', 'ผ้าขาวปิดตาแบบนักดาบ'], f_scuba: ['หน้ากากดำน้ำ', 'หน้ากากดำน้ำพร้อมท่อหายใจ'],
+    b_backpack: ['เป้แดง', 'กระเป๋าเป้สีแดง'], b_schoolbag: ['กระเป๋านักเรียน', 'กระเป๋าหนังน้ำตาล'], b_jetpack: ['เจ็ตแพ็ก', 'เจ็ตแพ็กเหล็กพ่นไฟ'], b_turtle: ['กระดองเต่า', 'กระดองเต่าเขียว'], b_basket: ['ตะกร้าสาน', 'ตะกร้าสานใส่ผัก'], b_sheath: ['ฝักดาบคู่', 'ฝักดาบไขว้หลัง'],
+    b_guitar: ['กีตาร์โปร่ง', 'กีตาร์สะพายหลัง'], b_balloons: ['ลูกโป่งสามสี', 'ลูกโป่งลอยตามตัว'], b_umbrella: ['ร่มกระดาษ', 'ร่มกระดาษสีแดงครีม'], b_cape_hero: ['ผ้าคลุมฮีโร่', 'ผ้าคลุมแดงตราทอง'], b_cape_star: ['ผ้าคลุมดวงดาว', 'ผ้าคลุมน้ำเงินประดับดาว'], b_cape_royal: ['ผ้าคลุมราชวงศ์', 'ผ้าคลุมม่วงขอบขนขาว'],
+    b_cape_leaf: ['ผ้าคลุมใบไม้', 'ผ้าคลุมเขียวลายใบไม้'], b_wings_butterfly: ['ปีกผีเสื้อ', 'ปีกผีเสื้อม่วงฟ้า · SPD +2%'], b_wings_bee: ['ปีกผึ้งใส', 'ปีกใสกระพือเร็ว'], b_wings_phoenix: ['ปีกฟีนิกซ์', 'ปีกเพลิงเรืองแสง · SPD +3%'], b_wings_mech: ['ปีกจักรกล', 'ปีกเหล็กไฟฟ้า · SPD +2%'], b_wings_leaf: ['ปีกใบไม้', 'ปีกใบไม้เขียว'],
+    b_tail_cat: ['หางแมว', 'หางแมวดำ'], b_tail_fox: ['หางจิ้งจอก', 'หางจิ้งจอกพวงใหญ่'], b_tail_devil: ['หางปีศาจ', 'หางแดงปลายแหลม'], b_tail_dragon: ['หางมังกร', 'หางมังกรเขียวมีหนาม'], b_cloud: ['เมฆน้อยลอยตาม', 'เมฆขาวลอยข้างตัว'], b_fairy: ['ภูตน้อย', 'ภูตแสงบินตาม']
+  };
+  for (const id in H) { const m = COS_MESH[id]; put(id, { name: H[id][0], slot: m.slot, desc: H[id][1], icon: m.slot === 'head' ? 'straw' : m.slot === 'face' ? 'person' : 'wing', bonus: /butterfly|mech/.test(id) ? { spdPct: .02 } : /phoenix/.test(id) ? { spdPct: .03 } : undefined }); }
+  for (const id in WSKIN) put(id, { name: WSKIN[id].name, slot: 'wskin', skin: id, desc: `สกินอาวุธสำหรับ${WSKIN[id].fam.map(f => FAM_TH[f]).join('/')} เปลี่ยนรูปร่างอาวุธที่ถือ`, icon: 'sword' });
+  /* sources: tailor (coins), gem shop, quests, achievements */
+  const tailor = { o_cs_student: 400, o_cs_farmer: 350, o_cs_chef: 450, o_cs_sailor: 450, o_cs_cat: 600, o_cs_frog: 600, o_cs_bee: 650, o_cs_muaythai: 700, h_cat: 150, h_bear: 150, h_bow: 120, h_bucket: 120, h_beret: 140, h_flowers: 220, h_chef: 160, h_bandana: 130, f_round: 180, f_surgical: 60, f_mustache: 90, f_whiskers: 120, b_backpack: 200, b_schoolbag: 220, b_basket: 180, b_umbrella: 260, b_cape_leaf: 300, b_tail_cat: 160, ws_wood: 250, ws_rosebow: 400, ws_lotusrod: 400 };
+  for (const id in tailor) { ITEMS[id].price = tailor[id]; if (!TAILOR_ITEMS.includes(id)) TAILOR_ITEMS.push(id); }
+  const gem = { o_cs_ninja_blue: 220, o_cs_ninja_shadow: 240, o_cs_samurai: 320, o_cs_robot: 300, o_cs_fox: 260, o_cs_thai: 360, o_cs_pirate: 280, o_cs_astro: 320, o_cs_doctor: 200, o_cs_police: 200, o_cs_fire: 220, o_cs_kimono: 300, o_cs_dragon: 420, o_cs_skeleton: 180, o_cs_pumpkin: 220, o_cs_santa: 240, o_cs_angel: 320, o_cs_devil: 320, o_cs_princess: 340, o_cs_prince: 340, o_cs_duck: 220, o_cs_bear: 220, o_cs_panda: 240, o_cs_cyber: 360, o_cs_detective: 220, o_cs_cowboy: 220, o_cs_scientist: 200, o_cs_witch: 300, o_cs_mummy: 200, o_cs_vampire: 320, o_cs_knightgold: 480, o_cs_ghostsheet: 160, o_cs_ladybug: 220, o_cs_bunny: 240, o_cs_tiger: 280, o_cs_crab: 220,
+    h_catw: 80, h_fox: 100, h_bunny: 100, h_panda: 90, h_mouse: 80, h_horns: 140, h_pumpkin: 160, h_witch: 160, h_tophat: 140, h_tricorn: 150, h_cowboy: 120, h_police: 100, h_tiara: 180, h_headphones: 160, h_goggles: 120, h_sombrero: 140, h_viking: 160, h_kabuto: 200, h_astro: 220, h_frog: 140, h_duck: 140, h_bearhood: 140, h_pandahood: 150, h_santa: 120, h_mongkol: 100, h_antenna: 90, h_lotus: 130, h_chada: 260, h_crownflame: 320, h_slime: 110, h_raincloud: 150,
+    f_sunglass: 90, f_3d: 80, f_visor: 180, f_maskcloth: 90, f_eyepatch: 90, f_monocle: 110, f_clown: 60, f_yak: 220, f_foxmask: 200, f_blindfold: 100, f_scuba: 120,
+    b_jetpack: 320, b_turtle: 200, b_sheath: 220, b_guitar: 260, b_balloons: 180, b_cape_hero: 260, b_cape_star: 300, b_cape_royal: 340, b_wings_butterfly: 320, b_wings_bee: 200, b_wings_phoenix: 480, b_wings_mech: 400, b_wings_leaf: 220, b_tail_fox: 160, b_tail_devil: 150, b_tail_dragon: 220, b_cloud: 180, b_fairy: 220,
+    ws_flame: 360, ws_ice: 360, ws_gold: 420, ws_fish: 180, ws_neon: 400, ws_dragonslayer: 480, ws_crystalbow: 400, ws_moonstaff: 360, ws_skullstaff: 320, ws_sunrod: 360, ws_goldkunai: 300, ws_icekunai: 300, ws_bladefang: 340, ws_thunderhammer: 420, ws_crystallance: 420, ws_tigerfist: 300, ws_goldharp: 320, ws_rainbowflask: 260 };
+  for (const id in gem) GEM_ITEMS.push({ id: 'gf_' + id, cat: 'fashion', gems: gem[id], item: id, tryon: true, hot: /dragon|phoenix|knightgold|chada/.test(id) });
+  /* quest / achievement rewards */
+  const qr = { m2: ['h_slime', 1], m3: ['b_cape_hero', 1], s1: ['h_bucket', 1], t1: ['h_lotus', 1], t4: ['b_cape_star', 1], ts6: ['o_cs_tiger', 1], td1: ['f_yak', 1] };
+  for (const q in qr) if (QUESTS[q]) { const r = QUESTS[q].rew = QUESTS[q].rew || {}; r.items = (r.items || []).concat([qr[q]]); }
+}
+/* ---------- cosmetic meshes per renderer + drawing ---------- */
+const CosMesh = {
+  cache: new Map(),
+  get(R, id) {
+    let c = this.cache.get(R); if (!c) { c = {}; this.cache.set(R, c); }
+    if (c[id] === undefined) { const sp = COS_MESH[id]; if (!sp) c[id] = null; else { const g = new Geo(id.length * 13); g.jit = .03; sp.mk(g); c[id] = g.d.length ? R.mesh(g) : null; } }
+    return c[id];
+  }
+};
+drawCosmetics3D = function (R, rig, o) {
+  const S = Save.d;
+  o = o || { head: S.cos.head, face: S.cos.face, back: S.cos.back, sheet: Player.sheet, anim: Player.anim, walk: Player.walkAmp || 0 };
+  const base = OUTFITS[Sheets.base(o.sheet || '')] || {}; const lift = base.hat || base.hatLift ? .3 : 0;
+  for (const slot of ['head', 'face', 'back']) {
+    const id = o[slot]; if (!id) continue; const sp = COS_MESH[id];
+    if (!sp) { if (slot !== 'face') legacyCosmetic(R, rig, id, slot, o); continue; }
+    if (sp.cover && slot === 'head' && (base.hat || base.hatLift)) continue; // a full cover can't stack on a costume's built-in hat
+    const mesh = CosMesh.get(R, id); if (!mesh) continue;
+    const bob = sp.bob ? Math.sin(o.anim * 2) * sp.bob : 0; const flap = sp.flap ? Math.sin(o.anim * (3 + 7 * o.walk)) * (.22 + .18 * o.walk) * sp.flap : 0;
+    const p = sp.pos || [0, 0, 0], r = sp.rot || [0, 0, 0], s = sp.s || 1; const y = p[1] + bob + (slot === 'head' && sp.bone === 'head' && !sp.cover && p[1] > .5 ? lift : 0);
+    M4.compose(_cl, p[0], y, p[2], r[0], r[1] + flap, r[2], s, s, s); M4.mul(_cm, rig.boneM(sp.bone), _cl); R.drawMesh(mesh, _cm, null, sp.emis || null);
+    if (sp.mirror) { M4.compose(_cl, -p[0], y, p[2], r[0], Math.PI - r[1] - flap, -r[2], s, s, s); M4.mul(_cm, rig.boneM(sp.bone), _cl); R.drawMesh(mesh, _cm, null, sp.emis || null); }
+  }
+};
+function legacyCosmetic(R, rig, id, slot, o) { // items whose mesh only exists in Models (built for the main renderer)
+  const mesh = Models[id]; if (!mesh || R !== Game.R) return;
+  if (slot === 'head') { const y = .9; M4.compose(_cl, 0, (OUTFITS[Sheets.base(o.sheet)] || {}).hat ? y + .35 : y, -.02, -.08, 0, 0, 1, 1, 1); M4.mul(_cm, rig.boneM('head'), _cl); R.drawMesh(mesh, _cm, null, null); }
+  else { const flap = Math.sin(o.anim * (3 + 7 * o.walk)) * (.22 + .18 * o.walk); M4.compose(_cl, .05, .3, -.2, 0, .35 + flap, .25, .85, .85, .85); M4.mul(_cm, rig.boneM('chest'), _cl); R.drawMesh(mesh, _cm, null, null); M4.compose(_cl, -.05, .3, -.2, 0, Math.PI - .35 - flap, -.25, .85, .85, .85); M4.mul(_cm, rig.boneM('chest'), _cl); R.drawMesh(mesh, _cm, null, null); }
+}
+/* glowing weapon skins: emissive tint on the weapon arm when drawing procedural rigs */
+{
+  const od = Rig.prototype.draw;
+  Rig.prototype.draw = function (R, parts, opts = {}) {
+    const O = OUTFITS[this.cls]; if (!O || !O.skinEmis) return od.call(this, R, parts, opts);
+    for (let i = 0; i < this.n; i++) { const nm = BONES[i][0], mesh = parts[nm]; if (!mesh) continue; const w = nm === 'elR' || nm === 'elL'; R.drawMesh(mesh, this.world[i], opts.tint, w ? O.skinEmis : (opts.emis || RIG_FILL), opts.flash || 0, opts.alpha || 1); }
+  };
+}
+
+/* ============================================================
    Systems: save, settings, audio, quiz, combat, quests
    ============================================================ */
 const today = () => { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
@@ -6577,14 +7368,14 @@ const Game = {
     UI.init(); Input.init(cv);
     await tick(1, 'พร้อมแล้ว');
     Player.x = 0; Player.z = 70; Player.zone = 'world'; Cam.yaw = .6; Cam.pitch = .55; Cam.dist = 30; this.setEnv('world');
-    Lobby.show(); Online.start(); Net.init();
+    Lobby.show(); Online.start(); Net.init(); GLBSys.init();
     this.lastT = performance.now();
     requestAnimationFrame(t => this.loop(t));
     { const ld = document.getElementById('loading'); ld.classList.add('out'); setTimeout(() => ld.hidden = true, 450); }
   },
   start(data) {
     Save.d = data; const S = Save.d;
-    S.cos = Object.assign({ head: null, back: null, aura: null, outfit: null }, S.cos); Gems.ensure(); if (S.tryon) Gems.endTry(true); Season.st();
+    S.cos = Object.assign({ head: null, face: null, back: null, aura: null, outfit: null, wskin: null }, S.cos); Gems.ensure(); if (S.tryon) Gems.endTry(true); Season.st();
     $('#lobby').hidden = true; $('#charsel').hidden = true; UI.closePanel();
     Player.recalc();
     Player.x = S.pos.x; Player.z = S.pos.z; Player.zone = World.zoneOf(S.pos.x); Player.reset();
@@ -7547,7 +8338,7 @@ const UI = {
   },
   refreshInvIfOpen() { if (this.panelOpen === 'inv' || this.panelOpen === 'shop') this.renderPanel(); },
   renderPanel() {
-    const k = this.panelOpen; const fn = { jobs: 'pJobs', ghost: 'pGhost', gm: 'pGM', chat: 'pChat', channels: 'pChannels', skills: 'pSkills', stable: 'pStable', doc: 'pDoc', season: 'pSeason', gemshop: 'pGemShop', topup: 'pTopup', inv: 'pInv', char: 'pChar', quest: 'pQuest', map: 'pMap', ach: 'pAch', settings: 'pSettings', help: 'pHelp', menu: 'pMenu', shop: 'pShop', dialog: 'pDialog' }[k];
+    const k = this.panelOpen; const fn = { models: 'pModels', wardrobe: 'pWardrobe', jobs: 'pJobs', ghost: 'pGhost', gm: 'pGM', chat: 'pChat', channels: 'pChannels', skills: 'pSkills', stable: 'pStable', doc: 'pDoc', season: 'pSeason', gemshop: 'pGemShop', topup: 'pTopup', inv: 'pInv', char: 'pChar', quest: 'pQuest', map: 'pMap', ach: 'pAch', settings: 'pSettings', help: 'pHelp', menu: 'pMenu', shop: 'pShop', dialog: 'pDialog' }[k];
     if (fn) this[fn](this.panelOpt || {});
   },
   setPanel(title, html, wide) { this.el.ptitle.innerHTML = title; this.el.pbody.innerHTML = html; this.el.panel.querySelector('.pwin').classList.toggle('wide', !!wide); },
@@ -7562,7 +8353,7 @@ const UI = {
     const S = Save.d; const tab = o.tab || 'gear'; this.panelOpt.tab = tab;
     const tabs = [['gear', 'อุปกรณ์'], ['use', 'ไอเทมใช้งาน'], ['mat', 'ของเควส/วัตถุดิบ'], ['cos', 'ของแต่งตัว']];
     const slots = [['weapon', 'อาวุธ'], ['armor', 'ชุดเกราะ'], ['acc', 'เครื่องประดับ']].map(([s, l]) => { const id = S.equip[s]; return `<div class="slot ${id ? 'on hasinfo' : ''}" ${id ? `data-info="${id}"` : ''}>${id ? this.itemIcon(id) : '<span class="empty"></span>'}<div><small>${l}</small><b>${id ? ITEMS[id].name : 'ว่าง'}</b></div></div>`; }).join('');
-    const cslots = [['head', 'หมวก'], ['back', 'หลัง'], ['aura', 'ออร่า'], ['outfit', 'ชุด']].map(([s, l]) => { const id = S.cos[s]; return `<div class="slot ${id ? 'on hasinfo' : ''}" ${id ? `data-info="${id}"` : ''}>${id ? this.itemIcon(id) : '<span class="empty"></span>'}<div><small>${l}</small><b>${id ? ITEMS[id].name : s === 'outfit' ? 'ชุดประจำอาชีพ' : 'ว่าง'}</b></div></div>`; }).join('');
+    const cslots = [['outfit', 'ชุด'], ['head', 'หมวก'], ['face', 'ใบหน้า'], ['back', 'หลัง'], ['wskin', 'สกินอาวุธ'], ['aura', 'ออร่า']].map(([s, l]) => { const id = S.cos[s]; return `<div class="slot ${id ? 'on hasinfo' : ''}" ${id ? `data-info="${id}"` : ''}>${id ? this.itemIcon(id) : '<span class="empty"></span>'}<div><small>${l}</small><b>${id ? ITEMS[id].name : s === 'outfit' ? 'ชุดประจำอาชีพ' : 'ว่าง'}</b></div></div>`; }).join('');
     const ids = Object.keys(S.inv).filter(id => ITEMS[id] && ITEMS[id].kind === tab && S.inv[id] > 0);
     const rows = ids.map(id => {
       const it = ITEMS[id]; const eq = it.kind === 'gear' ? S.equip[it.slot] === id : it.kind === 'cos' ? S.cos[it.slot] === id : false;
@@ -7650,9 +8441,11 @@ const UI = {
         <p id="cqmsg" class="muted">มีคำถามของฉัน ${D.custom.length} ข้อ</p>
       </fieldset>
       <fieldset><legend>เสียง</legend><label class="chk"><input type="checkbox" id="snd" ${D.sound ? 'checked' : ''}> เปิดเสียงเอฟเฟกต์</label><label class="chk"><input type="checkbox" id="mus" ${D.music ? 'checked' : ''}> เพลงประกอบและเสียงบรรยากาศ (เปลี่ยนตามแมพ)</label><label class="chk"><input type="checkbox" id="vox" ${D.voice ? 'checked' : ''}> เสียงตัวละครตะโกนและพากย์ชื่อสกิล</label></fieldset>
+      <fieldset><legend>โมเดล 3 มิติ</legend><p class="muted">นำเข้าโมเดล .glb ที่ทำเอง (Tripo / Meshy + Blender) มาแทนตัวละคร</p><button class="btn" data-go="models">จัดการโมเดล 3 มิติ</button></fieldset>
       <fieldset><legend>ผู้ดูแลเกม (GM)</legend><div id="gmset">${UI.gmSettingsHtml()}</div></fieldset>
       <div class="row"><button class="btn" id="savesettings">บันทึกการตั้งค่า</button>${Save.d ? '<button class="btn ghost danger" id="wipe">ลบเซฟและเริ่มใหม่</button>' : ''}</div>`);
     $('#qtime').oninput = e => $('#qtv').textContent = e.target.value;
+    this.el.pbody.querySelector('[data-go="models"]').onclick = () => this.openPanel('models');
     $('#qdiff').oninput = e => $('#qdv').textContent = diffL[e.target.value];
     $('#savesettings').onclick = () => {
       D.move = (document.querySelector('input[name=mv]:checked') || {}).value || 'both'; D.qtime = +$('#qtime').value; D.diff = +$('#qdiff').value; D.sound = $('#snd').checked ? 1 : 0; D.music = $('#mus').checked ? 1 : 0; MusicSys.setOn(!!D.music); Weather.sound(); D.voice = $('#vox').checked ? 1 : 0; D.customOnly = $('#customonly').checked ? 1 : 0;
@@ -8368,7 +9161,7 @@ const ITEM_LORE = {
   m_shard: 'ผลึกเรืองแสงหายากจากถ้ำผลึก พ่อค้าทุกคนอยากได้'
 };
 const KIND_TH = { gear: 'อุปกรณ์', use: 'ไอเทมใช้งาน', mat: 'วัตถุดิบ', cos: 'ของแต่งตัว' };
-const SLOT_TH = { weapon: 'อาวุธ (มือขวา)', armor: 'ชุดเกราะ', acc: 'เครื่องประดับ', head: 'ศีรษะ', back: 'หลัง', aura: 'ออร่า', outfit: 'ชุดทั้งตัว' };
+const SLOT_TH = { weapon: 'อาวุธ (มือขวา)', armor: 'ชุดเกราะ', acc: 'เครื่องประดับ', head: 'ศีรษะ', face: 'ใบหน้า', back: 'หลัง', aura: 'ออร่า', outfit: 'ชุดทั้งตัว', wskin: 'สกินอาวุธ' };
 const STAT_TH = [['atk', 'ATK'], ['def', 'DEF'], ['hp', 'HP'], ['mp', 'MP'], ['spd', 'SPD']];
 
 const ItemInfo = {
@@ -9026,7 +9819,7 @@ const Remote = {
       else rig.pose(p.dx, 0, p.dz, p.face, CHAR_SCALE, st.d ? 1 : 0);
       const sh = st.o && CharModels[st.o] ? st.o : st.c;
       rig.draw(R, CharModels[sh]);
-      if (!st.d) drawCosmetics3D(R, rig, { head: st.h || null, back: st.b || null, sheet: sh, anim: p.anim, walk: p.walk });
+      if (!st.d) drawCosmetics3D(R, rig, { head: st.h || null, face: st.f || null, back: st.b || null, sheet: sh, anim: p.anim, walk: p.walk });
     }
   }
 };
@@ -9087,7 +9880,7 @@ const Net = {
   },
   myState() {
     const S = Save.d, P = Player; const r2 = v => Math.round(v * 100) / 100;
-    return { gm: this.gm ? 1 : 0, n: S.name.slice(0, 16), c: S.cls, j: S.job || '', k: S.awk ? 1 : 0, lv: S.level, o: P.sheet, h: S.cos.head || '', b: S.cos.back || '', a: S.cos.aura || '', m: Mounts.riding() ? Mounts.cur() : '', zn: P.zone, x: r2(P.x), z: r2(P.z), f: r2(P.face), hp: Math.max(0, Math.round(S.hp / P.stats.maxhp * 100)), d: P.dead ? 1 : 0, ac: this.ac, p: this.partyId || '', t: this.be.ts() };
+    return { gm: this.gm ? 1 : 0, n: S.name.slice(0, 16), c: S.cls, j: S.job || '', k: S.awk ? 1 : 0, lv: S.level, o: P.sheet, h: S.cos.head || '', f: S.cos.face || '', b: S.cos.back || '', a: S.cos.aura || '', m: Mounts.riding() ? Mounts.cur() : '', zn: P.zone, x: r2(P.x), z: r2(P.z), f: r2(P.face), hp: Math.max(0, Math.round(S.hp / P.stats.maxhp * 100)), d: P.dead ? 1 : 0, ac: this.ac, p: this.partyId || '', t: this.be.ts() };
   },
   send(force) {
     if (!this.joined) return; const st = this.myState(); const L = this.lastSent;
@@ -9667,11 +10460,11 @@ UI.pGhost = function (o) {
 
 /* ---- portraits for any sheet (3D render when no sprite sheet) ---- */
 {
-  const mkProxy = (kind) => new Proxy({}, { get(t, k) { if (typeof k !== 'string') return t[k]; if (t[k] === undefined && OUTFITS[k]) t[k] = CharThumb[kind](k); return t[k]; }, set(t, k, v) { t[k] = v; return true; } });
+  const mkProxy = (kind) => new Proxy({}, { get(t, k) { if (typeof k !== 'string') return t[k]; if (t[k] === undefined && (OUTFITS[k] || (typeof Sheets !== 'undefined' && Sheets.ensure(k)))) t[k] = CharThumb[kind](k); return t[k]; }, set(t, k, v) { t[k] = v; return true; } });
   const CharThumb = {
-    portrait(sheet) { return ThumbR.shot('cp_' + sheet, 128, 128, [.35, 2.05, 1.45], [0, 1.72, 0], .62, R => CharThumb.rig(R, sheet, false)); },
-    body(sheet) { return ThumbR.shot('cb_' + sheet, 224, 320, [.9, 1.9, 4.4], [0, 1.2, 0], .7, R => CharThumb.rig(R, sheet, true)); },
-    rig(R, sheet, wave) { if (!ThumbR.cm[sheet]) ThumbR.cm[sheet] = buildCharModel(R, sheet); const rig = new Rig(sheet); for (let i = 0; i < 30; i++) rig.update(.05, { wave }); rig.pose(0, 0, 0, .3, CHAR_SCALE); rig.draw(R, ThumbR.cm[sheet], {}); }
+    portrait(sheet) { return ThumbR.shot('cp_' + sheet, 128, 128, [.35, 2.1, 1.55], [0, 1.75, 0], .66, R => CharThumb.rig(R, sheet, false)); },
+    body(sheet) { return ThumbR.shot('cb_' + sheet, 224, 320, [.95, 2.1, 4.8], [0, 1.35, 0], .7, R => CharThumb.rig(R, sheet, false)); },
+    rig(R, sheet, wave) { if (!ThumbR.cm[sheet]) { if (typeof Sheets !== 'undefined') Sheets.ensure(sheet); ThumbR.cm[sheet] = buildCharModel(R, sheet); } const rig = new Rig(sheet); for (let i = 0; i < 30; i++) rig.update(.05, { wave }); rig.pose(0, 0, 0, .3, CHAR_SCALE); rig.draw(R, ThumbR.cm[sheet], {}); }
   };
   const op = UI.portraits, ob = UI.bodies; UI.portraits = mkProxy('portrait'); UI.bodies = mkProxy('body'); Object.assign(UI.portraits, op); Object.assign(UI.bodies, ob);
   const on = ThumbR.npc.bind(ThumbR); ThumbR.npc = function (sheet) { if (!this.cm[sheet] && OUTFITS[sheet]) { this.ensure(); this.cm[sheet] = buildCharModel(this.R, sheet); } return on(sheet); };
@@ -9705,6 +10498,131 @@ UI.pJobs = function (o) {
   const oh = UI.pHelp.bind(UI);
   UI.pHelp = function () { oh(); const h = this.el.pbody.querySelector('.help'); if (h) h.insertAdjacentHTML('afterbegin', `<section><h4>สายอาชีพและการปลุกพลัง</h4><p>เลเวล ${JOB_LV} ไปหา <b>อาจารย์เซน</b> ในเมืองเพื่อเลือกอาชีพขั้นสอง (อาชีพละ 2 สาย ได้สกิลใหม่ 3 สกิล) เลเวล ${AWK_LV} รับเควส "ปลดผนึกแห่งพลัง" เก็บศิลา 4 ชนิดจากคราก แม่นาก ปู่โสม และบททดสอบของโอริน แล้วเข้าพิธีกรรมเพื่อปลุกพลัง เลเวลสูงสุดจะขยายเป็น ${AWK_LV_CAP} · กด <kbd>J</kbd> เพื่อดูสายอาชีพ</p></section>`); };
 }
+
+/* ============================================================
+   Fashion UI: item thumbnails, full-look preview, wardrobe panel,
+   gem-shop slot filter
+   ============================================================ */
+const FashionThumb = {
+  info: {},
+  bounds(id) {
+    if (this.info[id]) return this.info[id];
+    const g = new Geo(3); g.jit = 0; const sp = COS_MESH[id], W = WSKIN[id];
+    if (sp) sp.mk(g); else if (W) { if (W.elR) W.elR(g); if (W.elL) { g.push(.3, 0, 0); W.elL(g); g.pop(); } }
+    let mn = [1e9, 1e9, 1e9], mx = [-1e9, -1e9, -1e9]; const d = g.d;
+    for (let i = 0; i < d.length; i += 9) for (let k = 0; k < 3; k++) { if (d[i + k] < mn[k]) mn[k] = d[i + k]; if (d[i + k] > mx[k]) mx[k] = d[i + k]; }
+    if (!d.length) mn = [0, 0, 0], mx = [1, 1, 1];
+    const c = [(mn[0] + mx[0]) / 2, (mn[1] + mx[1]) / 2, (mn[2] + mx[2]) / 2]; const r = Math.max(.2, Math.hypot(mx[0] - mn[0], mx[1] - mn[1], mx[2] - mn[2]) / 2);
+    return this.info[id] = { c, r, geo: g };
+  },
+  icon(id) {
+    const b = this.bounds(id); const sp = COS_MESH[id]; const d = b.r * 2.3;
+    const dir = sp && sp.slot === 'face' ? [.35, .25, 1] : sp && sp.bone === 'cape' ? [.4, .2, -1] : [.8, .55, 1]; const l = Math.hypot(...dir);
+    const eye = [b.c[0] + dir[0] / l * d, b.c[1] + dir[1] / l * d, b.c[2] + dir[2] / l * d];
+    return ThumbR.shot('fi_' + id, 96, 96, eye, b.c, .75, R => { let m; if (sp) m = CosMesh.get(R, id); else { m = R.mesh(b.geo); } if (m) R.drawMesh(m, IDM, null, (sp && sp.emis) || (WSKIN[id] && WSKIN[id].emis) || null); });
+  },
+  look(S, face = .3) {
+    const sheet = Sheets.key(S), c = S.cos || {}; const key = `look_${sheet}|${c.head || ''}|${c.face || ''}|${c.back || ''}|${face}`;
+    return ThumbR.shot(key, 240, 340, [.95, 2.1, 4.8], [0, 1.35, 0], .7, R => {
+      Sheets.ensure(sheet); if (!ThumbR.cm[sheet]) ThumbR.cm[sheet] = buildCharModel(R, sheet);
+      const rig = new Rig(sheet); for (let i = 0; i < 30; i++) rig.update(.05, {}); rig.pose(0, 0, 0, face, CHAR_SCALE); rig.draw(R, ThumbR.cm[sheet], {});
+      drawCosmetics3D(R, rig, { head: c.head, face: c.face, back: c.back, sheet, anim: 1.2, walk: 0 });
+    });
+  }
+};
+{
+  const oi = UI.itemIcon.bind(UI);
+  UI.itemIcon = function (id) { const it = ITEMS[id]; if (it && it.fx3d && it.slot !== 'outfit') { const src = FashionThumb.icon(id); if (src) return `<img class="ic pimg" src="${src}" alt="">`; } return oi(id); };
+}
+const SLOT_TABS = [['outfit', 'ชุด'], ['head', 'หมวก'], ['face', 'ใบหน้า'], ['back', 'หลัง'], ['wskin', 'สกินอาวุธ'], ['aura', 'ออร่า']];
+UI.pWardrobe = function (o) {
+  const S = Save.d; const slot = o.slot || 'outfit'; this.panelOpt.slot = slot; const job = S.job || S.cls; const fam = WEAPON_FAM[job];
+  const owned = id => S.inv[id] > 0; const src = id => { const g = GEM_ITEMS.find(x => x.item === id); if (g) return 'ร้านเพชร'; if (TAILOR_ITEMS.includes(id)) return 'ร้านตัดเสื้อ'; for (const q in QUESTS) if ((QUESTS[q].rew && QUESTS[q].rew.items || []).some(x => x[0] === id)) return 'เควส ' + QUESTS[q].name; return 'ของหายาก'; };
+  const ids = Object.keys(ITEMS).filter(id => ITEMS[id].kind === 'cos' && ITEMS[id].slot === slot).sort((a, b) => (owned(b) - owned(a)) || (ITEMS[a].fx3d ? 0 : 1) - (ITEMS[b].fx3d ? 0 : 1));
+  const cur = S.cos[slot];
+  const cards = ids.map(id => { const it = ITEMS[id]; const on = cur === id; const ok = owned(id); const bad = slot === 'wskin' && !WSKIN[it.skin].fam.includes(fam); return `<div class="wcard ${on ? 'on' : ''} ${ok ? '' : 'locked'} ${bad ? 'bad' : ''}" data-wear="${id}" role="button" tabindex="0"><span class="winfo" data-info="${id}" title="รายละเอียด">i</span>${this.itemIcon(id)}<b>${it.name}</b><small>${on ? 'กำลังใส่' : ok ? 'คลิกเพื่อใส่' : src(id)}${bad ? ' · ใช้กับ' + FAM_TH[fam] + 'ไม่ได้' : ''}</small></div>`; }).join('');
+  const worn = SLOT_TABS.map(([s, l]) => { const id = S.cos[s]; return `<li><small>${l}</small><b>${id ? ITEMS[id].name : s === 'outfit' ? 'ชุดประจำอาชีพ' : '-'}</b>${id ? `<button class="btn sm ghost" data-wear="${id}">ถอด</button>` : ''}</li>`; }).join('');
+  this.setPanel(`${icon('person')} ตู้เสื้อผ้า`, `
+    <div class="wardrobe">
+      <div class="wprev"><img src="${FashionThumb.look(S, slot === 'back' ? 2.6 : .3)}" alt=""><p class="wname">${esc(S.name)} · ${Cls.name(S)}</p><ul class="wworn">${worn}</ul></div>
+      <div class="wlist"><div class="wtabs">${SLOT_TABS.map(([s, l]) => `<button class="gcat ${s === slot ? 'on' : ''}" data-wslot="${s}"><span>${l}</span><i>${Object.keys(ITEMS).filter(id => ITEMS[id].kind === 'cos' && ITEMS[id].slot === s && owned(id)).length}</i></button>`).join('')}</div>
+      <p class="muted">${slot === 'outfit' ? 'ชุดแฟชั่นจะใช้อาวุธของอาชีพปัจจุบัน และสีผมตามสายอาชีพ' : slot === 'wskin' ? `อาชีพของคุณใช้${FAM_TH[fam] || 'อาวุธ'} · สกินจะเปลี่ยนรูปร่างอาวุธที่ถือในมือ` : slot === 'head' ? 'หมวกบางแบบปิดทั้งหัว ใส่คู่กับชุดที่มีหมวกในตัวไม่ได้' : 'ไอเทมที่ยังไม่มีจะบอกแหล่งที่หาได้'}</p>
+      <div class="wgrid">${cards || '<p class="muted">ยังไม่มีไอเทมในช่องนี้</p>'}</div></div>
+    </div>`);
+  this.el.pbody.onclick = e => {
+    const t = e.target.closest('[data-wslot]'); if (t) { this.panelOpt.slot = t.dataset.wslot; return this.renderPanel(); }
+    if (e.target.closest('[data-info]')) return; const w = e.target.closest('[data-wear]'); if (!w) return; const id = w.dataset.wear;
+    if (!owned(id)) { ItemInfo.open(id); return; }
+    const it = ITEMS[id]; if (it.slot === 'wskin' && !WSKIN[it.skin].fam.includes(fam)) { this.toast('สกินนี้ใช้กับอาวุธของอาชีพคุณไม่ได้', 'warn'); return; }
+    Game.equip(id); Player.rig = null; this.renderPanel();
+  };
+};
+/* menu entry + char panel shortcut */
+{
+  const om = UI.pMenu.bind(UI);
+  UI.pMenu = function () { om(); const grid = this.el.pbody.querySelector('.menugrid'); if (!grid) return; const b = document.createElement('button'); b.className = 'mbtn'; b.dataset.go = 'wardrobe'; b.innerHTML = `${icon('person')}<span>ตู้เสื้อผ้า</span><kbd>O</kbd>`; const ref = grid.querySelector('[data-go="jobs"]'); grid.insertBefore(b, ref ? ref.nextSibling : null); };
+  document.addEventListener('keydown', e => { if (e.code === 'KeyO' && Game.started && !Game.paused && !e.repeat && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') UI.openPanel('wardrobe'); });
+  const oc = UI.pChar.bind(UI);
+  UI.pChar = function (o) { oc(o); const b = this.el.pbody.querySelector('[data-go="jobinfo"]'); if (b && !this.el.pbody.querySelector('[data-go="wardrobe"]')) { const w = document.createElement('button'); w.className = 'btn sm ghost'; w.dataset.go = 'wardrobe'; w.textContent = 'ตู้เสื้อผ้า'; b.after(w); w.onclick = () => this.openPanel('wardrobe'); } };
+  // gem shop: filter the fashion category by slot
+  const og = UI.pGemShop.bind(UI);
+  UI.pGemShop = function (o) {
+    const fs = o.fslot; const all = GEM_ITEMS.slice();
+    if ((o.cat || 'deal') === 'fashion' && fs) { GEM_ITEMS.length = 0; for (const g of all) if (g.cat !== 'fashion' || (ITEMS[g.item] || {}).slot === fs) GEM_ITEMS.push(g); }
+    try { og(o); } finally { GEM_ITEMS.length = 0; for (const g of all) GEM_ITEMS.push(g); }
+    if ((o.cat || 'deal') !== 'fashion') return;
+    const head = this.el.pbody.querySelector('.gcathead'); if (!head) return;
+    const chips = document.createElement('div'); chips.className = 'wtabs small'; chips.innerHTML = `<button class="gcat ${!fs ? 'on' : ''}" data-fslot=""><span>ทั้งหมด</span></button>` + SLOT_TABS.map(([s, l]) => `<button class="gcat ${fs === s ? 'on' : ''}" data-fslot="${s}"><span>${l}</span><i>${all.filter(g => g.cat === 'fashion' && (ITEMS[g.item] || {}).slot === s).length}</i></button>`).join('');
+    head.after(chips); chips.onclick = e => { const b = e.target.closest('[data-fslot]'); if (!b) return; e.stopPropagation(); this.panelOpt.fslot = b.dataset.fslot || null; this.renderPanel(); };
+  };
+}
+
+/* ============================================================
+   3D model manager panel: import personal .glb files, tune fit,
+   list shared models from the web host
+   ============================================================ */
+UI.pModels = function (o) {
+  const S = Save.d || {}; const cur = S.job || S.cls; const tune = (o && o.tune) || null;
+  const groups = [
+    ['ตัวละครของฉัน', [S.cls, S.job].filter(Boolean)],
+    ['อาชีพพื้นฐาน', CLASS_ORDER.slice()],
+    ['อาชีพขั้นสอง', Object.keys(JOBS)],
+    ['ชุดแฟชั่น', (typeof FASHION_SHEETS !== 'undefined' ? FASHION_SHEETS : [])]
+  ];
+  const nameOf = k => JOBS[k] ? JOBS[k].name : CLASSES[k] ? CLASSES[k].name : (typeof FASHION !== 'undefined' && FASHION.sheetName) ? FASHION.sheetName(k) : k;
+  const row = k => {
+    const m = GLBModels[k]; const err = GLBSys.errors[k]; const ld = GLBSys.loading[k];
+    const st = m ? (m.src === 'local' ? `<i class="tag ok">โมเดลของฉัน (เครื่องนี้)</i>` : `<i class="tag">โมเดลกลาง</i>`) : ld ? '<i class="tag">กำลังโหลด…</i>' : '<i class="tag dim">โมเดลโค้ด</i>';
+    const info = m ? `${m.tris.toLocaleString()} สามเหลี่ยม · ${m.skinned ? 'มีกระดูก ' + Object.keys(m.bones).length + ' ชิ้น' : 'ไม่มีกระดูก (ไม่ขยับแขนขา)'}${m.anims.length ? ' · อนิเมชัน ' + m.anims.length : ''}` : err ? `<span class="warn">${esc(err)}</span>` : '';
+    const t = (m && m.opts) || {};
+    const tuneBox = tune === k ? `<div class="mdltune"><label>ขนาด <b id="mt-s">${(t.scale || 1).toFixed(2)}</b><input type="range" id="mts" min=".5" max="2" step=".02" value="${t.scale || 1}"></label><label>หันหน้า <b id="mt-y">${Math.round((t.yaw || 0) * 180 / Math.PI)}°</b><input type="range" id="mty" min="-180" max="180" step="5" value="${Math.round((t.yaw || 0) * 180 / Math.PI)}"></label><label>ยกขึ้น/ลง <b id="mt-h">${(t.y || 0).toFixed(2)}</b><input type="range" id="mth" min="-.6" max=".6" step=".02" value="${t.y || 0}"></label><div class="row"><button class="btn sm" data-mapply="${k}">ใช้ค่านี้</button><button class="btn sm ghost" data-mtune="">ปิด</button></div></div>` : '';
+    return `<li class="mdlrow ${k === cur ? 'cur' : ''}"><img src="${UI.bodies[k] || ''}" alt=""><div class="mdlin"><b>${esc(nameOf(k))} ${st}</b><small>${info}</small>${tuneBox}</div><div class="mdlact"><label class="btn sm">นำเข้า .glb<input type="file" accept=".glb,.gltf,model/gltf-binary,model/gltf+json" data-mimp="${k}" hidden></label>${m ? `<button class="btn sm ghost" data-mtune="${k}">ปรับ</button>` : ''}${m && m.src === 'local' ? `<button class="btn sm ghost danger" data-mdel="${k}">ลบ</button>` : ''}</div></li>`;
+  };
+  this.setPanel(`${icon('person')} โมเดล 3 มิติ`, `
+    <p class="muted">นำโมเดล .glb ที่ทำเอง (เช่น จาก Tripo / Meshy แล้วปรับใน Blender) มาใช้แทนตัวละครในเกม โมเดลที่นำเข้าที่นี่จะเห็นเฉพาะเครื่องนี้ ถ้าอยากให้ทุกคนเห็น ส่งไฟล์ให้ผู้ดูแลใส่ไว้ในโฟลเดอร์ <code>models/</code> ของเกม</p>
+    <details class="howto"><summary>ข้อกำหนดของไฟล์และวิธีทำ</summary>
+      <ol>
+        <li>เตรียมรูปอ้างอิงหน้าตรง ตัดพื้นหลัง (PNG โปร่ง) แล้วสร้างด้วย AI Image-to-3D: <em>low-poly stylized game character, simple mesh, flat texture</em></li>
+        <li>ใน Blender ลดโพลีให้เหลือ 1,500–5,000 สามเหลี่ยม ใส่สีแบบ cel/flat และ <b>Rig กระดูกแบบมนุษย์</b> (ชื่อกระดูกมาตรฐาน Mixamo / VRM / Rigify เช่น Hips, Spine, Head, LeftArm, LeftForeArm, LeftUpLeg, LeftLeg)</li>
+        <li>หันหน้าไปทาง +Z, แกน Y ขึ้น, ยืนบนพื้น y=0 (เกมจะย่อ/ขยายให้พอดีอัตโนมัติ)</li>
+        <li>ส่งออก <b>glTF Binary (.glb)</b> ฝังเท็กซ์เจอร์ในไฟล์ ไม่บีบอัด Draco ขนาดไม่เกิน 24 MB</li>
+        <li>อนิเมชันไม่บังคับ ถ้ามีคลิปชื่อ Idle / Walk / Run / Attack / Dance เกมจะใช้ให้ ถ้าไม่มีเกมจะขยับกระดูกให้เองตามท่าทางทั้งหมดในเกม (เดิน โจมตี สกิล อีโมต)</li>
+      </ol></details>
+    ${groups.map(([t, ks]) => ks.length ? `<h3 class="sub">${t}</h3><ul class="mdllist">${ks.map(row).join('')}</ul>` : '').join('')}
+    <p class="muted">${GLBSys.list.length ? 'โมเดลกลางที่ติดตั้ง: ' + GLBSys.list.map(e => esc(e.sheet)).join(', ') : 'ยังไม่มีโมเดลกลางในโฟลเดอร์ models/'}</p>`);
+  const body = this.el.pbody;
+  body.querySelectorAll('[data-mimp]').forEach(inp => inp.onchange = async () => {
+    const f = inp.files[0]; if (!f) return; const k = inp.dataset.mimp; UI.toast('กำลังอ่านโมเดล…');
+    try { const m = await GLBSys.importFile(k, f, {}); UI.toast(`ใส่โมเดล ${nameOf(k)} แล้ว (${m.tris.toLocaleString()} สามเหลี่ยม${m.skinned ? '' : ' · ไม่พบกระดูกแบบมนุษย์'})`, 'quest'); if (!m.skinned) UI.toast('โมเดลไม่มีกระดูกชื่อมาตรฐาน จะยืนนิ่งขยับไม่ได้', 'warn'); }
+    catch (e) { UI.toast('นำเข้าไม่สำเร็จ: ' + (e.message || e), 'warn'); }
+    UI.renderPanel();
+  });
+  body.querySelectorAll('[data-mdel]').forEach(b => b.onclick = async () => { if (!b.dataset.c) { b.dataset.c = 1; b.textContent = 'ยืนยันลบ?'; return; } await GLBSys.removeLocal(b.dataset.mdel); UI.toast('ลบโมเดลแล้ว กลับไปใช้โมเดลเดิม'); UI.renderPanel(); });
+  body.querySelectorAll('[data-mtune]').forEach(b => b.onclick = () => { this.panelOpt.tune = b.dataset.mtune || null; UI.renderPanel(); });
+  const live = () => { const k = tune; if (!k) return; const s = $('#mts'), y = $('#mty'), h = $('#mth'); if (!s) return; $('#mt-s').textContent = (+s.value).toFixed(2); $('#mt-y').textContent = y.value + '°'; $('#mt-h').textContent = (+h.value).toFixed(2); };
+  ['#mts', '#mty', '#mth'].forEach(id => { const e = $(id); if (e) e.oninput = live; });
+  body.querySelectorAll('[data-mapply]').forEach(b => b.onclick = async () => { const k = b.dataset.mapply; const opts = { scale: +$('#mts').value, yaw: +$('#mty').value * Math.PI / 180, y: +$('#mth').value }; await GLBSys.retune(k, opts); UI.toast('ปรับโมเดลแล้ว', 'quest'); UI.renderPanel(); });
+};
 
 /* ============================================================
    Boot
