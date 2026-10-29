@@ -236,13 +236,13 @@ kbd { font-family: var(--f-display); font-size: 11px; line-height: 1; padding: 3
 .pwin { width: min(560px, 100%); max-height: min(88cqh, 860px); display: flex; flex-direction: column; overflow: hidden; }
 .pwin.wide { width: min(780px, 100%); }
 .phead { display: flex; align-items: center; gap: 10px; padding: 12px 14px 10px 18px; border-bottom: 1px solid var(--line2); }
-#ptitlebar { flex: 1; min-width: 0; font-family: var(--f-display); font-weight: 500; font-size: 19px; color: var(--brasshi); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-#ptitlebar small { font-family: var(--f-body); font-size: 12px; color: var(--mute); font-weight: 400; }
-#ptitlebar .coin { margin-left: auto; font-size: 15px; display: inline-flex; gap: 4px; align-items: center; font-variant-numeric: tabular-nums; }
-#pclose { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--line); background: transparent; color: var(--parch); display: grid; place-items: center; flex: none; }
-#pbody { padding: 14px 18px 18px; overflow-y: auto; touch-action: pan-y; -webkit-user-select: text; user-select: text; }
-#pbody h4 { font-family: var(--f-display); font-weight: 500; color: var(--brass); font-size: 14px; letter-spacing: .04em; margin: 14px 0 8px; }
-#pbody h4:first-child { margin-top: 0; }
+.ptitle { flex: 1; min-width: 0; font-family: var(--f-display); font-weight: 500; font-size: 19px; color: var(--brasshi); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ptitle small { font-family: var(--f-body); font-size: 12px; color: var(--mute); font-weight: 400; }
+.ptitle .coin { margin-left: auto; font-size: 15px; display: inline-flex; gap: 4px; align-items: center; font-variant-numeric: tabular-nums; }
+.pclose { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--line); background: transparent; color: var(--parch); display: grid; place-items: center; flex: none; }
+.pbody { padding: 14px 18px 18px; overflow-y: auto; touch-action: pan-y; -webkit-user-select: text; user-select: text; }
+.pbody h4 { font-family: var(--f-display); font-weight: 500; color: var(--brass); font-size: 14px; letter-spacing: .04em; margin: 14px 0 8px; }
+.pbody h4:first-child { margin-top: 0; }
 .menugrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
 .mbtn { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 9px; border: 1px solid var(--line); background: #1e1610; text-align: left; }
 .mbtn .ic { color: var(--brass); width: 22px; height: 22px; }
@@ -643,17 +643,17 @@ body.frozen .mk, body.frozen .navdot, body.frozen .lvbadge.pts, body.frozen #pla
 .csbox { width: min(980px, 100%); margin: auto; background: linear-gradient(180deg, rgba(42,31,23,.96), rgba(28,20,15,.96)); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px 18px; box-shadow: 0 10px 34px rgba(0,0,0,.55); }
 .csgrid { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 16px; margin-top: 14px; }
 .csslots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.slot { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 260px; padding: 12px 8px; border-radius: 12px; border: 1px solid var(--line2); background: rgba(0,0,0,.28); text-align: center; transition: border-color .15s, transform .15s; }
-.slot:hover { border-color: var(--line); }
-.slot.on { border-color: var(--lime); box-shadow: 0 0 0 1px var(--lime) inset, 0 0 18px rgba(168,224,76,.25); transform: translateY(-2px); }
-.slot .slv { align-self: flex-start; font-size: 12px; padding: 1px 8px; border-radius: 9px; background: var(--panelhi); border: 1px solid var(--line); color: var(--brasshi); }
-.slot img { width: 100%; max-width: 150px; height: 150px; object-fit: contain; image-rendering: auto; margin: 6px 0; filter: drop-shadow(0 6px 6px rgba(0,0,0,.5)); }
-.slot .snm { font-family: var(--f-display); font-weight: 500; font-size: 17px; overflow: hidden; text-overflow: ellipsis; max-width: 100%; white-space: nowrap; }
-.slot .scl { color: var(--lime); font-size: 13px; }
-.slot small { color: var(--mute); font-size: 12px; }
-.slot.empty { border-style: dashed; justify-content: center; }
-.slot.empty .slv { position: absolute; top: 12px; left: 8px; color: var(--mute); }
-.slot .plus { width: 64px; height: 64px; border-radius: 50%; border: 2px dashed var(--line); display: grid; place-items: center; font-size: 34px; color: var(--brass); margin-bottom: 8px; }
+#csslots .slot { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 260px; padding: 12px 8px; border-radius: 12px; border: 1px solid var(--line2); background: rgba(0,0,0,.28); text-align: center; transition: border-color .15s, transform .15s; }
+#csslots .slot:hover { border-color: var(--line); }
+#csslots .slot.on { border-color: var(--lime); box-shadow: 0 0 0 1px var(--lime) inset, 0 0 18px rgba(168,224,76,.25); transform: translateY(-2px); }
+#csslots .slot .slv { align-self: flex-start; font-size: 12px; padding: 1px 8px; border-radius: 9px; background: var(--panelhi); border: 1px solid var(--line); color: var(--brasshi); }
+#csslots .slot img { width: 100%; max-width: 150px; height: 150px; object-fit: contain; image-rendering: auto; margin: 6px 0; filter: drop-shadow(0 6px 6px rgba(0,0,0,.5)); }
+#csslots .slot .snm { font-family: var(--f-display); font-weight: 500; font-size: 17px; overflow: hidden; text-overflow: ellipsis; max-width: 100%; white-space: nowrap; }
+#csslots .slot .scl { color: var(--lime); font-size: 13px; }
+#csslots .slot small { color: var(--mute); font-size: 12px; }
+#csslots .slot.empty { border-style: dashed; justify-content: center; }
+#csslots .slot.empty .slv { position: absolute; top: 12px; left: 8px; color: var(--mute); }
+#csslots .slot .plus { width: 64px; height: 64px; border-radius: 50%; border: 2px dashed var(--line); display: grid; place-items: center; font-size: 34px; color: var(--brass); margin-bottom: 8px; }
 .csside { display: flex; flex-direction: column; gap: 10px; }
 .csside p { margin: 0; }
 .csside hr { width: 100%; border: 0; border-top: 1px solid var(--line2); margin: 4px 0; }
@@ -670,10 +670,10 @@ body.frozen .mk, body.frozen .navdot, body.frozen .lvbadge.pts, body.frozen #pla
 }
 @container (max-width: 560px) {
   .csslots { grid-template-columns: minmax(0, 1fr); }
-  .slot { min-height: 0; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; gap: 4px 10px; text-align: left; padding: 10px; }
-  .slot img { width: 64px; height: 64px; margin: 0; }
-  .slot .slv, .slot.empty .slv { position: static; }
-  .slot .plus { width: 44px; height: 44px; font-size: 24px; margin: 0; }
+  #csslots .slot { min-height: 0; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; gap: 4px 10px; text-align: left; padding: 10px; }
+  #csslots .slot img { width: 64px; height: 64px; margin: 0; }
+  #csslots .slot .slv, #csslots .slot.empty .slv { position: static; }
+  #csslots .slot .plus { width: 44px; height: 44px; font-size: 24px; margin: 0; }
   .lnks { grid-template-columns: minmax(0, 1fr); }
   .lbtab { font-size: 14px; padding: 11px 4px 9px; }
 }
@@ -1168,6 +1168,37 @@ body.compact .mdlrow { grid-template-columns: 44px minmax(0, 1fr); } body.compac
 .winfo:hover { background: var(--brass); color: #1a1208; }
 body.compact .wardrobe { grid-template-columns: 1fr; } body.compact .wprev { display: flex; gap: 10px; align-items: flex-start; } body.compact .wprev img { width: 120px; height: 170px; } body.compact .wprev .wworn { flex: 1; } body.compact .wname { display: none; }
 body.compact .wgrid { grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); }
+/* RO-style plates */
+.plate.ro { gap: 0; }
+.plate.ro > .bub, .plate.ro > .emob, .plate.ro > .mbub, .plate.ro > .mk { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(100% + var(--hh, 60px) + 4px); }
+.plate.ro .nm { color: #fff; font-weight: 500; font-size: 12px; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; }
+.plate.ro .nm.npc { color: #fff; font-family: var(--f-body); font-size: 12px; }
+.plate.ro .nm.me { color: #fff; }
+.plate.ro.hostile .nm { color: #ffd0c0; }
+.plate.ro .rl { color: #cfe3ff; font-size: 10.5px; text-shadow: -1px 0 #000, 1px 0 #000, 0 1px #000, 0 -1px #000; }
+.plate.ro .hpb { width: 46px; height: 5px; border: 1px solid #1a1a1a; border-radius: 0; background: #3a3a3a; margin-top: 1px; }
+.plate.ro .hpb i { background: linear-gradient(#7cf05a, #2ea81e); }
+.plate.ro.hostile .hpb i { background: linear-gradient(#ff6a5a, #c8201a); }
+.robar { display: block; width: 46px; height: 4px; border: 1px solid #111; background: #333; margin-top: 1px; }
+.robar i { display: block; height: 100%; }
+.robar.hp i { background: linear-gradient(#7cf05a, #2ea81e); } .robar.sp i { background: linear-gradient(#7ab4ff, #2a62d8); }
+/* RO-style damage numbers */
+.fl.ro { font-family: 'Arial Black', 'Segoe UI', sans-serif; font-weight: 900; font-size: 24px; letter-spacing: -1px; color: #fff; text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 2px 0 0 #000, -2px 0 0 #000; }
+.fl.ro.player { color: #ff3c2a; }
+.fl.ro.crit { color: #ffe600; font-size: 26px; }
+.fl.ro.crit::before { content: ''; position: absolute; left: 50%; top: 50%; width: 76px; height: 76px; transform: translate(-50%, -50%); z-index: -1; background: radial-gradient(circle, rgba(255,60,30,.95) 0 22%, rgba(255,120,30,.7) 30%, transparent 62%); clip-path: polygon(50% 0, 61% 34%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 34%); }
+/* window manager: draggable multi-windows */
+#winlayer { position: absolute; inset: 0; pointer-events: none; z-index: 42; }
+.uwin { position: absolute; left: 0; top: 0; pointer-events: auto; }
+.uwin .pwin { width: min(520px, calc(100cqw - 12px)); }
+.uwin .pwin.wide { width: min(760px, calc(100cqw - 12px)); }
+.uwin .pwin:has(.stb) { width: min(940px, calc(100cqw - 12px)); }
+.uwin .pwin { max-height: min(84cqh, 820px); box-shadow: 0 10px 34px rgba(0,0,0,.55); }
+.uwin.focus .pwin { box-shadow: 0 0 0 1.5px var(--brass), 0 12px 38px rgba(0,0,0,.6); }
+.uwin .phead { cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; }
+.uwin.drag .phead { cursor: grabbing; }
+.uwin.drag { opacity: .92; }
+body.compact .uwin .pwin { max-height: calc(100cqh - 12px); }
 </style>
 </head>
 <body>
@@ -1292,7 +1323,7 @@ body.compact .wgrid { grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)
   <div id="joy" aria-label="จอยสติ๊กเดิน"><div id="knob"></div></div>
 </div>
 
-<div id="panel" hidden><div class="pwin frame" role="dialog" aria-modal="true" aria-labelledby="ptitlebar"><div class="phead"><div id="ptitlebar"></div><button id="pclose" aria-label="ปิด"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button></div><div id="pbody"></div></div></div>
+<div id="panel" hidden><div class="pwin frame" role="dialog" aria-modal="true" aria-labelledby="ptitlebar"><div class="phead"><div id="ptitlebar" class="ptitle"></div><button id="pclose" class="pclose" aria-label="ปิด"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button></div><div id="pbody" class="pbody"></div></div></div>
 <div id="itempop" hidden></div>
 <div id="peercard" hidden></div>
 <div id="quiz" hidden role="dialog" aria-modal="true" aria-label="ตอบคำถาม"></div>
@@ -1487,9 +1518,9 @@ void main(){if(uOut>0.){gl_FragColor=vec4(uOutC,uAlpha);return;}
 vec4 t=uHasTex>.5?texture2D(uTex,vUV):vec4(.8,.8,.8,1.);if(t.a<.4)discard;
 vec3 n=normalize(vN);float d=max(dot(n,uSun),0.);d=mix(d,smoothstep(.05,.55,d)*.85+d*.15,uToon);vec3 l=mix(uGnd,uSky,n.y*.5+.5)+uSunC*d;
 for(int i=0;i<6;i++){vec3 L=uPL[i].xyz-vW;float ds=length(L);float at=max(0.,1.-ds/max(uPL[i].w,.001));at*=at;l+=uPC[i]*at*(.35+.65*max(dot(n,L/max(ds,.001)),0.));}
-vec3 c=vC*uTint.rgb*t.rgb*1.25;
+vec3 c=vC*uTint.rgb*t.rgb*1.15;
 if(uWave>0.){float w=sin(vW.x*.7+uTime*1.6)*sin(vW.z*.9-uTime*1.1);c+=vec3(.08,.12,.14)*w+vec3(.15)*smoothstep(.75,1.,w);}
-c=c*l+uEmis;float lum=dot(c,vec3(.299,.587,.114));c=mix(vec3(lum),c,1.18);c=c*(1.04-.08*smoothstep(.0,.3,lum));c=mix(c,vec3(1.,1.,.95),uFlash);
+c=c*l+uEmis;float lum=dot(c,vec3(.299,.587,.114));c=mix(vec3(lum),c,1.06);c=mix(c,vec3(1.,1.,.95),uFlash);
 float f=clamp((length(vW-uCam)-uFog.x)/(uFog.y-uFog.x),0.,1.);c=mix(c,uFogC,f);gl_FragColor=vec4(c,uAlpha*t.a);}`,
   sprV: `attribute vec2 aC;uniform mat4 uVP;uniform vec3 uPos,uRight,uUp;uniform vec2 uSize;uniform vec4 uUV;uniform float uFlip;uniform vec4 uAnim;uniform vec2 uAnim2;varying vec2 vUV;varying vec3 vW;
 void main(){
@@ -6998,6 +7029,113 @@ const Seats = {
 };
 
 /* ============================================================
+   RO-style sprite rendering: every character / NPC / monster is
+   rendered each frame into a low-resolution cell of an offscreen
+   atlas (orthographic, toon-lit, facing snapped to 8 directions)
+   and then drawn back into the world as a pixel-art billboard with
+   a 1-pixel ink outline. Keeps all 3D animation, fashion, GLB and
+   mounts — only the look changes.
+   ============================================================ */
+SH.bbV = `attribute vec2 aC;uniform mat4 uVP;uniform vec3 uPos,uRt,uUp,uFwd;uniform vec2 uSize;uniform vec4 uUV;uniform float uBias;varying vec2 vUV;varying vec3 vW;
+void main(){vec3 w=uPos+uRt*(aC.x*uSize.x)+uUp*(aC.y*uSize.y)-uFwd*uBias;vW=w;vUV=vec2(mix(uUV.x,uUV.z,aC.x+.5),mix(uUV.y,uUV.w,aC.y+.5));gl_Position=uVP*vec4(w,1.);}`;
+SH.bbF = `precision highp float;varying vec2 vUV;varying vec3 vW;uniform sampler2D uTex;uniform vec2 uTx;uniform vec4 uUV;uniform vec3 uFogC,uCam,uInk;uniform vec2 uFog;uniform float uInkA;
+vec4 S(vec2 o){vec2 u=clamp(vUV+o*uTx,uUV.xy,uUV.zw);return texture2D(uTex,u);}
+void main(){vec4 t=S(vec2(0.));vec3 c;float a;
+if(t.a<.3){float n=max(max(S(vec2(1.,0.)).a,S(vec2(-1.,0.)).a),max(S(vec2(0.,1.)).a,S(vec2(0.,-1.)).a));if(n<.5||uInkA<=0.)discard;c=uInk;a=uInkA;}
+else{c=t.rgb/max(t.a,.001);a=t.a;}
+float f=clamp((length(vW-uCam)-uFog.x)/(uFog.y-uFog.x),0.,1.);c=mix(c,uFogC,f);gl_FragColor=vec4(c*a,a);}`;
+const Sprites = {
+  on: true, pix: .6, ink: .9, size: 2048, R: null, fb: null, tex: null, depth: null, quad: null, prog: null,
+  active: false, capturing: false, jobs: [], shelfX: 0, shelfY: 0, shelfH: 0,
+  sv: { VP: M4.ident(), cam: [0, 0, 0], fog: [0, 0], toon: .6 }, _V: M4.ident(), _P: M4.ident(),
+  init(R) {
+    if (this.R === R) return !!this.fb;
+    this.R = R; const gl = R.gl;
+    try {
+      this.tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, this.tex);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, this.size, this.size, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      this.depth = gl.createRenderbuffer(); gl.bindRenderbuffer(gl.RENDERBUFFER, this.depth); gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, this.size, this.size);
+      this.fb = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, this.fb);
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.tex, 0); gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, this.depth);
+      const ok = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE; gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      if (!ok) { this.fb = null; return false; }
+      this.prog = R.prog(SH.bbV, SH.bbF); this.quad = R.buf(new Float32Array([-.5, -.5, .5, -.5, .5, .5, -.5, -.5, .5, .5, -.5, .5]));
+      return true;
+    } catch (e) { console.warn('sprites off', e); this.fb = null; return false; }
+  },
+  enabled(R) { return this.on && (typeof Settings === 'undefined' || Settings.d.sprites !== 0) && R === Game.R && this.init(R); },
+  begin(R) {
+    this.active = this.enabled(R); this.jobs.length = 0; this.shelfX = this.shelfY = this.shelfH = 0; if (!this.active) return;
+    const gl = R.gl; gl.bindFramebuffer(gl.FRAMEBUFFER, this.fb); gl.viewport(0, 0, this.size, this.size);
+    gl.disable(gl.SCISSOR_TEST); gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    const sv = this.sv; sv.VP.set(R.VP); sv.cam = R.cam; sv.fog = R.env.fog; sv.toon = R.toon; sv.w = R.cv.width; sv.h = R.cv.height;
+  },
+  alloc(w, h) {
+    const P = 2; if (this.shelfX + w + P > this.size) { this.shelfX = 0; this.shelfY += this.shelfH + P; this.shelfH = 0; }
+    if (this.shelfY + h + P > this.size) return null;
+    const c = { x: this.shelfX + 1, y: this.shelfY + 1, w, h }; this.shelfX += w + P; this.shelfH = Math.max(this.shelfH, h); return c;
+  },
+  // screen height (device px) of a vertical segment at world point
+  screenH(x, y0, y1, z) { const m = this.sv.VP; const pr = y => { const cy = m[1] * x + m[5] * y + m[9] * z + m[13], cw = m[3] * x + m[7] * y + m[11] * z + m[15]; return cw > .1 ? cy / cw : null; }; const a = pr(y0), b = pr(y1); return a === null || b === null ? 0 : Math.abs(b - a) * .5 * this.sv.h; },
+  snapFace(face) { const R = this.R; if (!this.capturing || !R) return face; const f = R.camFwd; const va = Math.atan2(-f[0], -f[2]); const st = Math.PI / 4; return va + Math.round(angWrap(face - va) / st) * st; },
+  // draw fn into a sprite cell centred on (x, cy, z) of world size w x h
+  capture(R, x, cy, z, w, h, fn) {
+    if (!this.active) { fn(); return; }
+    { const m = this.sv.VP; const cw = m[3] * x + m[7] * cy + m[11] * z + m[15]; if (cw < .1) return; const nx = (m[0] * x + m[4] * cy + m[8] * z + m[12]) / cw, ny = (m[1] * x + m[5] * cy + m[9] * z + m[13]) / cw; const mw = (w / 2) / (cw * .45) + .05, mh = (h / 2) / (cw * .45) + .05; if (nx < -1 - mw || nx > 1 + mw || ny < -1 - mh || ny > 1 + mh) return; }
+    const hp = this.screenH(x, cy - h / 2, cy + h / 2, z); if (hp < 2) return;
+    const ph = clamp(Math.round(hp * this.pix), 12, 420), pw = clamp(Math.round(ph * w / h), 8, 420);
+    const c = this.alloc(pw, ph); if (!c) { fn(); return; }
+    const gl = R.gl; const f = R.camFwd, u = R.camUp;
+    const eye = [x - f[0] * 60, cy - f[1] * 60, z - f[2] * 60]; M4.lookAt(this._V, eye, [x, cy, z], u);
+    const P = this._P; P.fill(0); P[0] = 2 / w; P[5] = 2 / h; P[10] = -2 / 119; P[14] = -121 / 119; P[15] = 1; // ortho near 1 far 120
+    M4.mul(R.VP, P, this._V); R.cam = eye; R.env.fog = [1e5, 1e5 + 1]; R.toon = 1;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.fb); gl.viewport(c.x, c.y, c.w, c.h); gl.enable(gl.SCISSOR_TEST); gl.scissor(c.x, c.y, c.w, c.h);
+    this.capturing = true; R.useLit();
+    try { fn(); } catch (e) { console.error(e); }
+    this.capturing = false; gl.disable(gl.SCISSOR_TEST); gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    R.VP.set(this.sv.VP); R.cam = this.sv.cam; R.env.fog = this.sv.fog; R.toon = this.sv.toon; gl.viewport(0, 0, this.sv.w, this.sv.h); R.useLit();
+    const S = this.size; this.jobs.push({ x, y: cy, z, w, h, uv: [c.x / S, c.y / S, (c.x + c.w) / S, (c.y + c.h) / S], d: dist2(x, z, R.cam[0], R.cam[2]) + (cy - R.cam[1]) ** 2 });
+  },
+  end(R) {
+    if (!this.active) return; this.active = false; if (!this.jobs.length) return;
+    const gl = R.gl, B = this.prog, e = R.env; gl.useProgram(B.p);
+    gl.uniformMatrix4fv(B.u.uVP, false, R.VP); gl.uniform3fv(B.u.uRt, R.camRight); gl.uniform3fv(B.u.uUp, R.camUp); gl.uniform3fv(B.u.uFwd, R.camFwd);
+    gl.uniform3fv(B.u.uFogC, e.fogC); gl.uniform2fv(B.u.uFog, e.fog); gl.uniform3fv(B.u.uCam, R.cam); gl.uniform3f(B.u.uInk, .08, .05, .06); gl.uniform1f(B.u.uInkA, this.ink);
+    gl.uniform2f(B.u.uTx, 1 / this.size, 1 / this.size);
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, this.tex); gl.uniform1i(B.u.uTex, 0);
+    R.attr(B.a.aC, this.quad, 2, 0, 0); gl.disable(gl.CULL_FACE); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    this.jobs.sort((a, b) => b.d - a.d);
+    for (const j of this.jobs) {
+      gl.uniform3f(B.u.uPos, j.x, j.y, j.z); gl.uniform2f(B.u.uSize, j.w, j.h); gl.uniform4fv(B.u.uUV, j.uv); gl.uniform1f(B.u.uBias, Math.min(1.2, j.w * .35));
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+    }
+    R.off(B.a.aC); gl.disable(gl.BLEND); gl.enable(gl.CULL_FACE); R.curLitTex = null; R.useLit();
+  }
+};
+// characters face one of 8 directions while being captured (classic sprite look)
+{ const op = Rig.prototype.pose; Rig.prototype.pose = function (x, y, z, face, s, fall) { return op.call(this, x, y, z, Sprites.snapFace(face), s, fall); }; }
+{ const op = GlbRig.prototype.pose; GlbRig.prototype.pose = function (x, y, z, face, s, fall) { return op.call(this, x, y, z, Sprites.snapFace(face), s, fall); }; }
+// monsters: each one captured into its own cell
+{
+  const od = Monsters.draw;
+  Monsters.draw = function (R, t) {
+    if (!Sprites.active) return od.call(this, R, t);
+    const all = this.list, P = Player;
+    try {
+      for (const m of all) {
+        if (m.zone !== P.zone || (m.dead && m.deathT === undefined)) continue;
+        const h = Math.max(1.4, (m.d.h || 1.5) * (m.d.boss || m.d.wboss ? 1.5 : 1.7)) + (m.d.fly ? 2.4 : 0) + (m.jump ? 3 : 0), w = Math.max(h * .95, (m.d.r || .6) * 4.5 + 1);
+        const f0 = m.face; Sprites.capture(R, m.x, h / 2 - .2, m.z, w, h + .4, () => { m.face = Sprites.snapFace(f0); this.list = [m]; od.call(this, R, t); });
+        m.face = f0;
+      }
+    } finally { this.list = all; }
+  };
+}
+const SPR_CHAR = { w: 2.8, h: 3.3 };
+
+/* ============================================================
    Systems: save, settings, audio, quiz, combat, quests
    ============================================================ */
 const today = () => { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
@@ -7570,11 +7708,11 @@ const RoleSys = {
    Game core: camera, input, loop, interactions
    ============================================================ */
 const Cam = {
-  yaw: 0, pitch: .78, dist: 17, tx: 0, ty: 1.2, tz: 0, eye: [0, 10, 10],
+  yaw: 0, pitch: .76, dist: 18, tx: 0, ty: 1.2, tz: 0, eye: [0, 10, 10], fov: .62,
   update(dt, snap) {
     const P = Player; const k = snap ? 1 : Math.min(1, dt * 10);
     this.tx += (P.x - this.tx) * k; this.tz += (P.z - this.tz) * k; this.ty = 1.3;
-    this.pitch = clamp(this.pitch, .22, 1.35); this.dist = clamp(this.dist, 6, 42);
+    this.pitch = clamp(this.pitch, .45, 1.2); this.dist = clamp(this.dist, 10, 48);
     const cp = Math.cos(this.pitch);
     let ex = this.tx + Math.sin(this.yaw) * cp * this.dist, ey = this.ty + Math.sin(this.pitch) * this.dist, ez = this.tz + Math.cos(this.yaw) * cp * this.dist;
     if (Game.shakeT > 0) { const s = Game.shakeT * .8; ex += rand(-s, s); ey += rand(-s, s); ez += rand(-s, s); }
@@ -7606,7 +7744,7 @@ const Input = {
     if (UI.quizOpen) { const n = { Digit1: 0, Digit2: 1, Digit3: 2, Digit4: 3, Numpad1: 0, Numpad2: 1, Numpad3: 2, Numpad4: 3 }[code]; if (n !== undefined) UI.quizPick(n); return; }
     if (code === 'Escape') { if (UI.panelOpen) UI.closePanel(); else if (Game.started) UI.openPanel('menu'); return; }
     if (!Game.started || UI.summaryOpen) return;
-    if (UI.panelOpen) { const pmap = { KeyI: 'inv', KeyC: 'char', KeyL: 'quest', KeyM: 'map', KeyK: 'ach' }; if (pmap[code] && UI.panelOpen === pmap[code]) UI.closePanel(); else if (pmap[code]) UI.openPanel(pmap[code]); return; }
+    { const pmap = { KeyI: 'inv', KeyC: 'char', KeyL: 'quest', KeyM: 'map', KeyK: 'ach', KeyJ: 'jobs', KeyB: 'ghost', KeyH: 'help', KeyP: 'skills', KeyO: 'wardrobe', KeyF: 'friends', KeyU: 'pets' }; if (pmap[code] && WM.isOpen(pmap[code])) { WM.close(pmap[code]); return; } if (UI.panelOpen && Game.paused) { if (pmap[code]) UI.openPanel(pmap[code]); return; } }
     switch (code) {
       case 'KeyQ': Skills.use(0); break; case 'KeyE': Skills.use(1); break; case 'KeyR': Skills.use(2); break; case 'KeyT': Skills.use(3); break; case 'KeyX': Skills.use(4); break; case 'KeyP': UI.openPanel('skills'); break;
       case 'Space': e.preventDefault(); Game.attackNearest(); break;
@@ -7705,7 +7843,7 @@ const Game = {
     Player.x = S.pos.x; Player.z = S.pos.z; Player.zone = World.zoneOf(S.pos.x); Player.reset();
     if (S.hp <= 0) S.hp = Player.stats.maxhp;
     this.run = { xp: 0, coins: 0, kills: 0, drops: [], t0: performance.now(), k0: S.stats.kills };
-    Cam.yaw = 0; Cam.pitch = .78; Cam.dist = 17; Cam.update(0, true);
+    Cam.yaw = 0; Cam.pitch = .76; Cam.dist = 18; Cam.update(0, true);
     this.setEnv(Player.zone); this.applyUnlocks();
     this.started = true; this.safeT = 3;
     UI.hideTitle(); UI.showHUD(); UI.refreshAll(); UI.mountBtns();
@@ -7962,7 +8100,7 @@ const Game = {
   render(dt) {
     const R = this.R, P = Player;
     R.resize();
-    R.setCamera(Cam.eye, [Cam.tx, Cam.ty, Cam.tz]);
+    R.setCamera(Cam.eye, [Cam.tx, Cam.ty, Cam.tz], Cam.fov);
     const zone = P.zone;
     const ls = World.lights.filter(l => l.zone === zone).map(l => ({ ...l, d: dist2(l.x, l.z, P.x, P.z) })).sort((a, b) => a.d - b.d).slice(0, 6)
       .map(l => { const f = (l.c[0] > 1 && zone !== 'world') || zone === 'world' ? .85 + Math.sin(this.time * 9 + l.x) * .08 + Math.sin(this.time * 23 + l.z) * .05 : 1; return { ...l, c: l.c.map(v => v * f) }; });
@@ -7984,25 +8122,35 @@ const Game = {
       else if (o.type === 'barricade') { if (!o.hidden) R.drawMesh(o.mesh, (M4.compose(M, o.x, 0, o.z, 0, 0, 0, 1, 1, 1), M)); }
       else if (o.type === 'gate') { o.lift = lerp(o.lift, o.open ? 8.5 : 0, Math.min(1, dt * 2)); M4.compose(M, o.x, o.lift, o.z, 0, 0, 0, 1, 1, 1); R.drawMesh(o.mesh, M); }
     }
+    Sprites.begin(R);
     Monsters.draw(R, this.time);
-    if (zone === 'temple') { GhostAI.draw(R); NakBoss.draw(R); }
-    Projectiles.draw(R);
-    // 3D characters
+    // characters (each into its own sprite cell when sprite mode is on)
     for (const n of NPCList) {
       if (n.zone !== zone || dist2(n.x, n.z, P.x, P.z) > 90 * 90) continue;
-      n.rig.pose(n.x, 0, n.z, n.face, n.sc || CHAR_SCALE); n.rig.draw(R, CharModels[n.sheet], n.sheet === 'kuman' ? { emis: [.18, .14, .04] } : undefined);
+      const sc = (n.sc || CHAR_SCALE) / CHAR_SCALE;
+      Sprites.capture(R, n.x, 1.5 * sc, n.z, SPR_CHAR.w * sc, SPR_CHAR.h * sc, () => { n.rig.pose(n.x, 0, n.z, n.face, n.sc || CHAR_SCALE); n.rig.draw(R, CharModels[n.sheet], n.sheet === 'kuman' ? { emis: [.18, .14, .04] } : undefined); });
     }
     if (this.started) {
       const rig = P.getRig(); const fall = P.dead ? Math.min(1, (P.deadT || 0) / .5) : 0;
-      const mt = P.dead ? null : Mounts.draw(R, P);
-      const sp = !mt && !P.dead && Seats.driver ? Seats.myPos() : null;
-      if (mt) rig.pose(mt.seat[0], mt.seat[1] - HIPY * CHAR_SCALE + .05, mt.seat[2], mt.face, CHAR_SCALE);
-      else if (sp) rig.pose(sp[0], sp[1] - HIPY * CHAR_SCALE + .05, sp[2], P.face, CHAR_SCALE);
-      else rig.pose(P.x, 0, P.z, P.face, CHAR_SCALE, fall);
-      rig.draw(R, CharModels[P.sheet], { flash: P.hurtT > .2 ? .45 : 0, emis: Save.d.awk ? AWK_EMIS : undefined }); if (Save.d.awk && !P.dead) JobSys.awkFx(P.x, P.z, P.anim);
-      if (!P.dead) drawCosmetics3D(R, rig);
+      const mid = !P.dead && Mounts.riding() ? Mounts.cur() : null, MD = mid && MOUNTS[mid];
+      const sp0 = !mid && !P.dead && Seats.driver ? Seats.myPos() : null;
+      const cw = MD ? Math.max(4.2, (MD.seats ? 7 : 4.6) * MD.sc) : SPR_CHAR.w, ch = MD ? (MD.seat[0] + 2.7) * Math.max(1, MD.sc * .9) + (MD.kind === 'float' ? .6 : 0) : SPR_CHAR.h;
+      const cx = sp0 ? sp0[0] : P.x, cz = sp0 ? sp0[2] : P.z, cy = sp0 ? sp0[1] + 1.2 : ch / 2 - .15;
+      Sprites.capture(R, cx, cy, cz, cw, ch, () => {
+        const mt = P.dead ? null : Mounts.draw(R, P);
+        const sp = !mt && !P.dead && Seats.driver ? Seats.myPos() : null;
+        if (mt) rig.pose(mt.seat[0], mt.seat[1] - HIPY * CHAR_SCALE + .05, mt.seat[2], mt.face, CHAR_SCALE);
+        else if (sp) rig.pose(sp[0], sp[1] - HIPY * CHAR_SCALE + .05, sp[2], P.face, CHAR_SCALE);
+        else rig.pose(P.x, 0, P.z, P.face, CHAR_SCALE, fall);
+        rig.draw(R, CharModels[P.sheet], { flash: P.hurtT > .2 ? .45 : 0, emis: Save.d.awk ? AWK_EMIS : undefined });
+        if (!P.dead) drawCosmetics3D(R, rig);
+      });
+      if (Save.d.awk && !P.dead) JobSys.awkFx(P.x, P.z, P.anim);
       Remote.draw(R);
     }
+    Sprites.end(R);
+    if (zone === 'temple') { GhostAI.draw(R); NakBoss.draw(R); }
+    Projectiles.draw(R);
     Fx.drawSolid(R);
     // transparent meshes
     const gl = R.gl; R.useLit(); gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(false);
@@ -8271,52 +8419,52 @@ const MusicSys = {
   }
 };
 
-/* ---------- weather ---------- */
+/* ---------- zone soundscapes (weather removed: sound only) ---------- */
 const Weather = {
-  kind: 'clear', t: 0, dur: 20, rainG: null, windG: null, thunderT: 8, dropT: 0, windT: 0,
-  PLAN: { world: ['clear', 'clear', 'breeze', 'clear', 'rain', 'breeze'], dungeon: ['drip'], temple: ['mist', 'drizzle', 'mist', 'storm'] },
-  setZone(z) { this.zone = z; this.t = 0; this.pick(true); },
-  pick(first) {
-    const list = this.PLAN[this.zone] || ['clear']; const k = first ? list[0] : pick(list);
-    if (k !== this.kind) { this.kind = k; this.dur = k === 'rain' || k === 'storm' ? 40 + Math.random() * 40 : 35 + Math.random() * 50; this.t = 0; this.apply(); }
-    else this.t = 0;
+  zone: null, kind: 'clear', beds: {}, ev: {},
+  BEDS: { // looping filtered-noise layers per zone: [filter, freq, Q, gain]
+    world: { wind: ['lowpass', 380, .7, .028] },
+    dungeon: { rumble: ['lowpass', 110, .8, .07], hiss: ['bandpass', 2400, 1.2, .006] },
+    temple: { wind: ['bandpass', 520, 2.5, .03], low: ['lowpass', 90, .7, .05] },
+    amazon: { river: ['lowpass', 700, .6, .035], insects: ['bandpass', 5200, 8, .016], canopy: ['bandpass', 1500, .6, .012] }
   },
-  apply() {
-    const k = this.kind, R = Game.R; if (!R) return;
-    Game.setEnv(this.zone); const e = R.env;
-    if (k === 'rain') { e.fogC = e.fogC.map(v => v * .7); e.fog = [40, 150]; e.sunC = e.sunC.map(v => v * .6); e.sky = e.sky.map(v => v * .75); e.top = e.top.map(v => v * .55); e.bot = e.bot.map(v => v * .7); }
-    if (k === 'storm') { e.fog = [16, 80]; e.fogC = e.fogC.map(v => v * .8); }
-    if (k === 'breeze' && Player.zone === 'world') UI.toast && UI.toast('ลมพัดเอื่อยๆ ใบไม้ปลิวว่อน', 'info');
-    if (k === 'rain') UI.toast && UI.toast('ฝนเริ่มตกแล้ว...', 'info');
-    if (k === 'storm') UI.toast && UI.toast('พายุฝนฟ้าคะนองโหมกระหน่ำวัดร้าง!', 'boss');
-    this.sound();
+  setZone(z) { this.zone = z; this.sound(); for (const k in this.ev) this.ev[k] = Math.random() * 3; },
+  apply() { }, lightning() { },
+  noiseBuf(c) { if (this._nb) return this._nb; const n = c.sampleRate * 3, b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; return this._nb = b; },
+  bed(c, id, spec) {
+    if (this.beds[id]) return this.beds[id];
+    const s = c.createBufferSource(); s.buffer = this.noiseBuf(c); s.loop = true; s.loopStart = Math.random(); const f = c.createBiquadFilter(); f.type = spec[0]; f.frequency.value = spec[1]; f.Q.value = spec[2];
+    const g = c.createGain(); g.gain.value = 0; s.connect(f); f.connect(g); g.connect(c.destination); s.start(); return this.beds[id] = { g, f, base: spec[1] };
   },
   sound() {
-    const c = Audio.ctx; if (!c) return;
-    const wantRain = this.kind === 'rain' || this.kind === 'storm' || this.kind === 'drizzle';
-    if (wantRain && !this.rainG) { const n = c.sampleRate * 2, b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; const s = c.createBufferSource(); s.buffer = b; s.loop = true; const f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 1800; f.Q.value = .5; const g = c.createGain(); g.gain.value = 0; s.connect(f); f.connect(g); g.connect(c.destination); s.start(); this.rainG = g; this.rainSrc = s; }
-    if (this.rainG) this.rainG.gain.linearRampToValueAtTime(!Settings.d.sound ? 0 : this.kind === 'storm' ? .12 : this.kind === 'rain' ? .08 : this.kind === 'drizzle' ? .035 : 0, c.currentTime + 2);
-    const wantWind = this.kind === 'breeze' || this.kind === 'storm' || this.kind === 'mist';
-    if (wantWind && !this.windG) { const n = c.sampleRate * 2, b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; const s = c.createBufferSource(); s.buffer = b; s.loop = true; const f = c.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 320; const g = c.createGain(); g.gain.value = 0; s.connect(f); f.connect(g); g.connect(c.destination); s.start(); this.windG = g; this.windF = f; }
-    if (this.windG) this.windG.gain.linearRampToValueAtTime(!Settings.d.sound ? 0 : wantWind ? (this.kind === 'storm' ? .1 : .05) : 0, c.currentTime + 2);
+    const c = Audio.ctx; if (!c) return; const on = !!Settings.d.sound;
+    for (const z in this.BEDS) for (const k in this.BEDS[z]) { const sp = this.BEDS[z][k]; const want = on && z === this.zone ? sp[3] : 0; if (!want && !this.beds[z + k]) continue; const b = this.bed(c, z + k, sp); b.g.gain.cancelScheduledValues(c.currentTime); b.g.gain.linearRampToValueAtTime(want, c.currentTime + 2.5); }
+  },
+  // one-shot voices
+  chirp(f0, n, vol = .025) { for (let i = 0; i < n; i++) { const f = f0 * (1 + Math.random() * .25); Audio.tone(f, .07, 'sine', vol, 1.35, i * .09); } },
+  bell(f = 196, vol = .05) { [1, 2.76, 5.4, 8.9].forEach((k, i) => Audio.tone(f * k, 3.5 - i * .6, 'sine', vol / (i + 1), 0)); },
+  owl() { Audio.tone(410, .35, 'sine', .03, .93); Audio.tone(400, .6, 'sine', .03, .9, .5); },
+  wail() { Audio.tone(620, 2.2, 'sine', .016, .62); Audio.tone(632, 2.2, 'sine', .012, .6, .05); },
+  whisper() { const c = Audio.ctx; if (!c) return; for (let i = 0; i < 4; i++) Audio.noise(.25 + Math.random() * .2, .012, 1800 + Math.random() * 1600); },
+  creak() { Audio.tone(140 + Math.random() * 60, .7, 'sawtooth', .012, 1.6); },
+  croak() { for (let i = 0; i < 3; i++) Audio.tone(110 + Math.random() * 20, .09, 'square', .02, .8, i * .12); },
+  monkey() { for (let i = 0; i < 4; i++) Audio.tone(320 + i * 60, .22, 'sawtooth', .014, 1.6, i * .2); Audio.noise(.6, .01, 600); },
+  parrot() { Audio.tone(1500, .12, 'square', .012, 1.8); Audio.tone(1900, .1, 'square', .01, .6, .12); },
+  drip() { Audio.tone(1200 + Math.random() * 900, .12, 'sine', .035, .5); Audio.tone(600, .5, 'sine', .012, 1); },
+  EVENTS: {
+    world: [[4, 9, z => Weather.chirp(2600 + Math.random() * 1400, 3 + (Math.random() * 4 | 0))], [18, 30, () => Weather.chirp(1800, 2, .018)]],
+    dungeon: [[1.5, 4, () => Weather.drip()], [14, 26, () => { Audio.noise(1.4, .05, 120); }]],
+    temple: [[9, 18, () => Weather.whisper()], [22, 40, () => Weather.bell(185 + Math.random() * 20)], [12, 24, () => Weather.owl()], [26, 50, () => Weather.wail()], [10, 20, () => Weather.creak()], [6, 12, () => Weather.chirp(4200, 6, .006)]],
+    amazon: [[2.5, 6, () => Weather.chirp(2200 + Math.random() * 2400, 4 + (Math.random() * 5 | 0), .02)], [7, 15, () => Weather.parrot()], [14, 30, () => Weather.monkey()], [3, 7, () => Weather.croak()]]
   },
   update(dt) {
-    const P = Player, z = P.zone; if (z !== this.zone) this.setZone(z);
-    this.t += dt; if (this.t > this.dur) this.pick(false);
+    const z = Player.zone; if (z !== this.zone) this.setZone(z);
     if (Audio.ctx && !this._snd) { this._snd = true; this.sound(); }
-    const k = this.kind, cam = Cam;
-    if (k === 'rain' || k === 'storm' || k === 'drizzle') {
-      const n = k === 'storm' ? 26 : k === 'rain' ? 18 : 6; const col = k === 'drizzle' ? [.5, .6, .7] : [.55, .65, .85];
-      for (let i = 0; i < n; i++) Particles.add(cam.tx + rand(-22, 22), 9 + Math.random() * 6, cam.tz + rand(-22, 22), { c: col.map(v => v * 1.3), s: .3, life: .55, vy: -26, vx: k === 'storm' ? -4 : 0, a: .7 });
-      if (Math.random() < dt * 25) Particles.add(cam.tx + rand(-14, 14), .1, cam.tz + rand(-14, 14), { c: [.6, .7, .85], s: .25, life: .3, vy: 1.2, a: .5 });
-    }
-    if (k === 'breeze' || k === 'storm') { if (Math.random() < dt * (k === 'storm' ? 14 : 6)) Particles.add(cam.tx + rand(-20, 20), rand(.5, 5), cam.tz + rand(-20, 20), { c: pick([[.8, .5, .2], [.6, .7, .2], [.9, .7, .3]]), s: .3, life: 2.5, vx: -5 - Math.random() * 3, vz: rand(-1, 1), vy: rand(-.6, .3) }); }
-    if (k === 'storm') { this.thunderT -= dt; if (this.thunderT <= 0) { this.thunderT = 7 + Math.random() * 12; this.lightning(); } }
-    if (k === 'drip' && Math.random() < dt * 1.5) { Audio.tone(1200 + Math.random() * 900, .12, 'sine', .035, .5); Audio.tone(600, .5, 'sine', .012, 1); if (Math.random() < .5) Particles.add(cam.tx + rand(-10, 10), 4, cam.tz + rand(-10, 10), { c: [.5, .7, .9], s: .2, life: .5, vy: -8 }); }
-    if (k === 'mist' && Math.random() < dt * 2) Particles.add(cam.tx + rand(-18, 18), .3, cam.tz + rand(-18, 18), { c: [.2, .22, .3], s: 3.5, life: 4, vx: rand(-.5, .5), vy: .04, a: .45 });
-    if (this.windF && (k === 'breeze' || k === 'storm')) this.windF.frequency.value = 260 + Math.sin(Game.time * .7) * 120;
-  },
-  lightning() { Fx.flash([.8, .85, 1], .55); setTimeout(() => Fx.flash([.8, .85, 1], .3), 120); const c = Audio.ctx; if (!c || !Settings.d.sound) return; setTimeout(() => { Audio.noise(1.6, .3, 180); Audio.tone(40, 1.6, 'sine', .25, .5); }, 500 + Math.random() * 1200); }
+    if (!Audio.ctx || !Settings.d.sound) return;
+    const list = this.EVENTS[z] || [];
+    list.forEach((e, i) => { const k = z + i; if (this.ev[k] === undefined) this.ev[k] = e[0] * Math.random(); this.ev[k] -= dt; if (this.ev[k] <= 0) { this.ev[k] = e[0] + Math.random() * (e[1] - e[0]); e[2](); } });
+    const b = this.beds[z + 'wind']; if (b) b.f.frequency.value = b.base + Math.sin(Game.time * .5) * b.base * .35;
+  }
 };
 
 /* ---------- ghost speech bubbles ---------- */
@@ -8346,7 +8494,6 @@ const GhostTalk = {
 {
   const ou = Game.update.bind(Game);
   Game.update = function (dt) { ou(dt); if (this.started && !this.paused) { Weather.update(dt); GhostTalk.update(dt); for (const m of Monsters.list) if (m.bubble) { m.bubble.t -= dt; if (m.bubble.t <= 0) m.bubble = null; } } MusicSys.update(); if (this.started && Player.zone !== MusicSys.zone && Audio.ctx) MusicSys.setZone(Player.zone); };
-  const ose = Game.setEnv.bind(Game); Game.setEnv = function (z) { ose(z); if (Weather.zone === z && Weather.kind !== 'clear' && !Weather._applying) { Weather._applying = true; Weather.apply(); Weather._applying = false; } };
   // boss lines on attacks
   const og = NakBoss.grabAtk.bind(NakBoss); NakBoss.grabAtk = function (m) { og(m); GhostTalk.say(m, pick(['พี่มากขาาา! มานี่!', 'อย่าหนีนากไป!']), 2.5); };
   const ow = NakBoss.wail.bind(NakBoss); NakBoss.wail = function (m) { ow(m); GhostTalk.say(m, pick(['ฮือออ... พี่มาก...', 'ทำไมถึงทิ้งนาก...']), 2.5); };
@@ -8538,7 +8685,7 @@ const UI = {
   bossBar(on, name) { this.el.boss.hidden = !on; if (on) this.el.boss.querySelector('.bn').textContent = name || 'คราก ผู้พิทักษ์ผลึก · Lv.10'; },
   hurtFlash() { const h = this.el.hurt; h.classList.remove('on'); void h.offsetWidth; h.classList.add('on'); },
   /* ---------- floats ---------- */
-  dmgNum(x, y, z, n, kind) { this.floats.push({ x, y, z, t: 0, life: kind === 'xp' ? 1.3 : 1, text: kind === 'xp' ? `+${n} XP` : kind === 'heal' ? `+${n}` : String(n), kind, dx: rand(-.4, .4) }); },
+  dmgNum(x, y, z, n, kind) { this.floats.push({ x, y, z, t: 0, life: kind === 'xp' ? 1.3 : (kind === 'hit' || kind === 'crit' || kind === 'player') && Settings.d.roPlates !== 0 ? 1.05 : 1, text: kind === 'xp' ? `+${n} XP` : kind === 'heal' ? `+${n}` : String(n), kind, dx: rand(-.4, .4) }); },
   floatText(x, y, z, text, kind) { if (this.floats.filter(f => f.kind === kind).length > 2) return; this.floats.push({ x, y, z, t: 0, life: 1, text, kind, dx: 0 }); },
   updateFloats(dt) {
     const R = Game.R; let html = '';
@@ -8547,9 +8694,11 @@ const UI = {
     for (let i = 0; i < c.children.length; i++) {
       const sp = c.children[i]; const f = this.floats[i];
       if (!f) { sp.style.display = 'none'; continue; }
-      const p = R.project(f.x + f.dx, f.y + f.t * 1.4, f.z); if (!p) { sp.style.display = 'none'; continue; }
-      sp.style.display = ''; sp.className = 'fl ' + f.kind; if (sp.textContent !== f.text) sp.textContent = f.text;
-      const a = f.t < .15 ? f.t / .15 : 1 - Math.max(0, (f.t - f.life * .6) / (f.life * .4)); const s = f.kind === 'crit' ? 1.3 - Math.min(.3, f.t) : 1;
+      const ro = Settings.d.roPlates !== 0 && (f.kind === 'hit' || f.kind === 'crit' || f.kind === 'player'); const u = f.t / f.life;
+      const fy = ro ? f.y + 3.6 * f.t - 4.2 * f.t * f.t : f.y + f.t * (f.kind === 'heal' && Settings.d.roPlates !== 0 ? .9 : 1.4);
+      const p = R.project(f.x + f.dx * (ro ? 1 + f.t * 2.4 : 1), fy, f.z); if (!p) { sp.style.display = 'none'; continue; }
+      sp.style.display = ''; sp.className = 'fl ' + f.kind + (ro ? ' ro' : ''); if (sp.textContent !== f.text) sp.textContent = f.text;
+      const a = ro ? (u < .75 ? 1 : 1 - (u - .75) / .25) : f.t < .15 ? f.t / .15 : 1 - Math.max(0, (f.t - f.life * .6) / (f.life * .4)); const s = ro ? (f.kind === 'crit' ? 1.6 : 1.25) - u * .55 : f.kind === 'crit' ? 1.3 - Math.min(.3, f.t) : 1;
       sp.style.transform = `translate(${p.x}px,${p.y}px) translate(-50%,-50%) scale(${s})`; sp.style.opacity = a;
     }
   },
@@ -8560,17 +8709,20 @@ const UI = {
       if (m.dead || m.zone !== P.zone || m.d.boss || (m.d.wboss && m.engaged && !m.bubble)) continue; const d2 = dist2(m.x, m.z, P.x, P.z); if (d2 > (m.d.wboss || m.d.elite ? 40 : 28) ** 2) continue;
       const tgt = P.target && P.target.ref === m; const show = tgt || m.hp < m.max || m.aggro || d2 < 12 * 12 || m.d.elite || m.d.wboss || m.bubble;
       if (!show) continue;
-      want.push({ key: 'm' + m.id, x: m.x, y: (m.d.fly ? 2.4 : m.d.h) + .55 + (m.jump ? m.jump.y : 0), z: m.z, cls: (m.d.aggro || m.d.elite || m.d.wboss ? 'hostile' : 'calm') + (tgt ? ' tgt' : '') + (m.d.elite || m.d.wboss ? ' elite' : ''), html: () => `${m.bubble ? `<span class="mbub">${esc(m.bubble.text)}</span>` : ''}${m.d.wboss && m.engaged ? '' : `<span class="nm">${m.d.elite ? '<i class="elt">หัวหน้า</i> ' : m.d.wboss ? '<i class="elt">บอส</i> ' : ''}${m.d.name} <small>Lv.${m.d.lvl}</small></span><span class="hpb"><i style="width:${m.hp / m.max * 100}%"></i></span>${(m.stun > 0 || m.slow > 0 || m.dotT > 0 || m.weakT > 0) ? `<span class="sts">${m.stun > 0 ? '<i class="s-stun">มึน</i>' : ''}${m.slow > 0 ? '<i class="s-slow">ช้า</i>' : ''}${m.dotT > 0 ? '<i class="s-dot">พิษ</i>' : ''}${m.weakT > 0 ? '<i class="s-weak">ยั่ว</i>' : ''}</span>` : ''}`}` });
+      want.push({ key: 'm' + m.id, x: m.x, y: (m.d.fly ? 2.4 : m.d.h) + .55 + (m.jump ? m.jump.y : 0), fy: (m.d.fly ? 1.4 : 0) + (m.jump ? m.jump.y : 0), z: m.z, cls: (m.d.aggro || m.d.elite || m.d.wboss ? 'hostile' : 'calm') + (tgt ? ' tgt' : '') + (m.d.elite || m.d.wboss ? ' elite' : ''), html: () => `${m.bubble ? `<span class="mbub">${esc(m.bubble.text)}</span>` : ''}${m.d.wboss && m.engaged ? '' : `<span class="nm">${m.d.elite ? '<i class="elt">หัวหน้า</i> ' : m.d.wboss ? '<i class="elt">บอส</i> ' : ''}${m.d.name} <small>Lv.${m.d.lvl}</small></span><span class="hpb"><i style="width:${m.hp / m.max * 100}%"></i></span>${(m.stun > 0 || m.slow > 0 || m.dotT > 0 || m.weakT > 0) ? `<span class="sts">${m.stun > 0 ? '<i class="s-stun">มึน</i>' : ''}${m.slow > 0 ? '<i class="s-slow">ช้า</i>' : ''}${m.dotT > 0 ? '<i class="s-dot">พิษ</i>' : ''}${m.weakT > 0 ? '<i class="s-weak">ยั่ว</i>' : ''}</span>` : ''}`}` });
     }
     UI.netPlates(want);
-    if (Game.started) want.push({ key: 'player', x: P.x, y: SPR_H + .3 + (Mounts.riding() ? MOUNTS[Mounts.cur()].seat[0] * .8 : 0), z: P.z, cls: 'me' + (Net.gm ? ' gm' : ''), html: () => `${UI.selfPlate()}<span class="nm me">${Net.gm ? '<i class="gmtag">GM</i> ' : ''}${esc(Save.d.name)}</span>` });
+    if (Game.started) want.push({ key: 'player', x: P.x, y: SPR_H + .3 + (Mounts.riding() ? MOUNTS[Mounts.cur()].seat[0] * .8 : 0), z: P.z, cls: 'me' + (Net.gm ? ' gm' : ''), html: () => `${UI.selfPlate()}<span class="nm me">${Net.gm ? '<i class="gmtag">GM</i> ' : ''}${esc(Save.d.name)}</span>${Settings.d.roPlates !== 0 ? `<span class="robar hp"><i style="width:${Math.round(Save.d.hp / P.stats.maxhp * 100)}%"></i></span><span class="robar sp"><i style="width:${Math.round(Save.d.mp / P.stats.maxmp * 100)}%"></i></span>` : ''}` });
     const seen = new Set();
     for (const w of want) {
       let el = this.plates.get(w.key); if (!el) { el = document.createElement('div'); el.className = 'plate'; this.el.plates.appendChild(el); this.plates.set(w.key, el); }
       seen.add(w.key);
       const p = R.project(w.x, w.y, w.z); if (!p) { el.style.display = 'none'; continue; }
-      el.style.display = ''; const h = w.html(); if (el._h !== h) { el.innerHTML = h; el._h = h; } el.className = 'plate ' + (w.cls || '');
-      el.style.transform = `translate(${p.x}px,${p.y}px) translate(-50%,-100%)`;
+      el.style.display = ''; const h = w.html(); if (el._h !== h) { el.innerHTML = h; el._h = h; }
+      if (Settings.d.roPlates !== 0) { // RO layout: names/bars under the feet, bubbles & markers above the head
+        const f = R.project(w.x, w.fy || 0, w.z) || p; el.className = 'plate ro ' + (w.cls || ''); el.style.setProperty('--hh', Math.max(0, f.y - p.y) + 'px');
+        el.style.transform = `translate(${f.x}px,${f.y}px) translate(-50%,3px)`;
+      } else { el.className = 'plate ' + (w.cls || ''); el.style.transform = `translate(${p.x}px,${p.y}px) translate(-50%,-100%)`; }
     }
     for (const [k, el] of this.plates) if (!seen.has(k)) { el.remove(); this.plates.delete(k); }
   },
@@ -8767,6 +8919,7 @@ const UI = {
         <p id="cqmsg" class="muted">มีคำถามของฉัน ${D.custom.length} ข้อ</p>
       </fieldset>
       <fieldset><legend>เสียง</legend><label class="chk"><input type="checkbox" id="snd" ${D.sound ? 'checked' : ''}> เปิดเสียงเอฟเฟกต์</label><label class="chk"><input type="checkbox" id="mus" ${D.music ? 'checked' : ''}> เพลงประกอบและเสียงบรรยากาศ (เปลี่ยนตามแมพ)</label><label class="chk"><input type="checkbox" id="vox" ${D.voice ? 'checked' : ''}> เสียงตัวละครตะโกนและพากย์ชื่อสกิล</label></fieldset>
+      <fieldset><legend>ภาพแบบ RO</legend><label class="chk"><input type="checkbox" id="rospr" ${D.sprites !== 0 ? 'checked' : ''}> ตัวละครและมอนสเตอร์แบบสไปรต์พิกเซล (สไตล์ RO)</label><label class="chk"><input type="checkbox" id="roplt" ${D.roPlates !== 0 ? 'checked' : ''}> ชื่อใต้เท้า แถบ HP/SP และตัวเลขดาเมจเด้งแบบ RO</label><label class="chk"><input type="checkbox" id="pausew" ${D.pauseWin !== 0 ? 'checked' : ''}> หยุดเกมเมื่อเปิดหน้าต่าง (ปิดเพื่อเล่นไปพร้อมเปิดหน้าต่างหลายอันแบบ RO)</label></fieldset>
       <fieldset><legend>โมเดล 3 มิติ</legend><p class="muted">นำเข้าโมเดล .glb ที่ทำเอง (Tripo / Meshy + Blender) มาแทนตัวละคร</p><button class="btn" data-go="models">จัดการโมเดล 3 มิติ</button></fieldset>
       <fieldset><legend>ผู้ดูแลเกม (GM)</legend><div id="gmset">${UI.gmSettingsHtml()}</div></fieldset>
       <div class="row"><button class="btn" id="savesettings">บันทึกการตั้งค่า</button>${Save.d ? '<button class="btn ghost danger" id="wipe">ลบเซฟและเริ่มใหม่</button>' : ''}</div>`);
@@ -8774,7 +8927,7 @@ const UI = {
     this.el.pbody.querySelector('[data-go="models"]').onclick = () => this.openPanel('models');
     $('#qdiff').oninput = e => $('#qdv').textContent = diffL[e.target.value];
     $('#savesettings').onclick = () => {
-      D.move = (document.querySelector('input[name=mv]:checked') || {}).value || 'both'; D.qtime = +$('#qtime').value; D.diff = +$('#qdiff').value; D.sound = $('#snd').checked ? 1 : 0; D.music = $('#mus').checked ? 1 : 0; MusicSys.setOn(!!D.music); Weather.sound(); D.voice = $('#vox').checked ? 1 : 0; D.customOnly = $('#customonly').checked ? 1 : 0;
+      D.move = (document.querySelector('input[name=mv]:checked') || {}).value || 'both'; D.qtime = +$('#qtime').value; D.diff = +$('#qdiff').value; D.sound = $('#snd').checked ? 1 : 0; D.music = $('#mus').checked ? 1 : 0; MusicSys.setOn(!!D.music); Weather.sound(); D.voice = $('#vox').checked ? 1 : 0; D.sprites = $('#rospr').checked ? 1 : 0; D.roPlates = $('#roplt').checked ? 1 : 0; D.pauseWin = $('#pausew').checked ? 1 : 0; WM.pauseSync(); D.customOnly = $('#customonly').checked ? 1 : 0;
       document.querySelectorAll('[data-cat]').forEach(c => D.cats[c.dataset.cat] = c.checked ? 1 : 0);
       const lines = $('#customq').value.split('\n').map(l => l.split('|').map(s => s.trim())).filter(p => p.length >= 3 && p[0] && p[1] && p[2]);
       D.custom = lines.map(p => ({ q: p[0], a: p[1], w: p.slice(2, 5) }));
@@ -9638,7 +9791,7 @@ const StableView = {
     if (!this.ensure()) { host.innerHTML = '<p class="muted">อุปกรณ์นี้แสดงตัวอย่าง 3 มิติไม่ได้</p>'; return; }
     if (this.id !== id) this.yaw = -.35; this.id = id; host.appendChild(this.cv);
     cancelAnimationFrame(this.raf); const t0 = performance.now();
-    const loop = now => { if (!this.cv.isConnected || UI.panelOpen !== 'stable') return; if (!this.drag) this.yaw += .006; this.frame(this.id, (now - t0) / 1000); this.raf = requestAnimationFrame(loop); };
+    const loop = now => { if (!this.cv.isConnected || !WM.isOpen('stable')) return; if (!this.drag) this.yaw += .006; this.frame(this.id, (now - t0) / 1000); this.raf = requestAnimationFrame(loop); };
     this.raf = requestAnimationFrame(loop);
   }
 };
@@ -10228,8 +10381,8 @@ const Net = {
     if (this.muted.has(msg.u)) return;
     const peer = Remote.map.get(msg.u); if (peer) peer.bubble = { text: msg.m, until: performance.now() + 5500 };
     if (msg.u === this.uid) this.selfBubble = { text: msg.m, until: performance.now() + 5500 };
-    if (msg.u !== this.uid && UI.panelOpen !== 'chat') this.unread++;
-    UI.chatLog(); if (UI.panelOpen === 'chat') UI.chatRender();
+    if (msg.u !== this.uid && !WM.isOpen('chat')) this.unread++;
+    UI.chatLog(); if (WM.isOpen('chat')) UI.chatRender();
   },
   sendChat(text, kind = 'w') {
     if (!this.joined) { UI.toast('ยังไม่ได้เชื่อมต่อเซิร์ฟเวอร์', 'warn'); return false; }
@@ -10341,7 +10494,7 @@ Object.assign(UI, {
     const c = document.getElementById('chatcompose'), i = document.getElementById('composein');
     c.hidden = false; i.value = ''; i.placeholder = kind === 'p' ? 'พิมพ์ถึงปาร์ตี้…' : 'พิมพ์ข้อความ…'; setTimeout(() => i.focus(), 30);
     const done = () => { c.hidden = true; i.blur(); };
-    document.getElementById('composeform').onsubmit = e => { e.preventDefault(); if (Net.sendChat(i.value, kind)) { done(); if (UI.panelOpen === 'chat') UI.chatRender(); } };
+    document.getElementById('composeform').onsubmit = e => { e.preventDefault(); if (Net.sendChat(i.value, kind)) { done(); if (WM.isOpen('chat')) UI.chatRender(); } };
     document.getElementById('composex').onclick = done;
   },
   peerCard(p) {
@@ -10971,17 +11124,22 @@ UI.pModels = function (o) {
       const st = p.st, rig = this.rig(p);
       if (st.rp) { // passenger
         const pos = Seats.peerPos(p); const face = Seats.driverFace(p);
-        if (pos) rig.pose(pos[0], pos[1] - HIPY * CHAR_SCALE + .05, pos[2], face, CHAR_SCALE); else rig.pose(p.dx, 0, p.dz, p.face, CHAR_SCALE, st.d ? 1 : 0);
-        const sh = st.o && CharModels[st.o] ? st.o : st.c; rig.draw(R, CharModels[sh]);
-        if (!st.d) drawCosmetics3D(R, rig, { head: st.h || null, face: st.fc || null, back: st.b || null, sheet: sh, anim: p.anim, walk: 0 });
+        Sprites.capture(R, pos ? pos[0] : p.dx, pos ? pos[1] + 1.2 : 1.5, pos ? pos[2] : p.dz, SPR_CHAR.w, SPR_CHAR.h, () => {
+          if (pos) rig.pose(pos[0], pos[1] - HIPY * CHAR_SCALE + .05, pos[2], face, CHAR_SCALE); else rig.pose(p.dx, 0, p.dz, p.face, CHAR_SCALE, st.d ? 1 : 0);
+          const sh = st.o && CharModels[st.o] ? st.o : st.c; rig.draw(R, CharModels[sh]);
+          if (!st.d) drawCosmetics3D(R, rig, { head: st.h || null, face: st.fc || null, back: st.b || null, sheet: sh, anim: p.anim, walk: 0 });
+        });
         continue;
       }
-      const riding = st.m && MOUNTS[st.m];
-      let seat = null; if (riding && !st.d) seat = drawMount(R, MountMeshes, st.m, p.dx, 0, p.dz, p.face, p.mst, 1);
-      if (seat && seat.all) Seats.cache[p.uid] = seat.all; else delete Seats.cache[p.uid];
-      if (seat) rig.pose(seat[0], seat[1] - HIPY * CHAR_SCALE + .05, seat[2], p.face, CHAR_SCALE); else rig.pose(p.dx, 0, p.dz, p.face, CHAR_SCALE, st.d ? 1 : 0);
-      const sh = st.o && CharModels[st.o] ? st.o : st.c; rig.draw(R, CharModels[sh]);
-      if (!st.d) drawCosmetics3D(R, rig, { head: st.h || null, face: st.fc || null, back: st.b || null, sheet: sh, anim: p.anim, walk: p.walk });
+      const riding = st.m && MOUNTS[st.m]; const MD = riding && !st.d ? MOUNTS[st.m] : null;
+      const cw = MD ? Math.max(4.2, (MD.seats ? 7 : 4.6) * MD.sc) : SPR_CHAR.w, ch = MD ? (MD.seat[0] + 2.7) * Math.max(1, MD.sc * .9) + (MD.kind === 'float' ? .6 : 0) : SPR_CHAR.h;
+      Sprites.capture(R, p.dx, ch / 2 - .15, p.dz, cw, ch, () => {
+        let seat = null; if (MD) seat = drawMount(R, MountMeshes, st.m, p.dx, 0, p.dz, p.face, p.mst, 1);
+        if (seat && seat.all) Seats.cache[p.uid] = seat.all; else delete Seats.cache[p.uid];
+        if (seat) rig.pose(seat[0], seat[1] - HIPY * CHAR_SCALE + .05, seat[2], p.face, CHAR_SCALE); else rig.pose(p.dx, 0, p.dz, p.face, CHAR_SCALE, st.d ? 1 : 0);
+        const sh = st.o && CharModels[st.o] ? st.o : st.c; rig.draw(R, CharModels[sh]);
+        if (!st.d) drawCosmetics3D(R, rig, { head: st.h || null, face: st.fc || null, back: st.b || null, sheet: sh, anim: p.anim, walk: p.walk });
+      });
     }
   };
   const oup = Remote.update.bind(Remote);
@@ -11008,6 +11166,11 @@ KIND_ICON.vehicle = 'star';
    PATCH_NEW for every game update (shown in lobby → บันทึกอัปเดต)
    ============================================================ */
 const PATCH_NEW = [
+  { d: '30/10', ic: 'person', t: 'ภาพแบบ RO: ตัวละครและมอนสเตอร์เป็นสไปรต์พิกเซล', x: 'ตัวละคร NPC มอนสเตอร์ และพาหนะ แสดงเป็นภาพพิกเซลขอบดำหันได้ 8 ทิศแบบเกม 2D คลาสสิก บนแมพ 3 มิติ กล้องมุมเอียงแบบ RO ชื่อและแถบ HP/SP อยู่ใต้เท้า ตัวเลขดาเมจเด้งโค้งตกลง คริติคอลเป็นตัวเลขเหลืองมีดาวแดง ปิด/เปิดได้ในตั้งค่า → ภาพแบบ RO' },
+  { d: '30/10', ic: 'star', t: 'เอฟเฟกต์แบบ RO: วงเวทใต้เท้าตอนร่าย ประกายตอนโจมตี เลเวลอัป', x: 'ร่ายเวท/บัฟ/ฮีลมีวงเวทหมุนใต้เท้า ฮีลมีเสาแสงและประกายเขียวลอยขึ้น บัฟมีประกายหมุนรอบตัว ตีโดนมีประกายแตก คริติคอลประกายทอง เลเวลอัปมีเสาแสงทองและเสียงเฉพาะ' },
+  { d: '30/10', ic: 'gear', t: 'หน้าต่างลากได้ เปิดได้หลายหน้าต่างพร้อมกัน', x: 'ทุกหน้าต่าง (กระเป๋า ตัวละคร สกิล เควส ฯลฯ) ลากแถบหัวเพื่อย้ายได้ เปิดซ้อนกันได้หลายอัน จำตำแหน่งไว้ให้ กดปุ่มลัดซ้ำ (I C L K J P O) เพื่อปิด ตั้งค่าให้เล่นต่อได้ขณะเปิดหน้าต่างแบบ RO' },
+  { d: '30/10', ic: 'star', t: 'ลบสภาพอากาศ เปลี่ยนเป็นเสียงบรรยากาศประจำแมพ', x: 'ทวีป: นกร้อง ลมพัด · ถ้ำ: น้ำหยด เสียงก้อง · วัดร้าง: เสียงกระซิบ ระฆังไกลๆ นกฮูก เสียงโหยหวน ไม้ลั่น · ป่าอเมซอน (เร็วๆ นี้): แมลง นกแก้ว ลิง กบ สายน้ำ' },
+  { d: '30/10', ic: 'bag', t: 'แก้บัค: ช่องอุปกรณ์ในกระเป๋ายืดสูงผิดปกติ', x: 'ช่องสวมใส่ในหน้ากระเป๋ากลับมาเป็นแถวกะทัดรัด' },
   { d: '30/10', ic: 'map', t: 'โลกสมจริงขึ้น: เท็กซ์เจอร์ แสงนุ่ม ขอบเส้นตัวละคร', x: 'พื้นหญ้า ดิน ทราย หินปูพื้น ผนังปูน หลังคากระเบื้อง ไม้ เปลือกไม้ ใบไม้ มีลายจริงทั้งแมพหลักและวัดร้าง ตัวละคร/พาหนะผิวเรียบไม่เหลี่ยม มีขอบเส้นแบบการ์ตูน แสงแบบเซล และทรงผมใหม่แบบอนิเมะ' },
   { d: '29/10', ic: 'paw', t: 'พาหนะหลายที่นั่ง 2–4 คน 6 คัน', x: 'ไดโนเสาร์เร็กซ์ (2) รถตุ๊กๆ (3) รถจี๊ปลุยป่า (4) เรือหางยาว (4) ช้างศึกบุษบก (3) รถม้าราชสำนัก (4) เพื่อนกด "ขึ้นนั่งด้วย" จากการ์ดผู้เล่นแล้วเคลื่อนที่ตามผู้ขับ กดเดินเพื่อลง ล้อ/ใบพัดหมุนจริง' },
   { d: '29/10', ic: 'person', t: 'แฟชั่นใส่ได้จริง 150+ ชิ้น + ตู้เสื้อผ้า (O)', x: 'ชุดเต็มตัว 44 แบบ หมวก 46 ใบหน้า 15 ของสะพายหลัง/ผ้าคลุม/หาง/ปีก 28 สกินอาวุธ 21 ทุกชิ้นเห็นบนตัวละครจริง ชุดใช้อาวุธของอาชีพปัจจุบัน ซื้อได้ที่ร้านตัดเสื้อ ร้านเพชร และรางวัลเควส' },
@@ -11022,7 +11185,147 @@ const PATCH_NEW = [
   { d: '29/10', ic: 'star', t: 'เล่นออนไลน์ด้วยกัน', x: 'เชื่อมเซิร์ฟเวอร์ Firebase เห็นผู้เล่นคนอื่น แชต ปาร์ตี้ (EXP +10% เมื่ออยู่ใกล้กัน) ตัวนับผู้เล่นออนไลน์ และช่องเซิร์ฟเวอร์' }
 ];
 PATCH.unshift(...PATCH_NEW);
-ANNOUNCE.unshift({ tag: 'อัปเดตใหญ่', title: 'อัปเดต 30 ต.ค.: อาชีพขั้นสอง แฟชั่น 150+ ชิ้น พาหนะหลายที่นั่ง โลกสมจริงขึ้น', body: 'เปลี่ยนอาชีพขั้นสองที่ Lv.10 ตื่นรู้ที่ Lv.20 · ตู้เสื้อผ้า (O) ใส่ชุด หมวก หน้ากาก ปีก สกินอาวุธ เห็นจริงบนตัวละคร · ขี่ไดโนเสาร์ ตุ๊กๆ จี๊ป เรือหางยาว ช้างศึก รถม้า กับเพื่อนได้ 2–4 คน · แมพมีเท็กซ์เจอร์และแสงใหม่ทั้งหมด · นำเข้าโมเดล .glb ของตัวเองได้ที่ตั้งค่า ดูรายละเอียดทั้งหมดที่แท็บ "บันทึกอัปเดต"' });
+ANNOUNCE.unshift({ tag: 'อัปเดตใหญ่', title: 'อัปเดต 30 ต.ค.: ภาพแบบ RO (สไปรต์พิกเซล) หน้าต่างลากได้ อาชีพขั้นสอง แฟชั่น พาหนะหลายที่นั่ง', body: 'เปลี่ยนอาชีพขั้นสองที่ Lv.10 ตื่นรู้ที่ Lv.20 · ตู้เสื้อผ้า (O) ใส่ชุด หมวก หน้ากาก ปีก สกินอาวุธ เห็นจริงบนตัวละคร · ขี่ไดโนเสาร์ ตุ๊กๆ จี๊ป เรือหางยาว ช้างศึก รถม้า กับเพื่อนได้ 2–4 คน · แมพมีเท็กซ์เจอร์และแสงใหม่ทั้งหมด · นำเข้าโมเดล .glb ของตัวเองได้ที่ตั้งค่า ดูรายละเอียดทั้งหมดที่แท็บ "บันทึกอัปเดต"' });
+
+/* ============================================================
+   RO-style presentation: casting circles, hit sparks, level-up
+   column, skill shout, RO click/hit sounds
+   ============================================================ */
+const RoFx = {
+  casts: [], marks: [],
+  cast(x, z, col, dur) { this.casts.push({ x, z, col, t: 0, dur }); },
+  update(dt) { for (const L of [this.casts, this.marks]) for (let i = L.length - 1; i >= 0; i--) { L[i].t += dt; if (L[i].t > L[i].dur) L.splice(i, 1); } },
+  decals(R) {
+    for (const c of this.casts) {
+      const u = c.t / c.dur, a = u < .15 ? u / .15 : u > .85 ? (1 - u) / .15 : 1, r = 1.5 + Math.min(1, u * 4) * .4;
+      R.drawDecal(c.x, .07, c.z, r, r, Game.time * 1.4, 4, [c.col[0], c.col[1], c.col[2], .95 * a], 0);
+      R.drawDecal(c.x, .065, c.z, r * .78, r * .78, -Game.time * 2, 4, [1, 1, 1, .7 * a], 0);
+      R.drawDecal(c.x, .06, c.z, r * 1.05, r * 1.05, 0, 0, [c.col[0], c.col[1], c.col[2], .35 * a]);
+    }
+    for (const m of this.marks) { const u = m.t / m.dur; R.drawDecal(m.x, .07, m.z, .5 + u * .4, .5 + u * .4, 0, 2, [.4, 1, .4, 1 - u], u); }
+  },
+  hit(x, y, z, crit) {
+    const n = crit ? 14 : 8; for (let i = 0; i < n; i++) { const a = Math.random() * TAU, v = rand(3, crit ? 8 : 5.5); Particles.add(x, y, z, { c: crit ? [1, .85, .3] : [1, 1, .9], s: crit ? .38 : .28, life: .22, vx: Math.cos(a) * v, vy: Math.sin(a) * v * .7 + 1, vz: Math.sin(a) * v * .4 }); }
+    Fx.glow(x, y, z, crit ? 1.1 : .7, crit ? [1, .7, .2] : [1, 1, .85], .12);
+  },
+  levelUp(x, z) {
+    Fx.pillar(x, z, 1.1, 9, [1, .9, .45], 1.4); Fx.pillar(x, z, .6, 11, [1, 1, .85], 1.1); Fx.shock(x, z, 3.2, [1, .85, .35], .9);
+    for (let i = 0; i < 60; i++) setTimeout(() => { const a = Math.random() * TAU, r = rand(.3, 1.3); Particles.add(x + Math.cos(a) * r, rand(.2, 1), z + Math.sin(a) * r, { c: pick([[1, .9, .4], [1, 1, .8], [1, .75, .3]]), s: .35, life: 1.4, vy: rand(3, 6) }); }, i * 18);
+  }
+};
+// RO click / hit / cast sounds (synthesised)
+const RoSfx = {
+  play(k) {
+    if (!Audio.ctx || !Settings.d.sound) return;
+    if (k === 'click') { Audio.tone(1400, .04, 'square', .03, .6); }
+    else if (k === 'hit') { Audio.noise(.07, .09, 2400); Audio.tone(180, .07, 'triangle', .06, .5); }
+    else if (k === 'crit') { Audio.noise(.12, .12, 3200); Audio.tone(240, .12, 'sawtooth', .06, .4); Audio.tone(900, .1, 'square', .03, 1.6, .03); }
+    else if (k === 'cast') { [660, 880, 990].forEach((f, i) => Audio.tone(f, .18, 'sine', .035, 1.4, i * .07)); }
+    else if (k === 'lvl') { [523, 659, 784, 1047].forEach((f, i) => Audio.tone(f, .32, 'triangle', .06, 1, i * .1)); }
+  }
+};
+{
+  // casting circle under the caster for magic / support skills
+  const MAGIC = new Set(['cast', 'slam', 'pray', 'bowUp']);
+  const oe = Skills.exec.bind(Skills);
+  Skills.exec = function (slot, sk, tgt, mult, id) {
+    const P = Player, clip = SKILL_ANIM[id]; if (MAGIC.has(clip)) { RoFx.cast(P.x, P.z, sk.col || [.5, .7, 1], ((CLIPS[clip] && CLIPS[clip].dur) || .7) + .25); RoSfx.play('cast'); }
+    const r = oe(slot, sk, tgt, mult, id);
+    if (sk.type === 'heal') { // RO Heal: soft light column + rising green sparkles
+      Fx.pillar(P.x, P.z, .9, 4, [.55, 1, .6], .7); for (let i = 0; i < 40; i++) setTimeout(() => { const a = Math.random() * TAU, rr = rand(.2, .9); Particles.add(P.x + Math.cos(a) * rr, rand(.1, .8), P.z + Math.sin(a) * rr, { c: pick([[.5, 1, .55], [.85, 1, .85], [1, 1, 1]]), s: .3, life: 1, vy: rand(1.5, 3) }); }, i * 15);
+    } else if (sk.type === 'buff' || sk.type === 'cleanse') { // RO blessing: spiralling sparkles around the body
+      const c = sk.col || [1, .95, .6]; for (let i = 0; i < 36; i++) setTimeout(() => { const a = i * .5, rr = .8; Particles.add(P.x + Math.cos(a) * rr, .2 + i * .07, P.z + Math.sin(a) * rr, { c, s: .34, life: .7, vy: .6 }); }, i * 18);
+      Fx.shock(P.x, P.z, 1.8, c, .5);
+    }
+    return r;
+  };
+  const odn = UI.dmgNum.bind(UI);
+  UI.dmgNum = function (x, y, z, n, kind) { odn(x, y, z, n, kind); if (kind === 'hit' || kind === 'crit') { RoFx.hit(x, y - .3, z, kind === 'crit'); RoSfx.play(kind === 'crit' ? 'crit' : 'hit'); } };
+  const oend = Renderer.prototype.endDecal;
+  Renderer.prototype.endDecal = function () { if (this === Game.R) RoFx.decals(this); return oend.call(this); };
+  const ou = Game.update.bind(Game);
+  Game.update = function (dt) { ou(dt); if (this.started && !this.paused) RoFx.update(dt); };
+  const ob = UI.banner.bind(UI);
+  UI.banner = function (text, kind) { ob(text, kind); if (kind === 'level' && Game.started) { RoFx.levelUp(Player.x, Player.z); RoSfx.play('lvl'); } };
+}
+Settings.d.roPlates = Settings.d.roPlates === undefined ? 1 : Settings.d.roPlates;
+Settings.d.sprites = Settings.d.sprites === undefined ? 1 : Settings.d.sprites;
+
+/* ============================================================
+   Window manager: every panel is its own draggable window, several
+   can be open at once (RO style). Panels keep using this.el.pbody /
+   this.setPanel / this.panelOpt — these now point at the window
+   being rendered (the focused one).
+   ============================================================ */
+const WM = {
+  wins: new Map(), cur: null, z: 60, layer: null, pos: {},
+  init() {
+    if (this.layer) return; this.layer = document.createElement('div'); this.layer.id = 'winlayer'; document.getElementById('app').appendChild(this.layer);
+    try { this.pos = JSON.parse(localStorage.getItem('aq_winpos') || '{}') || {}; } catch (e) { this.pos = {}; }
+    const old = UI.el; const base = { panel: old.panel, pbody: old.pbody, ptitle: old.ptitle };
+    Object.defineProperty(old, 'panel', { get: () => WM.cur ? WM.cur.el : base.panel, configurable: true });
+    Object.defineProperty(old, 'pbody', { get: () => WM.cur ? WM.cur.body : base.pbody, configurable: true });
+    Object.defineProperty(old, 'ptitle', { get: () => WM.cur ? WM.cur.title : base.ptitle, configurable: true });
+    base.panel.hidden = true;
+    addEventListener('resize', () => { for (const w of this.wins.values()) this.clamp(w); });
+  },
+  isOpen(k) { return this.wins.has(k); },
+  with(k, fn) { const w = this.wins.get(k); if (!w) return; const keep = this.cur; this.cur = w; try { fn(); } finally { if (this.wins.has(keep && keep.kind)) this.cur = keep; } },
+  render(k) { this.with(k, () => UI.renderPanel()); },
+  create(kind) {
+    const el = document.createElement('div'); el.className = 'uwin'; el.dataset.kind = kind;
+    el.innerHTML = `<div class="pwin frame" role="dialog" aria-label="${kind}"><div class="phead"><div class="ptitle"></div><button class="pclose" aria-label="ปิด"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button></div><div class="pbody"></div></div>`;
+    const w = { kind, el, body: el.querySelector('.pbody'), title: el.querySelector('.ptitle'), opt: {}, placed: false };
+    el.querySelector('.pclose').addEventListener('click', e => { e.stopPropagation(); this.close(kind); });
+    el.addEventListener('pointerdown', () => this.focus(w), true);
+    const head = el.querySelector('.phead');
+    head.addEventListener('pointerdown', e => {
+      if (e.target.closest('button,input,select,a')) return; e.preventDefault();
+      const st = { x: e.clientX, y: e.clientY, l: w.x, t: w.y }; el.classList.add('drag'); try { head.setPointerCapture(e.pointerId); } catch (_) { }
+      const mv = ev => { const d = Rot.delta(ev.clientX - st.x, ev.clientY - st.y); w.x = st.l + d.dx; w.y = st.t + d.dy; this.clamp(w); };
+      const up = () => { el.classList.remove('drag'); head.removeEventListener('pointermove', mv); head.removeEventListener('pointerup', up); head.removeEventListener('pointercancel', up); this.pos[kind] = [Math.round(w.x), Math.round(w.y)]; try { localStorage.setItem('aq_winpos', JSON.stringify(this.pos)); } catch (_) { } };
+      head.addEventListener('pointermove', mv); head.addEventListener('pointerup', up); head.addEventListener('pointercancel', up);
+    });
+    this.layer.appendChild(el); this.wins.set(kind, w); return w;
+  },
+  area() { const a = document.getElementById('app'); return { w: a.clientWidth, h: a.clientHeight }; },
+  clamp(w) {
+    const A = this.area(), r = w.el.firstElementChild; const ww = r.offsetWidth || 400, hh = r.offsetHeight || 300;
+    w.x = clamp(w.x, -ww + 90, A.w - 90); w.y = clamp(w.y, 0, Math.max(0, A.h - 44));
+    w.el.style.transform = `translate(${Math.round(w.x)}px,${Math.round(w.y)}px)`;
+  },
+  place(w) {
+    const A = this.area(), r = w.el.firstElementChild, ww = r.offsetWidth || 500, hh = r.offsetHeight || 400; const p = this.pos[w.kind];
+    if (p) { w.x = p[0]; w.y = p[1]; }
+    else { const n = this.wins.size - 1; w.x = (A.w - ww) / 2 + n * 28; w.y = Math.max(8, (A.h - hh) / 2 + n * 24); }
+    w.placed = true; this.clamp(w);
+  },
+  focus(w) { if (this.cur === w && w.el.style.zIndex) return; for (const o of this.wins.values()) o.el.classList.toggle('focus', o === w); w.el.style.zIndex = ++this.z; this.cur = w; },
+  open(kind, opt = {}) {
+    let w = this.wins.get(kind); const fresh = !w; if (!w) w = this.create(kind);
+    w.opt = opt; this.focus(w); if (fresh) w.body.scrollTop = 0;
+    UI.renderPanel(); if (!w.placed) this.place(w); else this.clamp(w);
+    this.pauseSync();
+  },
+  close(kind) {
+    const w = this.wins.get(kind); if (!w) return; w.el.remove(); this.wins.delete(kind);
+    if (this.cur === w) { let top = null; for (const o of this.wins.values()) if (!top || +o.el.style.zIndex > +top.el.style.zIndex) top = o; this.cur = null; if (top) this.focus(top); }
+    this.pauseSync(); if (Save.d) Save.write();
+  },
+  closeAll() { for (const k of [...this.wins.keys()]) this.close(k); },
+  pauseSync() { const any = this.wins.size > 0; if (Settings.d.pauseWin === 0) { Game.pause(false, 'panel'); return; } Game.pause(any && Game.started, 'panel'); }
+};
+{
+  const oinit = UI.init.bind(UI); UI.init = function () { oinit(); WM.init(); };
+  Object.defineProperty(UI, 'panelOpen', { get() { return WM.cur ? WM.cur.kind : null; }, set(v) { if (v === null || v === undefined) WM.closeAll(); }, configurable: true });
+  Object.defineProperty(UI, 'panelOpt', { get() { return WM.cur ? WM.cur.opt : {}; }, set(v) { if (WM.cur) WM.cur.opt = v || {}; }, configurable: true });
+  UI.openPanel = function (kind, opt = {}) { if (this.quizOpen) return; if (Game.started && Settings.d.pauseWin !== 0) this.haltPlayer(); WM.open(kind, opt); };
+  UI.closePanel = function () { if (WM.cur) WM.close(WM.cur.kind); };
+  UI.setPanel = function (title, html, wide) { const w = WM.cur; if (!w) return; w.title.innerHTML = title; w.body.innerHTML = html; w.el.firstElementChild.classList.toggle('wide', !!wide); };
+  UI.refreshInvIfOpen = function () { for (const k of ['inv', 'shop', 'wardrobe']) if (WM.isOpen(k)) WM.render(k); };
+  // chat & channel & gm refreshers render into their own window even when another is focused
+  const ocr = UI.chatRender && UI.chatRender.bind(UI); if (ocr) UI.chatRender = function () { if (WM.isOpen('chat')) WM.with('chat', () => ocr()); };
+}
 
 /* ============================================================
    Boot
