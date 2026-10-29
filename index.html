@@ -6739,7 +6739,15 @@ Object.assign(UI, {
    ============================================================ */
 // Firebase Realtime Database URL, e.g. https://aurelion-quest-default-rtdb.asia-southeast1.firebasedatabase.app
 // Firebase web config (Project settings → Your apps → SDK setup and configuration). Public by design; access is controlled by the database rules.
-const FIREBASE_CONFIG = null;
+const FIREBASE_CONFIG = {
+  apiKey: 'AIzaSyDr_PQ6LzMmAD4bnuUb_I66chc2zGA04UY',
+  authDomain: 'aurelion-quest.firebaseapp.com',
+  databaseURL: 'https://aurelion-quest-default-rtdb.asia-southeast1.firebasedatabase.app',
+  projectId: 'aurelion-quest',
+  storageBucket: 'aurelion-quest.firebasestorage.app',
+  messagingSenderId: '192414438931',
+  appId: '1:192414438931:web:7559b2a21fed7da28fd1e6'
+};
 const ONLINE_DB = FIREBASE_CONFIG && FIREBASE_CONFIG.databaseURL ? FIREBASE_CONFIG.databaseURL : '';
 
 const Online = {
@@ -6848,7 +6856,9 @@ class FirebaseBackend {
     try { const b = `https://www.gstatic.com/firebasejs/${FB_VER}/`; mods = await Promise.all([import(b + 'firebase-app.js'), import(b + 'firebase-auth.js'), import(b + 'firebase-database.js')]); }
     catch (e) { const j = `https://cdn.jsdelivr.net/npm/firebase@${FB_VER}/`; mods = await Promise.all([import(j + 'app/+esm'), import(j + 'auth/+esm'), import(j + 'database/+esm')]); }
     const [A, Au, D] = mods; this.D = D;
-    this.app = A.initializeApp(cfg, 'aurelion'); const auth = Au.getAuth(this.app);
+    this.app = A.initializeApp(cfg, 'aurelion');
+    // one anonymous player per browser tab (two tabs = two players, a reload keeps the same one)
+    let auth; try { auth = Au.initializeAuth(this.app, { persistence: Au.browserSessionPersistence }); } catch (e) { auth = Au.getAuth(this.app); }
     const cred = await Au.signInAnonymously(auth); this.uid = cred.user.uid;
     this.db = D.getDatabase(this.app); this.off = 0;
     D.onValue(D.ref(this.db, '.info/serverTimeOffset'), s => { this.off = s.val() || 0; });
