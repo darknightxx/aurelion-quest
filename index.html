@@ -1060,6 +1060,29 @@ body.compact .plist, body.compact .pinv { font-size: 10.5px; padding: 4px 6px; }
 .chbar { height: 8px; border-radius: 4px; background: #0f0b08; overflow: hidden; }
 .chbar i { display: block; height: 100%; background: linear-gradient(90deg, var(--limedk), var(--lime)); }
 .chlist small { color: var(--mute); font-variant-numeric: tabular-nums; }
+
+/* ===== GM ===== */
+.gmtag { font-style: normal; display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: .04em; padding: 0 5px; border-radius: 5px; background: linear-gradient(180deg, #ffd45a, #e0902a); color: #3a1a00; vertical-align: 1px; box-shadow: 0 0 6px rgba(255,200,80,.6); }
+#gmpill { border: 0; border-radius: 7px; padding: 0 7px; font: inherit; font-weight: 800; background: linear-gradient(180deg, #ffd45a, #e0902a); color: #3a1a00; cursor: pointer; }
+#gmpill[hidden] { display: none; }
+.plate.gm .nm, .plate.gm .nm.pe { color: #ffd45a; text-shadow: 0 0 6px rgba(255,180,60,.8), 0 1px 2px #000; }
+#chatlog p.gm b, .chatfull li.gm b { color: #ffd45a; }
+#chatlog p.sys, .chatfull li.sys { background: rgba(120,70,10,.75); border: 1px solid #e0902a; }
+#chatlog p.sys b, .chatfull li.sys b { color: #ffd45a; }
+#annbar { position: absolute; left: 50%; top: calc(max(12px, var(--st)) + 70px); transform: translateX(-50%); width: min(560px, calc(100cqw - 40px)); padding: 10px 16px; border-radius: 12px; background: linear-gradient(180deg, rgba(90,52,10,.96), rgba(60,34,8,.96)); border: 1.5px solid #ffd45a; box-shadow: 0 0 24px rgba(255,190,80,.35), 0 10px 26px rgba(0,0,0,.5); text-align: center; z-index: 5; pointer-events: none; opacity: 0; transition: opacity .4s, transform .4s; }
+#annbar[hidden] { display: none; }
+#annbar.in { opacity: 1; } #annbar.out { opacity: 0; }
+#annbar b { display: block; font-family: var(--f-display); font-weight: 500; color: #ffd45a; font-size: 13px; }
+#annbar span { display: block; color: #fff6dc; font-size: 15px; margin-top: 2px; overflow-wrap: anywhere; }
+body.compact #annbar { top: calc(max(6px, var(--st)) + 40px); padding: 6px 12px; } body.compact #annbar span { font-size: 12.5px; }
+.gmlist { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+.gmlist li { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 9px; background: #1e1610; border: 1px solid var(--line2); }
+.gmlist li > div:first-child { min-width: 0; flex: 1 1 160px; }
+.gmlist b { display: block; font-weight: 600; } .gmlist small { display: block; color: var(--mute); font-size: 12px; overflow-wrap: anywhere; }
+.gmact { display: flex; flex-wrap: wrap; gap: 4px; }
+.gmtools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
+#gmann { width: 100%; box-sizing: border-box; padding: 9px 12px; border-radius: 9px; border: 1px solid var(--line); background: #120d0a; color: var(--parch); font: inherit; margin: 6px 0; }
+.gmok { display: flex; gap: 8px; align-items: center; margin: 0 0 8px; }
 </style>
 </head>
 <body>
@@ -1136,7 +1159,7 @@ body.compact .plist, body.compact .pinv { font-size: 10.5px; padding: 4px 6px; }
 </div>
 
 <div id="hud" hidden>
-  <div id="netbar" aria-label="สถานะ"><span id="fps">FPS --</span><button id="chpill" hidden title="เลือกเซิร์ฟเวอร์" aria-label="เลือกเซิร์ฟเวอร์"><b>CH</b></button><span id="online" title="ผู้เล่นออนไลน์"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5" fill="currentColor"/><path d="M2.5 20c0-4 3-6.5 6.5-6.5s6.5 2.5 6.5 6.5z" fill="currentColor"/><circle cx="17" cy="9" r="2.8" fill="currentColor" opacity=".7"/><path d="M15.5 13.6c3.4-.4 6 1.8 6 5.4h-4.3" fill="currentColor" opacity=".7"/></svg>ออนไลน์ <b>—</b></span></div>
+  <div id="netbar" aria-label="สถานะ"><span id="fps">FPS --</span><button id="chpill" hidden title="เลือกเซิร์ฟเวอร์" aria-label="เลือกเซิร์ฟเวอร์"><b>CH</b></button><button id="gmpill" hidden title="เครื่องมือ GM" aria-label="เครื่องมือ GM">GM</button><span id="online" title="ผู้เล่นออนไลน์"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5" fill="currentColor"/><path d="M2.5 20c0-4 3-6.5 6.5-6.5s6.5 2.5 6.5 6.5z" fill="currentColor"/><circle cx="17" cy="9" r="2.8" fill="currentColor" opacity=".7"/><path d="M15.5 13.6c3.4-.4 6 1.8 6 5.4h-4.3" fill="currentColor" opacity=".7"/></svg>ออนไลน์ <b>—</b></span></div>
   <div id="status" class="frame">
     <div class="por"><div id="portrait"></div><span class="lvbadge">Lv.<span id="lvl">1</span></span></div>
     <div class="sinfo">
@@ -1169,6 +1192,7 @@ body.compact .plist, body.compact .pinv { font-size: 10.5px; padding: 4px 6px; }
   <div id="toasts"></div>
   <div id="banner" class="banner"></div>
   <div id="placename"></div>
+  <div id="annbar" hidden role="status"></div>
   <div id="partyhud" hidden></div>
   <div id="chatwrap" hidden>
     <div id="chatlog" aria-live="polite"></div>
@@ -2945,6 +2969,7 @@ const Player = {
     if (B.spd) spdPct += .25; if (B.haste) spdPct += .3; if (B.assassin) spdPct += .3;
     st.spd *= 1 + spdPct;
     Mounts.applyStats(st);
+    if (Net.gm && S.gmFast) st.spd *= 2;
     if (B.atk) st.atk *= 1.2;
     if (B.def) st.def *= 1.25; if (B.guard) st.def *= 1.7;
     if (B.ironhp) st.maxhp = Math.round(st.maxhp * 1.2); if (B.curse) st.atk *= .8; if (B.slowed) st.spd *= .65; if (c.role === 'tank') st.def *= 1.1;
@@ -4354,6 +4379,7 @@ const Combat = {
   hitPlayer(raw, src) {
     const P = Player, S = Save.d;
     if (P.dead || Game.paused) return;
+    if (Net.gm && S.gmGod) { UI.floatText(P.x, 2.6, P.z, 'GM', 'immune'); return; }
     const mk = Mounts.onHurt(raw, src); if (mk < 0) return;
     const rk = RoleSys.onPlayerHit(raw, src);
     let dmg = Math.max(1, Math.round((raw * rand(.85, 1.15) - P.stats.def * .6) * mk * rk));
@@ -5401,7 +5427,7 @@ const UI = {
       want.push({ key: 'm' + m.id, x: m.x, y: (m.d.fly ? 2.4 : m.d.h) + .55, z: m.z, cls: (m.d.aggro ? 'hostile' : 'calm') + (tgt ? ' tgt' : ''), html: () => `<span class="nm">${m.d.name} <small>Lv.${m.d.lvl}</small></span><span class="hpb"><i style="width:${m.hp / m.max * 100}%"></i></span>${(m.stun > 0 || m.slow > 0 || m.dotT > 0 || m.weakT > 0) ? `<span class="sts">${m.stun > 0 ? '<i class="s-stun">มึน</i>' : ''}${m.slow > 0 ? '<i class="s-slow">ช้า</i>' : ''}${m.dotT > 0 ? '<i class="s-dot">พิษ</i>' : ''}${m.weakT > 0 ? '<i class="s-weak">ยั่ว</i>' : ''}</span>` : ''}` });
     }
     UI.netPlates(want);
-    if (Game.started) want.push({ key: 'player', x: P.x, y: SPR_H + .3 + (Mounts.riding() ? MOUNTS[Mounts.cur()].seat[0] * .8 : 0), z: P.z, cls: 'me', html: () => `${UI.selfPlate()}<span class="nm me">${esc(Save.d.name)}</span>` });
+    if (Game.started) want.push({ key: 'player', x: P.x, y: SPR_H + .3 + (Mounts.riding() ? MOUNTS[Mounts.cur()].seat[0] * .8 : 0), z: P.z, cls: 'me' + (Net.gm ? ' gm' : ''), html: () => `${UI.selfPlate()}<span class="nm me">${Net.gm ? '<i class="gmtag">GM</i> ' : ''}${esc(Save.d.name)}</span>` });
     const seen = new Set();
     for (const w of want) {
       let el = this.plates.get(w.key); if (!el) { el = document.createElement('div'); el.className = 'plate'; this.el.plates.appendChild(el); this.plates.set(w.key, el); }
@@ -5502,7 +5528,7 @@ const UI = {
   },
   refreshInvIfOpen() { if (this.panelOpen === 'inv' || this.panelOpen === 'shop') this.renderPanel(); },
   renderPanel() {
-    const k = this.panelOpen; const fn = { chat: 'pChat', channels: 'pChannels', skills: 'pSkills', stable: 'pStable', doc: 'pDoc', season: 'pSeason', gemshop: 'pGemShop', topup: 'pTopup', inv: 'pInv', char: 'pChar', quest: 'pQuest', map: 'pMap', ach: 'pAch', settings: 'pSettings', help: 'pHelp', menu: 'pMenu', shop: 'pShop', dialog: 'pDialog' }[k];
+    const k = this.panelOpen; const fn = { gm: 'pGM', chat: 'pChat', channels: 'pChannels', skills: 'pSkills', stable: 'pStable', doc: 'pDoc', season: 'pSeason', gemshop: 'pGemShop', topup: 'pTopup', inv: 'pInv', char: 'pChar', quest: 'pQuest', map: 'pMap', ach: 'pAch', settings: 'pSettings', help: 'pHelp', menu: 'pMenu', shop: 'pShop', dialog: 'pDialog' }[k];
     if (fn) this[fn](this.panelOpt || {});
   },
   setPanel(title, html, wide) { this.el.ptitle.innerHTML = title; this.el.pbody.innerHTML = html; this.el.panel.querySelector('.pwin').classList.toggle('wide', !!wide); },
@@ -5605,6 +5631,7 @@ const UI = {
         <p id="cqmsg" class="muted">มีคำถามของฉัน ${D.custom.length} ข้อ</p>
       </fieldset>
       <fieldset><legend>เสียง</legend><label class="chk"><input type="checkbox" id="snd" ${D.sound ? 'checked' : ''}> เปิดเสียงเอฟเฟกต์</label><label class="chk"><input type="checkbox" id="vox" ${D.voice ? 'checked' : ''}> เสียงตัวละครตะโกนและพากย์ชื่อสกิล</label></fieldset>
+      <fieldset><legend>ผู้ดูแลเกม (GM)</legend><div id="gmset">${UI.gmSettingsHtml()}</div></fieldset>
       <div class="row"><button class="btn" id="savesettings">บันทึกการตั้งค่า</button>${Save.d ? '<button class="btn ghost danger" id="wipe">ลบเซฟและเริ่มใหม่</button>' : ''}</div>`);
     $('#qtime').oninput = e => $('#qtv').textContent = e.target.value;
     $('#qdiff').oninput = e => $('#qdv').textContent = diffL[e.target.value];
@@ -5616,7 +5643,8 @@ const UI = {
       Quiz.decks = {}; Settings.save();
       $('#cqmsg').textContent = `บันทึกแล้ว · มีคำถามของฉัน ${D.custom.length} ข้อ`; this.toast('บันทึกการตั้งค่าแล้ว', 'quest');
     };
-    const w = $('#wipe'); if (w) w.onclick = () => { if (!w.dataset.c) { w.dataset.c = 1; w.textContent = 'กดอีกครั้งเพื่อยืนยันการลบเซฟ'; return; } Save.wipe(); location.reload(); };
+    const w = $('#wipe'); if (w) w.onclick = () => { if (!w.dataset.c) { w.dataset.c = 1; w.textContent = 'กดอีกครั้งเพื่อยืนยันการลบเซฟ'; return; } Save.wipe(); location.reload(); }
+    UI.gmSettingsBind();;
     this.el.pbody.onclick = null;
   },
   pHelp() {
@@ -6858,8 +6886,11 @@ class FirebaseBackend {
     const [A, Au, D] = mods; this.D = D;
     this.app = A.initializeApp(cfg, 'aurelion');
     // one anonymous player per browser tab (two tabs = two players, a reload keeps the same one)
-    let auth; try { auth = Au.initializeAuth(this.app, { persistence: Au.browserSessionPersistence }); } catch (e) { auth = Au.getAuth(this.app); }
-    const cred = await Au.signInAnonymously(auth); this.uid = cred.user.uid;
+    let auth; try { auth = Au.initializeAuth(this.app, { persistence: Au.browserSessionPersistence, popupRedirectResolver: Au.browserPopupRedirectResolver }); } catch (e) { auth = Au.getAuth(this.app); }
+    this.Au = Au; this.auth = auth;
+    // keep a signed-in user from earlier in this tab (e.g. a GM after reload), otherwise play anonymously
+    const restored = await new Promise(r => { const u = Au.onAuthStateChanged(auth, x => { u(); r(x); }); });
+    const user = restored || (await Au.signInAnonymously(auth)).user; this.uid = user.uid; this.email = user.email || '';
     this.db = D.getDatabase(this.app); this.off = 0;
     D.onValue(D.ref(this.db, '.info/serverTimeOffset'), s => { this.off = s.val() || 0; });
     return this.uid;
@@ -7012,6 +7043,7 @@ const Net = {
     this.unsub.push(this.be.watch(`${base}/chat`, { added: (k, v) => { if (v && (v.t || 0) > t0) this.onChat(k, v); } }, { last: 40 }));
     this.unsub.push(this.be.watch(`invites/${this.uid}`, { added: (k, v) => this.onInvite(k, v), removed: k => { this.invites = this.invites.filter(i => i.from !== k); UI.partyUI(); } }));
     if (this.partyId) this.watchParty(this.partyId);
+    this.watchMod();
     this.status = `CH${this.ch}`; UI.netState(); UI.toast(`เข้าสู่เซิร์ฟเวอร์ CH${this.ch}`, 'info');
     // tidy chat older than an hour (rules allow anyone to remove stale messages)
     setTimeout(async () => { try { const v = await this.be.once(`${base}/chat`); if (!v) return; const old = Object.keys(v).filter(k => (v[k].t || 0) < this.be.now() - 3600e3).slice(0, 50); for (const k of old) this.be.remove(`${base}/chat/${k}`); } catch (e) { } }, 4000);
@@ -7022,11 +7054,11 @@ const Net = {
   },
   myState() {
     const S = Save.d, P = Player; const r2 = v => Math.round(v * 100) / 100;
-    return { n: S.name.slice(0, 16), c: S.cls, lv: S.level, o: P.sheet, h: S.cos.head || '', b: S.cos.back || '', a: S.cos.aura || '', m: Mounts.riding() ? Mounts.cur() : '', zn: P.zone, x: r2(P.x), z: r2(P.z), f: r2(P.face), hp: Math.max(0, Math.round(S.hp / P.stats.maxhp * 100)), d: P.dead ? 1 : 0, ac: this.ac, p: this.partyId || '', t: this.be.ts() };
+    return { gm: this.gm ? 1 : 0, n: S.name.slice(0, 16), c: S.cls, lv: S.level, o: P.sheet, h: S.cos.head || '', b: S.cos.back || '', a: S.cos.aura || '', m: Mounts.riding() ? Mounts.cur() : '', zn: P.zone, x: r2(P.x), z: r2(P.z), f: r2(P.face), hp: Math.max(0, Math.round(S.hp / P.stats.maxhp * 100)), d: P.dead ? 1 : 0, ac: this.ac, p: this.partyId || '', t: this.be.ts() };
   },
   send(force) {
     if (!this.joined) return; const st = this.myState(); const L = this.lastSent;
-    const changed = !L || force || Math.abs(st.x - L.x) > .04 || Math.abs(st.z - L.z) > .04 || Math.abs(angWrap(st.f - L.f)) > .05 || ['zn', 'm', 'o', 'h', 'b', 'a', 'd', 'ac', 'p', 'lv', 'n'].some(k => st[k] !== L[k]) || Math.abs(st.hp - L.hp) >= 5;
+    const changed = !L || force || Math.abs(st.x - L.x) > .04 || Math.abs(st.z - L.z) > .04 || Math.abs(angWrap(st.f - L.f)) > .05 || ['zn', 'm', 'o', 'h', 'b', 'a', 'd', 'ac', 'p', 'lv', 'n', 'gm'].some(k => st[k] !== L[k]) || Math.abs(st.hp - L.hp) >= 5;
     if (!changed && this.beatT < 8) return;
     this.beatT = 0; this.lastSent = Object.assign({}, st); this.be.set(`ch/${this.ch}/players/${this.uid}`, st);
   },
@@ -7038,7 +7070,7 @@ const Net = {
   /* ---- chat ---- */
   onChat(k, v) {
     if (this.chat.some(c => c.k === k)) return;
-    const msg = { k, u: v.u, n: ChatFilter.name(v.n), m: ChatFilter.clean(v.m).text, t: v.t, kind: v.k || 'w', p: v.p || '' };
+    const msg = { k, u: v.u, n: ChatFilter.name(v.n), m: v.gm ? String(v.m || '').slice(0, 100) : ChatFilter.clean(v.m).text, t: v.t, kind: v.k || 'w', p: v.p || '', gm: !!v.gm };
     if (msg.kind === 'p' && msg.p !== this.partyId) return;
     this.chat.push(msg); if (this.chat.length > 80) this.chat.shift();
     if (this.muted.has(msg.u)) return;
@@ -7058,7 +7090,7 @@ const Net = {
     if (r.bad) UI.toast('คำไม่สุภาพถูกซ่อน', 'warn');
     if (kind === 'p' && !this.partyId) { UI.toast('ยังไม่ได้อยู่ในปาร์ตี้', 'warn'); return false; }
     this.sendLog.push(now); this.lastText = r.text; this.lastTextT = now;
-    this.be.push(`ch/${this.ch}/chat`, { u: this.uid, n: Save.d.name.slice(0, 16), m: r.text, t: this.be.ts(), k: kind, p: kind === 'p' ? this.partyId : '' });
+    this.be.push(`ch/${this.ch}/chat`, { u: this.uid, n: Save.d.name.slice(0, 16), m: r.text, t: this.be.ts(), k: kind, p: kind === 'p' ? this.partyId : '', gm: this.gm ? 1 : 0 });
     return true;
   },
   mute(uid, on) { if (on) this.muted.add(uid); else this.muted.delete(uid); try { localStorage.setItem('aurelion_muted', JSON.stringify([...this.muted])); } catch (e) { } UI.chatLog(); },
@@ -7124,14 +7156,14 @@ Object.assign(UI, {
     const el = document.getElementById('chatlog'); if (!el) return;
     const now = Net.be ? Net.be.now() : Date.now();
     const rows = Net.chat.filter(c => !Net.muted.has(c.u)).slice(-5);
-    el.innerHTML = rows.map(c => `<p class="${c.kind === 'p' ? 'pt' : ''} ${c.u === Net.uid ? 'me' : ''}"><b>${c.kind === 'p' ? '[ปาร์ตี้] ' : ''}${esc(c.n)}:</b> ${esc(c.m)}</p>`).join('');
+    el.innerHTML = rows.map(c => `<p class="${c.kind === 'p' ? 'pt' : ''} ${c.kind === 'sys' ? 'sys' : ''} ${c.gm ? 'gm' : ''} ${c.u === Net.uid ? 'me' : ''}"><b>${c.kind === 'p' ? '[ปาร์ตี้] ' : ''}${c.gm ? '[GM] ' : ''}${esc(c.n)}:</b> ${esc(c.m)}</p>`).join('');
     el.classList.remove('fade'); clearTimeout(this._chatFade); this._chatFade = setTimeout(() => el.classList.add('fade'), 12000);
     const b = document.getElementById('chatunread'); if (b) { b.textContent = Net.unread > 9 ? '9+' : Net.unread; b.hidden = !Net.unread; }
   },
   chatRender() {
     const box = document.getElementById('chatfull'); if (!box) return;
     const tab = Net.chatTab; const rows = Net.chat.filter(c => !Net.muted.has(c.u) && (tab === 'all' || c.kind === 'p'));
-    box.innerHTML = rows.length ? rows.map(c => `<li class="${c.kind === 'p' ? 'pt' : ''} ${c.u === Net.uid ? 'me' : ''}"><b>${c.kind === 'p' ? '[ปาร์ตี้] ' : ''}${esc(c.n)}</b><span>${esc(c.m)}</span></li>`).join('') : '<li class="emptyrow">ยังไม่มีข้อความ ทักทายเพื่อนๆ ได้เลย</li>';
+    box.innerHTML = rows.length ? rows.map(c => `<li class="${c.kind === 'p' ? 'pt' : ''} ${c.kind === 'sys' ? 'sys' : ''} ${c.gm ? 'gm' : ''} ${c.u === Net.uid ? 'me' : ''}"><b>${c.kind === 'p' ? '[ปาร์ตี้] ' : ''}${c.gm ? '[GM] ' : ''}${esc(c.n)}</b><span>${esc(c.m)}</span></li>`).join('') : '<li class="emptyrow">ยังไม่มีข้อความ ทักทายเพื่อนๆ ได้เลย</li>';
     box.scrollTop = box.scrollHeight;
   },
   pChat() {
@@ -7208,7 +7240,7 @@ Object.assign(UI, {
       const party = Net.party && Net.party.members && Net.party.members[p.uid];
       const muted = Net.muted.has(p.uid);
       const y = SPR_H + .3 + (p.st.m && MOUNTS[p.st.m] ? MOUNTS[p.st.m].seat[0] * .8 : 0);
-      want.push({ key: 'u' + p.uid, x: p.dx, y, z: p.dz, cls: 'peer' + (party ? ' party' : ''), html: () => `${p.emo ? `<span class="emob">${p.emo.e}</span>` : p.bubble && !muted ? `<span class="bub">${esc(p.bubble.text)}</span>` : ''}<span class="nm pe">${party ? '★ ' : ''}${esc(p.name)} <small>Lv.${p.st.lv}</small></span>` });
+      want.push({ key: 'u' + p.uid, x: p.dx, y, z: p.dz, cls: 'peer' + (party ? ' party' : '') + (p.st.gm ? ' gm' : ''), html: () => `${p.emo ? `<span class="emob">${p.emo.e}</span>` : p.bubble && !muted ? `<span class="bub">${esc(p.bubble.text)}</span>` : ''}<span class="nm pe">${p.st.gm ? '<i class="gmtag">GM</i> ' : ''}${party ? '★ ' : ''}${esc(p.name)} <small>Lv.${p.st.lv}</small></span>` });
     }
   },
   selfPlate() {
@@ -7227,7 +7259,169 @@ Object.assign(UI, {
     emb.onclick = () => { pop.hidden = !pop.hidden; };
     pop.onclick = e => { const b = e.target.closest('[data-emo]'); if (!b) return; Net.emote(b.dataset.emo); pop.hidden = true; };
     chp.onclick = () => UI.openPanel('channels');
+    const gp = document.getElementById('gmpill'); if (gp) gp.onclick = () => UI.openPanel('gm');
     setInterval(() => { if (Net.party) UI.partyUI(); }, 1000);
+  }
+});
+
+/* ============================================================
+   GM (game master): Google sign-in verified by the database rules,
+   announcements, mute / kick, chat and report moderation, self tools.
+   GM status is decided by the server (gm_emails list in the database);
+   nothing secret lives in this public code.
+   ============================================================ */
+FirebaseBackend.prototype.googleSignIn = async function () {
+  const Au = this.Au, p = new Au.GoogleAuthProvider(); p.setCustomParameters({ prompt: 'select_account' });
+  const r = await Au.signInWithPopup(this.auth, p); this.uid = r.user.uid; this.email = r.user.email || ''; return r.user;
+};
+FirebaseBackend.prototype.signOutToAnon = async function () {
+  await this.Au.signOut(this.auth); const c = await this.Au.signInAnonymously(this.auth); this.uid = c.user.uid; this.email = '';
+};
+FirebaseBackend.prototype.isGM = async function () { if (!this.email) return false; try { await this.once('gmcheck'); return true; } catch (e) { return false; } };
+// local test backend: ?net=local&gm=1 simulates a GM account
+LocalBackend.prototype.googleSignIn = async function () { if (!/[?&]gm=1/.test(location.search)) throw Object.assign(new Error('not gm'), { code: 'local/not-gm' }); this.email = 'gm@local'; return { uid: this.uid }; };
+LocalBackend.prototype.signOutToAnon = async function () { this.email = ''; };
+LocalBackend.prototype.isGM = async function () { return this.email === 'gm@local'; };
+
+Object.assign(Net, {
+  gm: false, kickedUntil: 0, mutedUntil: 0, lastAnn: 0,
+  async gmLogin() {
+    if (!this.online()) { UI.toast('ยังไม่ได้เชื่อมต่อเซิร์ฟเวอร์', 'warn'); return; }
+    const wasJoined = this.joined, ch = this.ch;
+    try {
+      await this.be.googleSignIn();
+    } catch (e) {
+      const c = (e && e.code) || '';
+      UI.toast(c.includes('popup-blocked') ? 'เบราว์เซอร์บล็อกหน้าต่างล็อกอิน กรุณาอนุญาตป๊อปอัปแล้วลองใหม่' : c.includes('popup-closed') || c.includes('cancelled') ? 'ยกเลิกการล็อกอิน' : c.includes('unauthorized-domain') ? 'โดเมนนี้ยังไม่ได้รับอนุญาตใน Firebase' : c.includes('operation-not-allowed') ? 'ยังไม่ได้เปิดล็อกอินด้วย Google ใน Firebase' : 'ล็อกอินไม่สำเร็จ', 'warn');
+      return;
+    }
+    const ok = await this.be.isGM();
+    if (!ok) { UI.toast('บัญชีนี้ไม่มีสิทธิ์ GM', 'warn'); await this.be.signOutToAnon(); }
+    if (wasJoined) this.leave(true);
+    this.uid = this.be.uid; this.gm = ok;
+    if (Game.started) await this.join(ch || undefined);
+    UI.gmUI(); if (ok) { UI.toast('เข้าสู่โหมด GM แล้ว', 'rare'); Audio.sfx('level'); }
+    if (UI.panelOpen === 'settings') UI.renderPanel();
+  },
+  async gmLogout() {
+    if (!this.gm) return; const ch = this.ch, wasJoined = this.joined;
+    if (wasJoined) this.leave(true);
+    await this.be.signOutToAnon(); this.uid = this.be.uid; this.gm = false; Save.d && (Save.d.gmGod = false, Save.d.gmFast = false); Player.recalc && Save.d && Player.recalc();
+    if (Game.started) await this.join(ch || undefined);
+    UI.gmUI(); UI.toast('ออกจากโหมด GM แล้ว', 'info'); if (UI.panelOpen) UI.renderPanel();
+  },
+  watchMod() {
+    if (this.modUnsub) this.modUnsub.forEach(f => f());
+    this.modUnsub = [
+      this.be.watchValue('announce', v => this.onAnnounce(v)),
+      this.be.watchValue(`mod/mutes/${this.uid}`, v => { this.mutedUntil = typeof v === 'number' ? v : 0; }),
+      this.be.watchValue(`mod/kicks/${this.uid}`, v => { if (typeof v === 'number' && this.be.now() - v < 600000 && v > this.kickedUntil - 600000) { this.kickedUntil = v + 600000; if (this.joined) { this.leave(); UI.banner('ถูกเชิญออกจากเซิร์ฟเวอร์', 'fizzle'); UI.toast('GM เชิญคุณออกจากเซิร์ฟเวอร์ออนไลน์ 10 นาที ยังเล่นคนเดียวต่อได้', 'warn'); } } })
+    ];
+  },
+  onAnnounce(v) {
+    if (!v || !v.m || !v.t || v.t <= this.lastAnn) return; this.lastAnn = v.t;
+    if (this.be.now() - v.t > 5 * 60e3) return;
+    UI.announce(String(v.m).slice(0, 200), ChatFilter.name(v.n || 'GM'));
+    this.chat.push({ k: 'ann' + v.t, u: '', n: 'ประกาศจาก GM', m: String(v.m).slice(0, 200), t: v.t, kind: 'sys', gm: true }); UI.chatLog();
+  },
+  /* ---- GM actions (the database rules reject these for non-GMs) ---- */
+  async announce(text) { const t = String(text || '').trim().slice(0, 200); if (!t) return; await this.be.set('announce', { m: t, n: Save.d ? Save.d.name.slice(0, 16) : 'GM', t: this.be.ts() }); UI.toast('ส่งประกาศถึงผู้เล่นทุกคนแล้ว', 'quest'); },
+  async mutePlayer(uid, min) { await this.be.set(`mod/mutes/${uid}`, this.be.now() + min * 60e3); UI.toast(`ปิดแชตผู้เล่น ${min} นาทีแล้ว`, 'quest'); },
+  async unmutePlayer(uid) { await this.be.remove(`mod/mutes/${uid}`); UI.toast('เปิดแชตให้ผู้เล่นแล้ว', 'quest'); },
+  async kickPlayer(uid) { await this.be.set(`mod/kicks/${uid}`, this.be.ts()); await this.be.remove(`ch/${this.ch}/players/${uid}`); Remote.remove(uid); UI.toast('เชิญผู้เล่นออกจากเซิร์ฟเวอร์แล้ว (10 นาที)', 'quest'); },
+  async deleteMsg(k) { await this.be.remove(`ch/${this.ch}/chat/${k}`); this.chat = this.chat.filter(c => c.k !== k); UI.chatLog(); },
+  async reports() { const v = await this.be.once('reports'); return v ? Object.entries(v).map(([k, r]) => Object.assign({ k }, r)).sort((a, b) => (b.t || 0) - (a.t || 0)) : []; },
+  async deleteReport(k) { await this.be.remove(`reports/${k}`); },
+  teleportTo(p) { if (!p) return; Game.teleport(p.st.x + 1.5, p.st.z, 'ไปหา ' + p.name); }
+});
+
+/* guard normal actions against server-side mute / kick */
+{
+  const sendChat0 = Net.sendChat.bind(Net), join0 = Net.join.bind(Net);
+  Net.sendChat = function (text, kind) {
+    if (this.mutedUntil && this.be && this.be.now() < this.mutedUntil) { UI.toast(`คุณถูก GM ปิดแชตอีก ${Math.ceil((this.mutedUntil - this.be.now()) / 60000)} นาที`, 'warn'); return false; }
+    return sendChat0(text, kind);
+  };
+  Net.join = async function (ch) {
+    if (this.kickedUntil && this.be && this.be.now() < this.kickedUntil) { UI.toast(`เข้าเซิร์ฟเวอร์ได้อีกครั้งใน ${Math.ceil((this.kickedUntil - this.be.now()) / 60000)} นาที`, 'warn'); return; }
+    return join0(ch);
+  };
+}
+
+Object.assign(UI, {
+  gmUI() {
+    const b = document.getElementById('gmpill'); if (b) b.hidden = !Net.gm;
+  },
+  announce(text, by) {
+    const el = document.getElementById('annbar'); if (!el) return;
+    el.innerHTML = `<b>📢 ประกาศจาก GM ${esc(by)}</b><span>${esc(text)}</span>`; el.hidden = false; el.classList.remove('out'); void el.offsetWidth; el.classList.add('in');
+    Audio.sfx('quest'); clearTimeout(this._annT); this._annT = setTimeout(() => { el.classList.add('out'); setTimeout(() => { el.hidden = true; }, 500); }, 9000);
+  },
+  gmSettingsHtml() {
+    if (!Net.online()) return '<p class="muted">ต้องเชื่อมต่อเซิร์ฟเวอร์ออนไลน์ก่อน</p>';
+    if (Net.gm) return `<p class="gmok"><i class="gmtag">GM</i> คุณอยู่ในโหมดผู้ดูแลเกม</p><div class="row"><button class="btn" id="gmopen">เปิดเครื่องมือ GM</button><button class="btn ghost" id="gmout">ออกจากโหมด GM</button></div>`;
+    return `<p class="muted">สำหรับผู้ดูแลเกมเท่านั้น ล็อกอินด้วยบัญชี Google ที่ได้รับสิทธิ์ GM (ผู้เล่นทั่วไปไม่ต้องใช้)</p><button class="btn ghost" id="gmin">ล็อกอิน GM ด้วย Google</button>`;
+  },
+  gmSettingsBind() {
+    const a = $('#gmin'), o = $('#gmout'), g = $('#gmopen');
+    if (a) a.onclick = () => { a.disabled = true; a.textContent = 'กำลังล็อกอิน…'; Net.gmLogin().finally(() => { const s = $('#gmset'); if (s) { s.innerHTML = UI.gmSettingsHtml(); UI.gmSettingsBind(); } }); };
+    if (o) o.onclick = () => Net.gmLogout().then(() => { const s = $('#gmset'); if (s) { s.innerHTML = UI.gmSettingsHtml(); UI.gmSettingsBind(); } });
+    if (g) g.onclick = () => this.openPanel('gm');
+  },
+  async pGM(o) {
+    if (!Net.gm) { this.setPanel('GM', '<p class="muted">ต้องเข้าสู่โหมด GM ก่อน (ตั้งค่า → ผู้ดูแลเกม)</p>'); return; }
+    const tab = o.tab || 'players'; this.panelOpt.tab = tab;
+    const tabs = [['players', 'ผู้เล่น'], ['ann', 'ประกาศ'], ['chat', 'แชต'], ['reports', 'รายงาน'], ['tools', 'เครื่องมือ']];
+    const head = `<div class="tabs" role="tablist">${tabs.map(([k, l]) => `<button class="tab ${k === tab ? 'on' : ''}" data-gt="${k}">${l}</button>`).join('')}</div>`;
+    let body = '';
+    const now = Net.be.now();
+    if (tab === 'players') {
+      const ps = [...Remote.map.values()];
+      body = `<p class="muted">ผู้เล่นใน CH${Net.ch} ตอนนี้ ${ps.length + 1} คน (รวมคุณ)</p><ul class="gmlist">${ps.map(p => `<li><div><b>${p.st.gm ? '<i class="gmtag">GM</i> ' : ''}${esc(p.name)}</b><small>${(CLASSES[p.st.c] || {}).name || ''} · Lv.${p.st.lv} · ${p.zone === 'dungeon' ? 'ดันเจี้ยน' : 'ทวีป'}</small></div><div class="gmact"><button class="btn sm" data-ga="tp:${p.uid}">ไปหา</button><button class="btn sm ghost" data-ga="m10:${p.uid}">ปิดแชต 10 น.</button><button class="btn sm ghost" data-ga="m60:${p.uid}">60 น.</button><button class="btn sm ghost" data-ga="um:${p.uid}">เปิดแชต</button><button class="btn sm ghost danger" data-ga="kick:${p.uid}">เชิญออก</button></div></li>`).join('') || '<li class="emptyrow">ยังไม่มีผู้เล่นคนอื่นในเซิร์ฟเวอร์นี้</li>'}</ul>`;
+    } else if (tab === 'ann') {
+      body = `<p class="muted">ข้อความจะขึ้นเป็นแถบประกาศกลางจอของผู้เล่นทุกคนทุกเซิร์ฟเวอร์ และอยู่ในช่องแชต</p><textarea id="gmann" rows="3" maxlength="200" placeholder="เช่น คืนนี้ 2 ทุ่มมีกิจกรรมล่าบอสพร้อมกัน!"></textarea><div class="row"><button class="btn" id="gmannsend">ส่งประกาศ</button></div>`;
+    } else if (tab === 'chat') {
+      const rows = Net.chat.filter(c => c.kind !== 'sys').slice(-40).reverse();
+      body = `<ul class="gmlist chatmod">${rows.map(c => `<li><div><b>${c.gm ? '<i class="gmtag">GM</i> ' : ''}${esc(c.n)}</b><small>${esc(c.m)}</small></div><div class="gmact"><button class="btn sm ghost danger" data-ga="del:${c.k}">ลบ</button>${c.u && c.u !== Net.uid ? `<button class="btn sm ghost" data-ga="m10:${c.u}">ปิดแชต 10 น.</button>` : ''}</div></li>`).join('') || '<li class="emptyrow">ยังไม่มีข้อความ</li>'}</ul>`;
+    } else if (tab === 'reports') {
+      this.setPanel(`<i class="gmtag">GM</i> เครื่องมือผู้ดูแล`, head + '<p class="muted">กำลังโหลดรายงาน…</p>', true); this.gmBind();
+      let reps = []; try { reps = await Net.reports(); } catch (e) { }
+      if (UI.panelOpen !== 'gm' || this.panelOpt.tab !== 'reports') return;
+      body = `<ul class="gmlist">${reps.slice(0, 40).map(r => `<li><div><b>${esc(ChatFilter.name(r.tn || '?'))}</b><small>${r.msg ? '“' + esc(r.msg) + '” · ' : ''}${r.t ? new Date(r.t).toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' }) : ''} · CH${r.ch || '-'}</small></div><div class="gmact"><button class="btn sm ghost" data-ga="m60:${r.target}">ปิดแชต 60 น.</button><button class="btn sm ghost danger" data-ga="kick:${r.target}">เชิญออก</button><button class="btn sm ghost" data-ga="rdel:${r.k}">ลบรายงาน</button></div></li>`).join('') || '<li class="emptyrow">ไม่มีรายงาน</li>'}</ul>`;
+    } else if (tab === 'tools') {
+      const S = Save.d;
+      body = `<p class="muted">มีผลกับตัวละครของคุณเท่านั้น</p><div class="gmtools">
+        <button class="btn" data-ga="heal">ฟื้น HP/MP เต็ม</button><button class="btn" data-ga="lvl">เลเวล +1</button>
+        <button class="btn" data-ga="coin">เหรียญ +1,000</button><button class="btn" data-ga="gem">เพชร +1,000</button>
+        <button class="btn" data-ga="unlock">ปลดล็อกทุกพื้นที่</button><button class="btn" data-ga="mount">ได้สัตว์ขี่ครบ</button>
+        <label class="chk"><input type="checkbox" id="gmgod" ${S.gmGod ? 'checked' : ''}> อมตะ (ไม่โดนดาเมจ)</label>
+        <label class="chk"><input type="checkbox" id="gmfast" ${S.gmFast ? 'checked' : ''}> เดินเร็ว ×2</label></div>`;
+    }
+    this.setPanel(`<i class="gmtag">GM</i> เครื่องมือผู้ดูแล`, head + body, true);
+    this.gmBind();
+  },
+  gmBind() {
+    const S = Save.d;
+    const ann = $('#gmannsend'); if (ann) ann.onclick = async () => { const t = $('#gmann').value; if (!t.trim()) return; try { await Net.announce(t); $('#gmann').value = ''; } catch (e) { UI.toast('ส่งประกาศไม่สำเร็จ (สิทธิ์ GM ไม่ถูกต้อง)', 'warn'); } };
+    const god = $('#gmgod'); if (god) god.onchange = () => { S.gmGod = god.checked; };
+    const fast = $('#gmfast'); if (fast) fast.onchange = () => { S.gmFast = fast.checked; Player.recalc(); };
+    this.el.pbody.onclick = async e => {
+      const t = e.target.closest('[data-gt]'); if (t) { this.panelOpt.tab = t.dataset.gt; return this.renderPanel(); }
+      const b = e.target.closest('[data-ga]'); if (!b) return;
+      const [k, id] = b.dataset.ga.split(':');
+      try {
+        if (k === 'tp') { const p = Remote.map.get(id); this.closePanel(); Net.teleportTo(p); return; }
+        if (k === 'm10') await Net.mutePlayer(id, 10); else if (k === 'm60') await Net.mutePlayer(id, 60); else if (k === 'um') await Net.unmutePlayer(id);
+        else if (k === 'kick') { if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = 'ยืนยันเชิญออก?'; return; } await Net.kickPlayer(id); }
+        else if (k === 'del') await Net.deleteMsg(id); else if (k === 'rdel') await Net.deleteReport(id);
+        else if (k === 'heal') { Player.recalc(); S.hp = Player.stats.maxhp; S.mp = Player.stats.maxmp; UI.toast('ฟื้นเต็มแล้ว', 'quest'); }
+        else if (k === 'lvl') Game.gainXP(Math.max(1, xpNeed(S.level) - S.xp));
+        else if (k === 'coin') Game.gainCoins(1000); else if (k === 'gem') Gems.add(1000, 'เครื่องมือ GM');
+        else if (k === 'unlock') { S.flags.bridge = true; S.flags.gate = true; for (const w of WARPS) S.warps[w.id] = true; Game.applyUnlocks(); UI.toast('ปลดล็อกทุกพื้นที่และจุดวาร์ปแล้ว', 'quest'); }
+        else if (k === 'mount') { for (const m of MOUNT_ORDER) Mounts.data().own[m] = Mounts.data().own[m] || 1; Save.write(); UI.mountBtns(); UI.toast('ได้สัตว์ขี่ครบ 13 ตัวแล้ว', 'quest'); }
+      } catch (err) { UI.toast('ทำรายการไม่สำเร็จ (สิทธิ์ GM ไม่ถูกต้อง)', 'warn'); return; }
+      this.renderPanel();
+    };
   }
 });
 
