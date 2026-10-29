@@ -1120,6 +1120,23 @@ body.compact .gbhead img { width: 84px; height: 84px; }
 .maptabs { margin-bottom: 8px; }
 .plate .elt { font-style: normal; font-size: 10px; font-weight: 600; color: #1d1712; background: #ffc04a; border-radius: 5px; padding: 0 4px; margin-right: 2px; }
 .plate.elite .nm { color: #ffd27a; }
+
+/* ---- jobs ---- */
+.jobgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 10px 0; }
+.jobcard { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 10px; padding: 10px; border-radius: 12px; background: linear-gradient(135deg, color-mix(in srgb, var(--jc) 22%, #1d1510), #1d1510); border: 1.5px solid color-mix(in srgb, var(--jc) 60%, var(--line)); }
+.jobcard.cur { box-shadow: 0 0 0 2px var(--brass); } .jobcard.off { opacity: .55; }
+.jobcard img { width: 110px; height: 158px; object-fit: cover; border-radius: 8px; background: radial-gradient(circle at 50% 40%, #3e3052, #120e18); }
+.jobcard h3 { margin: 0; font-family: var(--f-display); font-size: 18px; color: var(--brasshi); } .jobcard h3 small { color: var(--mute); font-size: 12px; font-weight: 400; }
+.jobcard p { margin: 4px 0; font-size: 13px; line-height: 1.45; } .jobnow { color: var(--lime); font-weight: 600; }
+.skl.mini { display: grid; gap: 4px; margin: 6px 0; padding: 0; list-style: none; } .skl.mini li { display: flex; align-items: center; gap: 6px; font-size: 12.5px; cursor: pointer; } .skl.mini .skart { width: 30px; height: 30px; flex: none; } .skl.mini small { display: block; color: var(--mute); font-size: 11px; }
+.awkbox { padding: 10px 12px; border-radius: 12px; background: linear-gradient(135deg, #3a2410, #1d1510); border: 1.5px solid #c8842a; font-size: 13.5px; } .awkbox.done { border-color: #ffcf5a; background: linear-gradient(135deg, #4a3010, #2a1a08); }
+.stones { list-style: none; padding: 0; margin: 8px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.stones li { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 8px; background: rgba(0,0,0,.3); border: 1px solid var(--line2); font-size: 12.5px; } .stones li small { grid-column: 2; color: var(--mute); font-size: 11px; } .stones li.have { border-color: var(--lime); } .stones li i { grid-row: 1 / 3; grid-column: 3; color: var(--lime); font-style: normal; font-weight: 700; }
+@container (max-width: 700px) { .jobgrid { grid-template-columns: minmax(0, 1fr); } .stones { grid-template-columns: minmax(0, 1fr); } }
+body.compact .jobcard img { width: 80px; height: 115px; } body.compact .jobcard { grid-template-columns: 80px minmax(0, 1fr); }
+.plate .mbub { display: block; max-width: 190px; margin: 0 auto 4px; padding: 4px 9px; border-radius: 12px; background: rgba(245,236,220,.94); color: #2a1a26; font-size: 12.5px; line-height: 1.3; border: 1.5px solid #9a7ab0; position: relative; animation: bubin .25s ease-out; white-space: normal; }
+.plate .mbub::after { content: ""; position: absolute; left: 50%; bottom: -7px; width: 10px; height: 10px; background: inherit; border-right: 1.5px solid #9a7ab0; border-bottom: 1.5px solid #9a7ab0; transform: translateX(-50%) rotate(45deg); }
+@keyframes bubin { from { opacity: 0; transform: translateY(6px) scale(.9); } to { opacity: 1; } }
 </style>
 </head>
 <body>
@@ -1702,24 +1719,24 @@ const QUESTS = {
     type: 'main', giver: 'lyra', title: 'ก้าวแรกแห่ง Aurelion', obj: [{ k: 'kill', mon: 'slime', n: 5 }, { k: 'kill', mon: 'shroom', n: 3 }],
     text: 'ยินดีต้อนรับสู่ Aurelion นักผจญภัย! ช่วงนี้สไลม์กับเห็ดซุกซนเพ่นพ่านอยู่รอบกำแพงเมือง ช่วยปราบสไลม์ 5 ตัวและเห็ด 3 ตัวให้หน่อย แล้วฉันจะเปิดสะพานข้ามแม่น้ำให้',
     done: 'ฝีมือไม่เลวเลย! ฉันสั่งให้ทหารเปิดสะพานข้ามแม่น้ำแล้ว ทางเหนือคือป่ากระซิบ ระวังหมาป่าด้วยนะ',
-    rew: { xp: 160, coin: 100, items: [['hp_s', 3]] }, unlock: 'bridge'
+    rew: { xp: 160, coin: 100, items: [['hp_s', 3]] }, unlock: 'bridge', title: 'ผู้เปิดสะพาน'
   },
   m2: {
     type: 'main', giver: 'lyra', req: 'm1', title: 'เงามืดในป่ากระซิบ', obj: [{ k: 'kill', mon: 'wolf', n: 5 }, { k: 'collect', item: 'm_totem', n: 4 }],
     text: 'พวกก็อบลินตั้งค่ายอยู่ทางตะวันออกของป่ากระซิบ และใช้โทเท็มเรียกหมาป่ามาล้อมเมือง ปราบหมาป่า 5 ตัว แล้วยึดโทเท็มก็อบลินมา 4 ชิ้น',
     done: 'โทเท็มพวกนี้มีเศษผลึกฝังอยู่... มันมาจากถ้ำผลึกทางเหนือสุด ประตูถ้ำเปิดให้แล้ว แต่ต้องมีเลเวล 5 ขึ้นไปถึงจะผ่านเข้าไปได้',
-    rew: { xp: 420, coin: 260, items: [['hp_l', 2], ['mp_s', 2]] }, unlock: 'gate'
+    rew: { xp: 420, coin: 260, items: [['hp_l', 2], ['mp_s', 2]] }, unlock: 'gate', title: 'ผู้ปราบก็อบลิน'
   },
   m3: {
     type: 'main', giver: 'lyra', req: 'm2', title: 'หัวใจผลึกแห่งถ้ำลึก', obj: [{ k: 'boss', n: 1 }],
     text: 'ลึกเข้าไปในถ้ำผลึกมีผู้พิทักษ์ชื่อ "คราก" มันใช้เกราะผลึกที่อาวุธธรรมดาทำลายไม่ได้ ต้องใช้ปัญญาตอบคำถามต่อเนื่องเพื่อทำลายเกราะ ฝากความหวังของ Aurelion ไว้ด้วย!',
     done: 'เจ้าทำได้! Aurelion ปลอดภัยแล้ว ชื่อของเจ้าจะถูกจารึกไว้ในบันทึกนักผจญภัยของเมือง',
-    rew: { xp: 1000, coin: 800, items: [] }
+    rew: { xp: 1000, coin: 800, items: [] }, title: 'วีรชนแห่งถ้ำผลึก'
   },
   s1: {
     type: 'side', giver: 'rook', req: 'm1', title: 'เขี้ยวหมาป่าสำหรับฤดูหนาว', obj: [{ k: 'collect', item: 'm_fang', n: 4 }],
     text: 'หน้าหนาวใกล้มาแล้ว ข้าต้องการเขี้ยวหมาป่า 4 ชิ้นไปทำเครื่องราง ช่วยหามาหน่อยได้ไหม? ข้าจะให้เสื้อคลุมนายพรานเป็นการตอบแทน',
-    done: 'เขี้ยวสวยมาก! รับเสื้อคลุมนี้ไป ใส่แล้วเดินในป่าได้คล่องขึ้น', rew: { xp: 130, coin: 90, items: [['a_hunter', 1]] }, take: true
+    done: 'เขี้ยวสวยมาก! รับเสื้อคลุมนี้ไป ใส่แล้วเดินในป่าได้คล่องขึ้น', rew: { xp: 130, coin: 90, items: [['a_hunter', 1]] }, take: true, title: 'เพื่อนนายพราน'
   },
   s2: {
     type: 'side', giver: 'kaze', title: 'ซุปเห็ดของคาเสะ', obj: [{ k: 'collect', item: 'm_cap', n: 5 }],
@@ -1986,15 +2003,15 @@ const GEM_PACKS = [
   { id: 'g6', thb: 1990, gems: 3600, bonus: 1300, art: 6 }
 ];
 const SPECIAL_PACKS = [
-  { id: 'starter', thb: 49, name: 'แพ็กนักผจญภัยมือใหม่', desc: 'เพชร 300 · ปีกนางฟ้า · ยาฟื้นพลัง (ใหญ่) ×5 · ขนนกฟีนิกซ์ ×1', once: true, gems: 300, items: [['c_angel', 1], ['hp_l', 5], ['feather', 1]], tag: 'ซื้อได้ครั้งเดียว · คุ้มสุด' },
-  { id: 'monthly', thb: 129, name: 'บัตรนักผจญภัยรายเดือน', desc: 'รับเพชร 300 ทันที + รับเพิ่มวันละ 60 เพชร นาน 30 วัน (รวม 2,100)', monthly: true, gems: 300, daily: 60, days: 30, tag: 'คุ้มกว่า 7 เท่า' }
+  { id: 'starter', thb: 49, title: 'ผู้สนับสนุนรุ่นแรก', name: 'แพ็กนักผจญภัยมือใหม่', desc: 'เพชร 300 · ปีกนางฟ้า · ยาฟื้นพลัง (ใหญ่) ×5 · ขนนกฟีนิกซ์ ×1', once: true, gems: 300, items: [['c_angel', 1], ['hp_l', 5], ['feather', 1]], tag: 'ซื้อได้ครั้งเดียว · คุ้มสุด' },
+  { id: 'monthly', thb: 129, title: 'สมาชิกรายเดือน', name: 'บัตรนักผจญภัยรายเดือน', desc: 'รับเพชร 300 ทันที + รับเพิ่มวันละ 60 เพชร นาน 30 วัน (รวม 2,100)', monthly: true, gems: 300, daily: 60, days: 30, tag: 'คุ้มกว่า 7 เท่า' }
 ];
 const TOPUP_MILESTONES = [
   { thb: 100, gems: 50, items: [['hp_l', 5]], label: 'เพชร 50 · ยาใหญ่ ×5' },
-  { thb: 300, gems: 120, items: [['c_fairy', 1]], label: 'เพชร 120 · ออร่าภูตพราย' },
+  { thb: 300, gems: 120, items: [['c_fairy', 1]], label: 'เพชร 120 · ออร่าภูตพราย · ฉายา "ผู้อุปถัมภ์"', title: 'ผู้อุปถัมภ์' },
   { thb: 600, gems: 250, items: [['statbook', 2]], label: 'เพชร 250 · ตำราพลังแฝง ×2' },
-  { thb: 1000, gems: 400, items: [['c_halo', 1]], label: 'เพชร 400 · วงแหวนเทวดา' },
-  { thb: 2000, gems: 800, items: [['c_dragon', 1]], label: 'เพชร 800 · ปีกมังกรเพลิง' }
+  { thb: 1000, gems: 400, items: [['c_halo', 1]], label: 'เพชร 400 · วงแหวนเทวดา · ฉายา "เศรษฐีแห่ง Aurelion"', title: 'เศรษฐีแห่ง Aurelion' },
+  { thb: 2000, gems: 800, items: [['c_dragon', 1]], label: 'เพชร 800 · ปีกมังกรเพลิง · ฉายา "ราชันย์เพชร"', title: 'ราชันย์เพชร' }
 ];
 const GEM_CATS = [
   { id: 'deal', name: 'ลดราคาสัปดาห์นี้', desc: 'ลด 20% · สุ่มใหม่ทุกวันจันทร์' },
@@ -2344,7 +2361,7 @@ Object.assign(QUESTS, {
     done: 'เจริญพร โยมมาถึงเสียที วัดนี้ร้างมานาน ดวงวิญญาณที่ติดค้างอยู่ทุกข์ทรมานกันมาก อาตมาจะสวดส่งให้ แต่ต้องให้โยมช่วยสงบพวกเขาลงก่อน', rew: { xp: 200, coin: 100, items: [['holy', 2]] } },
   t1: { type: 'main', giver: 'luangta', req: 't0', title: 'เสียงหวีดหน้าวัด', obj: [{ k: 'kill', mon: 'pret', n: 6 }, { k: 'kill', mon: 'takhon', n: 4 }],
     text: 'ลานหน้าโบสถ์มีเปรตตัวสูงเท่าต้นตาลยืนร้องหวีดทั้งคืน พวกเขาหิวโหยเพราะไม่มีใครอุทิศส่วนบุญให้ แล้วยังมีผีตาโขนซุกซนวิ่งเล่นอยู่ฝั่งซ้าย ช่วยสงบเปรต 6 ตน และผีตาโขน 4 ตนให้อาตมาที',
-    done: 'สาธุ เสียงหวีดเงียบลงแล้ว อาตมาจะกรวดน้ำอุทิศส่วนกุศลไปให้ นี่น้ำมนต์ไว้ล้างสิ่งอัปมงคลนะโยม', rew: { xp: 520, coin: 300, items: [['holy', 3]] } },
+    done: 'สาธุ เสียงหวีดเงียบลงแล้ว อาตมาจะกรวดน้ำอุทิศส่วนกุศลไปให้ นี่น้ำมนต์ไว้ล้างสิ่งอัปมงคลนะโยม', rew: { xp: 520, coin: 300, items: [['holy', 3]] }, title: 'ผู้สงบเปรต' },
   t2: { type: 'main', giver: 'luangta', req: 't1', title: 'ผ้าแพรใต้ต้นตะเคียน', obj: [{ k: 'kill', mon: 'takhian', n: 4 }, { k: 'collect', item: 'm_cloth7', n: 4 }, { k: 'kill', mon: 'tani', n: 3 }],
     text: 'ต้นตะเคียนยักษ์ฝั่งตะวันตกมีนางไม้สิงสถิต ช่วงนี้นางโกรธเพราะผ้าแพรที่ชาวบ้านถวายไว้ถูกผีอื่นแย่งไป ส่วนดงกล้วยตานีข้างกันก็มีนางตานีออกมาหลอกคน ช่วยสงบนางตะเคียน 4 ตน นำผ้าแพรเจ็ดสีกลับมา 4 ผืน และสงบนางตานี 3 ตน',
     done: 'ผ้าแพรเหล่านี้อาตมาจะนำไปผูกถวายต้นตะเคียนใหม่ นางไม้จะได้สงบใจ นี่ธูปกันผีสำหรับทางข้างหน้าซึ่งอันตรายกว่าเดิม', rew: { xp: 820, coin: 420, items: [['incense', 2], ['hp_l', 2]] } },
@@ -2353,10 +2370,10 @@ Object.assign(QUESTS, {
     done: 'เก่งมากโยม ป่าช้าสงบลงแล้ว แต่อาตมารู้สึกถึงพลังที่หนักกว่านั้นจากใต้เจดีย์ร้าง ระวังตัวด้วย', rew: { xp: 1150, coin: 520, items: [['hp_l', 3], ['mp_s', 3]] } },
   t4: { type: 'main', giver: 'luangta', req: 't3', title: 'ผู้เฝ้าทรัพย์ใต้เจดีย์', obj: [{ k: 'kill', mon: 'pusom', n: 1 }],
     text: 'ใต้เจดีย์ร้างหลังโบสถ์มีไหทองคำที่คนโบราณฝังไว้ ปู่โสมผู้เฝ้าทรัพย์คลุ้มคลั่งเพราะมีคนโลภมาขุดของไป ตอนนี้ท่านไม่ยอมให้ใครเข้าใกล้ ช่วยสงบปู่โสมให้คลายความโกรธที ระวังงูจงอางที่ท่านเรียกมาด้วย',
-    done: 'ปู่โสมสงบลงแล้ว ทรัพย์ที่ได้มาจงแบ่งไปทำบุญบ้างนะโยม ทีนี้ก็เหลือวิญญาณดวงสุดท้ายที่เรือนริมคลอง', rew: { xp: 1400, coin: 650, items: [['statbook', 1], ['incense', 2]] } },
+    done: 'ปู่โสมสงบลงแล้ว ทรัพย์ที่ได้มาจงแบ่งไปทำบุญบ้างนะโยม ทีนี้ก็เหลือวิญญาณดวงสุดท้ายที่เรือนริมคลอง', rew: { xp: 1400, coin: 650, items: [['statbook', 1], ['incense', 2]] }, title: 'ผู้ไม่โลภในทรัพย์' },
   t5: { type: 'main', giver: 'luangta', req: 't4', title: 'วิญญาณริมคลอง', obj: [{ k: 'kill', mon: 'maenak', n: 1 }],
     text: 'เรือนไทยริมคลองหลังวัดเป็นของหญิงสาวชื่อนาก นางตายทั้งกลมขณะที่สามีไปทัพ แต่ยังรอคอยเขาอยู่ไม่ไปไหน แขนของนางยืดยาวได้ไม่สิ้นสุด และเมื่อนางกลายเป็นวิญญาณ อาวุธใดก็ทำร้ายไม่ได้ อาตมาปักเสาสายสิญจน์ไว้รอบลานแล้ว 3 ต้น ผูกให้ครบทั้งสามต้นเพื่อสะกดนาง แล้วช่วยส่งนางไปสู่สุคติด้วยเถิด',
-    done: 'นางนากได้ปล่อยวางแล้ว... อาตมาจะสวดบังสุกุลให้ทุกดวงวิญญาณในวัดนี้ ขออนุโมทนาบุญกับโยมด้วย วัดร้างแห่งนี้จะกลับมาสงบอีกครั้ง', rew: { xp: 3200, coin: 1500, items: [['c_soul', 1], ['feather', 1]] }, gems: 100 },
+    done: 'นางนากได้ปล่อยวางแล้ว... อาตมาจะสวดบังสุกุลให้ทุกดวงวิญญาณในวัดนี้ ขออนุโมทนาบุญกับโยมด้วย วัดร้างแห่งนี้จะกลับมาสงบอีกครั้ง', rew: { xp: 3200, coin: 1500, items: [['c_soul', 1], ['feather', 1]] }, gems: 100, title: 'ผู้ส่งแม่นากสู่สุคติ' },
   ts1: { type: 'side', giver: 'sapphaw', req: 't1', title: 'ยันต์ผีดิบ', obj: [{ k: 'collect', item: 'm_talis', n: 5 }],
     text: 'ข้าเป็นสัปเหร่อที่นี่มาสามสิบปี ไม่เคยเห็นผีดิบจีนมากเท่าปีนี้ ยันต์เหลืองที่แปะหน้าผากพวกมันเอาไปทำพิธีสะกดได้ หามาให้ข้า 5 แผ่น แล้วข้าจะถักตะกรุดสายสิญจน์ให้หนึ่งดอก',
     done: 'ยันต์ครบแล้ว นี่ตะกรุดของเจ้า ห้อยไว้แล้วผีจะไม่กล้าเข้าใกล้ง่ายๆ', rew: { xp: 600, coin: 300, items: [['r_takrut', 1]] }, take: true },
@@ -2371,7 +2388,7 @@ Object.assign(QUESTS, {
     done: 'คืนนี้ข้าคงได้นอนเฝ้าศพอย่างสบายใจ รับธูปกันผีกับยาไปเถอะ', rew: { xp: 900, coin: 480, items: [['incense', 2], ['hp_l', 3]] } },
   ts6: { type: 'side', giver: 'luangta', req: 't3', title: 'เสียงเรียกจากป่าลึก', obj: [{ k: 'kill', mon: 'saming', n: 2 }],
     text: 'คืนก่อนมีชาวบ้านมาเล่าว่าได้ยินเสียงเพื่อนเรียกชื่อจากป่าหลังวัด พอเดินตามไปกลับเจอเสือตัวใหญ่ตาเรืองแสง นั่นคือเสือสมิง คนที่เรียนอาคมจนกลายร่างเป็นเสือ ช่วยสงบเสือสมิง 2 ตัวก่อนจะมีใครหลงเข้าไปอีก',
-    done: 'สาธุ เสียงเรียกในป่าเงียบไปแล้ว อาตมาขอบใจโยมมาก', rew: { xp: 1300, coin: 620, items: [['statbook', 1], ['holy', 3]] }, gems: 30 },
+    done: 'สาธุ เสียงเรียกในป่าเงียบไปแล้ว อาตมาขอบใจโยมมาก', rew: { xp: 1300, coin: 620, items: [['statbook', 1], ['holy', 3]] }, gems: 30, title: 'ผู้ล่าเสือสมิง' },
   ts4: { type: 'side', giver: 'luangta', req: 't1', title: 'กรวดน้ำให้เปรต', obj: [{ k: 'collect', item: 'm_shroud', n: 6 }],
     text: 'เศษผ้าบังสุกุลที่เปรตทิ้งไว้ เป็นเครื่องหมายว่าเขายังรอส่วนบุญ นำมาให้อาตมา 6 ผืน อาตมาจะทำพิธีบังสุกุลและกรวดน้ำอุทิศให้',
     done: 'อาตมากรวดน้ำให้แล้ว เปรตเหล่านั้นจะได้รับส่วนบุญ นี่น้ำมนต์อีกขวดไว้ใช้นะโยม', rew: { xp: 500, coin: 260, items: [['holy', 4]] }, take: true },
@@ -2413,6 +2430,112 @@ QBANK.push(
   ['thai', 2, 'ตำนาน "แม่นาก" เกิดขึ้นที่ตำบลใดตามชื่อของเรื่อง', 'พระโขนง', 'บางกอกน้อย', 'ธนบุรี', 'บางรัก'],
   ['soc', 2, 'ต้นไม้ที่คนไทยเชื่อว่ามีนางไม้สิงสถิต จึงนิยมผูกผ้าแพรเจ็ดสีไว้รอบลำต้นคือข้อใด', 'ต้นตะเคียน', 'ต้นมะม่วง', 'ต้นมะพร้าว', 'ต้นยางพารา']
 );
+
+/* ============================================================
+   Class advancement: 2nd jobs (Lv.10) and Awakening (Lv.20)
+   ============================================================ */
+const JOB_LV = 10, AWK_LV = 20, LV_CAP = 30, AWK_LV_CAP = 40;
+const JOBS = {
+  lordknight: { base: 'knight', name: 'ลอร์ดไนท์', en: 'Lord Knight', role: 'melee', color: '#c84a3a', weapon: 'greatsword', hp: 30, mp: 5, atk: 6, def: 2, spd: .2, range: 2.9, rate: .8, melee: true,
+    desc: 'อัศวินผู้เลือกดาบใหญ่สองมือ ทิ้งโล่เพื่อพลังทำลายล้าง', skills: ['bash', 'taunt', 'bowling', 'brandish', 'dragonblade'], awk: ['bowling', 'brandish'] },
+  paladin: { base: 'knight', name: 'พาลาดิน', en: 'Paladin', role: 'tank', color: '#e8d8a0', weapon: 'lance', hp: 50, mp: 15, atk: 2, def: 6, spd: 0, range: 2.8, rate: .85, melee: true,
+    desc: 'อัศวินศักดิ์สิทธิ์ผู้ถือโล่และทวน ปกป้องเพื่อนด้วยพลังแห่งแสง', skills: ['bash', 'guard', 'grandcross', 'shieldchain', 'devotion'], awk: ['grandcross', 'shieldchain'] },
+  whitesmith: { base: 'adventurer', name: 'ช่างตีเหล็ก', en: 'Whitesmith', role: 'melee', color: '#d9a845', weapon: 'hammer', hp: 35, mp: 5, atk: 7, def: 3, spd: 0, range: 2.6, rate: .85, melee: true,
+    desc: 'นักผจญภัยผู้หลงใหลงานช่าง ถือค้อนยักษ์และทุบทุกอย่างให้แบน', skills: ['combo', 'whirl', 'hammerfall', 'thunderforge', 'mammonite'], awk: ['hammerfall', 'thunderforge'] },
+  creator: { base: 'adventurer', name: 'นักปรุงยา', en: 'Creator', role: 'support', color: '#8ad06a', weapon: 'flask', hp: 20, mp: 30, atk: 3, def: 2, spd: .1, range: 9, rate: .9, melee: false, proj: 'orb',
+    desc: 'นักผจญภัยผู้ค้นพบศาสตร์แห่งยา ปาขวดกรดและปรุงยาฟื้นฟูให้เพื่อน', skills: ['combo', 'focus', 'aciddemo', 'potionpitch', 'acidbomb'], awk: ['aciddemo', 'potionpitch'] },
+  assassinx: { base: 'ninja', name: 'แอสซาซินครอส', en: 'Assassin Cross', role: 'melee', color: '#9a2a3a', weapon: 'katar', hp: 15, mp: 10, atk: 9, def: 1, spd: .4, range: 2.4, rate: .5, melee: true,
+    desc: 'นินจาที่ก้าวสู่ความมืด ถือกรงเล็บคู่และพิษร้ายแรงที่สุด', skills: ['crescent', 'smoke', 'sonicblow', 'edp', 'meteorassault'], awk: ['sonicblow', 'edp'] },
+  stalker: { base: 'ninja', name: 'สตอล์กเกอร์', en: 'Stalker', role: 'melee', color: '#5a4a7a', weapon: 'dualdagger', hp: 25, mp: 15, atk: 5, def: 3, spd: .5, range: 2.5, rate: .6, melee: true,
+    desc: 'นินจาเงาผู้ไม่เคยถูกมองเห็น แทงข้างหลังแล้วหายไปในความมืด', skills: ['crescent', 'shadow', 'backstab', 'chasewalk', 'raid'], awk: ['backstab', 'chasewalk'] },
+  sniper: { base: 'archer', name: 'สไนเปอร์', en: 'Sniper', role: 'ranged', color: '#5a8a3a', weapon: 'longbow', hp: 15, mp: 15, atk: 8, def: 1, spd: .2, range: 13, rate: .75, melee: false, proj: 'arrow',
+    desc: 'นักธนูผู้แม่นยำที่สุด มีเหยี่ยวคู่ใจคอยโจมตีศัตรูจากฟ้า', skills: ['power', 'venom', 'blitz', 'truesight', 'sharpshoot'], awk: ['blitz', 'truesight'] },
+  minstrel: { base: 'archer', name: 'นักดนตรี', en: 'Minstrel', role: 'support', color: '#e8a0c0', weapon: 'harp', hp: 25, mp: 30, atk: 4, def: 2, spd: .2, range: 10, rate: .85, melee: false, proj: 'holy',
+    desc: 'นักธนูผู้เปลี่ยนคันธนูเป็นพิณ บทเพลงเสริมพลังให้ทั้งปาร์ตี้', skills: ['power', 'leap', 'bragi', 'idun', 'arrowvulcan'], awk: ['bragi', 'idun'] },
+  highwizard: { base: 'mage', name: 'จอมเวทขั้นสูง', en: 'High Wizard', role: 'ranged', color: '#7a3ad0', weapon: 'bigstaff', hp: 10, mp: 40, atk: 9, def: 1, spd: 0, range: 11, rate: .95, melee: false, proj: 'orb',
+    desc: 'จอมเวทผู้ควบคุมพลังทำลายล้างขั้นสูงสุด เวทของเขาถล่มทั้งสนามรบ', skills: ['fire', 'frost', 'napalm', 'gravity', 'stormgust'], awk: ['napalm', 'gravity'] },
+  professor: { base: 'mage', name: 'ศาสตราจารย์', en: 'Professor', role: 'support', color: '#d06a3a', weapon: 'book', hp: 25, mp: 30, atk: 5, def: 3, spd: .1, range: 10, rate: 1.0, melee: false, proj: 'orb',
+    desc: 'จอมเวทนักวิชาการ ใช้ตำราเวทควบคุมสนามรบและปกป้องเพื่อน', skills: ['fire', 'blink', 'heavensdrive', 'blindmist', 'soulburn'], awk: ['heavensdrive', 'blindmist'] },
+  highpriest: { base: 'priest', name: 'นักบวชขั้นสูง', en: 'High Priest', role: 'support', color: '#f4e0a0', weapon: 'bigrod', hp: 20, mp: 40, atk: 3, def: 3, spd: 0, range: 10, rate: .9, melee: false, proj: 'holy',
+    desc: 'นักบวชผู้บรรลุธรรมขั้นสูง ขับไล่วิญญาณร้ายและฟื้นฟูได้ไม่สิ้นสุด', skills: ['heal', 'cleanse', 'magnus', 'meditation', 'redemption'], awk: ['magnus', 'meditation'] },
+  champion: { base: 'priest', name: 'แชมเปี้ยน', en: 'Champion', role: 'melee', color: '#e86a3a', weapon: 'knuckle', hp: 35, mp: 10, atk: 8, def: 3, spd: .3, range: 2.3, rate: .6, melee: true,
+    desc: 'นักบวชผู้ฝึกหมัดจนถึงขีดสุด ปล่อยหมัดอสุราที่ทำลายได้แม้แต่ภูเขา', skills: ['heal', 'bless', 'ragingpalm', 'spheres', 'asura'], awk: ['ragingpalm', 'spheres'] }
+};
+const JOB_OF = {}; for (const k in JOBS) (JOB_OF[JOBS[k].base] = JOB_OF[JOBS[k].base] || []).push(k);
+/* effective class definition for a save */
+const Cls = {
+  cache: {},
+  of(S) {
+    if (!S) return CLASSES.adventurer;
+    const base = CLASSES[S.cls] || CLASSES.adventurer; const j = S.job && JOBS[S.job]; if (!j) return base;
+    const key = S.job; if (this.cache[key]) return this.cache[key];
+    return this.cache[key] = Object.assign({}, base, j, { hp: base.hp + j.hp, mp: base.mp + j.mp, atk: base.atk + j.atk, def: base.def + j.def, spd: base.spd + j.spd, id: key });
+  },
+  name(S) { const c = this.of(S); return (S.awk ? 'ผู้ตื่นรู้ ' : '') + c.name; },
+  isAwkSkill(S, id) { const j = S && S.job && JOBS[S.job]; return !!(S && S.awk && j && j.awk.includes(id)); }
+};
+
+/* ---- job skills (R, T, X) ---- */
+Object.assign(SKILLS, {
+  bowling: { name: 'โบว์ลิ่งแบช', cat: 'โจมตีหมู่', type: 'nova', mp: 14, cd: 7, mult: 2.0, r: 5, stun: .6, col: [1, .6, .4], icon: 'burst', glyph: 'whirl', desc: 'เหวี่ยงดาบใหญ่กวาดรอบตัว ศัตรูกระเด็นชนกันและมึนงงชั่วครู่', fx: ['ดาเมจ ×2.0 รอบตัว 5 เมตร', 'มึนงง 0.6 วินาที'] },
+  brandish: { name: 'แบรนดิชสเปียร์', cat: 'โจมตีด้านหน้า', type: 'cone', mp: 18, cd: 9, mult: 2.6, r: 7.5, ang: 1.0, col: [1, .75, .4], icon: 'sword', glyph: 'cleave', desc: 'ฟาดคลื่นพลังจากดาบใหญ่เป็นแนวกว้างด้านหน้า โจมตีศัตรูได้หลายตัวพร้อมกัน', fx: ['ดาเมจ ×2.6 ด้านหน้า 7.5 เมตร'] },
+  dragonblade: { name: 'ดาบมังกรคำราม', cat: 'สกิลใหญ่ + ตอบคำถาม', type: 'rain', mp: 30, cd: 20, mult: 5.2, r: 5.5, quiz: true, col: [1, .45, .25], icon: 'fire', glyph: 'hero', desc: 'กระโดดฟาดดาบใหญ่ลงพื้นเป็นรูปมังกรเพลิง', fx: ['ดาเมจ ×5.2 ในพื้นที่', 'ตอบถูก: พลัง ×2'] },
+  grandcross: { name: 'แกรนด์ครอส', cat: 'โจมตีหมู่ + ฟื้นฟู', type: 'nova', mp: 18, cd: 10, mult: 1.9, r: 6, heal: .06, col: [1, .95, .7], icon: 'sun', glyph: 'judge', desc: 'สร้างกางเขนแสงศักดิ์สิทธิ์รอบตัว ผีและอันเดดรับดาเมจเพิ่ม', fx: ['ดาเมจ ×1.9 รอบตัว 6 เมตร', 'ผี/อันเดด ×1.3', 'ฟื้น HP 6%'] },
+  shieldchain: { name: 'โล่ลูกโซ่', cat: 'โจมตีระยะไกล', type: 'proj', mp: 16, cd: 8, mult: .85, n: 5, spread: .06, proj: 'star', col: [.8, .85, 1], icon: 'shield', glyph: 'charge', desc: 'ขว้างโล่ 5 ครั้งติดต่อกันใส่เป้าหมาย', fx: ['ดาเมจ ×0.85 × 5 ครั้ง'] },
+  devotion: { name: 'ดีโวชั่น', cat: 'สกิลใหญ่ + ตอบคำถาม', type: 'buff', mp: 28, cd: 22, buffs: [['ward', 12], ['ironhp', 20], ['guard', 12]], heal: .3, quiz: true, col: [1, .95, .8], icon: 'guard', glyph: 'guard', desc: 'อุทิศตนปกป้อง รับดาเมจลดลงมหาศาลและฟื้น HP', fx: ['เกราะแสง 12 วิ', 'กายเหล็ก 20 วิ', 'ปราการเหล็ก 12 วิ', 'ฟื้น HP 30%'] },
+  hammerfall: { name: 'ค้อนถล่ม', cat: 'โจมตีหมู่', type: 'nova', mp: 14, cd: 8, mult: 1.7, r: 4.5, stun: 1.5, col: [1, .8, .4], icon: 'burst', glyph: 'bash', desc: 'ทุบค้อนลงพื้นให้สะเทือน ศัตรูรอบตัวมึนงง', fx: ['ดาเมจ ×1.7 รอบตัว 4.5 เมตร', 'มึนงง 1.5 วินาที'] },
+  thunderforge: { name: 'ค้อนสายฟ้า', cat: 'โจมตีด้านหน้า', type: 'cone', mp: 18, cd: 9, mult: 3.0, r: 5, ang: .7, stun: .8, col: [1, .9, .3], icon: 'meteor', glyph: 'storm', desc: 'ค้อนที่ชาร์จด้วยพลังสายฟ้า ฟาดใส่ศัตรูด้านหน้าอย่างรุนแรง', fx: ['ดาเมจ ×3.0 ด้านหน้า 5 เมตร', 'มึนงง 0.8 วินาที'] },
+  mammonite: { name: 'แมมโมไนต์', cat: 'สกิลใหญ่ + ตอบคำถาม', type: 'combo', mp: 26, cd: 18, mult: 7.5, hits: 1, r: 3, quiz: true, col: [1, .85, .3], icon: 'coin', glyph: 'hero', desc: 'ทุ่มเหรียญทองทั้งหมดลงบนค้อนแล้วทุบ ดาเมจเดี่ยวสูงมาก', fx: ['ดาเมจ ×7.5 เป้าหมายเดียว', 'ตอบถูก: พลัง ×2'] },
+  aciddemo: { name: 'ขวดกรดกัดกร่อน', cat: 'โจมตีระยะไกล', type: 'proj', mp: 14, cd: 6, mult: 1.6, n: 1, splash: 2.5, proj: 'fire', dot: { k: .25, t: 6 }, col: [.6, 1, .3], icon: 'potR', glyph: 'venom', desc: 'ปาขวดกรดที่แตกกระจายและกัดกร่อนศัตรูต่อเนื่อง', fx: ['ดาเมจ ×1.6 + กระจาย 2.5 เมตร', 'กรดกัดกร่อน 6 วิ'] },
+  potionpitch: { name: 'ปาขวดยาฟื้นฟู', cat: 'ฟื้นฟู', type: 'heal', mp: 18, cd: 12, heal: .32, buffs: [['regen', 8], ['luck', 30]], col: [.5, 1, .6], icon: 'heart', glyph: 'heal', desc: 'โยนขวดยาที่ปรุงพิเศษ ฟื้น HP ทันทีและฟื้นต่อเนื่อง', fx: ['ฟื้น HP 32%', 'ฟื้นต่อเนื่อง 8 วิ', 'โชคดี 30 วิ'] },
+  acidbomb: { name: 'ระเบิดกรดยักษ์', cat: 'สกิลใหญ่ + ตอบคำถาม', type: 'rain', mp: 28, cd: 20, mult: 4.6, r: 6.5, quiz: true, col: [.5, 1, .25], icon: 'meteor', glyph: 'meteor', desc: 'ขว้างระเบิดกรดลูกใหญ่ลงกลางกลุ่มศัตรู', fx: ['ดาเมจ ×4.6 ในพื้นที่', 'ตอบถูก: พลัง ×2'] },
+  sonicblow: { name: 'โซนิคโบลว์', cat: 'โจมตีต่อเนื่อง', type: 'combo', mp: 16, cd: 8, mult: .8, hits: 6, r: 2.8, col: [1, .4, .5], icon: 'burst', glyph: 'combo', desc: 'ฟันด้วยกรงเล็บคู่ 6 ครั้งรวดเร็วจนมองไม่ทัน', fx: ['ดาเมจ ×0.8 × 6 ครั้ง', 'ครั้งสุดท้าย ×1.5'] },
+  edp: { name: 'พิษมรณะ', cat: 'เสริมพลัง', type: 'buff', mp: 20, cd: 24, buffs: [['assassin', 15], ['frenzy', 15]], col: [.6, .2, .7], icon: 'star4', glyph: 'assassin', desc: 'ทาพิษร้ายแรงที่สุดลงบนอาวุธ', fx: ['จิตนักฆ่า 15 วิ', 'ใจนักสู้ 15 วิ'] },
+  meteorassault: { name: 'มิทีออร์แอสซอลต์', cat: 'สกิลใหญ่ + ตอบคำถาม', type: 'nova', mp: 28, cd: 18, mult: 4.0, r: 6.5, stun: 1, quiz: true, col: [1, .3, .4], icon: 'burst', glyph: 'blades', desc: 'ระเบิดพลังรอบตัวทำลายทุกอย่างในรัศมี', fx: ['ดาเมจ ×4.0 รอบตัว 6.5 เมตร', 'มึนงง 1 วิ', 'ตอบถูก: พลัง ×2'] },
+  backstab: { name: 'แทงข้างหลัง', cat: 'โจมตีเดี่ยว', type: 'dash', mp: 14, cd: 7, mult: 3.4, dist: 7, col: [.6, .4, .9], icon: 'dagger', glyph: 'shadow', desc: 'พุ่งทะลุไปด้านหลังเป้าหมายแล้วแทงจุดตาย', fx: ['ดาเมจ ×3.4 ตลอดแนวพุ่ง 7 เมตร'] },
+  chasewalk: { name: 'เดินในเงา', cat: 'หลบหลีก', type: 'escape', mp: 16, cd: 14, blink: true, dist: 8, r: 4, slow: 3, col: [.4, .3, .6], icon: 'dash', glyph: 'blink', desc: 'หายตัวไปในเงาและโผล่ห่างจากศัตรู ศัตรูที่เหลือช้าลง', fx: ['วาร์ป 8 เมตร', 'เกราะแสง 2 วิ', 'ศัตรูช้าลง 3 วิ'] },
+  raid: { name: 'เรด', cat: 'สกิลใหญ่ + ตอบคำถาม', type: 'nova', mp: 26, cd: 18, mult: 3.6, r: 5.5, stun: 2, quiz: true, col: [.7, .5, 1], icon: 'burst', glyph: 'smoke', desc: 'ปรากฏตัวจากเงาพร้อมระเบิดควัน ศัตรูรอบตัวมึนงงยาวนาน', fx: ['ดาเมจ ×3.6 รอบตัว', 'มึนงง 2 วิ', 'ตอบถูก: พลัง ×2'] },
+  blitz: { name: 'บลิทซ์บีท', cat: 'โจมตีระยะไกล', type: 'proj', mp: 14, cd: 6, mult: .9, n: 4, spread: .14, proj: 'star', col: [.9, .8, .5], icon: 'fan', glyph: 'multi', desc: 'สั่งเหยี่ยวโฉบโจมตีเป้าหมาย 4 ครั้ง', fx: ['ดาเมจ ×0.9 × 4 ครั้ง'] },
+  truesight: { name: 'ตาเหยี่ยว', cat: 'เสริมพลัง', type: 'buff', mp: 16, cd: 20, buffs: [['frenzy', 14], ['atk', 14]], col: [.7, 1, .5], icon: 'star', glyph: 'focus', desc: 'เพ่งสายตาจนเห็นจุดอ่อนทุกจุด', fx: ['ใจนักสู้ 14 วิ', 'พรแห่งพละกำลัง 14 วิ'] },
+  sharpshoot: { name: 'ชาร์ปชูตติ้ง', cat: 'สกิลใหญ่ + ตอบคำถาม', type: 'proj', mp: 26, cd: 16, mult: 6.0, n: 1, pierce: true, proj: 'arrow', quiz: true, col: [1, .95, .6], icon: 'arrow', glyph: 'power', desc: 'ยิงลูกศรแสงทะลุทุกอย่างที่ขวาง', fx: ['ดาเมจ ×6.0 ทะลุ', 'ตอบถูก: พลัง ×2'] },
+  bragi: { name: 'บทกวีแห่งบรากี', cat: 'เสริมพลัง', type: 'buff', mp: 18, cd: 20, buffs: [['haste', 15], ['regen', 10]], col: [1, .7, .9], icon: 'star', glyph: 'bless', desc: 'ดีดพิณขับกล่อม ตัวเองและเพื่อนเร็วขึ้นและฟื้นต่อเนื่อง', fx: ['ความเร็ว +30% 15 วิ', 'ฟื้นต่อเนื่อง 10 วิ'] },
+  idun: { name: 'แอปเปิลแห่งอิดุน', cat: 'ฟื้นฟู', type: 'heal', mp: 20, cd: 14, heal: .3, buffs: [['ironhp', 20]], col: [1, .5, .5], icon: 'heart', glyph: 'heal', desc: 'บทเพลงแห่งผลไม้เทพ เพิ่ม HP สูงสุดและฟื้นฟู', fx: ['ฟื้น HP 30%', 'กายเหล็ก 20 วิ'] },
+  arrowvulcan: { name: 'แอร์โรว์วัลแคน', cat: 'สกิลใหญ่ + ตอบคำถาม', type: 'proj', mp: 26, cd: 16, mult: .95, n: 9, spread: .1, proj: 'arrow', quiz: true, col: [1, .8, .9], icon: 'rain', glyph: 'multi', desc: 'ยิงลูกศร 9 ดอกรัวใส่เป้าหมายเดียว', fx: ['ดาเมจ ×0.95 × 9 ดอก', 'ตอบถูก: พลัง ×2'] },
+  napalm: { name: 'นาปาล์มวัลแคน', cat: 'โจมตีระยะไกล', type: 'proj', mp: 16, cd: 6, mult: .8, n: 5, spread: .12, proj: 'orb', dot: { k: .2, t: 4 }, col: [.75, .4, 1], icon: 'burst', glyph: 'storm', desc: 'ยิงลูกไฟวิญญาณ 5 ลูกต่อเนื่อง ศัตรูติดคำสาปไหม้', fx: ['ดาเมจ ×0.8 × 5 ลูก', 'ไหม้ต่อเนื่อง 4 วิ'] },
+  gravity: { name: 'สนามแรงโน้มถ่วง', cat: 'พื้นที่', type: 'storm', mp: 22, cd: 12, mult: 1.3, r: 5, dot: { k: .3, t: 5 }, col: [.5, .4, 1], icon: 'meteor', glyph: 'frost', desc: 'เพิ่มแรงโน้มถ่วงในพื้นที่ ศัตรูถูกกดทับหลายครั้ง', fx: ['ดาเมจ ×1.3 + 2 ระลอก', 'กดทับต่อเนื่อง 5 วิ'] },
+  stormgust: { name: 'สตอร์มกัสต์', cat: 'สกิลใหญ่ + ตอบคำถาม', type: 'rain', mp: 30, cd: 20, mult: 4.4, r: 7.5, quiz: true, col: [.6, .9, 1], icon: 'snow', glyph: 'frost', desc: 'พายุหิมะยักษ์ถล่มพื้นที่กว้าง', fx: ['ดาเมจ ×4.4 รัศมี 7.5 เมตร', 'ตอบถูก: พลัง ×2'] },
+  heavensdrive: { name: 'เฮฟเวนส์ไดรฟ์', cat: 'โจมตีหมู่', type: 'nova', mp: 16, cd: 8, mult: 1.8, r: 6, col: [.8, .6, .3], icon: 'meteor', glyph: 'meteor', desc: 'เรียกหอกหินทะลุพื้นขึ้นมาแทงศัตรูรอบตัว', fx: ['ดาเมจ ×1.8 รอบตัว 6 เมตร'] },
+  blindmist: { name: 'หมอกมืดบอด', cat: 'ควบคุม', type: 'nova', mp: 18, cd: 12, mult: .6, r: 6, slow: 4, buffs: [['ward', 6]], col: [.4, .35, .5], icon: 'snow', glyph: 'smoke', desc: 'ปล่อยหมอกพิษ ศัตรูช้าลงและโจมตีพลาด ตัวเองได้เกราะแสง', fx: ['ศัตรูช้าลง 4 วิ', 'เกราะแสง 6 วิ'] },
+  soulburn: { name: 'โซลเบิร์น', cat: 'สกิลใหญ่ + ตอบคำถาม', type: 'rain', mp: 28, cd: 18, mult: 4.2, r: 5.5, heal: .12, quiz: true, col: [1, .5, .3], icon: 'fire', glyph: 'fire', desc: 'เผาวิญญาณศัตรูและดูดพลังกลับมาฟื้นฟูตัวเอง', fx: ['ดาเมจ ×4.2 ในพื้นที่', 'ฟื้น HP 12%', 'ตอบถูก: พลัง ×2'] },
+  magnus: { name: 'แมกนัสเอ็กซอร์ซิสมัส', cat: 'โจมตีพื้นที่', type: 'rain', mp: 20, cd: 10, mult: 2.4, r: 6, col: [1, .95, .7], icon: 'sun', glyph: 'judge', desc: 'สร้างกางเขนศักดิ์สิทธิ์ขนาดใหญ่ ขับไล่ผีและอันเดด', fx: ['ดาเมจ ×2.4 ในพื้นที่', 'ผี/อันเดด ×1.5'] },
+  meditation: { name: 'สมาธิภาวนา', cat: 'ฟื้นฟู', type: 'cleanse', mp: 14, cd: 14, heal: .25, r: 4, mult: .5, buffs: [['regen', 12], ['ward', 6]], col: [.8, .9, 1], icon: 'heart', glyph: 'cleanse', desc: 'นั่งสมาธิล้างสิ่งชั่วร้าย ฟื้น MP และ HP ต่อเนื่อง', fx: ['ล้างสถานะผิดปกติ', 'ฟื้น HP 25%', 'ฟื้นต่อเนื่อง 12 วิ', 'เกราะแสง 6 วิ'] },
+  redemption: { name: 'การไถ่บาป', cat: 'สกิลใหญ่ + ตอบคำถาม', type: 'rain', mp: 28, cd: 20, mult: 3.4, r: 6.5, heal: .35, quiz: true, col: [1, 1, .85], icon: 'sun', glyph: 'angel', desc: 'แสงจากสวรรค์ชำระทั้งศัตรูและตัวเอง', fx: ['ดาเมจ ×3.4', 'ฟื้น HP 35%', 'ตอบถูก: พลัง ×2'] },
+  ragingpalm: { name: 'ฝ่ามือพิโรธ', cat: 'โจมตีด้านหน้า', type: 'cone', mp: 14, cd: 7, mult: 2.4, r: 4, ang: .6, stun: .8, col: [1, .6, .3], icon: 'hand', glyph: 'bash', desc: 'ผลักฝ่ามือด้วยพลังลมปราณใส่ศัตรูตรงหน้า', fx: ['ดาเมจ ×2.4 ด้านหน้า 4 เมตร', 'มึนงง 0.8 วิ'] },
+  spheres: { name: 'ลูกแก้ววิญญาณ', cat: 'เสริมพลัง', type: 'buff', mp: 16, cd: 18, buffs: [['frenzy', 14], ['ironhp', 14]], col: [1, .8, .5], icon: 'star4', glyph: 'focus', desc: 'เรียกลูกแก้ววิญญาณ 5 ลูกลอยรอบตัว', fx: ['ใจนักสู้ 14 วิ', 'กายเหล็ก 14 วิ'] },
+  asura: { name: 'หมัดอสุรา', cat: 'สกิลใหญ่ + ตอบคำถาม', type: 'combo', mp: 34, cd: 24, mult: 10, hits: 1, r: 2.8, quiz: true, col: [1, .5, .2], icon: 'burst', glyph: 'hero', desc: 'รวบรวมพลังทั้งหมดในหมัดเดียว ดาเมจเดี่ยวสูงที่สุดในเกม', fx: ['ดาเมจ ×10 เป้าหมายเดียว', 'ตอบถูก: พลัง ×2 (×20!)'] }
+});
+const STONES = { st_light: 'คราก ผู้พิทักษ์ผลึก', st_dark: 'แม่นาก', st_wisdom: 'บททดสอบนักปราชญ์ (ตอบถูกครบ 5 ข้อ)', st_spirit: 'ปู่โสมเฝ้าทรัพย์' };
+Object.assign(ITEMS, {
+  st_light: { name: 'ศิลาแห่งแสง', kind: 'mat', quest: true, rare: true, sell: 0, desc: 'ศิลาเรืองแสงสีขาวจากแกนผลึกของคราก', icon: 'gem' },
+  st_dark: { name: 'ศิลาแห่งความมืด', kind: 'mat', quest: true, rare: true, sell: 0, desc: 'ศิลาสีดำที่แม่นากทิ้งไว้เมื่อไปสู่สุคติ', icon: 'gem' },
+  st_wisdom: { name: 'ศิลาแห่งปัญญา', kind: 'mat', quest: true, rare: true, sell: 0, desc: 'ศิลาสีฟ้าที่ปราชญ์โอรินมอบให้ผู้ตอบถูกครบทุกข้อ', icon: 'gem' },
+  st_spirit: { name: 'ศิลาแห่งวิญญาณ', kind: 'mat', quest: true, rare: true, sell: 0, desc: 'ศิลาสีทองจากไหทรัพย์ของปู่โสม', icon: 'gem' },
+  awk_amulet: { name: 'เครื่องรางผู้ตื่นรู้', kind: 'cos', slot: 'aura', price: 0, desc: 'สัญลักษณ์ของผู้ที่ปลดผนึกแห่งพลังแล้ว ออร่าเปลวไฟทองลุกรอบตัว', icon: 'fire' }
+});
+Object.assign(NPCS, { zen: { name: 'อาจารย์เซน', role: 'ปรมาจารย์แห่งอาชีพ', sheet: 'zen', zone: 'world', x: -5, z: 44, face: .6 } });
+Object.assign(QUESTS, {
+  awk: { type: 'main', giver: 'zen', minLv: AWK_LV, title: 'ปลดผนึกแห่งพลัง', obj: [{ k: 'collect', item: 'st_light', n: 1 }, { k: 'collect', item: 'st_dark', n: 1 }, { k: 'collect', item: 'st_wisdom', n: 1 }, { k: 'collect', item: 'st_spirit', n: 1 }],
+    text: 'เจ้าแข็งแกร่งพอแล้วที่จะรู้ความลับของพลังที่ถูกผนึกไว้ จงนำศิลาทั้ง 4 มาให้ข้า: ศิลาแห่งแสงจากคราก ศิลาแห่งความมืดจากแม่นาก ศิลาแห่งปัญญาจากบททดสอบของปราชญ์โอริน (ต้องตอบถูกครบ 5 ข้อ) และศิลาแห่งวิญญาณจากปู่โสมเฝ้าทรัพย์ แล้วเตรียมเหรียญ 5,000 เหรียญสำหรับพิธีกรรมปลุกพลัง',
+    done: 'ศิลาทั้งสี่สั่นสะเทือนในมือเจ้า... ถึงเวลาแล้ว จงเข้าพิธีกรรมปลุกพลัง ตอบคำถามให้ถูกติดต่อกัน 3 ข้อเพื่อปลดผนึก', rew: { xp: 500, coin: 0, items: [] }, take: true, needJob: true }
+});
+QUEST_ORDER.push('awk');
+ACHIEVEMENTS.push({ id: 'job', name: 'ก้าวสู่อาชีพขั้นสอง', desc: 'เปลี่ยนอาชีพขั้นสองสำเร็จ', stat: 'jobs', n: 1, coin: 300, title: 'ผู้เลือกเส้นทาง' }, { id: 'awk', name: 'ผู้ตื่นรู้', desc: 'ปลดผนึกแห่งพลังและปลุกพลังสำเร็จ', stat: 'awakened', n: 1, coin: 1000, title: 'ผู้ตื่นรู้' });
+
+/* ---- titles from quests / top-up ---- */
+const Titles = {
+  grant(t, why) { const S = Save.d; if (!S) return; S.extraTitles = S.extraTitles || []; if (S.extraTitles.includes(t)) return; S.extraTitles.push(t); if (!S.title) S.title = t; UI.toast(`ได้รับฉายาใหม่ "${t}" (${why}) · เปลี่ยนได้ที่หน้าความสำเร็จ`, 'rare'); UI.refreshHUD(); },
+  all(S) { return ACHIEVEMENTS.filter(a => S.ach[a.id]).map(a => a.title).concat(S.extraTitles || []); }
+};
 
 /* ============================================================
    World building: terrain, town, forest, dungeon, colliders
@@ -3736,7 +3859,7 @@ const Player = {
   act: null, actT: 0, hurtT: 0, dead: false, stats: {}, stuckT: 0, regenT: 0, combatT: 0,
   reset() { this.dead = false; this.moveTo = null; this.target = null; this.act = null; this.hurtT = 0; },
   recalc() {
-    const S = Save.d; const c = CLASSES[S.cls]; const L = S.level - 1; const al = S.alloc;
+    const S = Save.d; const c = Cls.of(S); const L = S.level - 1; const al = S.alloc;
     const st = { maxhp: c.hp + L * 12 + al.hp * 10, maxmp: c.mp + L * 5 + al.mp * 6, atk: c.atk + L * 2 + al.atk * 2, def: c.def + L * 1 + al.def * 1.5, spd: c.spd + al.spd * .12, range: c.range };
     for (const slot of ['weapon', 'armor', 'acc']) { const id = S.equip[slot]; if (!id) continue; const it = ITEMS[id]; st.atk += it.atk || 0; st.def += it.def || 0; st.maxhp += it.hp || 0; st.maxmp += it.mp || 0; st.spd += it.spd || 0; }
     if (S.perm) { st.atk += S.perm.atk || 0; st.maxhp += S.perm.hp || 0; }
@@ -3753,7 +3876,7 @@ const Player = {
     this.stats = st;
     S.hp = Math.min(S.hp, st.maxhp); S.mp = Math.min(S.mp, st.maxmp);
   },
-  get sheet() { const o = Save.d.cos.outfit; return o ? ITEMS[o].sheet : Save.d.cls; },
+  get sheet() { const o = Save.d.cos.outfit; return o ? ITEMS[o].sheet : (Save.d.job || Save.d.cls); },
   update(dt, input) {
     const S = Save.d; this.anim += dt; this.hurtT = Math.max(0, this.hurtT - dt); this.atkCD -= dt; this.combatT -= dt;
     if (this.actT > 0) { this.actT -= dt; if (this.actT <= 0) this.act = null; }
@@ -3960,16 +4083,16 @@ function buildCharModels(R) {
   for (const cls of CLASS_ORDER) CharModels[cls] = buildCharModel(R, cls);
 }
 function buildCharModel(R, cls) {
-  const O = OUTFITS[cls], C = CHAR_COL; const parts = {};
-  const mk = (bone, fn) => { const g = new Geo(cls.length * 7 + bone.length); g.jit = .03; fn(g); if (g.d.length) parts[bone] = R.mesh(g); };
+  const O = OUTFITS[cls], C = Object.assign({}, CHAR_COL, O.col || {}); const like = O.like || cls; const parts = {};
+  const mk = (bone, fn) => { const g = new Geo(cls.length * 7 + bone.length); g.jit = .03; fn(g); if (O.add && O.add[bone]) O.add[bone](g, C, O); if (g.d.length) parts[bone] = R.mesh(g); };
   // hips
   mk('hips', g => {
     g.box(0, -.04, 0, .36, .2, .25, O.pants);
     g.cyl(0, 0, 0, .2, .2, .07, 10, O.belt); g.box(0, .035, .2, .1, .08, .03, C.gold);
-    if (cls === 'adventurer' || cls === 'archer') { g.box(.18, -.06, .06, .08, .14, .14, C.leather); }
-    if (O.robe) { g.cyl(0, -.44, 0, .36, .22, .46, 12, O.robe, null, true); g.cyl(0, -.44, 0, .37, .365, .05, 12, cls === 'priest' ? C.gold : hexc('#d8c8a0'), null, true); if (cls === 'priest') g.box(0, -.2, .25, .14, .4, .02, C.gold); }
+    if (like === 'adventurer' || like === 'archer') { g.box(.18, -.06, .06, .08, .14, .14, C.leather); }
+    if (O.robe) { g.cyl(0, -.44, 0, .36, .22, .46, 12, O.robe, null, true); g.cyl(0, -.44, 0, .37, .365, .05, 12, like === 'priest' ? C.gold : hexc('#d8c8a0'), null, true); if (like === 'priest') g.box(0, -.2, .25, .14, .4, .02, C.gold); }
     if (O.armor) { for (const s of [-1, 1]) { g.push(s * .14, -.12, .1, .15, 0, s * .08); g.box(0, 0, 0, .15, .22, .05, C.steel); g.pop(); } g.box(0, -.13, .14, .12, .24, .03, hexc('#7a3a26')); }
-    if (cls === 'ninja') { g.box(0, -.12, .12, .14, .24, .02, O.shirt); }
+    if (like === 'ninja') { g.box(0, -.12, .12, .14, .24, .02, O.shirt); }
   });
   // chest / torso
   mk('chest', g => {
@@ -3977,9 +4100,9 @@ function buildCharModel(R, cls) {
     g.cyl(0, .4, 0, .07, .07, .08, 6, C.skin);
     if (O.armor) { g.cyl(0, .08, 0, .215, .19, .3, 10, C.steel, C.steel); g.cyl(0, .06, 0, .22, .22, .04, 10, C.gold, null, true); g.box(0, .2, .17, .2, .16, .06, C.gold); g.box(0, .2, .19, .14, .1, .03, C.steel2); }
     if (O.vest) { g.cyl(0, .02, 0, .21, .18, .34, 10, O.vest); g.push(0, .2, 0, 0, 0, .6); g.box(0, 0, .19, .05, .5, .03, C.leather); g.pop(); }
-    if (cls === 'ninja') { g.push(0, .21, .12, .1, 0, 0); g.box(-.05, 0, .07, .26, .36, .04, hexc('#3c2b20')); g.pop(); g.cyl(0, .02, 0, .205, .2, .07, 10, C.leather); }
-    if (cls === 'mage') { g.cyl(0, .0, 0, .21, .2, .3, 10, O.shirt); g.box(0, .18, .19, .06, .3, .03, C.gold); }
-    if (cls === 'priest') { g.box(0, .2, .18, .1, .36, .03, C.gold); g.box(0, .26, .19, .2, .05, .03, C.gold); }
+    if (like === 'ninja') { g.push(0, .21, .12, .1, 0, 0); g.box(-.05, 0, .07, .26, .36, .04, hexc('#3c2b20')); g.pop(); g.cyl(0, .02, 0, .205, .2, .07, 10, C.leather); }
+    if (like === 'mage') { g.cyl(0, .0, 0, .21, .2, .3, 10, O.shirt); g.box(0, .18, .19, .06, .3, .03, C.gold); }
+    if (like === 'priest') { g.box(0, .2, .18, .1, .36, .03, C.gold); g.box(0, .26, .19, .2, .05, .03, C.gold); }
     if (O.capelet) { const cc = O.capeletCol || O.cape; g.cyl(0, .2, 0, .34, .17, .24, 10, cc); g.ell(0, .34, -.15, .2, .14, .1, shade(cc, .9)); g.box(0, .32, .16, .08, .05, .04, C.gold); }
     if (O.scarf) { g.cyl(0, .36, 0, .14, .12, .12, 8, O.cape); g.ell(0, .36, .08, .16, .08, .1, O.cape); }
     if (O.quiver) { g.push(-.08, .14, -.2, -.2, 0, .45); g.cyl(0, 0, 0, .08, .09, .5, 7, C.leather); for (let i = 0; i < 4; i++) g.cone(-.03 + i * .02, .5, (i % 2) * .03, 0, 1, 0, .045, .14, 3, [1, 1, 1]); g.pop(); }
@@ -3995,7 +4118,7 @@ function buildCharModel(R, cls) {
     if (O.mask) { g.ell(0, .16, .06, .43, .17, .43, hexc('#262838'), 14, 8); }
     // hair cap
     g.sphereSkip(0, .47, -.03, .53, C.hair, 14, 10, c => (c[2] > .12 && c[1] < .2) || c[1] < -.32);
-    const rnd = mulberry32(99 + cls.length);
+    const rnd = mulberry32(99 + like.length);
     // layered spiky tufts: top tufts point up-back, side/back tufts point outward and down
     for (let i = 0; i < 44; i++) {
       const a = rnd() * TAU, e = -.35 + rnd() * 1.25;
@@ -4035,12 +4158,12 @@ function buildCharModel(R, cls) {
   const armU = (g, side) => {
     g.cyl(0, -.24, 0, .062, .072, .24, 7, O.sleeve);
     g.sphere(0, 0, 0, .075, O.sleeve, 6, 4);
-    if (O.capelet && cls === 'priest') g.cyl(0, -.24, 0, .1, .08, .2, 7, O.shirt);
+    if (O.capelet && like === 'priest') g.cyl(0, -.24, 0, .1, .08, .2, 7, O.shirt);
   };
   const armL = (g, side) => {
     g.cyl(0, -.2, 0, .052, .062, .2, 7, O.wraps ? hexc('#2b2422') : O.sleeve === C.skin ? C.skin : O.glove);
     if (O.armor) g.cyl(0, -.18, 0, .075, .07, .16, 7, C.leather);
-    if (cls === 'mage' || cls === 'priest') g.cyl(0, -.12, 0, .09, .065, .12, 7, O.sleeve);
+    if (like === 'mage' || like === 'priest') g.cyl(0, -.12, 0, .09, .065, .12, 7, O.sleeve);
     g.sphere(0, -.25, 0, .075, O.glove, 6, 5);
   };
   mk('shL', g => armU(g, 1)); mk('shR', g => armU(g, -1));
@@ -4059,7 +4182,7 @@ function buildCharModel(R, cls) {
     if (w === 'rod') { g.cyl(0, -.7, 0, .03, .035, 1.5, 6, C.gold); g.push(0, .95, 0, Math.PI / 2); g.cyl(0, -.02, 0, .2, .2, .04, 12, C.gold, null, false); g.pop(); g.ell(0, .95, 0, .07, .1, .07, hexc('#d65aa0'), 6, 4); }
   });
   // legs
-  const legU = g => { g.cyl(0, -.3, 0, .085, .095, .3, 8, O.robe && cls === 'priest' ? O.pants : O.pants); };
+  const legU = g => { g.cyl(0, -.3, 0, .085, .095, .3, 8, O.robe && like === 'priest' ? O.pants : O.pants); };
   const legL = g => {
     g.cyl(0, -.28, 0, .072, .082, .28, 8, O.wraps ? hexc('#8a8378') : O.boot);
     g.box(0, -.335, .045, .17, .13, .27, O.boot); g.box(0, -.39, .05, .18, .03, .29, shade(O.boot, .6));
@@ -4069,10 +4192,11 @@ function buildCharModel(R, cls) {
   mk('thL', legU); mk('thR', legU); mk('knL', legL); mk('knR', legL);
   // cape / scarf tails / cloak
   mk('cape', g => {
-    if (cls === 'knight') { g.box(0, -.48, -.02, .5, .96, .035, O.cape); g.box(0, -.94, -.02, .52, .06, .04, shade(O.cape, .8)); }
-    if (cls === 'ninja') { g.push(-.08, 0, 0, 0, 0, .1); g.box(0, -.32, -.02, .14, .66, .025, O.cape); g.pop(); g.push(.06, 0, 0, 0, 0, -.06); g.box(0, -.25, -.03, .12, .5, .025, shade(O.cape, .9)); g.pop(); }
-    if (cls === 'mage') { g.box(0, -.48, -.03, .56, .96, .035, O.cape); g.box(0, -.95, -.03, .58, .04, .04, C.gold); }
-    if (cls === 'adventurer') { g.box(0, -.22, -.02, .44, .4, .03, shade(O.cape, .95)); }
+    if (!O.cape || (O.add && O.add.cape)) return;
+    if (like === 'knight') { g.box(0, -.48, -.02, .5, .96, .035, O.cape); g.box(0, -.94, -.02, .52, .06, .04, shade(O.cape, .8)); }
+    if (like === 'ninja') { g.push(-.08, 0, 0, 0, 0, .1); g.box(0, -.32, -.02, .14, .66, .025, O.cape); g.pop(); g.push(.06, 0, 0, 0, 0, -.06); g.box(0, -.25, -.03, .12, .5, .025, shade(O.cape, .9)); g.pop(); }
+    if (like === 'mage') { g.box(0, -.48, -.03, .56, .96, .035, O.cape); g.box(0, -.95, -.03, .58, .04, .04, C.gold); }
+    if (like === 'adventurer') { g.box(0, -.22, -.02, .44, .4, .03, shade(O.cape, .95)); }
   });
   return parts;
 }
@@ -4202,7 +4326,7 @@ class Rig {
     this.walkAmp = 0; this.ph = 0; this.hitDone = true;
   }
   play(name, speed = 1, onHit) { const c = CLIPS[name]; if (!c) return; this.clip = c; this.clipName = name; this.clipT = 0; this.clipSpd = speed; this.onHit = onHit; this.hitDone = !onHit; }
-  get busy() { return !!this.clip && this.clipName !== 'hurt' && this.clipName !== 'cheer'; }
+  get busy() { return !!this.clip && this.clipName !== 'hurt' && this.clipName !== 'cheer' && !(typeof EMOTE_CLIP !== 'undefined' && Object.values(EMOTE_CLIP).includes(this.clipName)); }
   // st: {walk, ph, speed, idle, dead, think, wave, vx, vz}
   update(dt, st) {
     this.t += dt; const T = this.tgt; for (const a of T) { a[0] = a[1] = a[2] = 0; }
@@ -4581,7 +4705,7 @@ const AutoHunt = {
     if (S.hp < P.stats.maxhp * .3 && !S.inv.hp_s && !S.inv.hp_l) { P.target = null; this.stop('HP ต่ำและยาหมดแล้ว ถอยกลับไปพักก่อน'); Nav.retreat(); return; }
     // use the small skills when they are ready
     if (P.target && P.target.kind === 'mon' && !P.target.ref.dead && dist2(P.target.ref.x, P.target.ref.z, P.x, P.z) < 49) {
-      const sk = CLASSES[S.cls].skills; for (let i = 0; i < 4; i++) { const d = SKILLS[sk[i]]; const ok = DMG_TYPES.includes(d.type) || (d.type === 'heal' && S.hp < P.stats.maxhp * .6) || (d.type === 'cleanse' && Object.keys(S.buffs).some(k => BUFFS[k] && BUFFS[k].bad)); if (Skills.cd[i] <= 0 && S.mp >= SkillLv.mp(sk[i]) + 6 && ok && !P.getRig().busy) { Skills.use(i); break; } }
+      const sk = Cls.of(S).skills; for (let i = 0; i < 4; i++) { const d = SKILLS[sk[i]]; const ok = DMG_TYPES.includes(d.type) || (d.type === 'heal' && S.hp < P.stats.maxhp * .6) || (d.type === 'cleanse' && Object.keys(S.buffs).some(k => BUFFS[k] && BUFFS[k].bad)); if (Skills.cd[i] <= 0 && S.mp >= SkillLv.mp(sk[i]) + 6 && ok && !P.getRig().busy) { Skills.use(i); break; } }
     }
     if (P.target && P.target.kind === 'mon' && !P.target.ref.dead) { this.idle = 0; return; }
     let best = null, bd = 32 * 32;
@@ -5622,6 +5746,143 @@ const NakBoss = {
 };
 
 /* ============================================================
+   Jobs: 12 advanced-class models (+ refreshed base looks),
+   job change, awakening ritual, awakened aura
+   ============================================================ */
+Object.assign(SKILL_ANIM, { bowling: 'spin', brandish: 'cleave', dragonblade: 'leap', grandcross: 'pray', shieldchain: 'throw', devotion: 'guard', hammerfall: 'slam', thunderforge: 'cleave', mammonite: 'cleave', aciddemo: 'throw', potionpitch: 'throw', acidbomb: 'throw', sonicblow: 'slash', edp: 'pray', meteorassault: 'spin', backstab: 'dash', chasewalk: 'dash', raid: 'spin', blitz: 'bow', truesight: 'guard', sharpshoot: 'bow', bragi: 'pray', idun: 'pray', arrowvulcan: 'bow', napalm: 'cast', gravity: 'slam', stormgust: 'slam', heavensdrive: 'slam', blindmist: 'cast', soulburn: 'slam', magnus: 'slam', meditation: 'pray', redemption: 'pray', ragingpalm: 'bash', spheres: 'pray', asura: 'leap' });
+Object.assign(SKILL_SHOUT, { bowling: 'haiya', brandish: 'uooa', dragonblade: 'heiyaa', grandcross: 'aaa', shieldchain: 'ha', devotion: 'hoo', hammerfall: 'uoo', thunderforge: 'hya', mammonite: 'uooa', aciddemo: 'ha', potionpitch: 'hai', acidbomb: 'heiya', sonicblow: 'sha', edp: 'hoo', meteorassault: 'haiya', backstab: 'shu', chasewalk: 'shu', raid: 'haa', blitz: 'hya', truesight: 'hoo', sharpshoot: 'eiyaa', bragi: 'laa', idun: 'laa', arrowvulcan: 'hyaa', napalm: 'haa', gravity: 'eia', stormgust: 'oooaa', heavensdrive: 'eia', blindmist: 'haa', soulburn: 'oooaa', magnus: 'aaa', meditation: 'ooo', redemption: 'aaa', ragingpalm: 'ha', spheres: 'hoo', asura: 'uooaaa' });
+Object.assign(BASIC_ANIM, { lordknight: 'slash', paladin: 'slash', whitesmith: 'slash', creator: 'throw', assassinx: 'slash', stalker: 'slash', sniper: 'bow', minstrel: 'cast', highwizard: 'cast', professor: 'cast', highpriest: 'cast', champion: 'slash' });
+const AWK_EMIS = new Float32Array([.17, .11, .03]);
+const hc = hexc;
+/* hair colors per class line (refreshed base looks) */
+const HAIR = {
+  adventurer: { hair: hc('#8a5a32'), hair2: hc('#6a4224'), hair3: hc('#b07a48') }, knight: { hair: hc('#d8dce6'), hair2: hc('#a8b0c0'), hair3: hc('#f4f6fa') },
+  ninja: { hair: hc('#c8c4c0'), hair2: hc('#9a9490'), hair3: hc('#ecebe8') }, archer: { hair: hc('#7a4a2a'), hair2: hc('#5a3418'), hair3: hc('#a0683a') },
+  mage: { hair: hc('#c83a3a'), hair2: hc('#962626'), hair3: hc('#e86060') }, priest: { hair: hc('#e8c870'), hair2: hc('#c0a050'), hair3: hc('#f8e4a0') }
+};
+for (const k in HAIR) OUTFITS[k].col = HAIR[k];
+const JC = { steel: hc('#c9ced8'), steel2: hc('#9aa1ae'), gold: hc('#d9a845'), gold2: hc('#b8862e'), dark: hc('#2a2430'), wood: hc('#8a6240'), leather: hc('#6b4428'), white: hc('#f4f0e7'), red: hc('#a32f25'), crimson: hc('#7a1a22') };
+/* weapon / gear builders used through OUTFITS[job].add[bone] */
+const JW = {
+  greatsword: g => { g.push(0, -.26, 0, Math.PI / 2); g.box(0, .62, 0, .16, 1.25, .035, JC.steel); g.box(0, .62, .02, .04, 1.2, .012, hc('#eef1f6')); g.box(0, .02, 0, .42, .07, .1, JC.gold); g.cone(0, 1.24, 0, 0, 1, 0, .09, .18, 4, JC.steel); g.cyl(0, -.16, 0, .04, .04, .3, 5, JC.leather); g.sphere(0, -.18, 0, .06, JC.crimson, 5, 3); g.pop(); },
+  lance: g => { g.push(0, -.26, 0, Math.PI / 2 + .12); g.cyl(0, -.3, 0, .035, .035, 1.6, 6, JC.wood); g.cone(0, 1.3, 0, 0, 1, 0, .07, .42, 4, JC.steel); g.cyl(0, 1.22, 0, .09, .09, .06, 6, JC.gold, null, true); g.pop(); },
+  kite: g => { g.push(.1, -.15, .04, 0, 0, 0); g.box(0, .02, 0, .05, .62, .46, JC.white); g.box(.03, .02, 0, .02, .56, .4, hc('#e8e0c8')); g.box(.04, .02, 0, .02, .36, .08, JC.gold); g.box(.04, .08, 0, .02, .08, .26, JC.gold); g.cone(0, -.3, 0, 0, -1, 0, .22, .22, 4, JC.white); g.pop(); },
+  hammer: g => { g.push(0, -.26, 0, Math.PI / 2); g.cyl(0, -.2, 0, .04, .04, 1.1, 6, JC.wood); g.box(0, .95, 0, .3, .3, .5, hc('#6a6a74'), hc('#8a8a94')); g.box(0, .95, 0, .34, .1, .1, JC.gold); g.pop(); },
+  flask: g => { g.push(0, -.3, .05, 0, 0, 0); g.sphere(0, 0, 0, .1, hc('#8ad06a'), 7, 5); g.cyl(0, .08, 0, .035, .035, .1, 6, hc('#c8e8a0')); g.cyl(0, .17, 0, .03, .03, .03, 6, JC.leather); g.pop(); },
+  katar: g => { g.push(0, -.25, 0, Math.PI / 2); g.box(0, .45, 0, .06, .7, .02, JC.steel); g.box(.06, .3, 0, .03, .4, .015, JC.steel); g.box(-.06, .3, 0, .03, .4, .015, JC.steel); g.box(0, .02, 0, .18, .05, .06, JC.crimson); g.pop(); },
+  longbow: g => { g.push(0, -.26, .02, 0, 0, 0); for (let i = -6; i <= 6; i++) { const y = i * .1, z = .16 - Math.abs(i) * Math.abs(i) * .006; g.box(0, y, z, .045, .11, .045, i % 2 ? hc('#5a3a1e') : JC.leather); } g.box(0, 0, -.04, .006, 1.2, .006, [1, 1, 1]); g.box(0, 0, .17, .05, .2, .06, JC.gold); g.pop(); },
+  falcon: g => { g.push(.1, .34, -.06, 0, 0, 0); g.ell(0, 0, 0, .09, .08, .14, hc('#6a4a2a'), 7, 5); g.sphere(0, .09, .1, .07, hc('#8a6a3a'), 6, 4); g.cone(0, .09, .16, 0, -.2, 1, .025, .07, 3, JC.gold); g.ell(.1, .02, -.02, .03, .05, .13, hc('#5a3a1e'), 5, 4); g.ell(-.1, .02, -.02, .03, .05, .13, hc('#5a3a1e'), 5, 4); g.pop(); },
+  harp: g => { g.push(0, -.26, .03, 0, 0, 0); g.box(0, .25, 0, .04, .55, .05, JC.gold); g.box(.16, .25, 0, .04, .5, .05, JC.gold); g.box(.08, .52, 0, .22, .05, .05, JC.gold); g.box(.08, -.02, 0, .22, .05, .05, JC.gold2); for (let i = 1; i < 5; i++) g.box(.04 + i * .025, .25, 0, .004, .48, .004, [1, 1, 1]); g.pop(); },
+  book: g => { g.push(0, -.3, .06, .4, 0, 0); g.box(0, 0, 0, .3, .05, .22, hc('#f4ead2')); g.box(0, -.03, 0, .32, .025, .24, hc('#6a2a2a')); g.box(0, .03, 0, .32, .025, .24, hc('#6a2a2a')); g.box(0, .045, 0, .1, .005, .1, JC.gold); g.pop(); },
+  knuckle: g => { for (let i = 0; i < 3; i++) g.cone(-.03 + i * .03, -.27, .05, 0, -.3, 1, .018, .16, 3, JC.steel); g.box(0, -.26, .03, .14, .09, .1, hc('#8a4a2a')); },
+  crystal: g => { g.push(0, .9, 0, 0, 0, 0); g.cyl(0, 0, 0, .14, 0, .3, 5, hc('#b08aff')); g.at(0, 0, 0, 0, 1, 1, 1, Math.PI); g.cyl(0, 0, 0, .14, 0, .22, 5, hc('#8a5aff')); g.reset(); g.pop(); },
+  bigrod: g => { g.cyl(0, -.7, 0, .03, .035, 1.6, 6, JC.gold); g.push(0, 1.0, 0, 0, 0, 0); g.cyl(0, 0, 0, .22, .22, .04, 12, JC.gold, null, false); g.ell(0, 0, 0, .09, .12, .09, hc('#ffe9a8'), 6, 4); for (let i = 0; i < 4; i++) g.cone(0, 0, 0, Math.cos(i * 1.57), .4, Math.sin(i * 1.57), .025, .3, 3, JC.gold); g.pop(); },
+  pauldrons: (g, col, trim) => { for (const s of [-1, 1]) { g.ell(s * .29, .38, 0, .15, .11, .15, col, 7, 5); g.cyl(s * .29, .33, 0, .155, .155, .03, 8, trim, null, true); } },
+  cape: (g, col, w = .5, h = .96) => { g.box(0, -h / 2, -.02, w, h, .035, col); g.box(0, -h + .03, -.02, w + .02, .06, .04, shade(col, .8)); },
+  hood: (g, col) => { g.sphereSkip(0, .5, -.04, .56, col, 14, 10, c => (c[2] > .18 && c[1] < .3) || c[1] < -.25); g.cone(0, .95, -.2, 0, .7, -1, .14, .3, 5, col); },
+  crown: (g, col) => { g.cyl(0, .66, 0, .5, .48, .1, 12, col, null, true); for (let i = 0; i < 6; i++) { const a = i / 6 * TAU; g.cone(Math.cos(a) * .46, .74, Math.sin(a) * .46, 0, 1, 0, .05, .18, 4, col); } },
+  halo: g => { g.cyl(0, 1.08, 0, .32, .32, .03, 14, JC.gold, null, false); g.cyl(0, 1.1, 0, .26, .26, .02, 14, hc('#ffe9a8'), null, true); },
+  horns: g => { for (const s of [-1, 1]) g.cone(s * .3, .7, .05, s * .5, 1, -.2, .07, .36, 5, JC.steel); },
+  scarf: (g, col) => { g.cyl(0, .36, 0, .15, .13, .12, 8, col); g.push(-.1, .28, -.2, .3, 0, 0); g.box(0, -.25, 0, .12, .5, .03, col); g.pop(); }
+};
+/* ---- 12 job outfits + master NPC ---- */
+Object.assign(OUTFITS, {
+  lordknight: { like: 'knight', col: HAIR.knight, shirt: hc('#2a2430'), sleeve: hc('#4a3a30'), pants: hc('#2a2026'), boot: JC.steel, glove: hc('#3a2a24'), belt: JC.gold2, cape: JC.red, armor: true, pig: false, band: 'helm', weapon: null,
+    add: { elR: g => JW.greatsword(g), chest: g => JW.pauldrons(g, JC.steel, JC.red), head: g => JW.horns(g), cape: g => JW.cape(g, JC.red, .56, 1.0) } },
+  paladin: { like: 'knight', col: HAIR.knight, shirt: JC.white, sleeve: hc('#5a4a40'), pants: hc('#4a3a30'), boot: JC.gold, glove: hc('#6b4428'), belt: JC.gold2, cape: hc('#4a7ad0'), armor: true, pig: false, band: 'helm', weapon: null,
+    add: { elR: g => JW.lance(g), elL: g => JW.kite(g), chest: g => JW.pauldrons(g, JC.white, JC.gold), head: g => JW.crown(g, JC.gold), cape: g => JW.cape(g, hc('#4a7ad0'), .5, .9) } },
+  whitesmith: { like: 'adventurer', col: HAIR.adventurer, shirt: hc('#e8d8b0'), sleeve: hc('#e8d8b0'), pants: hc('#3a3a44'), boot: hc('#5a4a3a'), glove: hc('#8a6a4a'), belt: hc('#4a3a2a'), capelet: false, weapon: null, pig: false,
+    add: { elR: g => JW.hammer(g), chest: g => { g.cyl(0, .02, 0, .215, .19, .3, 10, hc('#6a4a3a')); g.box(0, .18, .19, .18, .08, .03, JC.gold); JW.pauldrons(g, hc('#6a6a74'), JC.gold); }, head: g => { g.cyl(0, .6, 0, .53, .53, .1, 14, hc('#c8402a'), null, true); } } },
+  creator: { like: 'adventurer', col: HAIR.adventurer, shirt: hc('#f4f0e7'), sleeve: hc('#f4f0e7'), pants: hc('#3a4a5a'), boot: hc('#5a4a3a'), glove: hc('#8a6a4a'), belt: hc('#4a3a2a'), capelet: true, cape: hc('#4a8a5a'), weapon: null, pig: false,
+    add: { elL: g => JW.flask(g), chest: g => { g.push(0, .1, -.22, 0, 0, 0); g.box(0, 0, 0, .34, .4, .18, hc('#8a6a4a')); g.box(0, .18, 0, .36, .06, .2, hc('#5a4030')); g.pop(); g.box(.12, .2, .19, .08, .1, .03, hc('#8ad06a')); g.box(-.1, .2, .19, .08, .1, .03, hc('#d06a6a')); }, head: g => { g.cyl(0, .62, 0, .54, .54, .06, 14, hc('#8a6a4a'), null, true); g.box(0, .6, .5, .34, .1, .04, hc('#d0e8f0')); } } },
+  assassinx: { like: 'ninja', col: HAIR.ninja, shirt: hc('#1a1418'), sleeve: hc('#f8d6b8'), pants: hc('#1a1418'), boot: hc('#2a2024'), glove: hc('#2b2422'), belt: JC.crimson, cape: JC.crimson, scarf: true, mask: true, weapon: null, pig: false, band: 'ninja', wraps: true,
+    add: { elR: g => JW.katar(g), elL: g => JW.katar(g), chest: g => { g.box(0, .1, .19, .24, .22, .03, JC.crimson); g.box(0, .1, .2, .04, .22, .02, JC.gold); }, cape: g => { g.push(-.1, 0, 0, 0, 0, .15); g.box(0, -.4, -.02, .16, .8, .025, JC.crimson); g.pop(); g.push(.1, 0, 0, 0, 0, -.15); g.box(0, -.4, -.02, .16, .8, .025, JC.crimson); g.pop(); } } },
+  stalker: { like: 'ninja', col: HAIR.ninja, shirt: hc('#2a2436'), sleeve: hc('#3a3048'), pants: hc('#1e1a26'), boot: hc('#2a2024'), glove: hc('#2b2422'), belt: hc('#6b4428'), cape: hc('#5a4a7a'), scarf: false, mask: false, weapon: 'kunai', pig: false, band: null, wraps: true,
+    add: { head: g => JW.hood(g, hc('#4a3c66')), chest: g => { g.cyl(0, .02, 0, .212, .19, .36, 10, hc('#3a3048')); g.box(0, .3, .17, .3, .06, .06, hc('#5a4a7a')); }, cape: g => JW.cape(g, hc('#4a3c66'), .48, .9) } },
+  sniper: { like: 'archer', col: HAIR.archer, shirt: hc('#4a6a3a'), sleeve: hc('#e8dcc0'), pants: hc('#3a2a1e'), boot: hc('#5a3a1e'), glove: hc('#6b4428'), belt: hc('#6a4428'), vest: hc('#2e4a2a'), weapon: null, quiver: true, pig: false,
+    add: { elL: g => JW.longbow(g), chest: g => JW.falcon(g), head: g => { g.cyl(0, .64, 0, .535, .53, .08, 14, hc('#2e4a2a'), null, true); g.cone(.38, .68, .15, .6, .7, .2, .03, .4, 3, hc('#e8dcc0')); } } },
+  minstrel: { like: 'archer', col: HAIR.archer, shirt: hc('#f4e0e8'), sleeve: hc('#f4e0e8'), pants: hc('#6a3a5a'), boot: hc('#4a2a3a'), glove: hc('#f4e0e8'), belt: JC.gold, vest: hc('#c86a9a'), weapon: null, quiver: false, pig: false,
+    add: { elL: g => JW.harp(g), head: g => { g.cyl(0, .62, 0, .55, .5, .14, 12, hc('#c86a9a'), null, true); g.cone(.3, .72, -.1, .6, 1, -.3, .04, .5, 3, hc('#f4e0e8')); g.cone(.32, .72, -.12, .7, .8, -.3, .04, .45, 3, hc('#6ab0e8')); }, chest: g => { g.box(0, .18, .19, .1, .3, .03, JC.gold); } } },
+  highwizard: { like: 'mage', col: HAIR.mage, shirt: hc('#2a1a44'), sleeve: hc('#2a1a44'), pants: hc('#1e1430'), boot: hc('#3a2a4a'), glove: hc('#2a1a44'), belt: JC.gold, cape: hc('#4a2a7a'), robe: hc('#3a2460'), weapon: 'staff', hat: false, pig: false, cloak: true,
+    add: { elR: g => JW.crystal(g), head: g => { JW.crown(g, JC.gold); g.cone(0, .76, 0, 0, 1, 0, .1, .36, 4, hc('#b08aff')); }, chest: g => { g.cyl(0, .04, 0, .215, .19, .34, 10, hc('#2a1a44')); g.box(0, .2, .19, .18, .3, .03, JC.gold); JW.pauldrons(g, hc('#4a2a7a'), JC.gold); }, cape: g => JW.cape(g, hc('#4a2a7a'), .6, 1.0) } },
+  professor: { like: 'mage', col: HAIR.mage, shirt: hc('#8a3a2a'), sleeve: hc('#f4e8d0'), pants: hc('#3a2a24'), boot: hc('#5a3a2a'), glove: hc('#f4e8d0'), belt: JC.gold2, cape: hc('#8a3a2a'), robe: hc('#f4e8d0'), weapon: 'staff', hat: false, pig: false, cloak: true,
+    add: { elL: g => JW.book(g), head: g => { g.box(-.2, .22, .5, .16, .12, .02, hc('#f4e8d0')); g.box(.2, .22, .5, .16, .12, .02, hc('#f4e8d0')); g.box(0, .22, .5, .1, .02, .02, JC.gold); g.cyl(0, .62, 0, .54, .54, .08, 14, hc('#8a3a2a'), null, true); }, cape: g => JW.cape(g, hc('#8a3a2a'), .56, .96) } },
+  highpriest: { like: 'priest', col: HAIR.priest, shirt: JC.white, sleeve: JC.white, pants: hc('#4a3324'), boot: hc('#7a4c2a'), glove: hc('#6b4428'), belt: JC.gold, robe: JC.white, weapon: null, capelet: true, capeletCol: hc('#b8302a'), pig: false,
+    add: { elR: g => JW.bigrod(g), head: g => JW.halo(g), chest: g => { g.box(0, .2, .18, .12, .4, .03, JC.gold); g.box(0, .3, .19, .28, .06, .03, JC.gold); } } },
+  champion: { like: 'priest', col: HAIR.priest, shirt: hc('#e8d0a0'), sleeve: hc('#f8d6b8'), pants: hc('#c8402a'), boot: hc('#4a3a2a'), glove: hc('#f8d6b8'), belt: JC.gold, robe: null, weapon: null, capelet: false, pig: false,
+    add: { elR: g => JW.knuckle(g), elL: g => JW.knuckle(g), head: g => { g.cyl(0, .64, 0, .535, .53, .1, 14, hc('#c8402a'), null, true); g.push(-.3, .6, -.3, .3, 0, 0); g.box(0, -.3, 0, .1, .5, .02, hc('#c8402a')); g.pop(); }, chest: g => { g.push(0, .2, 0, 0, 0, .6); g.box(0, 0, .19, .12, .5, .03, hc('#c8402a')); g.pop(); for (let i = 0; i < 5; i++) { const a = i / 5 * TAU; g.sphere(Math.cos(a) * .42, .18 + Math.sin(a * 2) * .06, Math.sin(a) * .42, .05, hc('#ffd080'), 5, 3); } } } },
+  zen: { like: 'priest', col: { hair: hc('#e8e4dc'), hair2: hc('#c0bcb4'), hair3: hc('#fbfaf6') }, shirt: hc('#3a3a4a'), sleeve: hc('#3a3a4a'), pants: hc('#2a2a34'), boot: hc('#4a3a2a'), glove: hc('#e8c4a0'), belt: JC.gold, robe: hc('#3a3a4a'), weapon: 'staff', capelet: false, pig: false,
+    add: { head: g => { g.cone(0, .2, .32, 0, -1, .25, .2, .7, 7, hc('#f4f0e7')); for (const s of [-1, 1]) g.ell(s * .19, .6, .43, .11, .04, .03, hc('#f4f0e7'), 5, 3); }, chest: g => { g.box(0, .2, .19, .06, .36, .03, JC.gold); } } }
+});
+{ const ob = buildCharModels; buildCharModels = function (R) { ob(R); for (const k in JOBS) CharModels[k] = buildCharModel(R, k); CharModels.zen = buildCharModel(R, 'zen'); }; }
+
+/* ---- job system ---- */
+const JobSys = {
+  cost: 500, ritualCost: 5000,
+  canChange(S) { return !S.job && S.level >= JOB_LV; },
+  change(id) {
+    const S = Save.d, j = JOBS[id]; if (!j || j.base !== S.cls) return false;
+    if (S.job) { UI.toast('เปลี่ยนอาชีพไปแล้ว', 'warn'); return false; }
+    if (S.level < JOB_LV) { UI.toast(`ต้องมีเลเวล ${JOB_LV} ขึ้นไป`, 'warn'); return false; }
+    if (S.coins < this.cost) { UI.toast(`ต้องใช้ ${this.cost} เหรียญ`, 'warn'); return false; }
+    S.coins -= this.cost; S.job = id; S.stats.jobs = 1; Cls.cache = {}; Skills.cd = [0, 0, 0, 0, 0];
+    Player.recalc(); S.hp = Player.stats.maxhp; S.mp = Player.stats.maxmp; Player.rig = null;
+    const P = Player; Fx.pillar(P.x, P.z, 1.6, 9, hexc(j.color), 1.2); Fx.shock(P.x, P.z, 5, [1, .9, .6], .8); Particles.burst(P.x, 1, P.z, 80, [1, .9, .5], 6, 1.2, .5, 5); Audio.sfx('level'); Player.doAct('cheer', 1.4);
+    UI.banner('เปลี่ยนอาชีพเป็น ' + j.name + '!', 'level'); UI.toast('ได้สกิลใหม่ 3 สกิล (R, T, X) เปิดหน้าสกิลเพื่อดูรายละเอียด', 'quest');
+    UI.refreshAll(); UI.mountBtns(); Achievements.check(); Save.write(); if (Net.joined) Net.send(true); return true;
+  },
+  ritual() {
+    const S = Save.d; if (S.awk || !S.job) return;
+    if (S.level < AWK_LV) { UI.toast(`ต้องมีเลเวล ${AWK_LV} ขึ้นไป`, 'warn'); return; }
+    if (S.coins < this.ritualCost) { UI.toast(`ต้องใช้ ${fmt(this.ritualCost)} เหรียญสำหรับพิธีกรรม`, 'warn'); return; }
+    Quiz.run({
+      title: 'พิธีกรรมปลุกพลัง', sub: 'ตอบถูกติดต่อกัน 3 ข้อเพื่อปลดผนึกแห่งพลัง ตอบผิดต้องเริ่มใหม่ (เหรียญไม่หาย)', count: 3, chain: true, time: Settings.d.qtime + 5, mode: 'chain',
+      onEach: ok => { if (ok) { Fx.pillar(Player.x, Player.z, .8, 5, [1, .85, .4], .6); Audio.sfx('crystal'); } },
+      onEnd: r => { if (r.correct >= 3) this.awaken(); else UI.toast('ผนึกยังไม่คลาย ลองเข้าพิธีกรรมอีกครั้ง', 'warn'); }
+    });
+  },
+  awaken() {
+    const S = Save.d, P = Player, j = JOBS[S.job]; S.coins -= this.ritualCost; S.awk = true; S.stats.awakened = 1; S.skillPts = (S.skillPts || 0) + 3;
+    Game.addItem('awk_amulet', 1); S.cos.aura = 'awk_amulet'; Player.recalc(); S.hp = P.stats.maxhp; S.mp = P.stats.maxmp;
+    Fx.pillar(P.x, P.z, 2.4, 14, [1, .8, .3], 2); Fx.shock(P.x, P.z, 8, [1, .85, .4], 1); Fx.shock(P.x, P.z, 4, [1, 1, .9], .7); for (let i = 0; i < 160; i++) Particles.add(P.x + rand(-1.5, 1.5), rand(0, 3), P.z + rand(-1.5, 1.5), { c: [1, .7 + Math.random() * .3, .3], s: .5, life: 2, vy: rand(2, 6) });
+    Game.shake(.8); Audio.sfx('boss'); Audio.sfx('level'); Player.doAct('cheer', 2); VoiceFx.shout('uooaaa', P.sheet, .3);
+    UI.banner('ปลุกพลังสำเร็จ! ' + Cls.name(S), 'crit'); UI.toast(`เลเวลสูงสุดขยายเป็น ${AWK_LV_CAP} · สกิลอัปได้ถึง Lv.10 · ${j.awk.map(k => SKILLS[k].name).join(' และ ')} แข็งแกร่งขึ้น 30%`, 'rare');
+    S.extraTitles = S.extraTitles || []; if (!S.extraTitles.includes('ผู้ตื่นรู้')) S.extraTitles.push('ผู้ตื่นรู้');
+    UI.refreshAll(); Achievements.check(); Save.write(); if (Net.joined) Net.send(true);
+  },
+  giveStone(id, why) { const S = Save.d; if (!S || !S.quests.awk || S.quests.awk.s !== 'active' || S.inv[id]) return; Game.addItem(id, 1); UI.toast(`${ITEMS[id].name}: ${why}`, 'rare'); },
+  onDaily(correct) { if (correct >= 5) this.giveStone('st_wisdom', 'ปราชญ์โอรินมอบให้ผู้ตอบถูกครบทุกข้อ'); },
+  awkFx(x, z, t) { for (let k = 0; k < 2; k++) if (Math.random() < .7) { const a = Math.random() * TAU, r = .5 + Math.random() * .4; Particles.add(x + Math.cos(a) * r, .05, z + Math.sin(a) * r, { c: Math.random() < .3 ? [1, .95, .6] : [1, .5 + Math.random() * .3, .15], s: .45, life: .7, vy: rand(1.5, 3), drag: 1 }); } },
+  stoneProgress(S) { return ['st_light', 'st_dark', 'st_wisdom', 'st_spirit'].map(k => ({ id: k, have: !!(S.inv[k]) })); }
+};
+
+/* ---- hair styles for jobs ---- */
+JW.longHair = (g, C) => { g.box(0, .05, -.36, .9, 1.3, .16, C.hair); for (const s of [-1, 1]) g.box(s * .44, .05, -.06, .12, 1.0, .3, C.hair); g.cone(0, -.6, -.38, 0, -1, 0, .3, .5, 5, C.hair2); };
+JW.ponytail = (g, C) => { g.sphere(0, .45, -.5, .14, C.hair2, 6, 4); g.cone(0, .4, -.55, 0, -1, -.45, .14, 1.1, 5, C.hair); g.cone(0, .4, -.55, .2, -1, -.35, .1, .9, 4, C.hair3); };
+JW.braid = (g, C) => { for (let i = 0; i < 6; i++) g.sphere(.38 - i * .02, .3 - i * .17, -.3 + i * .03, .11 - i * .005, i % 2 ? C.hair : C.hair2, 6, 4); };
+JW.twintails = (g, C) => { for (const s of [-1, 1]) { g.sphere(s * .5, .5, -.1, .13, C.hair2, 6, 4); g.cone(s * .5, .45, -.1, s * .3, -1, -.1, .12, .95, 5, C.hair); } };
+{ const H = { paladin: 'longHair', creator: 'twintails', stalker: 'ponytail', sniper: 'ponytail', minstrel: 'longHair', professor: 'longHair', highpriest: 'braid', highwizard: 'ponytail', whitesmith: 'braid', champion: null, lordknight: null, assassinx: null };
+  for (const k in H) if (H[k]) { const o = OUTFITS[k], prev = o.add.head; o.add.head = (g, C, O) => { prev && prev(g, C, O); JW[H[k]](g, C); }; } }
+
+/* ---- extra pose clips (emotes) ---- */
+Object.assign(CLIPS, {
+  bow: { dur: 1.4, hit: 1, keys: [[0, {}], [.3, { chest: [.9, 0, 0], head: [.3, 0, 0], shR: [.4, 0, -.3], shL: [.4, 0, .3] }], [.7, { chest: [.9, 0, 0], head: [.3, 0, 0], shR: [.4, 0, -.3], shL: [.4, 0, .3] }], [1, {}]] },
+  laugh: { dur: 1.3, hit: 1, keys: [[0, {}], [.2, { chest: [-.25, 0, 0], head: [-.4, 0, .1], shR: [-.3, 0, -.5], elR: [-1.8, 0, 0], shL: [.3, 0, .4] }], [.45, { chest: [-.15, 0, 0], head: [-.3, 0, -.1], shR: [-.3, 0, -.5], elR: [-1.8, 0, 0], shL: [.3, 0, .4], root: { y: -.04 } }], [.7, { chest: [-.25, 0, 0], head: [-.4, 0, .1], shR: [-.3, 0, -.5], elR: [-1.8, 0, 0], shL: [.3, 0, .4] }], [1, {}]] },
+  flex: { dur: 1.5, hit: 1, keys: [[0, {}], [.3, { shR: [-1.5, 0, -1.3], elR: [-2.2, 0, 0], shL: [-1.5, 0, 1.3], elL: [-2.2, 0, 0], chest: [-.1, 0, 0], head: [-.1, 0, 0], thL: [0, 0, .25], thR: [0, 0, -.25], root: { y: -.06 } }], [.8, { shR: [-1.5, 0, -1.3], elR: [-2.3, 0, 0], shL: [-1.5, 0, 1.3], elL: [-2.3, 0, 0], chest: [-.12, 0, 0], thL: [0, 0, .25], thR: [0, 0, -.25], root: { y: -.06 } }], [1, {}]] },
+  sad: { dur: 1.8, hit: 1, keys: [[0, {}], [.3, { chest: [.4, 0, 0], head: [.5, 0, 0], shR: [.3, 0, -.1], shL: [.3, 0, .1], root: { y: -.05 } }], [.8, { chest: [.4, 0, 0], head: [.5, 0, .15], shR: [.3, 0, -.1], shL: [.3, 0, .1], root: { y: -.05 } }], [1, {}]] },
+  angry: { dur: 1.4, hit: 1, keys: [[0, {}], [.25, { chest: [-.1, 0, 0], head: [.15, 0, 0], shR: [-2.6, 0, -.3], elR: [-.8, 0, 0], shL: [.3, 0, .3], thL: [-.3, 0, 0], root: { y: -.08 } }], [.4, { chest: [.25, 0, 0], head: [.2, 0, 0], shR: [-1.4, 0, -.2], elR: [-.3, 0, 0], shL: [.3, 0, .3], thL: [-.4, 0, 0], knL: [.5, 0, 0], root: { y: -.12 } }], [.6, { chest: [-.1, 0, 0], head: [.15, 0, 0], shR: [-2.6, 0, -.3], elR: [-.8, 0, 0], shL: [.3, 0, .3], root: { y: -.08 } }], [.75, { chest: [.25, 0, 0], shR: [-1.4, 0, -.2], shL: [.3, 0, .3], thL: [-.4, 0, 0], knL: [.5, 0, 0], root: { y: -.12 } }], [1, {}]] },
+  love: { dur: 1.6, hit: 1, keys: [[0, {}], [.3, { shR: [-1.6, .4, -.3], elR: [-2.2, 0, 0], shL: [-1.6, -.4, .3], elL: [-2.2, 0, 0], head: [.1, 0, .2], chest: [.05, 0, .05], root: { y: -.03 } }], [.75, { shR: [-1.6, .4, -.3], elR: [-2.2, 0, 0], shL: [-1.6, -.4, .3], elL: [-2.2, 0, 0], head: [.1, 0, -.2], chest: [.05, 0, -.05], root: { y: -.03 } }], [1, {}]] },
+  good: { dur: 1.3, hit: 1, keys: [[0, {}], [.3, { shR: [-1.9, 0, -.5], elR: [-1.2, 0, 0], head: [0, .3, -.1], chest: [0, .2, 0] }], [.75, { shR: [-1.9, 0, -.5], elR: [-1.2, 0, 0], head: [0, .3, -.1], chest: [0, .2, 0] }], [1, {}]] },
+  thanks: { dur: 1.5, hit: 1, keys: [[0, {}], [.3, { shR: [-1.0, .55, -.1], elR: [-1.7, 0, 0], shL: [-1.0, -.55, .1], elL: [-1.7, 0, 0], head: [.35, 0, 0], chest: [.25, 0, 0] }], [.8, { shR: [-1.0, .55, -.1], elR: [-1.7, 0, 0], shL: [-1.0, -.55, .1], elL: [-1.7, 0, 0], head: [.35, 0, 0], chest: [.25, 0, 0] }], [1, {}]] },
+  dance: { dur: 2.2, hit: 1, keys: [[0, {}], [.15, { shR: [-2.4, 0, -.6], shL: [.4, 0, .6], chest: [0, .4, .1], hips: [0, -.3, 0], thL: [-.3, 0, .3], root: { y: -.05 } }], [.35, { shR: [.4, 0, -.6], shL: [-2.4, 0, .6], chest: [0, -.4, -.1], hips: [0, .3, 0], thR: [-.3, 0, -.3], root: { y: -.05 } }], [.55, { shR: [-2.4, 0, -.6], shL: [.4, 0, .6], chest: [0, .4, .1], hips: [0, -.3, 0], thL: [-.3, 0, .3], root: { y: -.05 } }], [.75, { shR: [.4, 0, -.6], shL: [-2.4, 0, .6], chest: [0, -.4, -.1], hips: [0, .3, 0], thR: [-.3, 0, -.3], root: { y: -.05 } }], [.9, { shR: [-2.6, 0, -.3], shL: [-2.6, 0, .3], root: { y: .25, spin: TAU } }], [1, { root: { spin: TAU } }]] },
+  sit: { dur: 3.0, hit: 1, keys: [[0, {}], [.15, { thL: [-1.5, 0, .35], thR: [-1.5, 0, -.35], knL: [1.5, 0, 0], knR: [1.5, 0, 0], shL: [-.3, 0, .3], shR: [-.3, 0, -.3], elL: [-.9, 0, 0], elR: [-.9, 0, 0], chest: [.1, 0, 0], root: { y: -.5 } }], [.85, { thL: [-1.5, 0, .35], thR: [-1.5, 0, -.35], knL: [1.5, 0, 0], knR: [1.5, 0, 0], shL: [-.3, 0, .3], shR: [-.3, 0, -.3], elL: [-.9, 0, 0], elR: [-.9, 0, 0], chest: [.1, 0, 0], root: { y: -.5 } }], [1, {}]] },
+  point: { dur: 1.3, hit: 1, keys: [[0, {}], [.3, { shR: [-1.5, 0, -.1], elR: [0, 0, 0], chest: [0, -.2, 0], head: [0, -.2, 0] }], [.75, { shR: [-1.5, 0, -.1], elR: [0, 0, 0], chest: [0, -.2, 0], head: [0, -.2, 0] }], [1, {}]] },
+  kneel: { dur: 2.0, hit: 1, keys: [[0, {}], [.2, { thL: [-1.4, 0, .1], knL: [1.5, 0, 0], thR: [.3, 0, -.1], knR: [1.5, 0, 0], chest: [.3, 0, 0], head: [.3, 0, 0], shR: [-.4, 0, -.2], elR: [-.9, 0, 0], shL: [.2, 0, .3], root: { y: -.42 } }], [.85, { thL: [-1.4, 0, .1], knL: [1.5, 0, 0], thR: [.3, 0, -.1], knR: [1.5, 0, 0], chest: [.3, 0, 0], head: [.3, 0, 0], shR: [-.4, 0, -.2], elR: [-.9, 0, 0], shL: [.2, 0, .3], root: { y: -.42 } }], [1, {}]] },
+  victory: { dur: 1.6, hit: 1, keys: [[0, {}], [.2, { thL: [-.4, 0, 0], knL: [.8, 0, 0], thR: [-.4, 0, 0], knR: [.8, 0, 0], root: { y: -.18 } }], [.4, { shR: [-2.8, 0, -.2], elR: [-.2, 0, 0], shL: [-1.2, 0, .5], elL: [-1.6, 0, 0], head: [-.3, 0, 0], chest: [-.15, 0, 0], thL: [-.5, 0, 0], knL: [1.0, 0, 0], root: { y: .7, spin: TAU } }], [.65, { shR: [-2.8, 0, -.2], elR: [-.2, 0, 0], shL: [-1.2, 0, .5], elL: [-1.6, 0, 0], head: [-.3, 0, 0], thL: [-.5, 0, 0], knL: [1.0, 0, 0], root: { y: .2, spin: TAU } }], [.85, { shR: [-2.8, 0, -.2], shL: [-1.2, 0, .5], thL: [-.3, 0, .1], knL: [.5, 0, 0], thR: [-.3, 0, -.1], knR: [.5, 0, 0], root: { y: -.1, spin: TAU } }], [1, { root: { spin: TAU } }]] }
+});
+const EMOTE_CLIP = { wave: null, cheer: 'cheer', laugh: 'laugh', love: 'love', good: 'good', thanks: 'thanks', sad: 'sad', angry: 'angry', bow: 'bow', flex: 'flex', dance: 'dance', sit: 'sit', point: 'point', kneel: 'kneel', victory: 'victory' };
+
+/* ============================================================
    Systems: save, settings, audio, quiz, combat, quests
    ============================================================ */
 const today = () => { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
@@ -5750,7 +6011,7 @@ const Quiz = {
 /* ---------- Combat ---------- */
 const Combat = {
   basicAttack(m) {
-    const P = Player, cls = Save.d.cls, c = CLASSES[cls], st = P.stats; const rig = P.getRig();
+    const P = Player, cls = Save.d.cls, c = Cls.of(Save.d), st = P.stats; const rig = P.getRig();
     if (rig.busy) return;
     P.atkCD = c.rate * (Save.d.buffs.frenzy ? .6 : 1); P.combatT = 6; Net.act('atk'); P.face = Math.atan2(m.x - P.x, m.z - P.z);
     const anim = BASIC_ANIM[cls]; const spd = Math.max(1, CLIPS[anim].dur / Math.max(.3, c.rate * .85));
@@ -5831,7 +6092,7 @@ const Skills = {
   cd: [0, 0, 0, 0, 0],
   use(slot) {
     const P = Player, S = Save.d; if (P.dead || Game.paused) return;
-    const id = CLASSES[S.cls].skills[slot]; const sk = SKILLS[id];
+    const id = Cls.of(S).skills[slot]; const sk = SKILLS[id];
     if (Player.getRig().busy || Player.dashT > 0) return;
     if (this.cd[slot] > 0) { UI.toast('สกิลยังคูลดาวน์อยู่', 'warn'); return; }
     if (S.mp < SkillLv.mp(id)) { UI.toast('MP ไม่พอ', 'warn'); return; }
@@ -5945,6 +6206,7 @@ const Quests = {
     const q = QUESTS[id], s = this.st(id), S = Save.d;
     if (q.req && !(S.quests[q.req] && S.quests[q.req].s === 'done')) return false;
     if (q.minLv && S.level < q.minLv) return false;
+    if (q.needJob && !S.job) return false;
     if (!s) return true;
     if (this.isDaily(id) && s.s === 'done' && s.day !== today()) return true;
     return false;
@@ -5985,7 +6247,7 @@ const Quests = {
     for (const [it, n] of q.rew.items) Game.addItem(it, n);
     if (q.unlock === 'bridge') { S.flags.bridge = true; Game.applyUnlocks(); UI.toast('สะพานข้ามแม่น้ำเปิดแล้ว!', 'quest'); }
     if (q.unlock === 'gate') { S.flags.gate = true; Game.applyUnlocks(); UI.toast('ประตูถ้ำผลึกปลดล็อกแล้ว (ต้องเลเวล 5)', 'quest'); }
-    if (q.type === 'side') S.stats.sideDone++;
+    if (q.type === 'side') S.stats.sideDone++; if (q.title) Titles.grant(q.title, 'เควส ' + q.title);
     Season.addXP(QUEST_SXP[q.type] || 100, 'เควส ' + q.title); Season.bump('quest');
     Audio.sfx('quest'); Player.doAct('cheer', 1.0);
     Achievements.check(); UI.refreshTracker(); Game.autosave();
@@ -6031,15 +6293,17 @@ const DMG_TYPES = ['proj', 'nova', 'cone', 'dash', 'combo', 'storm', 'rain'];
 const SkillLv = {
   ensure(S) { if (!S.skillLv) S.skillLv = {}; if (S.skillPts === undefined) S.skillPts = Math.max(0, S.level - 1); },
   get(id) { const S = Save.d; return (S && S.skillLv && S.skillLv[id]) || 1; },
-  role() { return Save.d ? CLASSES[Save.d.cls].role : 'melee'; },
+  role() { return Save.d ? Cls.of(Save.d).role : 'melee'; },
   // multipliers for a given level (defaults to current)
   f(id, lv) {
     lv = lv || this.get(id); const k = lv - 1;
-    return { dmg: 1 + .15 * k, heal: (1 + .12 * k) * (this.role() === 'support' ? 1.2 : 1), dur: 1 + .1 * k, cd: 1 - .04 * k, mp: k };
+    const aw = Cls.isAwkSkill(Save.d, id) ? 1.3 : 1;
+    return { dmg: (1 + .15 * k) * aw, heal: (1 + .12 * k) * (this.role() === 'support' ? 1.2 : 1) * aw, dur: (1 + .1 * k) * (aw > 1 ? 1.2 : 1), cd: Math.max(.5, 1 - .04 * k), mp: k };
   },
   mp(id, lv) { return SKILLS[id].mp + this.f(id, lv).mp; },
   cd(id, lv) { return +(SKILLS[id].cd * this.f(id, lv).cd).toFixed(1); },
-  canUp(id) { const S = Save.d; return S.skillPts > 0 && this.get(id) < SKILL_MAXLV; },
+  max() { return Save.d && Save.d.awk ? 10 : SKILL_MAXLV; },
+  canUp(id) { const S = Save.d; return S.skillPts > 0 && this.get(id) < this.max(); },
   up(id) {
     const S = Save.d; if (!this.canUp(id)) return false;
     S.skillPts--; S.skillLv[id] = this.get(id) + 1; Audio.sfx('level');
@@ -6237,7 +6501,7 @@ const Input = {
       case 'KeyV': Mounts.ride(); break; case 'KeyG': Mounts.useSkill(); break;
       case 'Tab': e.preventDefault(); Game.cycleTarget(); break;
       case 'KeyI': UI.openPanel('inv'); break; case 'KeyC': UI.openPanel('char'); break; case 'KeyL': UI.openPanel('quest'); break;
-      case 'KeyM': UI.openPanel('map'); break; case 'KeyB': UI.openPanel('ghost'); break; case 'KeyK': UI.openPanel('ach'); break; case 'KeyH': UI.openPanel('help'); break;
+      case 'KeyM': UI.openPanel('map'); break; case 'KeyB': UI.openPanel('ghost'); break; case 'KeyJ': UI.openPanel('jobs'); break; case 'KeyK': UI.openPanel('ach'); break; case 'KeyH': UI.openPanel('help'); break;
     }
   },
   moveVec() {
@@ -6509,7 +6773,7 @@ const Game = {
   gainXP(n) {
     const S = Save.d; if (S.buffs.xp2) n *= 2; if (eventOn()) n *= EVENT.xpMul; n = Math.round(n * (1 + Mounts.pas('xp')) * (Net.partyNear() ? 1.1 : 1)); S.xp += n; this.run.xp += n; UI.dmgNum(Player.x, 3.3, Player.z, n, 'xp');
     let lv = false;
-    while (S.level < 30 && S.xp >= xpNeed(S.level)) { S.xp -= xpNeed(S.level); S.level++; S.points += 3; S.skillPts = (S.skillPts || 0) + 1; lv = true; Season.bump('lvl'); }
+    while (S.level < (S.awk ? AWK_LV_CAP : LV_CAP) && S.xp >= xpNeed(S.level)) { S.xp -= xpNeed(S.level); S.level++; S.points += 3; S.skillPts = (S.skillPts || 0) + 1; lv = true; Season.bump('lvl'); }
     if (lv) {
       Player.recalc(); S.hp = Player.stats.maxhp; S.mp = Player.stats.maxmp; Player.doAct('cheer', 1.3);
       Particles.ring(Player.x, .3, Player.z, 1.2, 50, [.75, 1, .4], 1.2, .6); for (let i = 0; i < 40; i++) Particles.add(Player.x + rand(-.8, .8), rand(0, 1), Player.z + rand(-.8, .8), { c: [1, .9, .4], s: .4, life: 1.4, vy: rand(2, 6) });
@@ -6618,7 +6882,7 @@ const Game = {
       const mt = P.dead ? null : Mounts.draw(R, P);
       if (mt) rig.pose(mt.seat[0], mt.seat[1] - HIPY * CHAR_SCALE + .05, mt.seat[2], mt.face, CHAR_SCALE);
       else rig.pose(P.x, 0, P.z, P.face, CHAR_SCALE, fall);
-      rig.draw(R, CharModels[P.sheet], { flash: P.hurtT > .2 ? .45 : 0 });
+      rig.draw(R, CharModels[P.sheet], { flash: P.hurtT > .2 ? .45 : 0, emis: Save.d.awk ? AWK_EMIS : undefined }); if (Save.d.awk && !P.dead) JobSys.awkFx(P.x, P.z, P.anim);
       if (!P.dead) drawCosmetics3D(R, rig);
       Remote.draw(R);
     }
@@ -6838,6 +7102,143 @@ const TempleFx = {
 };
 
 /* ============================================================
+   Ambience: procedural zone music, weather, ghost speech bubbles
+   ============================================================ */
+Settings.d.music = Settings.d.music === undefined ? 1 : Settings.d.music;
+const MusicSys = {
+  zone: null, gains: {}, master: null, timer: 0, next: 0, step: 0, bpm: 100,
+  SCALES: { world: [0, 2, 4, 7, 9, 12, 14], dungeon: [0, 3, 5, 7, 10, 12], temple: [0, 2, 5, 7, 9, 12, 14] },
+  ROOT: { world: 261.6, dungeon: 110, temple: 196 },
+  ensure() { if (this.master) return true; const c = Audio.ctx; if (!c) return false; this.master = c.createGain(); this.master.gain.value = Settings.d.music ? .9 : 0; this.master.connect(c.destination); return true; },
+  gainFor(z) { if (!this.gains[z]) { const g = Audio.ctx.createGain(); g.gain.value = 0; g.connect(this.master); this.gains[z] = g; } return this.gains[z]; },
+  setZone(z) {
+    if (!this.ensure()) { this.zone = z; return; } if (this.zone === z) return;
+    const c = Audio.ctx, t = c.currentTime; if (this.zone) this.gains[this.zone].gain.linearRampToValueAtTime(0, t + 1.5);
+    const g = this.gainFor(z); g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(1, t + 2.5);
+    this.zone = z; this.step = 0; this.next = t + .1;
+  },
+  setOn(on) { if (!this.ensure()) return; this.master.gain.linearRampToValueAtTime(on ? .9 : 0, Audio.ctx.currentTime + .4); },
+  note(z, f, t0, dur, type, vol, atk = .01, rel = .25, detune = 0) {
+    const c = Audio.ctx, g = this.gainFor(z); const o = c.createOscillator(), e = c.createGain(); o.type = type; o.frequency.value = f; if (detune) o.detune.value = detune;
+    e.gain.setValueAtTime(0, t0); e.gain.linearRampToValueAtTime(vol, t0 + atk); e.gain.setValueAtTime(vol, t0 + Math.max(atk, dur - rel)); e.gain.exponentialRampToValueAtTime(.0005, t0 + dur + .05);
+    o.connect(e); e.connect(g); o.start(t0); o.stop(t0 + dur + .1);
+  },
+  pluck(z, f, t0, vol) { // ranad-like bright pluck
+    const c = Audio.ctx, g = this.gainFor(z); const o = c.createOscillator(), o2 = c.createOscillator(), e = c.createGain(), fl = c.createBiquadFilter();
+    o.type = 'triangle'; o.frequency.value = f; o2.type = 'sine'; o2.frequency.value = f * 3; fl.type = 'lowpass'; fl.frequency.setValueAtTime(4200, t0); fl.frequency.exponentialRampToValueAtTime(600, t0 + .4);
+    e.gain.setValueAtTime(vol, t0); e.gain.exponentialRampToValueAtTime(.0005, t0 + .55); o.connect(fl); o2.connect(fl); fl.connect(e); e.connect(g); o.start(t0); o2.start(t0); o.stop(t0 + .6); o2.stop(t0 + .6);
+  },
+  update() {
+    if (!this.zone || !Audio.ctx || !Settings.d.music) return; const c = Audio.ctx; if (!this.ensure()) return;
+    while (this.next < c.currentTime + .4) { this.play(this.zone, this.step, this.next); const beat = 60 / (this.zone === 'world' ? 104 : this.zone === 'dungeon' ? 60 : 84); this.next += beat / 2; this.step++; }
+  },
+  play(z, i, t) {
+    const sc = this.SCALES[z], root = this.ROOT[z]; const F = (deg, oct = 0) => root * Math.pow(2, (sc[((deg % sc.length) + sc.length) % sc.length] + 12 * (Math.floor(deg / sc.length) + oct)) / 12);
+    const bar = Math.floor(i / 8), beat = i % 8;
+    if (z === 'world') {
+      const chords = [[0, 2, 4], [4, 6, 8], [5, 7, 9], [3, 5, 7]]; const ch = chords[bar % 4];
+      if (beat === 0) for (const d of ch) this.note(z, F(d, -1), t, 2.2, 'triangle', .045, .4, .8, (d % 2) * 4);
+      if (beat % 2 === 0) this.note(z, F(ch[0], -2), t, .35, 'sine', .09, .01, .15);
+      if (Math.random() < .75) { this.mel = (this.mel === undefined ? 7 : this.mel + pick([-2, -1, -1, 0, 1, 1, 2])); this.mel = clamp(this.mel, 4, 13); this.note(z, F(this.mel), t, .28, 'square', .028, .01, .12); }
+      if (beat === 4 && bar % 2 === 1) this.note(z, F(ch[1], 1), t, .5, 'sine', .035, .02, .3);
+    } else if (z === 'dungeon') {
+      if (beat === 0 && bar % 2 === 0) { this.note(z, root, t, 6, 'sawtooth', .022, 1.5, 2, -5); this.note(z, root * 1.5, t, 6, 'sine', .03, 1.5, 2); }
+      if (Math.random() < .22) this.note(z, F(pick([0, 2, 3, 5]), 2), t, 1.2, 'sine', .035, .01, .8);
+      if (beat === 6 && bar % 4 === 3) this.note(z, F(1, -1), t, 1.5, 'triangle', .04, .05, 1);
+    } else {
+      if (beat === 0 && bar % 2 === 0) { this.note(z, root / 2, t, 5.5, 'sine', .05, 1, 2); this.note(z, root / 2 * 1.498, t, 5.5, 'triangle', .015, 1, 2, 6); }
+      const pat = [0, 2, 3, 5, 3, 2, 0, -2, 0, 2, 5, 7, 5, 3, 2, 0]; const d = pat[(i + bar) % pat.length];
+      if (beat % 2 === 0 || Math.random() < .35) this.pluck(z, F(d, 1), t, .05); if (beat % 4 === 2 && Math.random() < .5) this.pluck(z, F(d + 4, 1), t + .02, .03);
+      if (beat === 4 && bar % 4 === 0) this.note(z, root * 2, t, 1.2, 'sine', .025, .3, .8);
+    }
+  }
+};
+
+/* ---------- weather ---------- */
+const Weather = {
+  kind: 'clear', t: 0, dur: 20, rainG: null, windG: null, thunderT: 8, dropT: 0, windT: 0,
+  PLAN: { world: ['clear', 'clear', 'breeze', 'clear', 'rain', 'breeze'], dungeon: ['drip'], temple: ['mist', 'drizzle', 'mist', 'storm'] },
+  setZone(z) { this.zone = z; this.t = 0; this.pick(true); },
+  pick(first) {
+    const list = this.PLAN[this.zone] || ['clear']; const k = first ? list[0] : pick(list);
+    if (k !== this.kind) { this.kind = k; this.dur = k === 'rain' || k === 'storm' ? 40 + Math.random() * 40 : 35 + Math.random() * 50; this.t = 0; this.apply(); }
+    else this.t = 0;
+  },
+  apply() {
+    const k = this.kind, R = Game.R; if (!R) return;
+    Game.setEnv(this.zone); const e = R.env;
+    if (k === 'rain') { e.fogC = e.fogC.map(v => v * .7); e.fog = [40, 150]; e.sunC = e.sunC.map(v => v * .6); e.sky = e.sky.map(v => v * .75); e.top = e.top.map(v => v * .55); e.bot = e.bot.map(v => v * .7); }
+    if (k === 'storm') { e.fog = [16, 80]; e.fogC = e.fogC.map(v => v * .8); }
+    if (k === 'breeze' && Player.zone === 'world') UI.toast && UI.toast('ลมพัดเอื่อยๆ ใบไม้ปลิวว่อน', 'info');
+    if (k === 'rain') UI.toast && UI.toast('ฝนเริ่มตกแล้ว...', 'info');
+    if (k === 'storm') UI.toast && UI.toast('พายุฝนฟ้าคะนองโหมกระหน่ำวัดร้าง!', 'boss');
+    this.sound();
+  },
+  sound() {
+    const c = Audio.ctx; if (!c) return;
+    const wantRain = this.kind === 'rain' || this.kind === 'storm' || this.kind === 'drizzle';
+    if (wantRain && !this.rainG) { const n = c.sampleRate * 2, b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; const s = c.createBufferSource(); s.buffer = b; s.loop = true; const f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 1800; f.Q.value = .5; const g = c.createGain(); g.gain.value = 0; s.connect(f); f.connect(g); g.connect(c.destination); s.start(); this.rainG = g; this.rainSrc = s; }
+    if (this.rainG) this.rainG.gain.linearRampToValueAtTime(!Settings.d.sound ? 0 : this.kind === 'storm' ? .12 : this.kind === 'rain' ? .08 : this.kind === 'drizzle' ? .035 : 0, c.currentTime + 2);
+    const wantWind = this.kind === 'breeze' || this.kind === 'storm' || this.kind === 'mist';
+    if (wantWind && !this.windG) { const n = c.sampleRate * 2, b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; const s = c.createBufferSource(); s.buffer = b; s.loop = true; const f = c.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 320; const g = c.createGain(); g.gain.value = 0; s.connect(f); f.connect(g); g.connect(c.destination); s.start(); this.windG = g; this.windF = f; }
+    if (this.windG) this.windG.gain.linearRampToValueAtTime(!Settings.d.sound ? 0 : wantWind ? (this.kind === 'storm' ? .1 : .05) : 0, c.currentTime + 2);
+  },
+  update(dt) {
+    const P = Player, z = P.zone; if (z !== this.zone) this.setZone(z);
+    this.t += dt; if (this.t > this.dur) this.pick(false);
+    if (Audio.ctx && !this._snd) { this._snd = true; this.sound(); }
+    const k = this.kind, cam = Cam;
+    if (k === 'rain' || k === 'storm' || k === 'drizzle') {
+      const n = k === 'storm' ? 26 : k === 'rain' ? 18 : 6; const col = k === 'drizzle' ? [.5, .6, .7] : [.55, .65, .85];
+      for (let i = 0; i < n; i++) Particles.add(cam.tx + rand(-22, 22), 9 + Math.random() * 6, cam.tz + rand(-22, 22), { c: col.map(v => v * 1.3), s: .3, life: .55, vy: -26, vx: k === 'storm' ? -4 : 0, a: .7 });
+      if (Math.random() < dt * 25) Particles.add(cam.tx + rand(-14, 14), .1, cam.tz + rand(-14, 14), { c: [.6, .7, .85], s: .25, life: .3, vy: 1.2, a: .5 });
+    }
+    if (k === 'breeze' || k === 'storm') { if (Math.random() < dt * (k === 'storm' ? 14 : 6)) Particles.add(cam.tx + rand(-20, 20), rand(.5, 5), cam.tz + rand(-20, 20), { c: pick([[.8, .5, .2], [.6, .7, .2], [.9, .7, .3]]), s: .3, life: 2.5, vx: -5 - Math.random() * 3, vz: rand(-1, 1), vy: rand(-.6, .3) }); }
+    if (k === 'storm') { this.thunderT -= dt; if (this.thunderT <= 0) { this.thunderT = 7 + Math.random() * 12; this.lightning(); } }
+    if (k === 'drip' && Math.random() < dt * 1.5) { Audio.tone(1200 + Math.random() * 900, .12, 'sine', .035, .5); Audio.tone(600, .5, 'sine', .012, 1); if (Math.random() < .5) Particles.add(cam.tx + rand(-10, 10), 4, cam.tz + rand(-10, 10), { c: [.5, .7, .9], s: .2, life: .5, vy: -8 }); }
+    if (k === 'mist' && Math.random() < dt * 2) Particles.add(cam.tx + rand(-18, 18), .3, cam.tz + rand(-18, 18), { c: [.2, .22, .3], s: 3.5, life: 4, vx: rand(-.5, .5), vy: .04, a: .45 });
+    if (this.windF && (k === 'breeze' || k === 'storm')) this.windF.frequency.value = 260 + Math.sin(Game.time * .7) * 120;
+  },
+  lightning() { Fx.flash([.8, .85, 1], .55); setTimeout(() => Fx.flash([.8, .85, 1], .3), 120); const c = Audio.ctx; if (!c || !Settings.d.sound) return; setTimeout(() => { Audio.noise(1.6, .3, 180); Audio.tone(40, 1.6, 'sine', .25, .5); }, 500 + Math.random() * 1200); }
+};
+
+/* ---------- ghost speech bubbles ---------- */
+const GHOST_LINES = {
+  maenak: ['พี่มากขาาา...', 'พี่มาก... กลับมาแล้วหรือ', 'อย่าทิ้งนากไปอีกนะ', 'ลูกของเรา... น่ารักไหมคะ', 'นากรอพี่มานานแล้ว...'],
+  pret: ['ขอส่วนบุญด้วย...', 'หิว... หิวเหลือเกิน', 'กรวดน้ำให้ข้าที...', 'ญาติข้าอยู่ไหน...', 'วี้ดดดด...'],
+  krasue: ['หิว... ของสดดด', 'แสงไฟนี้... ตามมาสิ', 'ผ้าใครตากไว้...'], krahang: ['กระด้งข้าบินได้นะ', 'ไปกินข้าวเปลือกกัน', 'ฮึ่ม... ยุ้งข้าวอยู่ไหน'],
+  kongkoi: ['กองกอย กองกอย!', 'นิ้วเท้า... อร่อยจัง', 'ใครนอนในป่าข้า'], tani: ['มาหาข้าในคืนเดือนเพ็ญสิ...', 'อย่าทรยศข้านะ', 'กล้วยหอมๆ กินไหม'],
+  takhian: ['ใครแตะต้นไม้ของข้า!', 'ผ้าแพรของข้าอยู่ไหน', 'ขอพรอะไรข้าก็ให้... ถ้าไม่โกหก'], khamot: ['ตามแสงมาสิ...', 'ทางนี้... ทางนี้...', 'หลงป่าหรือจ๊ะ'],
+  phrai: ['ลงมาเล่นน้ำสิ...', 'น้ำเย็นสบายดีนะ...', 'จมลงมา... กับข้า'], pongkhang: ['ฮึ่ม... กลิ่นคนเป็น', 'ดินโป่งเป็นของข้า'],
+  nangram: ['มาดูข้ารำสิ...', 'เสียงปี่พาทย์... ได้ยินไหม', 'เวทีนี้เป็นของข้า'], phong: ['อบ๊ะ... กบอร่อย', 'อย่าสบตาข้า', 'กลิ่นนี้... ของข้าเอง'],
+  tabo: ['ใครอยู่ตรงนั้น!?', 'ได้ยินเสียงฝีเท้า...', 'อยู่ไหน... อยู่ไหน'], chakla: ['เมี้ยววว~', 'ข้ามศพแล้วจะเป็นยังไงนะ', 'ฟ่อออ!'],
+  saming: ['ช่วยด้วย... ทางนี้ (เสียงคุ้นๆ)', 'คำรามมม!!', 'เนื้อสดๆ...'], phidip: ['ฮึ่บ... ฮึ่บ...', 'ลมหายใจ... ของเจ้า', 'ยันต์... แกะออกที'],
+  pop: ['ตับไตไส้พุง...', 'ฮี่ๆ ปอบมาแล้ว', 'ใครจะโดนสิง...'], huakhat: ['หัวข้า... อยู่ไหน', 'ขอหัวคืนที', 'ข้าตายเพื่อแผ่นดิน...'],
+  pusom: ['ทรัพย์ของข้า ห้ามแตะ!', 'ไอ้คนโลภ!', 'ใครขุดของไป...'], takhon: ['ปึ้ดๆ ป้าดๆ บุญหลวงมาแล้ว!', 'เล่นกันไหม?', 'กระดิ่งข้าดังกรุ๋งกริ๋ง']
+};
+const GhostTalk = {
+  t: 0,
+  update(dt) {
+    const P = Player; if (P.zone !== 'temple') return; this.t -= dt; if (this.t > 0) return; this.t = 1.2;
+    const near = Monsters.list.filter(m => !m.dead && m.zone === 'temple' && GHOST_LINES[m.type] && !m.bubble && dist2(m.x, m.z, P.x, P.z) < 26 * 26);
+    if (!near.length || Math.random() > .5) return;
+    const m = pick(near); this.say(m, pick(GHOST_LINES[m.type]), 3.2 + Math.random() * 1.5);
+  },
+  say(m, text, t = 3.5) { m.bubble = { text, t }; if (m.d.wboss || m.d.elite) { Audio.tone(240 + Math.random() * 80, .5, 'sine', .035, .7); } }
+};
+{
+  const ou = Game.update.bind(Game);
+  Game.update = function (dt) { ou(dt); if (this.started && !this.paused) { Weather.update(dt); GhostTalk.update(dt); for (const m of Monsters.list) if (m.bubble) { m.bubble.t -= dt; if (m.bubble.t <= 0) m.bubble = null; } } MusicSys.update(); if (this.started && Player.zone !== MusicSys.zone && Audio.ctx) MusicSys.setZone(Player.zone); };
+  const ose = Game.setEnv.bind(Game); Game.setEnv = function (z) { ose(z); if (Weather.zone === z && Weather.kind !== 'clear' && !Weather._applying) { Weather._applying = true; Weather.apply(); Weather._applying = false; } };
+  // boss lines on attacks
+  const og = NakBoss.grabAtk.bind(NakBoss); NakBoss.grabAtk = function (m) { og(m); GhostTalk.say(m, pick(['พี่มากขาาา! มานี่!', 'อย่าหนีนากไป!']), 2.5); };
+  const ow = NakBoss.wail.bind(NakBoss); NakBoss.wail = function (m) { ow(m); GhostTalk.say(m, pick(['ฮือออ... พี่มาก...', 'ทำไมถึงทิ้งนาก...']), 2.5); };
+  const oe = NakBoss.engage.bind(NakBoss); NakBoss.engage = function (m) { oe(m); GhostTalk.say(m, 'พี่มาก... กลับมาแล้วหรือคะ', 4); };
+  const oge = NakBoss.goEthereal.bind(NakBoss); NakBoss.goEthereal = function (m) { oge(m); GhostTalk.say(m, 'ไม่มีใครจับนากได้หรอก...', 4); };
+  const od = NakBoss.defeated.bind(NakBoss); NakBoss.defeated = function (m) { GhostTalk.say(m, 'ขอบคุณ... นากไปแล้วนะ', 5); od(m); };
+}
+
+/* ============================================================
    UI: HUD, panels, quiz, dialog, shop, map, summary, title
    ============================================================ */
 const $ = s => document.querySelector(s);
@@ -6970,12 +7371,12 @@ const UI = {
   refreshAll() { this.refreshHUD(); this.refreshTracker(); this.buildSkillbar(); this.seasonDot && this.seasonDot(); },
   refreshHUD() {
     const S = Save.d; if (!S) return; const st = Player.stats;
-    this.el.name.textContent = S.name; this.el.title.textContent = S.title || CLASSES[S.cls].name; this.el.lvl.textContent = S.level;
+    this.el.name.textContent = S.name; this.el.title.textContent = S.title || Cls.name(S); this.el.lvl.textContent = S.level;
     this.el.por.style.backgroundImage = `url(${this.portraits[Player.sheet]})`;
     this.el.coins.textContent = fmt(S.coins);
   },
   buildSkillbar() {
-    const S = Save.d; const cls = S ? S.cls : 'adventurer'; const sk = CLASSES[cls].skills;
+    const S = Save.d; const sk = (S ? Cls.of(S) : CLASSES.adventurer).skills;
     const b = this.el.skills;
     b.innerHTML = `<button class="sk atk" data-a="atk" aria-label="โจมตี">${icon('sword')}<kbd>Space</kbd></button>` +
       sk.map((id, i) => { const s = SKILLS[id]; return `<button class="sk ${s.quiz ? 'ult' : ''}" data-a="s${i}" aria-label="${s.name}">${icon(s.icon)}<kbd>${'QER'[i]}</kbd><span class="mpc">${s.mp}</span><i class="cd"></i>${s.quiz ? '<span class="qbadge">?</span>' : ''}<span class="tip">${s.name}${s.quiz ? ' · ตอบถูก ×2' : ''}</span></button>`; }).join('') +
@@ -6990,7 +7391,7 @@ const UI = {
     this.el.hpT.textContent = `${Math.ceil(S.hp)} / ${st.maxhp}`; this.el.mpT.textContent = `${Math.floor(S.mp)} / ${st.maxmp}`;
     this.el.coins.textContent = fmt(S.coins); const ge = $('#gems'); if (ge) ge.textContent = fmt(S.gems || 0);
     // skill cooldowns
-    const sk = CLASSES[S.cls].skills; const btns = this.el.skills.querySelectorAll('.sk');
+    const sk = Cls.of(S).skills; const btns = this.el.skills.querySelectorAll('.sk');
     sk.forEach((id, i) => { const b = btns[i + 1]; if (!b) return; const p = Skills.cd[i] / SkillLv.cd(id); b.querySelector('.cd').style.setProperty('--p', p); b.classList.toggle('nomp', S.mp < SkillLv.mp(id)); b.classList.toggle('cool', p > 0); });
     const ch = $('#cnt-hp'), cm = $('#cnt-mp'); if (ch) ch.textContent = (S.inv.hp_s || 0) + (S.inv.hp_l || 0); if (cm) cm.textContent = S.inv.mp_s || 0;
     // buffs
@@ -7039,10 +7440,10 @@ const UI = {
     const R = Game.R, P = Player; const want = [];
     for (const n of NPCList) { if (n.zone !== P.zone || dist2(n.x, n.z, P.x, P.z) > 40 * 40) continue; want.push({ key: 'n' + n.id, x: n.x, y: SPR_H + .35, z: n.z, html: () => { const mk = Quests.marker(n.id); return `${mk ? `<b class="mk ${mk === '?' ? 'ready' : mk === '!' ? 'avail' : 'prog'}">${mk}</b>` : ''}<span class="nm npc">${n.name}</span><span class="rl">${n.role}</span>`; } }); }
     for (const m of Monsters.list) {
-      if (m.dead || m.zone !== P.zone || m.d.boss || (m.d.wboss && m.engaged)) continue; const d2 = dist2(m.x, m.z, P.x, P.z); if (d2 > (m.d.wboss || m.d.elite ? 40 : 28) ** 2) continue;
-      const tgt = P.target && P.target.ref === m; const show = tgt || m.hp < m.max || m.aggro || d2 < 12 * 12 || m.d.elite || m.d.wboss;
+      if (m.dead || m.zone !== P.zone || m.d.boss || (m.d.wboss && m.engaged && !m.bubble)) continue; const d2 = dist2(m.x, m.z, P.x, P.z); if (d2 > (m.d.wboss || m.d.elite ? 40 : 28) ** 2) continue;
+      const tgt = P.target && P.target.ref === m; const show = tgt || m.hp < m.max || m.aggro || d2 < 12 * 12 || m.d.elite || m.d.wboss || m.bubble;
       if (!show) continue;
-      want.push({ key: 'm' + m.id, x: m.x, y: (m.d.fly ? 2.4 : m.d.h) + .55 + (m.jump ? m.jump.y : 0), z: m.z, cls: (m.d.aggro || m.d.elite || m.d.wboss ? 'hostile' : 'calm') + (tgt ? ' tgt' : '') + (m.d.elite || m.d.wboss ? ' elite' : ''), html: () => `<span class="nm">${m.d.elite ? '<i class="elt">หัวหน้า</i> ' : m.d.wboss ? '<i class="elt">บอส</i> ' : ''}${m.d.name} <small>Lv.${m.d.lvl}</small></span><span class="hpb"><i style="width:${m.hp / m.max * 100}%"></i></span>${(m.stun > 0 || m.slow > 0 || m.dotT > 0 || m.weakT > 0) ? `<span class="sts">${m.stun > 0 ? '<i class="s-stun">มึน</i>' : ''}${m.slow > 0 ? '<i class="s-slow">ช้า</i>' : ''}${m.dotT > 0 ? '<i class="s-dot">พิษ</i>' : ''}${m.weakT > 0 ? '<i class="s-weak">ยั่ว</i>' : ''}</span>` : ''}` });
+      want.push({ key: 'm' + m.id, x: m.x, y: (m.d.fly ? 2.4 : m.d.h) + .55 + (m.jump ? m.jump.y : 0), z: m.z, cls: (m.d.aggro || m.d.elite || m.d.wboss ? 'hostile' : 'calm') + (tgt ? ' tgt' : '') + (m.d.elite || m.d.wboss ? ' elite' : ''), html: () => `${m.bubble ? `<span class="mbub">${esc(m.bubble.text)}</span>` : ''}${m.d.wboss && m.engaged ? '' : `<span class="nm">${m.d.elite ? '<i class="elt">หัวหน้า</i> ' : m.d.wboss ? '<i class="elt">บอส</i> ' : ''}${m.d.name} <small>Lv.${m.d.lvl}</small></span><span class="hpb"><i style="width:${m.hp / m.max * 100}%"></i></span>${(m.stun > 0 || m.slow > 0 || m.dotT > 0 || m.weakT > 0) ? `<span class="sts">${m.stun > 0 ? '<i class="s-stun">มึน</i>' : ''}${m.slow > 0 ? '<i class="s-slow">ช้า</i>' : ''}${m.dotT > 0 ? '<i class="s-dot">พิษ</i>' : ''}${m.weakT > 0 ? '<i class="s-weak">ยั่ว</i>' : ''}</span>` : ''}`}` });
     }
     UI.netPlates(want);
     if (Game.started) want.push({ key: 'player', x: P.x, y: SPR_H + .3 + (Mounts.riding() ? MOUNTS[Mounts.cur()].seat[0] * .8 : 0), z: P.z, cls: 'me' + (Net.gm ? ' gm' : ''), html: () => `${UI.selfPlate()}<span class="nm me">${Net.gm ? '<i class="gmtag">GM</i> ' : ''}${esc(Save.d.name)}</span>` });
@@ -7146,13 +7547,13 @@ const UI = {
   },
   refreshInvIfOpen() { if (this.panelOpen === 'inv' || this.panelOpen === 'shop') this.renderPanel(); },
   renderPanel() {
-    const k = this.panelOpen; const fn = { ghost: 'pGhost', gm: 'pGM', chat: 'pChat', channels: 'pChannels', skills: 'pSkills', stable: 'pStable', doc: 'pDoc', season: 'pSeason', gemshop: 'pGemShop', topup: 'pTopup', inv: 'pInv', char: 'pChar', quest: 'pQuest', map: 'pMap', ach: 'pAch', settings: 'pSettings', help: 'pHelp', menu: 'pMenu', shop: 'pShop', dialog: 'pDialog' }[k];
+    const k = this.panelOpen; const fn = { jobs: 'pJobs', ghost: 'pGhost', gm: 'pGM', chat: 'pChat', channels: 'pChannels', skills: 'pSkills', stable: 'pStable', doc: 'pDoc', season: 'pSeason', gemshop: 'pGemShop', topup: 'pTopup', inv: 'pInv', char: 'pChar', quest: 'pQuest', map: 'pMap', ach: 'pAch', settings: 'pSettings', help: 'pHelp', menu: 'pMenu', shop: 'pShop', dialog: 'pDialog' }[k];
     if (fn) this[fn](this.panelOpt || {});
   },
   setPanel(title, html, wide) { this.el.ptitle.innerHTML = title; this.el.pbody.innerHTML = html; this.el.panel.querySelector('.pwin').classList.toggle('wide', !!wide); },
   pMenu() {
     this.setPanel('เมนู', `<div class="menugrid">
-      ${[['season', 'pass', 'Season Pass', ''], ['gemshop', 'gem', 'ร้านเพชร', ''], ['topup', 'gem', 'เติมเพชร', ''], ['inv', 'bag', 'กระเป๋า', 'I'], ['char', 'person', 'ตัวละคร', 'C'], ['quest', 'book', 'เควส', 'L'], ['map', 'map', 'แผนที่โลก', 'M'], ['ghost', 'ghost', 'ตำราผีไทย', 'B'], ['ach', 'trophy', 'ความสำเร็จ', 'K'], ['settings', 'gear', 'ตั้งค่า', ''], ['help', 'help', 'วิธีเล่น', 'H']].map(([p, ic, l, kb]) => `<button class="mbtn" data-go="${p}">${icon(ic)}<span>${l}</span>${kb ? `<kbd>${kb}</kbd>` : ''}</button>`).join('')}
+      ${[['season', 'pass', 'Season Pass', ''], ['gemshop', 'gem', 'ร้านเพชร', ''], ['topup', 'gem', 'เติมเพชร', ''], ['inv', 'bag', 'กระเป๋า', 'I'], ['char', 'person', 'ตัวละคร', 'C'], ['quest', 'book', 'เควส', 'L'], ['map', 'map', 'แผนที่โลก', 'M'], ['jobs', 'person', 'สายอาชีพ', 'J'], ['ghost', 'ghost', 'ตำราผีไทย', 'B'], ['ach', 'trophy', 'ความสำเร็จ', 'K'], ['settings', 'gear', 'ตั้งค่า', ''], ['help', 'help', 'วิธีเล่น', 'H']].map(([p, ic, l, kb]) => `<button class="mbtn" data-go="${p}">${icon(ic)}<span>${l}</span>${kb ? `<kbd>${kb}</kbd>` : ''}</button>`).join('')}
       <button class="mbtn" data-go="title">${icon('close')}<span>บันทึกและกลับหน้าแรก</span></button></div>`);
     this.el.pbody.onclick = e => { const b = e.target.closest('[data-go]'); if (!b) return; if (b.dataset.go === 'title') { Save.write(); location.reload(); return; } this.openPanel(b.dataset.go); };
   },
@@ -7181,15 +7582,15 @@ const UI = {
     };
   },
   pChar() {
-    const S = Save.d, st = Player.stats, c = CLASSES[S.cls];
+    const S = Save.d, st = Player.stats, c = Cls.of(S);
     const rows = [['hp', 'HP สูงสุด', st.maxhp, '+10'], ['mp', 'MP สูงสุด', st.maxmp, '+6'], ['atk', 'พลังโจมตี (ATK)', st.atk, '+2'], ['def', 'พลังป้องกัน (DEF)', st.def, '+1.5'], ['spd', 'ความเร็ว (SPD)', st.spd.toFixed(2), '+0.12']];
     this.setPanel(`${icon('person')} ตัวละคร`, `
-      <div class="charhead"><img src="${this.bodies[Player.sheet]}" alt=""><div><h3>${esc(S.name)}</h3><p class="ttl">${S.title ? '「' + S.title + '」' : ''}</p><p>${c.name} · เลเวล ${S.level}</p><p class="xpline">XP ${fmt(S.xp)} / ${fmt(xpNeed(S.level))}</p><div class="xpb"><i style="width:${S.xp / xpNeed(S.level) * 100}%"></i></div></div></div>
+      <div class="charhead"><img src="${this.bodies[Player.sheet]}" alt=""><div><h3>${esc(S.name)}</h3><p class="ttl">${S.title ? '「' + S.title + '」' : ''}</p><p>${Cls.name(S)} · เลเวล ${S.level}${S.job ? '' : ` · <button class="btn sm ghost" data-go="jobinfo">เปลี่ยนอาชีพ Lv.${JOB_LV}</button>`}${S.job && !S.awk ? ` · <button class="btn sm ghost" data-go="jobinfo">ปลุกพลัง Lv.${AWK_LV}</button>` : ''}</p><p class="xpline">XP ${fmt(S.xp)} / ${fmt(xpNeed(S.level))}</p><div class="xpb"><i style="width:${S.xp / xpNeed(S.level) * 100}%"></i></div></div></div>
       <p class="pts">แต้มสถานะคงเหลือ: <b>${S.points}</b> ${S.points ? '· กด + เพื่ออัปเกรด' : '· ได้รับ 3 แต้มทุกครั้งที่เลเวลอัป'}</p>
       <ul class="stats">${rows.map(([k, l, v, inc]) => `<li><span>${l}</span><b>${v}</b><small>อัปแล้ว ${S.alloc[k]}</small><button class="btn sm" data-al="${k}" ${S.points ? '' : 'disabled'}>+ <small>${inc}</small></button></li>`).join('')}</ul>
       <h4>สกิล · ${ROLES[c.role].name} <button class="btn sm ghost" data-go="skills">เปิดหน้าสกิล</button></h4><ul class="skl">${c.skills.map((id, i) => { const s = SKILLS[id]; return `<li class="hasinfo" data-skinfo="${id}">${SkillArt.art(id, { cls: 'sm' })}<div><b>${SKILL_KEYS[i]} · ${s.name} <em>Lv.${SkillLv.get(id)}</em></b><small>${s.cat} · MP ${SkillLv.mp(id)} · คูลดาวน์ ${SkillLv.cd(id)} วินาที${s.quiz ? ' · ตอบถูก = พลัง ×2' : ''}</small></div></li>`; }).join('')}</ul>
       <p class="muted">เวลาเล่นรวม ${Math.floor((S.playT || 0) / 60)} นาที · ปราบมอนสเตอร์ ${S.stats.kills} ตัว · ตอบถูก ${S.stats.correct} ข้อ</p>`);
-    this.el.pbody.onclick = e => { const sk = e.target.closest('[data-skinfo]'); if (sk) return SkillInfo.open(sk.dataset.skinfo); if (e.target.closest('[data-go="skills"]')) return this.openPanel('skills'); const b = e.target.closest('[data-al]'); if (!b || !S.points) return; S.points--; S.alloc[b.dataset.al]++; Player.recalc(); if (b.dataset.al === 'hp') S.hp += 10; Audio.sfx('ui'); this.renderPanel(); };
+    this.el.pbody.onclick = e => { const sk = e.target.closest('[data-skinfo]'); if (sk) return SkillInfo.open(sk.dataset.skinfo); if (e.target.closest('[data-go="skills"]')) return this.openPanel('skills'); if (e.target.closest('[data-go="jobinfo"]')) return this.openPanel('jobs'); const b = e.target.closest('[data-al]'); if (!b || !S.points) return; S.points--; S.alloc[b.dataset.al]++; Player.recalc(); if (b.dataset.al === 'hp') S.hp += 10; Audio.sfx('ui'); this.renderPanel(); };
   },
   pQuest() {
     const S = Save.d;
@@ -7197,7 +7598,7 @@ const UI = {
       const q = QUESTS[id], s = Quests.st(id); const pr = Quests.progress(id); const state = Quests.active(id) ? (Quests.complete(id) ? 'พร้อมส่ง' : 'กำลังทำ') : s && s.s === 'done' && !(q.type === 'daily' && s.day !== today()) ? 'สำเร็จ' : Quests.available(id) ? 'รับได้' : 'ยังล็อกอยู่';
       return `<li class="qc ${q.type}"><div class="qh"><span class="qt">${{ main: 'เควสหลัก', side: 'เควสย่อย', daily: 'ประจำวัน' }[q.type]}</span><b>${q.title}</b><em class="qs s-${state}">${state}</em></div>
         <p>${q.text}</p>${pr.length ? `<div class="qobj">${pr.map(o => `<span>${o.label}: <b>${o.have}/${o.n}</b></span>`).join('')}</div>` : ''}
-        ${(state === 'กำลังทำ' || state === 'พร้อมส่ง' || state === 'รับได้') ? `<button class="btn sm" data-navq="${id}">นำทาง</button> ` : ''}<small>ผู้ให้เควส: ${NPCS[q.giver].name}${q.rew.xp ? ` · รางวัล ${q.rew.xp} XP, ${q.rew.coin} เหรียญ` : ''}${q.rew.items.length ? ', ' + q.rew.items.map(([i, n]) => ITEMS[i].name + (n > 1 ? ' ×' + n : '')).join(', ') : ''}</small></li>`;
+        ${(state === 'กำลังทำ' || state === 'พร้อมส่ง' || state === 'รับได้') ? `<button class="btn sm" data-navq="${id}">นำทาง</button> ` : ''}<small>ผู้ให้เควส: ${NPCS[q.giver].name}${q.rew.xp ? ` · รางวัล ${q.rew.xp} XP, ${q.rew.coin} เหรียญ` : ''}${q.rew.items.length ? ', ' + q.rew.items.map(([i, n]) => ITEMS[i].name + (n > 1 ? ' ×' + n : '')).join(', ') : ''}${q.title ? ` · ฉายา "${q.title}"` : ''}${q.gems ? ` · เพชร ${q.gems}` : ''}</small></li>`;
     };
     const vis = QUEST_ORDER.filter(id => { const q = QUESTS[id]; return Quests.st(id) || Quests.available(id) || q.type === 'main'; });
     this.setPanel(`${icon('book')} บันทึกเควส`, `<ul class="qlist">${vis.map(card).join('')}</ul><p class="muted">เควสประจำวันรีเซ็ตทุกวันตามเวลาในเครื่องของคุณ · กดปุ่มนำทางเพื่อให้ตัวละครเดินไปเอง</p>`, true);
@@ -7248,13 +7649,13 @@ const UI = {
         <label class="chk"><input type="checkbox" id="customonly" ${D.customOnly ? 'checked' : ''}> ใช้เฉพาะคำถามของฉัน</label>
         <p id="cqmsg" class="muted">มีคำถามของฉัน ${D.custom.length} ข้อ</p>
       </fieldset>
-      <fieldset><legend>เสียง</legend><label class="chk"><input type="checkbox" id="snd" ${D.sound ? 'checked' : ''}> เปิดเสียงเอฟเฟกต์</label><label class="chk"><input type="checkbox" id="vox" ${D.voice ? 'checked' : ''}> เสียงตัวละครตะโกนและพากย์ชื่อสกิล</label></fieldset>
+      <fieldset><legend>เสียง</legend><label class="chk"><input type="checkbox" id="snd" ${D.sound ? 'checked' : ''}> เปิดเสียงเอฟเฟกต์</label><label class="chk"><input type="checkbox" id="mus" ${D.music ? 'checked' : ''}> เพลงประกอบและเสียงบรรยากาศ (เปลี่ยนตามแมพ)</label><label class="chk"><input type="checkbox" id="vox" ${D.voice ? 'checked' : ''}> เสียงตัวละครตะโกนและพากย์ชื่อสกิล</label></fieldset>
       <fieldset><legend>ผู้ดูแลเกม (GM)</legend><div id="gmset">${UI.gmSettingsHtml()}</div></fieldset>
       <div class="row"><button class="btn" id="savesettings">บันทึกการตั้งค่า</button>${Save.d ? '<button class="btn ghost danger" id="wipe">ลบเซฟและเริ่มใหม่</button>' : ''}</div>`);
     $('#qtime').oninput = e => $('#qtv').textContent = e.target.value;
     $('#qdiff').oninput = e => $('#qdv').textContent = diffL[e.target.value];
     $('#savesettings').onclick = () => {
-      D.move = (document.querySelector('input[name=mv]:checked') || {}).value || 'both'; D.qtime = +$('#qtime').value; D.diff = +$('#qdiff').value; D.sound = $('#snd').checked ? 1 : 0; D.voice = $('#vox').checked ? 1 : 0; D.customOnly = $('#customonly').checked ? 1 : 0;
+      D.move = (document.querySelector('input[name=mv]:checked') || {}).value || 'both'; D.qtime = +$('#qtime').value; D.diff = +$('#qdiff').value; D.sound = $('#snd').checked ? 1 : 0; D.music = $('#mus').checked ? 1 : 0; MusicSys.setOn(!!D.music); Weather.sound(); D.voice = $('#vox').checked ? 1 : 0; D.customOnly = $('#customonly').checked ? 1 : 0;
       document.querySelectorAll('[data-cat]').forEach(c => D.cats[c.dataset.cat] = c.checked ? 1 : 0);
       const lines = $('#customq').value.split('\n').map(l => l.split('|').map(s => s.trim())).filter(p => p.length >= 3 && p[0] && p[1] && p[2]);
       D.custom = lines.map(p => ({ q: p[0], a: p[1], w: p.slice(2, 5) }));
@@ -7302,6 +7703,7 @@ const UI = {
       else text = NPC_IDLE[o.npc] || { lyra: 'Aurelion สงบสุขได้ก็เพราะนักผจญภัยอย่างเจ้า กลับมาหาฉันพรุ่งนี้สำหรับภารกิจล่าประจำวันนะ', orin: 'วันนี้เจ้าทดสอบไปแล้ว พรุ่งนี้ค่อยมาใหม่ ระหว่างนี้แท่นบูชาทั้งสามก็มีคำถามรออยู่', pip: 'ยินดีต้อนรับ! ยา อาวุธ ชุดเกราะ มีครบ', mina: 'อยากเปลี่ยนลุคไหม? ฉันมีหมวก ปีก ออร่า และชุดทั้งหกแบบ', kaze: 'ซุปเห็ดหม้อนั้นอร่อยมาก ขอบใจอีกครั้งนะ', rook: 'ป่ากระซิบช่วงนี้อันตราย ระวังหมาป่าที่ล่าเป็นฝูงด้วย' }[o.npc];
       if (n.shop) buttons.push([`shop:${n.shop}`, n.shop === 'items' ? 'ดูสินค้า' : n.shop === 'temple' ? 'ดูเครื่องรางกันผี' : 'ดูชุดแต่งตัว', '']);
       if (o.npc === 'kuman') buttons.push(['bless', 'ขอพรกุมารทอง', '']);
+      if (o.npc === 'zen') { if (!S.job) buttons.push(['jobs', 'เปลี่ยนอาชีพขั้นสอง', 'primary']); else if (!S.awk && S.quests.awk && S.quests.awk.s === 'done') buttons.push(['ritual', 'เข้าพิธีกรรมปลุกพลัง (5,000 เหรียญ)', 'primary']); else buttons.push(['jobs', 'ดูสายอาชีพ', '']); }
       if (o.npc === 'luangta' && S.quests.t0 && S.quests.t0.s === 'done') buttons.push(['ghostbook', 'ตำราผีไทย', '']);
     }
     buttons.push(['bye', 'ลาก่อน', 'ghost']);
@@ -7313,6 +7715,8 @@ const UI = {
       else if (a === 'shop') this.openPanel('shop', { shop: id, tab: 'buy' });
       else if (a === 'bless') { const d = today(); if (S.kumanDay === d) { this.panelOpt = { npc: o.npc, text: 'วันนี้หนูให้พรไปแล้วนะ พรุ่งนี้ค่อยมาใหม่น้า' }; } else { S.kumanDay = d; Game.addBuff('luck', 900); this.panelOpt = { npc: o.npc, text: 'เพี้ยง! ขอให้พี่โชคดี ดรอปของดีๆ ตลอด 15 นาทีเลยนะ' }; Particles.ring(Player.x, 1, Player.z, 1.2, 30, [1, .85, .3], 1, .45); Audio.sfx('level'); } this.renderPanel(); }
       else if (a === 'ghostbook') this.openPanel('ghost');
+      else if (a === 'jobs') this.openPanel('jobs');
+      else if (a === 'ritual') { this.closePanel(); JobSys.ritual(); }
       else if (a === 'turn') { Quests.turnIn(id); this.panelOpt = { npc: o.npc, text: QUESTS[id].done || 'ขอบใจมาก!' }; this.renderPanel(); }
       else if (a === 'next') { this.panelOpt = { npc: o.npc }; this.renderPanel(); }
       else if (a === 'acc') {
@@ -7329,7 +7733,7 @@ const UI = {
       onEnd: r => {
         const s = Quests.st(id); s.s = 'done'; s.day = today();
         const xp = r.correct * 15, coin = r.correct * 10 + (r.correct === 5 ? 50 : 0); Season.addXP(QUEST_SXP.daily, 'บททดสอบนักปราชญ์'); Season.bump('quest');
-        if (xp) Game.gainXP(xp); if (coin) Game.gainCoins(coin);
+        if (xp) Game.gainXP(xp); if (coin) Game.gainCoins(coin); JobSys.onDaily(r.correct);
         this.banner(`ตอบถูก ${r.correct}/5`, r.correct >= 3 ? 'level' : 'buff');
         this.toast(`บททดสอบเสร็จสิ้น: ได้ ${xp} XP และ ${coin} เหรียญ`, 'quest'); this.refreshTracker(); Game.autosave();
       }
@@ -7436,7 +7840,7 @@ const Gems = {
     else if (p.id === 'starter') { got = p.gems; items = p.items; T.starter = true; }
     else if (p.id === 'monthly') { got = p.gems; const now = Date.now(); const base = T.monthly && T.monthly.until > now ? T.monthly.until : now; T.monthly = { until: base + p.days * 864e5, last: '' }; }
     T.spent += p.thb; S.gems += got; this.log('+' + got, `เติมเพชร ฿${p.thb} (ทดลอง)`);
-    for (const [it, n] of items) Game.addItem(it, n, true);
+    for (const [it, n] of items) Game.addItem(it, n, true); if (p.title) Titles.grant(p.title, p.name);
     Save.write(); UI.gemPop(); Audio.sfx('level'); Achievements.check();
     return { got, items };
   },
@@ -7445,7 +7849,7 @@ const Gems = {
   claimMilestone(i) {
     const S = Save.d, m = TOPUP_MILESTONES[i]; if (S.topup.spent < m.thb || S.topup.claimed[i]) return;
     S.topup.claimed[i] = true; this.add(m.gems, `รางวัลเติมสะสม ฿${m.thb}`); for (const [it, n] of m.items) Game.addItem(it, n, true);
-    UI.toast('รับรางวัล: ' + m.label, 'rare'); Audio.sfx('level');
+    if (m.title) Titles.grant(m.title, 'รางวัลเติมสะสม'); UI.toast('รับรางวัล: ' + m.label, 'rare'); Audio.sfx('level');
   },
   // ---- gem shop ----
   price(g) { return weeklyDeals().includes(g) ? Math.round(g.gems * .8) : g.gems; },
@@ -7859,7 +8263,7 @@ const Lobby = {
     const L = Save.list(); this.sel = L.findIndex(Boolean); if (this.sel < 0) this.sel = null;
     const paint = () => {
       $('#cscount').textContent = `${L.filter(Boolean).length}/3`;
-      $('#csslots').innerHTML = L.map((d, i) => d ? `<button class="slot full ${this.sel === i ? 'on' : ''}" data-slot="${i}"><span class="slv">Lv.${d.level}</span><img src="${UI.bodies[(d.cos && d.cos.outfit) ? ITEMS[d.cos.outfit].sheet : d.cls]}" alt=""><b class="snm">${esc(d.name)}</b><span class="scl">${CLASSES[d.cls].name}</span><small>${d.title ? '「' + esc(d.title) + '」' : World.placeName(d.pos.x, d.pos.z)}</small></button>`
+      $('#csslots').innerHTML = L.map((d, i) => d ? `<button class="slot full ${this.sel === i ? 'on' : ''}" data-slot="${i}"><span class="slv">Lv.${d.level}</span><img src="${UI.bodies[(d.cos && d.cos.outfit) ? ITEMS[d.cos.outfit].sheet : d.cls]}" alt=""><b class="snm">${esc(d.name)}</b><span class="scl">${(d.job && JOBS[d.job] ? (d.awk ? 'ผู้ตื่นรู้ ' : '') + JOBS[d.job].name : CLASSES[d.cls].name)}</span><small>${d.title ? '「' + esc(d.title) + '」' : World.placeName(d.pos.x, d.pos.z)}</small></button>`
         : `<button class="slot empty" data-new="${i}"><span class="slv">ช่องว่าง</span><span class="plus" aria-hidden="true">+</span><b class="snm">สร้างตัวละคร</b><small>เริ่มที่เลเวล 1</small></button>`).join('');
       $('#csstart').disabled = this.sel === null; const del = $('#csdel'); del.disabled = this.sel === null; del.textContent = 'ลบตัวละคร'; delete del.dataset.c;
     };
@@ -8274,7 +8678,7 @@ const SkillArt = (() => {
   return { art };
 })();
 
-const SKILL_ROLE = {}; for (const k of CLASS_ORDER) for (const id of CLASSES[k].skills) SKILL_ROLE[id] = CLASSES[k].role;
+const SKILL_ROLE = {}; for (const k of CLASS_ORDER) for (const id of CLASSES[k].skills) SKILL_ROLE[id] = CLASSES[k].role; for (const k in JOBS) for (const id of JOBS[k].skills) SKILL_ROLE[id] = SKILL_ROLE[id] || JOBS[k].role;
 addEventListener('keydown', e => { if (e.key === 'Escape' && SkillInfo.active) { e.stopPropagation(); SkillInfo.close(); } }, true);
 /* ---- per-skill tips (how to play it) ---- */
 const SKILL_TIPS = {
@@ -8316,9 +8720,9 @@ const SkillInfo = {
   id: null,
   open(id) {
     const sk = SKILLS[id]; if (!sk || !Save.d) return; this.id = id; Audio.sfx('ui');
-    const S = Save.d, cls = CLASSES[S.cls], role = ROLES[cls.role], lv = SkillLv.get(id), L = SkillLv.f(id), slot = cls.skills.indexOf(id);
+    const S = Save.d, cls = Cls.of(S), role = ROLES[cls.role], lv = SkillLv.get(id), L = SkillLv.f(id), slot = cls.skills.indexOf(id);
     const atk = Player.stats ? Player.stats.atk : cls.atk, maxhp = Player.stats ? Player.stats.maxhp : cls.hp;
-    const rows = [['บทบาท', `${role.name} <small>(${role.en})</small>`], ['ประเภท', sk.cat], ['เป้าหมาย', TARGET_TH[sk.type] || '-'], ['ใช้ MP', SkillLv.mp(id)], ['คูลดาวน์', SkillLv.cd(id) + ' วินาที']];
+    const rows = [['บทบาท', `${role.name} <small>(${role.en})</small>`], ['ประเภท', sk.cat + (Cls.isAwkSkill(S, id) ? ' · <b style="color:#ffcf5a">ปลุกพลังแล้ว +30%</b>' : '')], ['เป้าหมาย', TARGET_TH[sk.type] || '-'], ['ใช้ MP', SkillLv.mp(id)], ['คูลดาวน์', SkillLv.cd(id) + ' วินาที']];
     if (sk.r) rows.push(['รัศมี / ระยะ', sk.r + ' เมตร']); if (sk.dist) rows.push(['ระยะเคลื่อนที่', sk.dist + ' เมตร']);
     if (sk.mult) rows.push(['ความเสียหายต่อครั้ง', `ATK ${atk} × ${(sk.mult * L.dmg).toFixed(2)} ≈ <b>${Math.round(atk * sk.mult * L.dmg)}</b>${sk.hits ? ` × ${sk.hits} ครั้ง` : sk.n > 1 ? ` × ${sk.n} ดอก` : ''}`]);
     if (sk.heal) rows.push(['ฟื้นฟู', `${Math.round(sk.heal * L.heal * 100)}% ≈ <b>${Math.round(maxhp * sk.heal * L.heal)}</b> HP`]);
@@ -8326,14 +8730,14 @@ const SkillInfo = {
     if (sk.dot) rows.push(['ดาเมจต่อเนื่อง', `≈ ${Math.round(atk * sk.dot.k * L.dmg)}/วินาที นาน ${(sk.dot.t * L.dur).toFixed(1)} วินาที`]);
     if (sk.buffs) rows.push(['ระยะเวลาบัฟ', sk.buffs.map(([k, t]) => `${BUFFS[k].name} ${(t * L.dur).toFixed(0)} วิ`).join(' · ')]);
     rows.push(['ปุ่มลัด', `<kbd>${SKILL_KEYS[slot] || '-'}</kbd> หรือแตะปุ่มสกิล`]);
-    const nx = lv < SKILL_MAXLV ? SkillLv.f(id, lv + 1) : null;
+    const nx = lv < SkillLv.max() ? SkillLv.f(id, lv + 1) : null;
     const nextTxt = nx ? [sk.mult ? `ดาเมจ ×${(sk.mult * nx.dmg).toFixed(2)}` : '', sk.heal ? `ฟื้นฟู ${Math.round(sk.heal * nx.heal * 100)}%` : '', (sk.stun || sk.slow || sk.buffs || sk.dot) ? `ระยะเวลา +${Math.round((nx.dur - 1) * 100)}%` : '', `คูลดาวน์ ${SkillLv.cd(id, lv + 1)} วิ`, `MP ${SkillLv.mp(id, lv + 1)}`].filter(Boolean).join(' · ') : 'เลเวลสูงสุดแล้ว';
-    const pips = Array.from({ length: SKILL_MAXLV }, (_, i) => `<i class="${i < lv ? 'on' : ''}"></i>`).join('');
+    const pips = Array.from({ length: SkillLv.max() }, (_, i) => `<i class="${i < lv ? 'on' : ''}"></i>`).join('');
     const el = $('#itempop');
     el.innerHTML = `<div class="iibox skbox" role="dialog" aria-modal="true" aria-labelledby="skname">
       <div class="iihead"><span class="lbdia"></span><h3>รายละเอียดสกิล</h3><span class="lbdia"></span><button class="iiclose" data-sact="close" aria-label="ปิด">${icon('close')}</button></div>
       <div class="iiscroll"><div class="iil">
-        <div class="iitop"><div class="skbig">${SkillArt.art(id)}</div><div><h2 id="skname">${sk.name}</h2><div class="skchips"><span class="chip role" style="--rc:${role.col}">${role.name}</span><span class="chip">${sk.cat}</span>${sk.quiz ? '<span class="chip ult">ตอบคำถาม ×2</span>' : ''}</div><div class="sklv"><b>Lv.${lv}</b><span class="pips">${pips}</span><small>${lv}/${SKILL_MAXLV}</small></div></div></div>
+        <div class="iitop"><div class="skbig">${SkillArt.art(id)}</div><div><h2 id="skname">${sk.name}</h2><div class="skchips"><span class="chip role" style="--rc:${role.col}">${role.name}</span><span class="chip">${sk.cat}</span>${sk.quiz ? '<span class="chip ult">ตอบคำถาม ×2</span>' : ''}</div><div class="sklv"><b>Lv.${lv}</b><span class="pips">${pips}</span><small>${lv}/${SkillLv.max()}</small></div></div></div>
         <p class="iilore skdesc">${sk.desc}</p>
         <h4 class="iisec">${icon('star')} ผลของสกิล</h4>
         <ul class="skfx">${(sk.fx || []).map(f => `<li>${f}</li>`).join('')}</ul>
@@ -8343,7 +8747,7 @@ const SkillInfo = {
         <dl class="iiprops">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
         <div class="sknext"><small>เลเวลถัดไป</small><p>${nextTxt}</p></div>
       </div></div>
-      <div class="iifoot"><span class="skpts">แต้มสกิล <b>${S.skillPts || 0}</b></span><button class="btn" data-sact="up" ${SkillLv.canUp(id) ? '' : 'disabled'}>${lv >= SKILL_MAXLV ? 'เลเวลสูงสุด' : 'อัปเลเวลสกิล'}</button></div>
+      <div class="iifoot"><span class="skpts">แต้มสกิล <b>${S.skillPts || 0}</b></span><button class="btn" data-sact="up" ${SkillLv.canUp(id) ? '' : 'disabled'}>${lv >= SkillLv.max() ? 'เลเวลสูงสุด' : 'อัปเลเวลสกิล'}</button></div>
     </div>`;
     el.hidden = false; this.active = true; Game.pause(true, 'skinfo');
     const f = el.querySelector('.iiclose'); if (f) f.focus({ preventScroll: true });
@@ -8360,7 +8764,7 @@ const SkillInfo = {
 Object.assign(UI, {
   skillDot() { const b = document.querySelector('#menubtns [data-p="skills"]'); if (b && Save.d) b.classList.toggle('dot', (Save.d.skillPts || 0) > 0); },
   buildSkillbar() {
-    const S = Save.d; const cls = S ? S.cls : 'adventurer'; const sk = CLASSES[cls].skills;
+    const S = Save.d; const sk = (S ? Cls.of(S) : CLASSES.adventurer).skills;
     const b = this.el.skills;
     b.innerHTML = `<button class="sk atk" data-a="atk" aria-label="โจมตี">${icon('sword')}<kbd>Space</kbd></button>` +
       sk.map((id, i) => { const s = SKILLS[id]; return `<button class="sk art ${s.quiz ? 'ult' : ''}" data-a="s${i}" data-sid="${id}" aria-label="${s.name}">${SkillArt.art(id)}<kbd>${SKILL_KEYS[i]}</kbd><span class="mpc">${SkillLv.mp(id)}</span><i class="cd"></i>${s.quiz ? '<span class="qbadge">?</span>' : ''}<span class="tip">${s.name}${s.quiz ? ' · ตอบถูก ×2' : ''}<br><small>กดค้าง/คลิกขวา = ดูรายละเอียด</small></span></button>`; }).join('') +
@@ -8375,13 +8779,13 @@ Object.assign(UI, {
     this.skillDot();
   },
   pSkills() {
-    const S = Save.d, cls = CLASSES[S.cls], rk = cls.role, role = ROLES[rk];
-    const card = (id, i) => { const s = SKILLS[id], lv = SkillLv.get(id); return `<li class="skrow ${s.quiz ? 'ult' : ''}" data-skinfo="${id}"><div class="skico">${SkillArt.art(id)}<kbd>${SKILL_KEYS[i]}</kbd></div><div class="skmid"><b>${s.name}</b><span class="chip">${s.cat}</span><small>MP ${SkillLv.mp(id)} · คูลดาวน์ ${SkillLv.cd(id)} วิ${s.mult ? ` · ดาเมจ ×${(s.mult * SkillLv.f(id).dmg).toFixed(2)}` : ''}</small></div><div class="skright"><span class="pips">${Array.from({ length: SKILL_MAXLV }, (_, k) => `<i class="${k < lv ? 'on' : ''}"></i>`).join('')}</span><button class="btn sm" data-skup="${id}" ${SkillLv.canUp(id) ? '' : 'disabled'} aria-label="อัปเลเวล ${s.name}">+</button></div></li>`; };
+    const S = Save.d, cls = Cls.of(S), rk = cls.role, role = ROLES[rk];
+    const card = (id, i) => { const s = SKILLS[id], lv = SkillLv.get(id); return `<li class="skrow ${s.quiz ? 'ult' : ''}" data-skinfo="${id}"><div class="skico">${SkillArt.art(id)}<kbd>${SKILL_KEYS[i]}</kbd></div><div class="skmid"><b>${s.name}</b><span class="chip">${s.cat}</span><small>MP ${SkillLv.mp(id)} · คูลดาวน์ ${SkillLv.cd(id)} วิ${s.mult ? ` · ดาเมจ ×${(s.mult * SkillLv.f(id).dmg).toFixed(2)}` : ''}</small></div><div class="skright"><span class="pips">${Array.from({ length: SkillLv.max() }, (_, k) => `<i class="${k < lv ? 'on' : ''}"></i>`).join('')}</span><button class="btn sm" data-skup="${id}" ${SkillLv.canUp(id) ? '' : 'disabled'} aria-label="อัปเลเวล ${s.name}">+</button></div></li>`; };
     const roles = Object.entries(ROLES).map(([k, r]) => `<div class="rolecard ${k === rk ? 'me' : ''}" style="--rc:${r.col}"><div class="rh">${icon(r.icon)}<b>${r.name}</b><small>${r.en}</small></div><p>${r.desc}</p><ul>${r.cats.map(c => `<li>${c}</li>`).join('')}</ul><small class="rcls">อาชีพ: ${CLASS_ORDER.filter(c => CLASSES[c].role === k).map(c => CLASSES[c].name).join(', ')}</small></div>`).join('');
     this.setPanel(`${icon('book')} สกิล <span class="coin">แต้มสกิล <b>${S.skillPts || 0}</b></span>`, `
       <div class="skhead" style="--rc:${role.col}"><div class="skrole">${icon(role.icon)}</div><div><h3>${cls.name} · ${role.name} <small>${role.en}</small></h3><p>${role.desc}</p><p class="skpass"><b>ความสามารถติดตัว: ${role.passive.name}</b> ${role.passive.desc}</p></div></div>
       <ul class="sklist">${cls.skills.map(card).join('')}</ul>
-      <p class="muted skhint">แตะสกิลเพื่อดูรายละเอียดเต็ม · ได้แต้มสกิล 1 แต้มทุกเลเวล · สกิลอัปได้สูงสุดเลเวล ${SKILL_MAXLV} (ดาเมจ +15% ฟื้นฟู +12% ระยะเวลา +10% คูลดาวน์ −4% ต่อเลเวล)</p>
+      <p class="muted skhint">แตะสกิลเพื่อดูรายละเอียดเต็ม · ได้แต้มสกิล 1 แต้มทุกเลเวล · สกิลอัปได้สูงสุดเลเวล ${SkillLv.max()} (ดาเมจ +15% ฟื้นฟู +12% ระยะเวลา +10% คูลดาวน์ −4% ต่อเลเวล)</p>
       <h4 class="sksec">4 สายบทบาทในเกม</h4><div class="rolegrid">${roles}</div>`, true);
     this.el.pbody.onclick = e => {
       const u = e.target.closest('[data-skup]'); if (u) { SkillLv.up(u.dataset.skup); this.buildSkillbar(); return this.renderPanel(); }
@@ -8587,7 +8991,7 @@ const Remote = {
     else if (k === 'sk') { rg.play(SKILL_ANIM[id] || 'cast', 1); const sk = SKILLS[id]; if (sk) { Fx.glow(p.dx, 1.3, p.dz, 1.2, sk.col, .4); Fx.shock(p.dx, p.dz, 2, sk.col, .45); } }
     else if (k === 'emo') this.emote(p, id);
   },
-  emote(p, id) { const e = EMOTES.find(x => x.id === id); if (!e) return; p.emo = { e: e.e, t: 2.6 }; const rg = this.rig(p); if (id === 'wave') p.waveT = 1.6; else rg.play('cheer', 1); },
+  emote(p, id) { const e = EMOTES.find(x => x.id === id); if (!e) return; p.emo = { e: e.e, t: 2.6 }; const rg = this.rig(p); if (id === 'wave') p.waveT = 1.6; else { rg.clip = null; rg.play(EMOTE_CLIP[id] || 'cheer', 1); } },
   update(dt) {
     const now = performance.now(), Pz = Player.zone;
     for (const p of this.map.values()) {
@@ -8630,7 +9034,8 @@ const Remote = {
 /* ---------- emotes ---------- */
 const EMOTES = [
   { id: 'wave', e: '👋', n: 'ทักทาย' }, { id: 'cheer', e: '🎉', n: 'เฮ!' }, { id: 'laugh', e: '😂', n: 'ฮ่าๆ' },
-  { id: 'love', e: '❤️', n: 'ชอบ' }, { id: 'good', e: '👍', n: 'เยี่ยม' }, { id: 'thanks', e: '🙏', n: 'ขอบคุณ' }, { id: 'sad', e: '😢', n: 'เศร้า' }, { id: 'angry', e: '😠', n: 'โกรธ' }
+  { id: 'love', e: '❤️', n: 'ชอบ' }, { id: 'good', e: '👍', n: 'เยี่ยม' }, { id: 'thanks', e: '🙏', n: 'ขอบคุณ' }, { id: 'sad', e: '😢', n: 'เศร้า' }, { id: 'angry', e: '😠', n: 'โกรธ' },
+  { id: 'bow', e: '🙇', n: 'คำนับ' }, { id: 'flex', e: '💪', n: 'โชว์กล้าม' }, { id: 'dance', e: '💃', n: 'เต้น' }, { id: 'sit', e: '🪑', n: 'นั่งพัก' }, { id: 'point', e: '👉', n: 'ชี้' }, { id: 'kneel', e: '🧎', n: 'คุกเข่า' }, { id: 'victory', e: '🏆', n: 'ชัยชนะ' }
 ];
 
 /* ---------- network session ---------- */
@@ -8682,11 +9087,11 @@ const Net = {
   },
   myState() {
     const S = Save.d, P = Player; const r2 = v => Math.round(v * 100) / 100;
-    return { gm: this.gm ? 1 : 0, n: S.name.slice(0, 16), c: S.cls, lv: S.level, o: P.sheet, h: S.cos.head || '', b: S.cos.back || '', a: S.cos.aura || '', m: Mounts.riding() ? Mounts.cur() : '', zn: P.zone, x: r2(P.x), z: r2(P.z), f: r2(P.face), hp: Math.max(0, Math.round(S.hp / P.stats.maxhp * 100)), d: P.dead ? 1 : 0, ac: this.ac, p: this.partyId || '', t: this.be.ts() };
+    return { gm: this.gm ? 1 : 0, n: S.name.slice(0, 16), c: S.cls, j: S.job || '', k: S.awk ? 1 : 0, lv: S.level, o: P.sheet, h: S.cos.head || '', b: S.cos.back || '', a: S.cos.aura || '', m: Mounts.riding() ? Mounts.cur() : '', zn: P.zone, x: r2(P.x), z: r2(P.z), f: r2(P.face), hp: Math.max(0, Math.round(S.hp / P.stats.maxhp * 100)), d: P.dead ? 1 : 0, ac: this.ac, p: this.partyId || '', t: this.be.ts() };
   },
   send(force) {
     if (!this.joined) return; const st = this.myState(); const L = this.lastSent;
-    const changed = !L || force || Math.abs(st.x - L.x) > .04 || Math.abs(st.z - L.z) > .04 || Math.abs(angWrap(st.f - L.f)) > .05 || ['zn', 'm', 'o', 'h', 'b', 'a', 'd', 'ac', 'p', 'lv', 'n', 'gm'].some(k => st[k] !== L[k]) || Math.abs(st.hp - L.hp) >= 5;
+    const changed = !L || force || Math.abs(st.x - L.x) > .04 || Math.abs(st.z - L.z) > .04 || Math.abs(angWrap(st.f - L.f)) > .05 || ['zn', 'm', 'o', 'h', 'b', 'a', 'd', 'ac', 'p', 'lv', 'n', 'gm', 'j', 'k'].some(k => st[k] !== L[k]) || Math.abs(st.hp - L.hp) >= 5;
     if (!changed && this.beatT < 8) return;
     this.beatT = 0; this.lastSent = Object.assign({}, st); this.be.set(`ch/${this.ch}/players/${this.uid}`, st);
   },
@@ -8727,7 +9132,7 @@ const Net = {
     this.be.push('reports', { by: this.uid, target: p.uid, tn: (p.st.n || '').slice(0, 16), msg: last ? last.m : '', ch: this.ch, t: this.be.ts() });
     UI.toast('ส่งรายงานแล้ว ขอบคุณที่ช่วยดูแลชุมชน', 'quest');
   },
-  emote(id) { const e = EMOTES.find(x => x.id === id); if (!e) return; this.selfEmo = { e: e.e, t: 2.6 }; const rg = Player.getRig(); if (id === 'wave') Player.waveT = 1.6; else if (!rg.busy) rg.play('cheer'); this.act('emo', id); },
+  emote(id) { const e = EMOTES.find(x => x.id === id); if (!e) return; this.selfEmo = { e: e.e, t: 2.6 }; const rg = Player.getRig(); if (id === 'wave') Player.waveT = 1.6; else if (!rg.busy) { rg.play(EMOTE_CLIP[id] || 'cheer'); Player.act = 'cheer'; Player.actT = CLIPS[EMOTE_CLIP[id] || 'cheer'].dur; } this.act('emo', id); },
   /* ---- party ---- */
   async invite(p) {
     if (!this.joined) return;
@@ -8821,11 +9226,11 @@ Object.assign(UI, {
     document.getElementById('composex').onclick = done;
   },
   peerCard(p) {
-    const el = $('#peercard'); const st = p.st; const cls = CLASSES[st.c] || CLASSES.adventurer; const role = ROLES[cls.role];
+    const el = $('#peercard'); const st = p.st; const cls = (st.j && JOBS[st.j]) || CLASSES[st.c] || CLASSES.adventurer; const role = ROLES[cls.role];
     const inParty = Net.party && Net.party.members && Net.party.members[p.uid];
     const muted = Net.muted.has(p.uid);
     el.innerHTML = `<div class="pcbox" role="dialog" aria-label="ผู้เล่น ${esc(p.name)}"><button class="pcx" data-pc="x" aria-label="ปิด">${icon('close')}</button>
-      <div class="pchead"><img src="${this.portraits[st.o] || this.portraits[st.c] || ''}" alt=""><div><b>${esc(p.name)}</b><small>${cls.name} · Lv.${st.lv} · <span style="color:${role.col}">${role.name}</span></small>${st.p ? `<small>${inParty ? 'อยู่ปาร์ตี้เดียวกับคุณ' : 'อยู่ในปาร์ตี้'}</small>` : ''}</div></div>
+      <div class="pchead"><img src="${this.portraits[st.o] || this.portraits[st.c] || ''}" alt=""><div><b>${esc(p.name)}</b><small>${st.k ? 'ผู้ตื่นรู้ ' : ''}${cls.name} · Lv.${st.lv} · <span style="color:${role.col}">${role.name}</span></small>${st.p ? `<small>${inParty ? 'อยู่ปาร์ตี้เดียวกับคุณ' : 'อยู่ในปาร์ตี้'}</small>` : ''}</div></div>
       <div class="pcbtns">${inParty ? '' : `<button class="btn" data-pc="inv" ${st.p ? 'disabled' : ''}>ชวนเข้าปาร์ตี้</button>`}${inParty && Net.party.leader === Net.uid ? `<button class="btn ghost" data-pc="kick">เชิญออกจากปาร์ตี้</button>` : ''}
       <button class="btn ghost" data-pc="mute">${muted ? 'เลิกปิดเสียง' : 'ปิดเสียงแชต'}</button><button class="btn ghost danger" data-pc="rep">รายงาน</button></div></div>`;
     el.hidden = false;
@@ -9244,6 +9649,61 @@ UI.pGhost = function (o) {
     if (id === 'c_soul') out.unshift({ ic: 'ghost', t: 'รางวัลเควสหลัก: วิญญาณริมคลอง', s: 'ส่งวิญญาณแม่นากให้หลวงตาพุฒ', go: { quest: 't5' } });
     return out;
   };
+}
+
+/* ============================================================
+   Jobs UI: lazy 3D portraits, jobs panel, hooks
+   ============================================================ */
+{
+  const or = Player.recalc.bind(Player);
+  Player.recalc = function () { or(); const S = Save.d; if (S && S.awk) { const st = this.stats; st.maxhp = Math.round(st.maxhp * 1.15); st.maxmp = Math.round(st.maxmp * 1.15); st.atk = Math.round(st.atk * 1.12); st.def = Math.round(st.def * 1.12); } };
+  const obd = Game.bossDefeated.bind(Game); Game.bossDefeated = function (m) { obd(m); JobSys.giveStone('st_light', 'แกนผลึกของครากเรืองแสง'); };
+  const ond = NakBoss.defeated.bind(NakBoss); NakBoss.defeated = function (m) { ond(m); JobSys.giveStone('st_dark', 'แม่นากทิ้งศิลาไว้ก่อนจากไป'); };
+  const ok = Combat.kill.bind(Combat); Combat.kill = function (m) { ok(m); if (m.type === 'pusom') JobSys.giveStone('st_spirit', 'ปู่โสมมอบให้ผู้ไม่โลภ'); };
+  // remote players: awakened aura
+  const ord = Remote.draw.bind(Remote);
+  Remote.draw = function (R) { ord(R); for (const p of this.map.values()) if (p.st.k && p.zone === Player.zone && !p.st.d) JobSys.awkFx(p.dx, p.dz, p.anim); };
+}
+
+/* ---- portraits for any sheet (3D render when no sprite sheet) ---- */
+{
+  const mkProxy = (kind) => new Proxy({}, { get(t, k) { if (typeof k !== 'string') return t[k]; if (t[k] === undefined && OUTFITS[k]) t[k] = CharThumb[kind](k); return t[k]; }, set(t, k, v) { t[k] = v; return true; } });
+  const CharThumb = {
+    portrait(sheet) { return ThumbR.shot('cp_' + sheet, 128, 128, [.35, 2.05, 1.45], [0, 1.72, 0], .62, R => CharThumb.rig(R, sheet, false)); },
+    body(sheet) { return ThumbR.shot('cb_' + sheet, 224, 320, [.9, 1.9, 4.4], [0, 1.2, 0], .7, R => CharThumb.rig(R, sheet, true)); },
+    rig(R, sheet, wave) { if (!ThumbR.cm[sheet]) ThumbR.cm[sheet] = buildCharModel(R, sheet); const rig = new Rig(sheet); for (let i = 0; i < 30; i++) rig.update(.05, { wave }); rig.pose(0, 0, 0, .3, CHAR_SCALE); rig.draw(R, ThumbR.cm[sheet], {}); }
+  };
+  const op = UI.portraits, ob = UI.bodies; UI.portraits = mkProxy('portrait'); UI.bodies = mkProxy('body'); Object.assign(UI.portraits, op); Object.assign(UI.bodies, ob);
+  const on = ThumbR.npc.bind(ThumbR); ThumbR.npc = function (sheet) { if (!this.cm[sheet] && OUTFITS[sheet]) { this.ensure(); this.cm[sheet] = buildCharModel(this.R, sheet); } return on(sheet); };
+  window.CharThumb = CharThumb;
+}
+Object.assign(NPC_IDLE, { zen: 'ข้าคืออาจารย์เซน ผู้ชี้ทางแห่งอาชีพ เมื่อเจ้าถึงเลเวล 10 จงกลับมาเลือกเส้นทางขั้นสอง และเมื่อถึงเลเวล 20 ข้าจะบอกความลับของการปลุกพลัง' });
+Object.assign(SKILL_TIPS, {
+  bowling: 'ใช้เมื่อถูกล้อม ศัตรูจะกระเด็นและมึนงงให้ตามตีต่อ', brandish: 'ยืนให้ศัตรูเรียงเป็นแนวหน้ากว้างแล้วฟาด', dragonblade: 'กระโดดลงกลางกลุ่ม ตอบถูกได้ ×2', grandcross: 'ใช้ในวัดร้าง ผีรับดาเมจเพิ่ม 30%', shieldchain: 'โจมตีระยะไกลของแทงค์ ใช้ดึงศัตรูจากไกล', devotion: 'เปิดก่อนรับท่าแรงของบอส ลดดาเมจเกือบทั้งหมด',
+  hammerfall: 'มึนงงยาว ใช้เปิดก่อนค้อนสายฟ้า', thunderforge: 'ดาเมจเดี่ยวสูง ใช้หลังค้อนถล่ม', mammonite: 'ปิดงานศัตรูตัวใหญ่ ตอบถูก ×2', aciddemo: 'กัดกร่อนต่อเนื่อง ยิงแล้วถอย', potionpitch: 'ใช้ตอน HP ต่ำกว่าครึ่ง', acidbomb: 'ปาใส่จุดที่ศัตรูรวมกัน',
+  sonicblow: 'ดาเมจเดี่ยวรัว 6 ครั้ง ใช้หลังพิษมรณะ', edp: 'เปิดก่อนโซนิคโบลว์ คริติคอลแทบทุกครั้ง', meteorassault: 'สกิลหมู่ของแอสซาซิน', backstab: 'พุ่งทะลุไปหลังเป้าหมาย ดาเมจสูงมาก', chasewalk: 'หนีออกจากวงล้อมแล้วกลับมาแทงข้างหลัง', raid: 'เปิดศึกด้วยสกิลนี้ ศัตรูมึนงง 2 วิ',
+  blitz: 'เหยี่ยวโจมตีได้แม้ศัตรูอยู่หลังสิ่งกีดขวาง', truesight: 'เปิดก่อนชาร์ปชูตติ้ง', sharpshoot: 'ยืนเป็นแนวเดียวกับศัตรูหลายตัว', bragi: 'เปิดตอนปาร์ตี้อยู่ใกล้กัน ทุกคนได้ผล', idun: 'เพิ่ม HP สูงสุดก่อนสู้บอส', arrowvulcan: 'ดาเมจเดี่ยวรัวสูงสุดของสายธนู',
+  napalm: 'ลูกไฟตามล่าเป้าหมาย ยิงได้บ่อย', gravity: 'ใช้คู่วงแหวนน้ำแข็ง ศัตรูหนีไม่ได้', stormgust: 'พื้นที่กว้างที่สุดในเกม', heavensdrive: 'สกิลหมู่รอบตัวของนักเวท', blindmist: 'ใช้ตอนโดนล้อม ศัตรูช้าลงและตัวเองได้เกราะ', soulburn: 'ทั้งโจมตีและฟื้นฟู',
+  magnus: 'ปล่อยใส่ฝูงผีในวัดร้าง ดาเมจ ×1.5', meditation: 'ล้างสถานะและฟื้นฟูในสกิลเดียว', redemption: 'ฟื้นฟู 35% พร้อมโจมตี', ragingpalm: 'ใช้ตัดจังหวะศัตรูที่ง้างโจมตี', spheres: 'เปิดก่อนหมัดอสุรา', asura: 'ดาเมจเดี่ยวสูงที่สุดในเกม ตอบถูกได้ ×20'
+});
+/* ---- jobs panel ---- */
+UI.pJobs = function (o) {
+  const S = Save.d, base = CLASSES[S.cls], jobs = JOB_OF[S.cls] || [];
+  const skillRow = id => { const s = SKILLS[id]; return `<li class="hasinfo" data-skinfo="${id}">${SkillArt.art(id, { cls: 'xs' })}<div><b>${s.name}</b><small>${s.cat}</small></div></li>`; };
+  const cards = jobs.map(id => { const j = JOBS[id]; const cur = S.job === id; return `<div class="jobcard ${cur ? 'cur' : ''} ${S.job && !cur ? 'off' : ''}" style="--jc:${j.color}"><img src="${UI.bodies[id]}" alt=""><div class="jobin"><h3>${j.name} <small>${j.en}</small></h3><p class="crole" style="--rc:${ROLES[j.role].col}">${icon(ROLES[j.role].icon)} ${ROLES[j.role].name}</p><p>${j.desc}</p><p class="muted">HP +${j.hp} · MP +${j.mp} · ATK +${j.atk} · DEF +${j.def}${j.spd ? ' · SPD +' + j.spd : ''}</p><ul class="skl mini">${j.skills.slice(2).map(skillRow).join('')}</ul>${cur ? '<p class="jobnow">อาชีพปัจจุบัน</p>' : !S.job ? `<button class="btn primary" data-job="${id}" ${S.level >= JOB_LV && S.coins >= JobSys.cost ? '' : 'disabled'}>เปลี่ยนเป็น ${j.name} (${JobSys.cost} เหรียญ)</button>` : ''}</div></div>`; }).join('');
+  const st = JobSys.stoneProgress(S);
+  const awk = S.job ? `<h4>ปลุกพลัง (Awakening) · เลเวล ${AWK_LV}+</h4><div class="awkbox ${S.awk ? 'done' : ''}">${S.awk ? `<p><b>ปลุกพลังแล้ว!</b> ${Cls.name(S)} · เลเวลสูงสุด ${AWK_LV_CAP} · สกิลอัปได้ถึง Lv.10 · สกิล ${JOBS[S.job].awk.map(k => SKILLS[k].name).join(' และ ')} แข็งแกร่งขึ้น 30% · HP/MP +15% · ATK/DEF +12%</p>` : `<p>รับเควส "ปลดผนึกแห่งพลัง" จาก <b>อาจารย์เซน</b> ในเมือง แล้วรวบรวมศิลาทั้ง 4 จากนั้นเข้าพิธีกรรม (ตอบคำถามถูกติดกัน 3 ข้อ) ใช้ ${fmt(JobSys.ritualCost)} เหรียญ</p><ul class="stones">${st.map(s => `<li class="${s.have ? 'have' : ''}">${icon('gem')}<b>${ITEMS[s.id].name}</b><small>${STONES[s.id]}</small>${s.have ? '<i>✓</i>' : ''}</li>`).join('')}</ul><p class="muted">รางวัล: เลเวลสูงสุด ${AWK_LV_CAP} · สกิลสูงสุด Lv.10 · สกิลประจำอาชีพ 2 สกิลแข็งแกร่งขึ้น 30% · HP/MP +15% · ATK/DEF +12% · ออร่าเปลวไฟทอง · ฉายา "ผู้ตื่นรู้"</p>${S.quests.awk && S.quests.awk.s === 'done' ? '<button class="btn primary" data-ritual="1">เข้าพิธีกรรมปลุกพลัง</button>' : `<button class="btn" data-navnpc="zen">ไปหาอาจารย์เซน</button>`}`}</div>` : '';
+  this.setPanel(`${icon('person')} สายอาชีพ <small>${base.name} → ขั้นสอง → ผู้ตื่นรู้</small>`, `<p class="muted">เลือกอาชีพขั้นสองได้เมื่อถึงเลเวล ${JOB_LV} (เลือกได้ครั้งเดียว) สกิล Q และ E คงเดิม ส่วน R, T และสกิลใหญ่ X จะเปลี่ยนเป็นสกิลประจำอาชีพใหม่</p><div class="jobgrid">${cards}</div>${awk}`, true);
+  this.el.pbody.onclick = e => {
+    const sk = e.target.closest('[data-skinfo]'); if (sk) return SkillInfo.open(sk.dataset.skinfo);
+    const b = e.target.closest('[data-job]'); if (b) { if (JobSys.change(b.dataset.job)) this.renderPanel(); return; }
+    if (e.target.closest('[data-ritual]')) { this.closePanel(); JobSys.ritual(); return; }
+    const n = e.target.closest('[data-navnpc]'); if (n) { this.closePanel(); Nav.goNpc(n.dataset.navnpc, 'ไปหา'); }
+  };
+};
+{
+  const oh = UI.pHelp.bind(UI);
+  UI.pHelp = function () { oh(); const h = this.el.pbody.querySelector('.help'); if (h) h.insertAdjacentHTML('afterbegin', `<section><h4>สายอาชีพและการปลุกพลัง</h4><p>เลเวล ${JOB_LV} ไปหา <b>อาจารย์เซน</b> ในเมืองเพื่อเลือกอาชีพขั้นสอง (อาชีพละ 2 สาย ได้สกิลใหม่ 3 สกิล) เลเวล ${AWK_LV} รับเควส "ปลดผนึกแห่งพลัง" เก็บศิลา 4 ชนิดจากคราก แม่นาก ปู่โสม และบททดสอบของโอริน แล้วเข้าพิธีกรรมเพื่อปลุกพลัง เลเวลสูงสุดจะขยายเป็น ${AWK_LV_CAP} · กด <kbd>J</kbd> เพื่อดูสายอาชีพ</p></section>`); };
 }
 
 /* ============================================================
