@@ -170,7 +170,7 @@ const UI = {
     // prompt
     const n = Game.nearTarget;
     if (n && !Game.paused && !Player.dead) {
-      const label = n.kind === 'npc' ? 'คุยกับ ' + n.ref.name : n.kind === 'warp' ? 'ใช้จุดวาร์ป' : n.kind === 'shrine' ? 'สักการะ ' + n.ref.name : n.kind === 'bindpost' ? 'ผูกสายสิญจน์ (ตอบคำถาม)' : 'ทำลายเกราะ (Chain Quiz)';
+      const label = n.label ? n.label : n.kind === 'npc' ? 'คุยกับ ' + n.ref.name : n.kind === 'warp' ? 'ใช้จุดวาร์ป' : n.kind === 'shrine' ? 'สักการะ ' + n.ref.name : n.kind === 'bindpost' ? 'ผูกสายสิญจน์ (ตอบคำถาม)' : 'ทำลายเกราะ (Chain Quiz)';
       this.el.prompt.hidden = false; this.el.prompt.innerHTML = `<kbd>F</kbd>${label}`; this.el.prompt.classList.toggle('boss', n.kind === 'barrier' || n.kind === 'bindpost');
     } else this.el.prompt.hidden = true;
     // target frame

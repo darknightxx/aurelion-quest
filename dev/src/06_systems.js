@@ -363,7 +363,7 @@ const Quests = {
     for (const [it, n] of q.rew.items) Game.addItem(it, n);
     if (q.unlock === 'bridge') { S.flags.bridge = true; Game.applyUnlocks(); UI.toast('สะพานข้ามแม่น้ำเปิดแล้ว!', 'quest'); }
     if (q.unlock === 'gate') { S.flags.gate = true; Game.applyUnlocks(); UI.toast('ประตูถ้ำผลึกปลดล็อกแล้ว (ต้องเลเวล 5)', 'quest'); }
-    if (q.type === 'side') S.stats.sideDone++; if (q.title) Titles.grant(q.title, 'เควส ' + q.title);
+    if (q.type === 'side') S.stats.sideDone++; if (q.award) Titles.grant(q.award, 'เควส ' + q.title);
     Season.addXP(QUEST_SXP[q.type] || 100, 'เควส ' + q.title); Season.bump('quest');
     Audio.sfx('quest'); Player.doAct('cheer', 1.0);
     Achievements.check(); UI.refreshTracker(); Game.autosave();
