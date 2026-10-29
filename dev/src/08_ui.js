@@ -195,7 +195,7 @@ const UI = {
       const p = R.project(f.x + f.dx * (ro ? 1 + f.t * 2.4 : 1), fy, f.z); if (!p) { sp.style.display = 'none'; continue; }
       sp.style.display = ''; sp.className = 'fl ' + f.kind + (ro ? ' ro' : ''); if (sp.textContent !== f.text) sp.textContent = f.text;
       const a = ro ? (u < .75 ? 1 : 1 - (u - .75) / .25) : f.t < .15 ? f.t / .15 : 1 - Math.max(0, (f.t - f.life * .6) / (f.life * .4)); const s = ro ? (f.kind === 'crit' ? 1.6 : 1.25) - u * .55 : f.kind === 'crit' ? 1.3 - Math.min(.3, f.t) : 1;
-      sp.style.transform = `translate(${p.x}px,${p.y}px) translate(-50%,-50%) scale(${s})`; sp.style.opacity = a;
+      sp.style.transform = `translate(${p.x}px,${p.y}px) translate(-50%,-50%) scale(${s * UIScale.pl})`; sp.style.opacity = a;
     }
   },
   updatePlates() {
@@ -217,8 +217,8 @@ const UI = {
       el.style.display = ''; const h = w.html(); if (el._h !== h) { el.innerHTML = h; el._h = h; }
       if (Settings.d.roPlates !== 0) { // RO layout: names/bars under the feet, bubbles & markers above the head
         const f = R.project(w.x, w.fy || 0, w.z) || p; el.className = 'plate ro ' + (w.cls || ''); el.style.setProperty('--hh', Math.max(0, f.y - p.y) + 'px');
-        el.style.transform = `translate(${f.x}px,${f.y}px) translate(-50%,3px)`;
-      } else { el.className = 'plate ' + (w.cls || ''); el.style.transform = `translate(${p.x}px,${p.y}px) translate(-50%,-100%)`; }
+        el.style.transform = `translate(${f.x}px,${f.y}px) translate(-50%,3px) scale(${UIScale.pl})`;
+      } else { el.className = 'plate ' + (w.cls || ''); el.style.transform = `translate(${p.x}px,${p.y}px) translate(-50%,-100%) scale(${UIScale.pl})`; }
     }
     for (const [k, el] of this.plates) if (!seen.has(k)) { el.remove(); this.plates.delete(k); }
   },
@@ -287,7 +287,7 @@ const UI = {
   initJoystick() {
     const j = this.el.joy, k = this.el.knob; let id = null, cx = 0, cy = 0;
     j.addEventListener('pointerdown', e => { e.preventDefault(); Audio.init(); id = e.pointerId; try { j.setPointerCapture(id); } catch (_) { } const r = j.getBoundingClientRect(); cx = r.left + r.width / 2; cy = r.top + r.height / 2; mv(e); });
-    const mv = e => { if (e.pointerId !== id) return; const dd = Rot.delta(e.clientX - cx, e.clientY - cy); let dx = dd.dx, dy = dd.dy; const R = 46; const l = Math.hypot(dx, dy); if (l > R) { dx = dx / l * R; dy = dy / l * R; } k.style.transform = `translate(${dx}px,${dy}px)`; const m = l < 8 ? 0 : 1; Input.joy.x = m * dx / R; Input.joy.z = m * -dy / R; };
+    const mv = e => { if (e.pointerId !== id) return; const dd = Rot.delta(e.clientX - cx, e.clientY - cy); let dx = dd.dx / UIScale.bt, dy = dd.dy / UIScale.bt; const R = 46; const l = Math.hypot(dx, dy); if (l > R) { dx = dx / l * R; dy = dy / l * R; } k.style.transform = `translate(${dx}px,${dy}px)`; const m = l < 8 ? 0 : 1; Input.joy.x = m * dx / R; Input.joy.z = m * -dy / R; };
     j.addEventListener('pointermove', mv);
     const up = e => { if (e.pointerId !== id) return; id = null; k.style.transform = ''; Input.joy.x = Input.joy.z = 0; };
     j.addEventListener('pointerup', up); j.addEventListener('pointercancel', up);
@@ -312,7 +312,7 @@ const UI = {
   },
   refreshInvIfOpen() { if (this.panelOpen === 'inv' || this.panelOpen === 'shop') this.renderPanel(); },
   renderPanel() {
-    const k = this.panelOpen; const fn = { models: 'pModels', wardrobe: 'pWardrobe', jobs: 'pJobs', ghost: 'pGhost', gm: 'pGM', chat: 'pChat', channels: 'pChannels', skills: 'pSkills', stable: 'pStable', doc: 'pDoc', season: 'pSeason', gemshop: 'pGemShop', topup: 'pTopup', inv: 'pInv', char: 'pChar', quest: 'pQuest', map: 'pMap', ach: 'pAch', settings: 'pSettings', help: 'pHelp', menu: 'pMenu', shop: 'pShop', dialog: 'pDialog' }[k];
+    const k = this.panelOpen; const fn = { models: 'pModels', wardrobe: 'pWardrobe', jobs: 'pJobs', ghost: 'pGhost', gm: 'pGM', chat: 'pChat', channels: 'pChannels', skills: 'pSkills', stable: 'pStable', doc: 'pDoc', season: 'pSeason', gemshop: 'pGemShop', topup: 'pTopup', inv: 'pInv', char: 'pChar', quest: 'pQuest', map: 'pMap', ach: 'pAch', settings: 'pSettings', help: 'pHelp', menu: 'pMenu', shop: 'pShop', dialog: 'pDialog' }[k] || (UI.extraPanels && UI.extraPanels[k]);
     if (fn) this[fn](this.panelOpt || {});
   },
   setPanel(title, html, wide) { this.el.ptitle.innerHTML = title; this.el.pbody.innerHTML = html; this.el.panel.querySelector('.pwin').classList.toggle('wide', !!wide); },

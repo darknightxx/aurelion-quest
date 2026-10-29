@@ -37,12 +37,12 @@ const WM = {
   },
   area() { const a = document.getElementById('app'); return { w: a.clientWidth, h: a.clientHeight }; },
   clamp(w) {
-    const A = this.area(), r = w.el.firstElementChild; const ww = r.offsetWidth || 400, hh = r.offsetHeight || 300;
+    const A = this.area(), r = w.el.firstElementChild; const z = UIScale.get('wiz'), ww = (r.offsetWidth || 400) * z, hh = (r.offsetHeight || 300) * z;
     w.x = clamp(w.x, -ww + 90, A.w - 90); w.y = clamp(w.y, 0, Math.max(0, A.h - 44));
     w.el.style.transform = `translate(${Math.round(w.x)}px,${Math.round(w.y)}px)`;
   },
   place(w) {
-    const A = this.area(), r = w.el.firstElementChild, ww = r.offsetWidth || 500, hh = r.offsetHeight || 400; const p = this.pos[w.kind];
+    const A = this.area(), r = w.el.firstElementChild, z = UIScale.get('wiz'), ww = (r.offsetWidth || 500) * z, hh = (r.offsetHeight || 400) * z; const p = this.pos[w.kind];
     if (p) { w.x = p[0]; w.y = p[1]; }
     else { const n = this.wins.size - 1; w.x = (A.w - ww) / 2 + n * 28; w.y = Math.max(8, (A.h - hh) / 2 + n * 24); }
     w.placed = true; this.clamp(w);

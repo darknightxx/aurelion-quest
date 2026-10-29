@@ -1199,6 +1199,17 @@ body.compact .wgrid { grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)
 .uwin.drag .phead { cursor: grabbing; }
 .uwin.drag { opacity: .92; }
 body.compact .uwin .pwin { max-height: calc(100cqh - 12px); }
+/* UI scale (settings) */
+#status, #mapcol, #topc, #netbar, #partyhud { zoom: var(--uiz, 1); }
+#bottomc, #joy { zoom: var(--btz, 1); }
+#chatwrap, #toasts, #annbar, #banner, #placename { zoom: var(--chz, 1); }
+.uwin .pwin { zoom: var(--wiz, 1); }
+.uwin .pwin { max-height: calc(min(84cqh, 820px) / var(--wiz, 1)); }
+.uwin .pwin, .uwin .pwin.wide, .uwin .pwin:has(.stb) { max-width: calc((100cqw - 12px) / var(--wiz, 1)); }
+body.compact .uwin .pwin { max-height: calc((100cqh - 12px) / var(--wiz, 1)); }
+.plate.ro { transform-origin: 50% 0; } .plate:not(.ro) { transform-origin: 50% 100%; }
+.uisc label { display: block; margin-top: 8px; } .uisc input[type=range] { width: 100%; }
+.uipre { display: flex; flex-wrap: wrap; gap: 6px; }
 </style>
 </head>
 <body>
@@ -8699,7 +8710,7 @@ const UI = {
       const p = R.project(f.x + f.dx * (ro ? 1 + f.t * 2.4 : 1), fy, f.z); if (!p) { sp.style.display = 'none'; continue; }
       sp.style.display = ''; sp.className = 'fl ' + f.kind + (ro ? ' ro' : ''); if (sp.textContent !== f.text) sp.textContent = f.text;
       const a = ro ? (u < .75 ? 1 : 1 - (u - .75) / .25) : f.t < .15 ? f.t / .15 : 1 - Math.max(0, (f.t - f.life * .6) / (f.life * .4)); const s = ro ? (f.kind === 'crit' ? 1.6 : 1.25) - u * .55 : f.kind === 'crit' ? 1.3 - Math.min(.3, f.t) : 1;
-      sp.style.transform = `translate(${p.x}px,${p.y}px) translate(-50%,-50%) scale(${s})`; sp.style.opacity = a;
+      sp.style.transform = `translate(${p.x}px,${p.y}px) translate(-50%,-50%) scale(${s * UIScale.pl})`; sp.style.opacity = a;
     }
   },
   updatePlates() {
@@ -8721,8 +8732,8 @@ const UI = {
       el.style.display = ''; const h = w.html(); if (el._h !== h) { el.innerHTML = h; el._h = h; }
       if (Settings.d.roPlates !== 0) { // RO layout: names/bars under the feet, bubbles & markers above the head
         const f = R.project(w.x, w.fy || 0, w.z) || p; el.className = 'plate ro ' + (w.cls || ''); el.style.setProperty('--hh', Math.max(0, f.y - p.y) + 'px');
-        el.style.transform = `translate(${f.x}px,${f.y}px) translate(-50%,3px)`;
-      } else { el.className = 'plate ' + (w.cls || ''); el.style.transform = `translate(${p.x}px,${p.y}px) translate(-50%,-100%)`; }
+        el.style.transform = `translate(${f.x}px,${f.y}px) translate(-50%,3px) scale(${UIScale.pl})`;
+      } else { el.className = 'plate ' + (w.cls || ''); el.style.transform = `translate(${p.x}px,${p.y}px) translate(-50%,-100%) scale(${UIScale.pl})`; }
     }
     for (const [k, el] of this.plates) if (!seen.has(k)) { el.remove(); this.plates.delete(k); }
   },
@@ -8791,7 +8802,7 @@ const UI = {
   initJoystick() {
     const j = this.el.joy, k = this.el.knob; let id = null, cx = 0, cy = 0;
     j.addEventListener('pointerdown', e => { e.preventDefault(); Audio.init(); id = e.pointerId; try { j.setPointerCapture(id); } catch (_) { } const r = j.getBoundingClientRect(); cx = r.left + r.width / 2; cy = r.top + r.height / 2; mv(e); });
-    const mv = e => { if (e.pointerId !== id) return; const dd = Rot.delta(e.clientX - cx, e.clientY - cy); let dx = dd.dx, dy = dd.dy; const R = 46; const l = Math.hypot(dx, dy); if (l > R) { dx = dx / l * R; dy = dy / l * R; } k.style.transform = `translate(${dx}px,${dy}px)`; const m = l < 8 ? 0 : 1; Input.joy.x = m * dx / R; Input.joy.z = m * -dy / R; };
+    const mv = e => { if (e.pointerId !== id) return; const dd = Rot.delta(e.clientX - cx, e.clientY - cy); let dx = dd.dx / UIScale.bt, dy = dd.dy / UIScale.bt; const R = 46; const l = Math.hypot(dx, dy); if (l > R) { dx = dx / l * R; dy = dy / l * R; } k.style.transform = `translate(${dx}px,${dy}px)`; const m = l < 8 ? 0 : 1; Input.joy.x = m * dx / R; Input.joy.z = m * -dy / R; };
     j.addEventListener('pointermove', mv);
     const up = e => { if (e.pointerId !== id) return; id = null; k.style.transform = ''; Input.joy.x = Input.joy.z = 0; };
     j.addEventListener('pointerup', up); j.addEventListener('pointercancel', up);
@@ -8816,7 +8827,7 @@ const UI = {
   },
   refreshInvIfOpen() { if (this.panelOpen === 'inv' || this.panelOpen === 'shop') this.renderPanel(); },
   renderPanel() {
-    const k = this.panelOpen; const fn = { models: 'pModels', wardrobe: 'pWardrobe', jobs: 'pJobs', ghost: 'pGhost', gm: 'pGM', chat: 'pChat', channels: 'pChannels', skills: 'pSkills', stable: 'pStable', doc: 'pDoc', season: 'pSeason', gemshop: 'pGemShop', topup: 'pTopup', inv: 'pInv', char: 'pChar', quest: 'pQuest', map: 'pMap', ach: 'pAch', settings: 'pSettings', help: 'pHelp', menu: 'pMenu', shop: 'pShop', dialog: 'pDialog' }[k];
+    const k = this.panelOpen; const fn = { models: 'pModels', wardrobe: 'pWardrobe', jobs: 'pJobs', ghost: 'pGhost', gm: 'pGM', chat: 'pChat', channels: 'pChannels', skills: 'pSkills', stable: 'pStable', doc: 'pDoc', season: 'pSeason', gemshop: 'pGemShop', topup: 'pTopup', inv: 'pInv', char: 'pChar', quest: 'pQuest', map: 'pMap', ach: 'pAch', settings: 'pSettings', help: 'pHelp', menu: 'pMenu', shop: 'pShop', dialog: 'pDialog' }[k] || (UI.extraPanels && UI.extraPanels[k]);
     if (fn) this[fn](this.panelOpt || {});
   },
   setPanel(title, html, wide) { this.el.ptitle.innerHTML = title; this.el.pbody.innerHTML = html; this.el.panel.querySelector('.pwin').classList.toggle('wide', !!wide); },
@@ -11166,6 +11177,7 @@ KIND_ICON.vehicle = 'star';
    PATCH_NEW for every game update (shown in lobby → บันทึกอัปเดต)
    ============================================================ */
 const PATCH_NEW = [
+  { d: '30/10', ic: 'gear', t: 'ปรับขนาด UI ได้ตามต้องการ', x: 'เมนู → ปรับขนาด UI หรือ ตั้งค่า → ขนาด UI: ปรับแยกได้ 5 ส่วน คือ แถบสถานะ/แผนที่/เมนู/เควส, ปุ่มสกิลและจอยสติ๊ก, หน้าต่าง, ชื่อและแถบ HP ใต้ตัวละคร, แชทและข้อความแจ้งเตือน (60–200%) มีปุ่มลัด เล็ก/ปกติ/ใหญ่/ใหญ่มาก เห็นผลทันที ใช้ได้ทั้งคอม มือถือแนวนอน และโหมดหมุนจอ' },
   { d: '30/10', ic: 'person', t: 'ภาพแบบ RO: ตัวละครและมอนสเตอร์เป็นสไปรต์พิกเซล', x: 'ตัวละคร NPC มอนสเตอร์ และพาหนะ แสดงเป็นภาพพิกเซลขอบดำหันได้ 8 ทิศแบบเกม 2D คลาสสิก บนแมพ 3 มิติ กล้องมุมเอียงแบบ RO ชื่อและแถบ HP/SP อยู่ใต้เท้า ตัวเลขดาเมจเด้งโค้งตกลง คริติคอลเป็นตัวเลขเหลืองมีดาวแดง ปิด/เปิดได้ในตั้งค่า → ภาพแบบ RO' },
   { d: '30/10', ic: 'star', t: 'เอฟเฟกต์แบบ RO: วงเวทใต้เท้าตอนร่าย ประกายตอนโจมตี เลเวลอัป', x: 'ร่ายเวท/บัฟ/ฮีลมีวงเวทหมุนใต้เท้า ฮีลมีเสาแสงและประกายเขียวลอยขึ้น บัฟมีประกายหมุนรอบตัว ตีโดนมีประกายแตก คริติคอลประกายทอง เลเวลอัปมีเสาแสงทองและเสียงเฉพาะ' },
   { d: '30/10', ic: 'gear', t: 'หน้าต่างลากได้ เปิดได้หลายหน้าต่างพร้อมกัน', x: 'ทุกหน้าต่าง (กระเป๋า ตัวละคร สกิล เควส ฯลฯ) ลากแถบหัวเพื่อย้ายได้ เปิดซ้อนกันได้หลายอัน จำตำแหน่งไว้ให้ กดปุ่มลัดซ้ำ (I C L K J P O) เพื่อปิด ตั้งค่าให้เล่นต่อได้ขณะเปิดหน้าต่างแบบ RO' },
@@ -11187,6 +11199,7 @@ const PATCH_NEW = [
 PATCH.unshift(...PATCH_NEW);
 ANNOUNCE.unshift({ tag: 'อัปเดตใหญ่', title: 'อัปเดต 30 ต.ค.: ภาพแบบ RO (สไปรต์พิกเซล) หน้าต่างลากได้ อาชีพขั้นสอง แฟชั่น พาหนะหลายที่นั่ง', body: 'เปลี่ยนอาชีพขั้นสองที่ Lv.10 ตื่นรู้ที่ Lv.20 · ตู้เสื้อผ้า (O) ใส่ชุด หมวก หน้ากาก ปีก สกินอาวุธ เห็นจริงบนตัวละคร · ขี่ไดโนเสาร์ ตุ๊กๆ จี๊ป เรือหางยาว ช้างศึก รถม้า กับเพื่อนได้ 2–4 คน · แมพมีเท็กซ์เจอร์และแสงใหม่ทั้งหมด · นำเข้าโมเดล .glb ของตัวเองได้ที่ตั้งค่า ดูรายละเอียดทั้งหมดที่แท็บ "บันทึกอัปเดต"' });
 
+ANNOUNCE.unshift({ tag: 'อัปเดต', title: 'ใหม่! ปรับขนาด UI ได้เอง', body: 'กดเมนู → ปรับขนาด UI เพื่อขยายหรือย่อแถบสถานะ ปุ่มสกิล จอยสติ๊ก หน้าต่าง ชื่อตัวละคร และแชท แยกกันได้ เหมาะกับมือถือจอเล็กหรือแท็บเล็ต' });
 /* ============================================================
    RO-style presentation: casting circles, hit sparks, level-up
    column, skill shout, RO click/hit sounds
@@ -11290,12 +11303,12 @@ const WM = {
   },
   area() { const a = document.getElementById('app'); return { w: a.clientWidth, h: a.clientHeight }; },
   clamp(w) {
-    const A = this.area(), r = w.el.firstElementChild; const ww = r.offsetWidth || 400, hh = r.offsetHeight || 300;
+    const A = this.area(), r = w.el.firstElementChild; const z = UIScale.get('wiz'), ww = (r.offsetWidth || 400) * z, hh = (r.offsetHeight || 300) * z;
     w.x = clamp(w.x, -ww + 90, A.w - 90); w.y = clamp(w.y, 0, Math.max(0, A.h - 44));
     w.el.style.transform = `translate(${Math.round(w.x)}px,${Math.round(w.y)}px)`;
   },
   place(w) {
-    const A = this.area(), r = w.el.firstElementChild, ww = r.offsetWidth || 500, hh = r.offsetHeight || 400; const p = this.pos[w.kind];
+    const A = this.area(), r = w.el.firstElementChild, z = UIScale.get('wiz'), ww = (r.offsetWidth || 500) * z, hh = (r.offsetHeight || 400) * z; const p = this.pos[w.kind];
     if (p) { w.x = p[0]; w.y = p[1]; }
     else { const n = this.wins.size - 1; w.x = (A.w - ww) / 2 + n * 28; w.y = Math.max(8, (A.h - hh) / 2 + n * 24); }
     w.placed = true; this.clamp(w);
@@ -11327,6 +11340,64 @@ const WM = {
   const ocr = UI.chatRender && UI.chatRender.bind(UI); if (ocr) UI.chatRender = function () { if (WM.isOpen('chat')) WM.with('chat', () => ocr()); };
 }
 
+
+/* ============================================================
+   UI scale: players can resize each part of the interface
+   (HUD, action buttons, windows, name plates, chat) separately.
+   Uses CSS zoom per group, so layouts stay anchored to the
+   screen edges; windows zoom their inner frame so dragging keeps
+   working in screen pixels.
+   ============================================================ */
+const UIScale = {
+  defs: [
+    ['uiz', 'แถบสถานะ แผนที่ย่อ เมนู และเควส', .6, 1.8],
+    ['btz', 'ปุ่มสกิล ปุ่มโจมตี และจอยสติ๊ก', .6, 2],
+    ['wiz', 'หน้าต่าง (กระเป๋า ร้านค้า ตั้งค่า ฯลฯ)', .6, 1.6],
+    ['plz', 'ชื่อ แถบ HP ใต้ตัวละคร และตัวเลขดาเมจ', .6, 1.8],
+    ['chz', 'แชท ข้อความแจ้งเตือน และประกาศ', .6, 1.8]
+  ],
+  presets: [['เล็ก', .8], ['ปกติ', 1], ['ใหญ่', 1.2], ['ใหญ่มาก', 1.45]],
+  get(k) { const v = +Settings.d[k]; return v > 0 ? v : 1; },
+  get pl() { return this.get('plz'); },
+  get bt() { return this.get('btz'); },
+  apply() { const de = document.documentElement; for (const [k] of this.defs) de.style.setProperty('--' + k, this.get(k)); },
+  set(k, v) { Settings.d[k] = Math.round(v * 100) / 100; this.apply(); },
+  html() {
+    return `<div class="uisc">
+      <div class="uipre">${this.presets.map(([l, v]) => `<button class="btn sm" data-uipre="${v}">${l}</button>`).join('')}<button class="btn sm ghost" data-uipre="reset">ค่าเริ่มต้น</button></div>
+      ${this.defs.map(([k, l, a, b]) => `<label for="uis-${k}">${l}: <b id="uisv-${k}">${Math.round(this.get(k) * 100)}%</b></label><input type="range" id="uis-${k}" data-uis="${k}" min="${a}" max="${b}" step=".05" value="${this.get(k)}">`).join('')}
+      <p class="muted">ปรับแล้วเห็นผลทันทีและบันทึกอัตโนมัติ · ลากหน้าต่างไปวางตรงไหนก็ได้</p></div>`;
+  },
+  bind(root) {
+    root.querySelectorAll('[data-uis]').forEach(inp => {
+      inp.oninput = () => { const k = inp.dataset.uis; this.set(k, +inp.value); const t = root.querySelector('#uisv-' + k); if (t) t.textContent = Math.round(+inp.value * 100) + '%'; };
+      inp.onchange = () => { Settings.save(); this.fit(); };
+    });
+    root.querySelectorAll('[data-uipre]').forEach(b => b.onclick = e => {
+      e.stopPropagation(); const v = b.dataset.uipre;
+      for (const [k, , a, m] of this.defs) this.set(k, v === 'reset' ? 1 : clamp(+v * (k === 'btz' && +v > 1 ? 1.1 : 1), a, m));
+      Settings.save(); Audio.sfx('ui'); this.fit();
+      root.querySelectorAll('[data-uis]').forEach(inp => { inp.value = this.get(inp.dataset.uis); const t = root.querySelector('#uisv-' + inp.dataset.uis); if (t) t.textContent = Math.round(this.get(inp.dataset.uis) * 100) + '%'; });
+    });
+  },
+  // keep open windows on screen after a size change
+  fit() { if (typeof WM !== 'undefined') for (const w of WM.wins.values()) WM.clamp(w); },
+  pUIScale() { UI.setPanel(`${icon('gear')} ปรับขนาด UI`, this.html()); this.bind(UI.el.pbody); }
+};
+Settings.d.uiz = Settings.d.uiz || 1;
+UIScale.apply();
+{
+  UI.extraPanels = UI.extraPanels || {};
+  UI.extraPanels.uiscale = 'pUIScale'; UI.pUIScale = () => UIScale.pUIScale();
+  const ol = Settings.load.bind(Settings); Settings.load = function () { ol(); UIScale.apply(); };
+  const os = UI.pSettings.bind(UI);
+  UI.pSettings = function () {
+    os(); const b = this.el.pbody; const fs = document.createElement('fieldset'); fs.innerHTML = `<legend>ขนาด UI</legend>${UIScale.html()}`;
+    b.insertBefore(fs, b.firstChild); UIScale.bind(fs);
+  };
+  const om = UI.pMenu.bind(UI);
+  UI.pMenu = function () { om(); const g = this.el.pbody.querySelector('.menugrid'); if (!g) return; const bt = document.createElement('button'); bt.className = 'mbtn'; bt.dataset.go = 'uiscale'; bt.innerHTML = `${icon('gear')}<span>ปรับขนาด UI</span>`; const ref = g.querySelector('[data-go="settings"]'); g.insertBefore(bt, ref || null); };
+}
 /* ============================================================
    Boot
    ============================================================ */
