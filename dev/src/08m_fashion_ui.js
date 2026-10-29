@@ -58,9 +58,6 @@ UI.pWardrobe = function (o) {
 };
 /* menu entry + char panel shortcut */
 {
-  const om = UI.pMenu.bind(UI);
-  UI.pMenu = function () { om(); const grid = this.el.pbody.querySelector('.menugrid'); if (!grid) return; const b = document.createElement('button'); b.className = 'mbtn'; b.dataset.go = 'wardrobe'; b.innerHTML = `${icon('person')}<span>ตู้เสื้อผ้า</span><kbd>O</kbd>`; const ref = grid.querySelector('[data-go="jobs"]'); grid.insertBefore(b, ref ? ref.nextSibling : null); };
-  document.addEventListener('keydown', e => { if (e.code === 'KeyO' && Game.started && !Game.paused && !e.repeat && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') UI.openPanel('wardrobe'); });
   const oc = UI.pChar.bind(UI);
   UI.pChar = function (o) { oc(o); const b = this.el.pbody.querySelector('[data-go="jobinfo"]'); if (b && !this.el.pbody.querySelector('[data-go="wardrobe"]')) { const w = document.createElement('button'); w.className = 'btn sm ghost'; w.dataset.go = 'wardrobe'; w.textContent = 'ตู้เสื้อผ้า'; b.after(w); w.onclick = () => this.openPanel('wardrobe'); } };
   // gem shop: filter the fashion category by slot

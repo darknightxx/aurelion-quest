@@ -38,7 +38,7 @@ const Input = {
     if (UI.quizOpen) { const n = { Digit1: 0, Digit2: 1, Digit3: 2, Digit4: 3, Numpad1: 0, Numpad2: 1, Numpad3: 2, Numpad4: 3 }[code]; if (n !== undefined) UI.quizPick(n); return; }
     if (code === 'Escape') { if (UI.panelOpen) UI.closePanel(); else if (Game.started) UI.openPanel('menu'); return; }
     if (!Game.started || UI.summaryOpen) return;
-    { const pmap = { KeyI: 'inv', KeyC: 'char', KeyL: 'quest', KeyM: 'map', KeyK: 'ach', KeyJ: 'jobs', KeyB: 'ghost', KeyH: 'help', KeyP: 'skills', KeyO: 'wardrobe', KeyF: 'friends', KeyU: 'pets' }; if (pmap[code] && WM.isOpen(pmap[code])) { WM.close(pmap[code]); return; } if (UI.panelOpen && Game.paused) { if (pmap[code]) UI.openPanel(pmap[code]); return; } }
+    { const pmap = { KeyI: 'inv', KeyC: 'char', KeyL: 'quest', KeyM: 'map', KeyK: 'ach', KeyJ: 'jobs', KeyB: 'ghost', KeyH: 'help', KeyP: 'skills', KeyO: 'wardrobe', KeyY: 'friends', KeyU: 'pets', KeyN: 'npcs' }; if (pmap[code] && WM.isOpen(pmap[code])) { WM.close(pmap[code]); return; } if (UI.panelOpen && Game.paused) { if (pmap[code]) UI.openPanel(pmap[code]); return; } }
     switch (code) {
       case 'KeyQ': Skills.use(0); break; case 'KeyE': Skills.use(1); break; case 'KeyR': Skills.use(2); break; case 'KeyT': Skills.use(3); break; case 'KeyX': Skills.use(4); break; case 'KeyP': UI.openPanel('skills'); break;
       case 'Space': e.preventDefault(); Game.attackNearest(); break;
@@ -49,6 +49,7 @@ const Input = {
       case 'Tab': e.preventDefault(); Game.cycleTarget(); break;
       case 'KeyI': UI.openPanel('inv'); break; case 'KeyC': UI.openPanel('char'); break; case 'KeyL': UI.openPanel('quest'); break;
       case 'KeyM': UI.openPanel('map'); break; case 'KeyB': UI.openPanel('ghost'); break; case 'KeyJ': UI.openPanel('jobs'); break; case 'KeyK': UI.openPanel('ach'); break; case 'KeyH': UI.openPanel('help'); break;
+      case 'KeyO': UI.openPanel('wardrobe'); break; case 'KeyU': UI.openPanel('pets'); break; case 'KeyY': UI.openPanel('friends'); break; case 'KeyZ': Loot.pickAround(); break;
     }
   },
   moveVec() {

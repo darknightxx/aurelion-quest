@@ -310,6 +310,7 @@ class Renderer {
   begin() {
     const gl = this.gl; this.resize();
     gl.clearColor(...this.env.fogC, 1); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    if (this.env.noSky) return;
     // sky
     const S = this.P.sky; gl.useProgram(S.p); gl.disable(gl.DEPTH_TEST);
     gl.uniform3fv(S.u.uTop, this.env.top); gl.uniform3fv(S.u.uBot, this.env.bot); { const ty = Math.tan((this.fov || .85) / 2), tx = ty * this.cv.width / this.cv.height; gl.uniform3fv(S.u.uF, this.camFwd); gl.uniform3fv(S.u.uRt, this.camRight); gl.uniform3fv(S.u.uUp, this.camUp); gl.uniform2f(S.u.uTan, tx, ty); } gl.uniform3fv(S.u.uSun, this.env.sun); gl.uniform1f(S.u.uTime, this.time); gl.uniform1f(S.u.uCloud, this.env.cloud === undefined ? 1 : this.env.cloud);

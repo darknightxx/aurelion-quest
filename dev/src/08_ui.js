@@ -61,6 +61,12 @@ const ICONS = {
 };
 const icon = (k, cls = '') => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[k] || ICONS.star}</svg>`;
 
+/* shop registry: [title, NPC button label, () => item list, can sell] — modules add their own shops */
+const SHOPS = {
+  items: ['ร้านไอเทมของพิป', 'ดูสินค้า', () => SHOP_ITEMS, 1],
+  tailor: ['ร้านชุดแต่งตัวของมีนา', 'ดูชุดแต่งตัว', () => TAILOR_ITEMS, 0],
+  temple: ['เครื่องรางกันผีของตาเผือก', 'ดูเครื่องรางกันผี', () => TEMPLE_SHOP, 1]
+};
 const UI = {
   panelOpen: null, quizOpen: false, summaryOpen: false, portraits: {}, bodies: {}, floats: [], plates: new Map(), toastQ: [], targetM: null,
   init() { ItemInfo.init(); RotScroll.init(); UI.netInit(); $('#mride').onclick = () => { Audio.init(); Mounts.ride(); }; $('#mskill').onclick = () => Mounts.useSkill();
@@ -318,7 +324,7 @@ const UI = {
   setPanel(title, html, wide) { this.el.ptitle.innerHTML = title; this.el.pbody.innerHTML = html; this.el.panel.querySelector('.pwin').classList.toggle('wide', !!wide); },
   pMenu() {
     this.setPanel('เมนู', `<div class="menugrid">
-      ${[['season', 'pass', 'Season Pass', ''], ['gemshop', 'gem', 'ร้านเพชร', ''], ['topup', 'gem', 'เติมเพชร', ''], ['inv', 'bag', 'กระเป๋า', 'I'], ['char', 'person', 'ตัวละคร', 'C'], ['quest', 'book', 'เควส', 'L'], ['map', 'map', 'แผนที่โลก', 'M'], ['jobs', 'person', 'สายอาชีพ', 'J'], ['ghost', 'ghost', 'ตำราผีไทย', 'B'], ['ach', 'trophy', 'ความสำเร็จ', 'K'], ['settings', 'gear', 'ตั้งค่า', ''], ['help', 'help', 'วิธีเล่น', 'H']].map(([p, ic, l, kb]) => `<button class="mbtn" data-go="${p}">${icon(ic)}<span>${l}</span>${kb ? `<kbd>${kb}</kbd>` : ''}</button>`).join('')}
+      ${[['season', 'pass', 'Season Pass', ''], ['gemshop', 'gem', 'ร้านเพชร', ''], ['topup', 'gem', 'เติมเพชร', ''], ['inv', 'bag', 'กระเป๋า', 'I'], ['char', 'person', 'ตัวละคร', 'C'], ['quest', 'book', 'เควส', 'L'], ['map', 'map', 'แผนที่โลก', 'M'], ['jobs', 'person', 'สายอาชีพ', 'J'], ['wardrobe', 'outfit', 'ตู้เสื้อผ้า', 'O'], ['pets', 'paw', 'สัตว์เลี้ยง', 'U'], ['friends', 'person', 'เพื่อน', 'Y'], ['ghost', 'ghost', 'ตำราผีไทย', 'B'], ['ach', 'trophy', 'ความสำเร็จ', 'K'], ['settings', 'gear', 'ตั้งค่า', ''], ['help', 'help', 'วิธีเล่น', 'H']].map(([p, ic, l, kb]) => `<button class="mbtn" data-go="${p}">${icon(ic)}<span>${l}</span>${kb ? `<kbd>${kb}</kbd>` : ''}</button>`).join('')}
       <button class="mbtn" data-go="title">${icon('close')}<span>บันทึกและกลับหน้าแรก</span></button></div>`);
     this.el.pbody.onclick = e => { const b = e.target.closest('[data-go]'); if (!b) return; if (b.dataset.go === 'title') { Save.write(); location.reload(); return; } this.openPanel(b.dataset.go); };
   },
@@ -469,7 +475,7 @@ const UI = {
       else if (avail) { text = QUESTS[avail].text; buttons.push([`acc:${avail}`, (QUESTS[avail].type === 'daily' && QUESTS[avail].obj[0].k === 'quiz' ? 'เริ่มบททดสอบ' : 'รับเควส: ') + (QUESTS[avail].obj[0].k === 'quiz' ? '' : QUESTS[avail].title), 'primary']); }
       else if (act) { const pr = Quests.progress(act); text = `ภารกิจ "${QUESTS[act].title}" เป็นยังไงบ้าง? ` + pr.map(p => `${p.label} ${p.have}/${p.n}`).join(' · '); }
       else text = NPC_IDLE[o.npc] || { lyra: 'Aurelion สงบสุขได้ก็เพราะนักผจญภัยอย่างเจ้า กลับมาหาฉันพรุ่งนี้สำหรับภารกิจล่าประจำวันนะ', orin: 'วันนี้เจ้าทดสอบไปแล้ว พรุ่งนี้ค่อยมาใหม่ ระหว่างนี้แท่นบูชาทั้งสามก็มีคำถามรออยู่', pip: 'ยินดีต้อนรับ! ยา อาวุธ ชุดเกราะ มีครบ', mina: 'อยากเปลี่ยนลุคไหม? ฉันมีหมวก ปีก ออร่า และชุดทั้งหกแบบ', kaze: 'ซุปเห็ดหม้อนั้นอร่อยมาก ขอบใจอีกครั้งนะ', rook: 'ป่ากระซิบช่วงนี้อันตราย ระวังหมาป่าที่ล่าเป็นฝูงด้วย' }[o.npc];
-      if (n.shop) buttons.push([`shop:${n.shop}`, n.shop === 'items' ? 'ดูสินค้า' : n.shop === 'temple' ? 'ดูเครื่องรางกันผี' : 'ดูชุดแต่งตัว', '']);
+      if (n.shop) buttons.push([`shop:${n.shop}`, (SHOPS[n.shop] || SHOPS.items)[1], '']);
       if (o.npc === 'kuman') buttons.push(['bless', 'ขอพรกุมารทอง', '']);
       if (o.npc === 'zen') { if (!S.job) buttons.push(['jobs', 'เปลี่ยนอาชีพขั้นสอง', 'primary']); else if (!S.awk && S.quests.awk && S.quests.awk.s === 'done') buttons.push(['ritual', 'เข้าพิธีกรรมปลุกพลัง (5,000 เหรียญ)', 'primary']); else buttons.push(['jobs', 'ดูสายอาชีพ', '']); }
       if (o.npc === 'luangta' && S.quests.t0 && S.quests.t0.s === 'done') buttons.push(['ghostbook', 'ตำราผีไทย', '']);
@@ -508,7 +514,7 @@ const UI = {
     });
   },
   pShop(o) {
-    const S = Save.d; const list = o.shop === 'tailor' ? TAILOR_ITEMS : o.shop === 'temple' ? TEMPLE_SHOP : SHOP_ITEMS; const tab = o.tab || 'buy';
+    const S = Save.d; const list = (SHOPS[o.shop] || SHOPS.items)[2](); const tab = o.tab || 'buy';
     let rows;
     if (tab === 'buy') rows = list.map(id => {
       const it = ITEMS[id]; const owned = (it.kind === 'gear' || it.kind === 'cos') && S.inv[id]; const lock = it.lvl && S.level < it.lvl;
@@ -518,8 +524,8 @@ const UI = {
       const ids = Object.keys(S.inv).filter(id => { const it = ITEMS[id]; if (!it || it.quest) return false; if (it.kind === 'cos') return false; if (it.kind === 'gear' && S.equip[it.slot] === id) return false; return (it.sell || it.price) > 0; });
       rows = ids.map(id => { const it = ITEMS[id]; const pr = it.sell || Math.floor(it.price / 2); return `<li class="hasinfo" data-info="${id}">${this.itemIcon(id)}<div class="in"><b>${it.name}</b><small>มี ×${S.inv[id]}</small></div><span class="price">${icon('coin')}${pr}</span><button class="btn sm" data-sell="${id}">ขาย 1</button></li>`; }).join('') || '<li class="emptyrow">ไม่มีของที่ขายได้ (ของที่สวมอยู่และของแต่งตัวขายไม่ได้)</li>';
     }
-    this.setPanel(`${o.shop === 'tailor' ? 'ร้านชุดแต่งตัวของมีนา' : o.shop === 'temple' ? 'เครื่องรางกันผีของตาเผือก' : 'ร้านไอเทมของพิป'} <span class="coin">${icon('coin')}${fmt(S.coins)}</span>`,
-      `<div class="tabs"><button class="tab ${tab === 'buy' ? 'on' : ''}" data-tab="buy">ซื้อ</button>${o.shop === 'items' || o.shop === 'temple' ? `<button class="tab ${tab === 'sell' ? 'on' : ''}" data-tab="sell">ขาย</button>` : ''}</div><ul class="ilist">${rows}</ul>${o.shop === 'tailor' ? '<p class="muted">ของแต่งตัวเปลี่ยนรูปลักษณ์ทันทีที่สวมใส่ บางชิ้นเพิ่มความเร็วเล็กน้อย</p>' : ''}`, true);
+    this.setPanel(`${(SHOPS[o.shop] || SHOPS.items)[0]} <span class="coin">${icon('coin')}${fmt(S.coins)}</span>`,
+      `<div class="tabs"><button class="tab ${tab === 'buy' ? 'on' : ''}" data-tab="buy">ซื้อ</button>${(SHOPS[o.shop] || SHOPS.items)[3] ? `<button class="tab ${tab === 'sell' ? 'on' : ''}" data-tab="sell">ขาย</button>` : ''}</div><ul class="ilist">${rows}</ul>${o.shop === 'tailor' ? '<p class="muted">ของแต่งตัวเปลี่ยนรูปลักษณ์ทันทีที่สวมใส่ บางชิ้นเพิ่มความเร็วเล็กน้อย</p>' : ''}`, true);
     this.el.pbody.onclick = e => {
       const t = e.target.closest('[data-tab]'); if (t) { this.panelOpt.tab = t.dataset.tab; this.renderPanel(); return; }
       const b = e.target.closest('[data-buy]'); if (b) { const id = b.dataset.buy, it = ITEMS[id]; if (S.coins < it.price) return; S.coins -= it.price; Game.addItem(id, 1, true); Audio.sfx('coin'); this.toast('ซื้อ ' + it.name + ' แล้ว', 'item'); if (it.kind === 'cos' || it.kind === 'gear') { Game.equip(id); this.toast('สวมใส่ ' + it.name + ' แล้ว', 'quest'); } this.renderPanel(); return; }
