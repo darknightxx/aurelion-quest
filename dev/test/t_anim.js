@@ -7,7 +7,7 @@ const { boot } = require('./lib');
   for (const [n, a] of dirs) {
     // camera looks along -z with yaw 0; "front" = walking toward the camera (+z)
     for (let k = 0; k < 4; k++) {
-      await page.evaluate(a => { Player.x = 30; Player.z = 105; Cam.dist = 8; Cam.yaw = 0; Player.moveTo = { x: 30 + Math.sin(a) * 40, z: 105 + Math.cos(a) * 40 }; }, a);
+      await page.evaluate(a => { Monsters.list.length = 0; Player.dead = false; Save.d.hp = Player.stats.maxhp; Player.x = 14; Player.z = 72; Cam.dist = 8; Cam.yaw = 0; Player.moveTo = { x: 14 + Math.sin(a) * 30, z: 72 + Math.cos(a) * 30 }; }, a);
       await page.waitForTimeout(260 + k * 90);
       const s = await page.evaluate(() => { const r = Player.rig, it = { face: Player.face, x: Player.x, z: Player.z }; const o = CharArt.pose(r, it); return { anim: o.anim, flip: o.flip, f: o.f, face: +Player.face.toFixed(2) }; });
       info.push([n, k, JSON.stringify(s)]); console.log(n, k, JSON.stringify(s));
@@ -18,7 +18,7 @@ const { boot } = require('./lib');
   await page.waitForTimeout(600);
   for (const [n, a] of [['atkF', 0], ['atkR', Math.PI / 2], ['atkL', -Math.PI / 2]]) {
     for (let k = 0; k < 5; k++) {
-      await page.evaluate(a => { Player.x = 30; Player.z = 105; Player.moveTo = null; Player.face = a; Cam.yaw = 0; if (!Player.rig.clip || Player.rig.clipT >= 1) Player.rig.play('slash', .5); }, a);
+      await page.evaluate(a => { Monsters.list.length = 0; Player.dead = false; Save.d.hp = Player.stats.maxhp; Player.x = 14; Player.z = 72; Player.moveTo = null; Player.face = a; Cam.yaw = 0; if (!Player.rig.clip || Player.rig.clipT >= 1) Player.rig.play('slash', .5); }, a);
       await page.waitForTimeout(110);
       const s = await page.evaluate(() => { const r = Player.rig; const o = CharArt.pose(r, { face: Player.face, x: Player.x, z: Player.z }); return { anim: o.anim, flip: o.flip, clip: r.clipName, u: +r.clipT.toFixed(2) }; });
       info.push([n, k, JSON.stringify(s)]); console.log(n, k, JSON.stringify(s));
