@@ -27,7 +27,7 @@ const { boot } = require('./lib');
   ok(mapped[0] === 'ch/11/players/x' && mapped[1] === 'ch/13/chat' && mapped[2] === 'parties/abc' && mapped[3] === '.info/serverTimeOffset', 'online channels shifted to 11-13, other paths untouched');
 
   // patch notes / announcement
-  ok(await ev(() => PATCH[0].t.includes('v0.3') && PATCH.some(p => p.t.includes('v0.2.1')) && PATCH.some(p => p.t.includes('(v0.2)')) && PATCH.some(p => p.t.includes('เปิดทดลอง สยาม RPG')) && ANNOUNCE[0].title.includes('v0.3')), 'patch notes: v0.2 on top, launch note kept');
+  ok(await ev(() => PATCH[0].t.includes('v0.4') && PATCH.some(p => p.t.includes('v0.3')) && PATCH.some(p => p.t.includes('v0.2.1')) && PATCH.some(p => p.t.includes('(v0.2)')) && PATCH.some(p => p.t.includes('เปิดทดลอง สยาม RPG')) && ANNOUNCE[0].title.includes('v0.4')), 'patch notes: v0.2 on top, launch note kept');
 
   // temple zone with Thai ghosts still works
   const temple = await ev(() => {

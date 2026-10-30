@@ -389,8 +389,8 @@ const UI = {
     lbl('แม่น้ำเงินยวง', -95, 4, '#cfe8ff');
     if (!S.flags.bridge) lbl('สะพานปิด', 0, 18, '#ff9a7a');
     if (!(S.flags.gate && S.level >= 5)) lbl('ประตูผนึก', 0, -128, '#ff9a7a');
-    for (const w of WARPS) if (w.zone === 'world') { const [a, b] = tp(w.x, w.z); x.fillStyle = S.warps[w.id] ? '#7fe6ff' : '#5a6b78'; x.beginPath(); x.moveTo(a, b - 8); x.lineTo(a + 6, b); x.lineTo(a, b + 8); x.lineTo(a - 6, b); x.fill(); }
-    for (const s of SHRINES) { const [a, b] = tp(s.x, s.z); x.fillStyle = BUFFS[s.buff].col; x.beginPath(); x.arc(a, b, 6, 0, TAU); x.fill(); x.strokeStyle = '#1d1712'; x.lineWidth = 2; x.stroke(); }
+    if (typeof SiamMap === 'undefined') { for (const w of WARPS) if (w.zone === 'world') { const [a, b] = tp(w.x, w.z); x.fillStyle = S.warps[w.id] ? '#7fe6ff' : '#5a6b78'; x.beginPath(); x.moveTo(a, b - 8); x.lineTo(a + 6, b); x.lineTo(a, b + 8); x.lineTo(a - 6, b); x.fill(); } }
+    if (typeof SiamMap === 'undefined') { for (const s of SHRINES) { const [a, b] = tp(s.x, s.z); x.fillStyle = BUFFS[s.buff].col; x.beginPath(); x.arc(a, b, 6, 0, TAU); x.fill(); x.strokeStyle = '#1d1712'; x.lineWidth = 2; x.stroke(); } }
     if (P.zone === 'world') { const [a, b] = tp(P.x, P.z); x.fillStyle = '#a5e84a'; x.strokeStyle = '#1d1712'; x.lineWidth = 2; x.beginPath(); x.arc(a, b, 7, 0, TAU); x.fill(); x.stroke(); }
     else lbl('คุณอยู่ในถ้ำนาคา', 0, -110, '#a5e84a');
     this.el.pbody.onclick = e => { const b = e.target.closest('[data-w]'); if (!b || b.disabled) return; const w = WARPS.find(v => v.id === b.dataset.w); if (Monsters.boss.engaged) { this.toast('วาร์ปไม่ได้ระหว่างต่อสู้กับบอส', 'warn'); return; } this.closePanel(); Game.teleport(w.x + 2.5, w.z + 2.5, w.name); };

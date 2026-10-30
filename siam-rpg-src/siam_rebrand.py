@@ -81,7 +81,8 @@ NET_NEW = ("  // สยาม RPG: shift channel ids so this game's players neve
 # Map markers: สยาม draws monsters / MVPs / NPCs itself (08zz_siam_map.js, with filters),
 # so the AQ map tabs skip theirs when SiamMap exists. Applied per line, idempotent.
 MAP_MARKER_LINES = {
-    '08k_temple_ui.js': ["const sp = {}; for (const [t, sx, sz] of SPAWNS) if (sx > 1500", "for (const n of NPCList) if (n.zone === 'temple')"],
+    '08_ui.js': ["for (const w of WARPS) if (w.zone === 'world')", "for (const s of SHRINES) { const [a, b] = tp("],
+    '08k_temple_ui.js': ["const sp = {}; for (const [t, sx, sz] of SPAWNS) if (sx > 1500", "for (const n of NPCList) if (n.zone === 'temple')", "for (const w of WARPS) if (w.zone === 'temple')"],
     '08zb_amazon_ui.js': ["const sp = {}; for (const [t, sx, sz] of SPAWNS) if (sx > 2500", "for (const m of MVPSys.list) if (m.zone === 'amazon')", "for (const n of NPCList) if (n.zone === 'amazon')"],
 }
 def patch_map_markers(fname, text):
