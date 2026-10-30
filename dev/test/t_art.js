@@ -4,7 +4,7 @@ const { boot } = require('./lib');
   console.log('emotes', await page.evaluate(() => EMOTES.length));
   // 8 facings
   for (let i = 0; i < 8; i++) {
-    await page.evaluate(i => { Player.x = 30; Player.z = 80; Cam.dist = 9; Cam.yaw = 0; Player.face = i * Math.PI / 4; Player.moveTo = null; }, i);
+    await page.evaluate(i => { Player.x = 30; Player.z = 105; Cam.dist = 9; Cam.yaw = 0; Player.face = i * Math.PI / 4; Player.moveTo = null; }, i);
     await page.waitForTimeout(700); await page.evaluate(i => { Player.face = i * Math.PI / 4; }, i); await page.waitForTimeout(500);
     await page.screenshot({ path: `${__dirname}/out/art_f${i}.png`, clip: { x: 540, y: 220, width: 200, height: 260 } });
   }
@@ -13,7 +13,7 @@ const { boot } = require('./lib');
   await page.waitForTimeout(2500); await page.screenshot({ path: `${__dirname}/out/art_town.png` });
   // emotes sample
   const ems = ['jump', 'sleep', 'pushup', 'backflip', 'meditate', 'thaidance', 'swim', 'headstand'];
-  for (const e of ems) { await page.evaluate(e => { Player.x = 30; Player.z = 80; Cam.dist = 9; Cam.yaw = 0; Player.face = 0; Net.emote(e); }, e); await page.waitForTimeout(900); await page.screenshot({ path: `${__dirname}/out/art_e_${e}.png`, clip: { x: 520, y: 200, width: 240, height: 300 } }); }
+  for (const e of ems) { await page.evaluate(e => { Player.x = 30; Player.z = 105; Cam.dist = 9; Cam.yaw = 0; Player.face = 0; Net.emote(e); }, e); await page.waitForTimeout(900); await page.screenshot({ path: `${__dirname}/out/art_e_${e}.png`, clip: { x: 520, y: 200, width: 240, height: 300 } }); }
   console.log(errors.filter(e => !e.includes('TUNNEL')));
   await close();
   const { execSync } = require('child_process');
