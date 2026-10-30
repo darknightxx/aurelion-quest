@@ -588,7 +588,7 @@ PX.K = 1.6;
     this.drawMini();
   };
   CP.label = function (ctx, text, x, y, color, size) {
-    ctx.font = `700 ${size}px 'IBM Plex Sans Thai',sans-serif`; ctx.textAlign = 'center'; ctx.lineJoin = 'round';
+    ctx.font = `700 ${Math.round(size * (PX.S === 2 ? .8 : 1))}px 'IBM Plex Sans Thai',sans-serif`; ctx.textAlign = 'center'; ctx.lineJoin = 'round';
     ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(20,14,12,.95)'; ctx.strokeText(text, x, y); ctx.fillStyle = color; ctx.fillText(text, x, y);
   };
   CP.bubble = function (ctx, x, y) {
@@ -651,7 +651,7 @@ PX.K = 1.6;
     // shrink the HUD (not the world canvas) on small screens so panels do not overlap
     const fit = () => {
       const cv = this.canvasRef.current, root = cv && cv.parentElement; if (!root) return;
-      const k = Math.max(.5, Math.min(1, innerWidth / 1280, innerHeight / 820));
+      const k = Math.max(.38, Math.min(1, innerWidth / 1280, innerHeight / 820));
       for (const el of root.children) if (el !== cv) el.style.zoom = k;
     };
     this.hudFit = fit; fit(); addEventListener('resize', fit);
