@@ -104,7 +104,7 @@ const JobSys = {
     UI.refreshAll(); Achievements.check(); Save.write(); if (Net.joined) Net.send(true);
   },
   giveStone(id, why) { const S = Save.d; if (!S || !S.quests.awk || S.quests.awk.s !== 'active' || S.inv[id]) return; Game.addItem(id, 1); UI.toast(`${ITEMS[id].name}: ${why}`, 'rare'); },
-  onDaily(correct) { if (correct >= 5) this.giveStone('st_wisdom', 'ปราชญ์โอรินมอบให้ผู้ตอบถูกครบทุกข้อ'); },
+  onDaily(correct) { if (correct >= 5) this.giveStone('st_wisdom', 'ปราชญ์พรหมมอบให้ผู้ตอบถูกครบทุกข้อ'); },
   awkFx(x, z, t) { for (let k = 0; k < 2; k++) if (Math.random() < .7) { const a = Math.random() * TAU, r = .5 + Math.random() * .4; Particles.add(x + Math.cos(a) * r, .05, z + Math.sin(a) * r, { c: Math.random() < .3 ? [1, .95, .6] : [1, .5 + Math.random() * .3, .15], s: .45, life: .7, vy: rand(1.5, 3), drag: 1 }); } },
   stoneProgress(S) { return ['st_light', 'st_dark', 'st_wisdom', 'st_spirit'].map(k => ({ id: k, have: !!(S.inv[k]) })); }
 };

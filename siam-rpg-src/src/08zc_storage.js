@@ -3,7 +3,7 @@
    RO touches: account storage NPC (คลังสินค้า) in the capital,
    and sitting down (emote "นั่งพัก") doubles HP/SP regeneration.
    ============================================================ */
-NPCS.nelly = { name: 'เนลลี่', role: 'พนักงานคลังสินค้า', sheet: 'priest', zone: 'world', x: -9, z: 62, face: 2.2, voice: [1.4, 1.1], hair: 45, pose: 15, lines: ['ฝากของไว้กับคลังสินค้าได้นะคะ', 'คลังสินค้ายินดีให้บริการค่ะ', 'กระเป๋าเต็มแล้วเหรอคะ?'] };
+NPCS.nelly = { name: 'นิลุบล', role: 'พนักงานคลังสินค้า', sheet: 'priest', zone: 'world', x: -9, z: 62, face: 2.2, voice: [1.4, 1.1], hair: 45, pose: 15, lines: ['ฝากของไว้กับคลังสินค้าได้นะคะ', 'คลังสินค้ายินดีให้บริการค่ะ', 'กระเป๋าเต็มแล้วเหรอคะ?'] };
 NPC_IDLE.nelly = 'สวัสดีค่ะ คลังสินค้าสยาม ยินดีให้บริการ ฝากของได้ 300 ช่อง ใช้ร่วมกันทุกตัวละครในเครื่องนี้ ค่าบริการครั้งละ 40 เหรียญค่ะ';
 const STORAGE_KEY = 'siam_storage_v1', STORAGE_MAX = 300;
 const Storage = {

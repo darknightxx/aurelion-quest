@@ -17,6 +17,9 @@ async function boot(opt = {}) {
   const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
   const ctx = await browser.newContext({ viewport: opt.viewport || { width: 1280, height: 720 }, hasTouch: !!opt.touch, isMobile: !!opt.mobile, deviceScaleFactor: opt.dpr || 1 });
   const page = await ctx.newPage(); const errors = [];
+  page.setDefaultTimeout(120000);
+  // OFFLINE=1: sandbox without internet — skip web fonts so screenshots don't wait for them
+  if (process.env.OFFLINE) await ctx.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
   await page.goto(`http://localhost:${port}/${opt.live ? 'siam-rpg' : 'siam-rpg-test'}/index.html?net=local${opt.q || ''}`);

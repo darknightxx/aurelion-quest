@@ -168,8 +168,8 @@ function buildEastGate(g) {
   World.build = function (R) { ob.call(this, R); buildAmazonZone(R); const eg = new Geo(314); buildEastGate(eg); World.meshes.eastgate = R.mesh(eg); };
   const op = World.placeName.bind(World);
   World.placeName = function (x, z) {
-    if (x > 2500) { const lx = x - AX; for (const [ax, az, r, n] of AMAZON_AREAS) if (Math.hypot(lx - ax, z - az) < r) return n; if (aRiverDist(lx, z) < 8) return 'แม่น้ำอเมซอน'; return 'ป่าดิบชื้นอเมซอน'; }
-    if (x > 128 && Math.abs(z - 70) < 16) return 'ทางไปป่าอเมซอน';
+    if (x > 2500) { const lx = x - AX; for (const [ax, az, r, n] of AMAZON_AREAS) if (Math.hypot(lx - ax, z - az) < r) return n; if (aRiverDist(lx, z) < 8) return 'แม่น้ำหิมพานต์'; return 'ป่าดิบชื้นหิมพานต์'; }
+    if (x > 128 && Math.abs(z - 70) < 16) return 'ทางไปป่าหิมพานต์';
     return op(x, z);
   };
 }

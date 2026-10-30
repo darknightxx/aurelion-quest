@@ -2192,12 +2192,12 @@ const MONSTERS = {
 
 /* NPCs */
 const NPCS = {
-  lyra: { name: 'กัปตันลีร่า', role: 'ผู้บัญชาการทหารเมือง', sheet: 'knight', zone: 'world', x: 5, z: 49, face: 0 },
-  orin: { name: 'ปราชญ์โอริน', role: 'นักปราชญ์ประจำเมือง', sheet: 'priest', zone: 'world', x: -12, z: 55, face: .9 },
-  pip: { name: 'พ่อค้าพิป', role: 'ร้านไอเทม', sheet: 'adventurer', zone: 'world', x: 13, z: 66, face: -1.4, shop: 'items' },
+  lyra: { name: 'นายกองลำดวน', role: 'ผู้บัญชาการทหารเมือง', sheet: 'knight', zone: 'world', x: 5, z: 49, face: 0 },
+  orin: { name: 'ปราชญ์พรหม', role: 'นักปราชญ์ประจำเมือง', sheet: 'priest', zone: 'world', x: -12, z: 55, face: .9 },
+  pip: { name: 'พ่อค้าพิพัฒน์', role: 'ร้านไอเทม', sheet: 'adventurer', zone: 'world', x: 13, z: 66, face: -1.4, shop: 'items' },
   mina: { name: 'ช่างตัดเสื้อมีนา', role: 'ร้านชุดแต่งตัว', sheet: 'mage', zone: 'world', x: -13, z: 68, face: 1.4, shop: 'tailor' },
   kaze: { name: 'คาเสะ', role: 'นินจาชอบทำอาหาร', sheet: 'ninja', zone: 'world', x: -4, z: 76, face: 3.0 },
-  rook: { name: 'นายพรานรุก', role: 'นายพรานแห่งป่ากระซิบ', sheet: 'archer', zone: 'world', x: 7, z: -38, face: 0 }
+  rook: { name: 'นายพรานรุ่ง', role: 'นายพรานแห่งป่ากระซิบ', sheet: 'archer', zone: 'world', x: 7, z: -38, face: 0 }
 };
 
 /* Quests. objective kinds: kill(mon,n) collect(item,n) quiz(n) boss reach(place) */
@@ -2211,14 +2211,14 @@ const QUESTS = {
   m2: {
     type: 'main', giver: 'lyra', req: 'm1', title: 'เงามืดในป่ากระซิบ', obj: [{ k: 'kill', mon: 'wolf', n: 5 }, { k: 'collect', item: 'm_totem', n: 4 }],
     text: 'พวกยักษ์น้อยตั้งค่ายอยู่ทางตะวันออกของป่ากระซิบ และใช้โทเท็มเรียกหมาในมาล้อมเมือง ปราบหมาใน 5 ตัว แล้วยึดโทเท็มยักษ์น้อยมา 4 ชิ้น',
-    done: 'โทเท็มพวกนี้มีเศษผลึกฝังอยู่... มันมาจากถ้ำผลึกทางเหนือสุด ประตูถ้ำเปิดให้แล้ว แต่ต้องมีเลเวล 5 ขึ้นไปถึงจะผ่านเข้าไปได้',
+    done: 'โทเท็มพวกนี้มีเศษผลึกฝังอยู่... มันมาจากถ้ำนาคาทางเหนือสุด ประตูถ้ำเปิดให้แล้ว แต่ต้องมีเลเวล 5 ขึ้นไปถึงจะผ่านเข้าไปได้',
     rew: { xp: 420, coin: 260, items: [['hp_l', 2], ['mp_s', 2]] }, unlock: 'gate', award: 'ผู้ปราบยักษ์น้อย'
   },
   m3: {
     type: 'main', giver: 'lyra', req: 'm2', title: 'หัวใจผลึกแห่งถ้ำลึก', obj: [{ k: 'boss', n: 1 }],
-    text: 'ลึกเข้าไปในถ้ำผลึกมีผู้พิทักษ์ชื่อ "ยักษ์ศิลา" มันใช้เกราะผลึกที่อาวุธธรรมดาทำลายไม่ได้ ต้องใช้ปัญญาตอบคำถามต่อเนื่องเพื่อทำลายเกราะ ฝากความหวังของสยาม ไว้ด้วย!',
+    text: 'ลึกเข้าไปในถ้ำนาคามีผู้พิทักษ์ชื่อ "ยักษ์ศิลา" มันใช้เกราะผลึกที่อาวุธธรรมดาทำลายไม่ได้ ต้องใช้ปัญญาตอบคำถามต่อเนื่องเพื่อทำลายเกราะ ฝากความหวังของสยาม ไว้ด้วย!',
     done: 'เจ้าทำได้! สยาม ปลอดภัยแล้ว ชื่อของเจ้าจะถูกจารึกไว้ในบันทึกนักผจญภัยของเมือง',
-    rew: { xp: 1000, coin: 800, items: [] }, award: 'วีรชนแห่งถ้ำผลึก'
+    rew: { xp: 1000, coin: 800, items: [] }, award: 'วีรชนแห่งถ้ำนาคา'
   },
   s1: {
     type: 'side', giver: 'rook', req: 'm1', title: 'เขี้ยวหมาในสำหรับฤดูหนาว', obj: [{ k: 'collect', item: 'm_fang', n: 4 }],
@@ -2443,17 +2443,17 @@ function genMath(d) {
 /* Map places */
 const PLACES = {
   town: { name: 'เมืองหลวงสยาม', x: 0, z: 62 },
-  meadow: { name: 'ทุ่งหญ้าใบเขียว', x: 0, z: 118 },
+  meadow: { name: 'ทุ่งนาสยาม', x: 0, z: 118 },
   forest: { name: 'ป่ากระซิบ', x: 0, z: -70 },
   camp: { name: 'ค่ายนายพราน', x: 0, z: -40 },
   goblin: { name: 'ค่ายยักษ์น้อย', x: 74, z: -88 },
-  gate: { name: 'ประตูถ้ำผลึก', x: 0, z: -132 },
-  dungeon: { name: 'ถ้ำผลึกใต้พิภพ', x: 1000, z: -40 }
+  gate: { name: 'ประตูถ้ำนาคา', x: 0, z: -132 },
+  dungeon: { name: 'ถ้ำนาคาใต้พิภพ', x: 1000, z: -40 }
 };
 const WARPS = [
   { id: 'w_town', name: 'จัตุรัสสยาม', zone: 'world', x: 9, z: 73 },
   { id: 'w_camp', name: 'ค่ายนายพราน', zone: 'world', x: -8, z: -46 },
-  { id: 'w_gate', name: 'หน้าประตูถ้ำผลึก', zone: 'world', x: -14, z: -116 },
+  { id: 'w_gate', name: 'หน้าประตูถ้ำนาคา', zone: 'world', x: -14, z: -116 },
   { id: 'w_deep', name: 'ห้องโถงผลึก (ในถ้ำ)', zone: 'dungeon', x: 1012, z: -46 }
 ];
 const SHRINES = [
@@ -3005,14 +3005,14 @@ const STONES = { st_light: 'ยักษ์ศิลา ผู้พิทัก
 Object.assign(ITEMS, {
   st_light: { name: 'ศิลาแห่งแสง', kind: 'mat', quest: true, rare: true, sell: 0, desc: 'ศิลาเรืองแสงสีขาวจากแกนผลึกของยักษ์ศิลา', icon: 'gem' },
   st_dark: { name: 'ศิลาแห่งความมืด', kind: 'mat', quest: true, rare: true, sell: 0, desc: 'ศิลาสีดำที่แม่นากทิ้งไว้เมื่อไปสู่สุคติ', icon: 'gem' },
-  st_wisdom: { name: 'ศิลาแห่งปัญญา', kind: 'mat', quest: true, rare: true, sell: 0, desc: 'ศิลาสีฟ้าที่ปราชญ์โอรินมอบให้ผู้ตอบถูกครบทุกข้อ', icon: 'gem' },
+  st_wisdom: { name: 'ศิลาแห่งปัญญา', kind: 'mat', quest: true, rare: true, sell: 0, desc: 'ศิลาสีฟ้าที่ปราชญ์พรหมมอบให้ผู้ตอบถูกครบทุกข้อ', icon: 'gem' },
   st_spirit: { name: 'ศิลาแห่งวิญญาณ', kind: 'mat', quest: true, rare: true, sell: 0, desc: 'ศิลาสีทองจากไหทรัพย์ของปู่โสม', icon: 'gem' },
   awk_amulet: { name: 'เครื่องรางผู้ตื่นรู้', kind: 'cos', slot: 'aura', price: 0, desc: 'สัญลักษณ์ของผู้ที่ปลดผนึกแห่งพลังแล้ว ออร่าเปลวไฟทองลุกรอบตัว', icon: 'fire' }
 });
 Object.assign(NPCS, { zen: { name: 'อาจารย์เซน', role: 'ปรมาจารย์แห่งอาชีพ', sheet: 'zen', zone: 'world', x: -5, z: 44, face: .6 } });
 Object.assign(QUESTS, {
   awk: { type: 'main', giver: 'zen', minLv: AWK_LV, title: 'ปลดผนึกแห่งพลัง', obj: [{ k: 'collect', item: 'st_light', n: 1 }, { k: 'collect', item: 'st_dark', n: 1 }, { k: 'collect', item: 'st_wisdom', n: 1 }, { k: 'collect', item: 'st_spirit', n: 1 }],
-    text: 'เจ้าแข็งแกร่งพอแล้วที่จะรู้ความลับของพลังที่ถูกผนึกไว้ จงนำศิลาทั้ง 4 มาให้ข้า: ศิลาแห่งแสงจากยักษ์ศิลา ศิลาแห่งความมืดจากแม่นาก ศิลาแห่งปัญญาจากบททดสอบของปราชญ์โอริน (ต้องตอบถูกครบ 5 ข้อ) และศิลาแห่งวิญญาณจากปู่โสมเฝ้าทรัพย์ แล้วเตรียมเหรียญ 5,000 เหรียญสำหรับพิธีกรรมปลุกพลัง',
+    text: 'เจ้าแข็งแกร่งพอแล้วที่จะรู้ความลับของพลังที่ถูกผนึกไว้ จงนำศิลาทั้ง 4 มาให้ข้า: ศิลาแห่งแสงจากยักษ์ศิลา ศิลาแห่งความมืดจากแม่นาก ศิลาแห่งปัญญาจากบททดสอบของปราชญ์พรหม (ต้องตอบถูกครบ 5 ข้อ) และศิลาแห่งวิญญาณจากปู่โสมเฝ้าทรัพย์ แล้วเตรียมเหรียญ 5,000 เหรียญสำหรับพิธีกรรมปลุกพลัง',
     done: 'ศิลาทั้งสี่สั่นสะเทือนในมือเจ้า... ถึงเวลาแล้ว จงเข้าพิธีกรรมปลุกพลัง ตอบคำถามให้ถูกติดต่อกัน 3 ข้อเพื่อปลดผนึก', rew: { xp: 500, coin: 0, items: [] }, take: true, needJob: true }
 });
 QUEST_ORDER.push('awk');
@@ -3026,7 +3026,7 @@ const Titles = {
 
 
 /* ============================================================
-   Amazon jungle zone "ป่าอเมซอนมรณะ" — data: monsters (Lv.15–26,
+   Amazon jungle zone "ป่าหิมพานต์มรณะ" — data: monsters (Lv.15–26,
    higher than the abandoned temple), drops, gear, NPCs, quests.
    local coords: lx = x - AX, z. Base camp at the south (z≈90),
    river running north→south-east, piranha lake, anaconda swamp,
@@ -3046,9 +3046,9 @@ Object.assign(MONSTERS, {
 });
 Object.assign(ITEMS, {
   m_tooth: { name: 'ฟันปลาช่อนผี', kind: 'mat', price: 0, sell: 30, desc: 'ฟันแหลมคมเรียงเป็นแถว', icon: 'fang' },
-  m_venom: { name: 'ต่อมพิษอึ่งพิษ', kind: 'mat', price: 0, sell: 32, desc: 'พิษร้ายแรง ใช้ทำยาได้ถ้ารู้วิธี', icon: 'potion' },
+  m_venom: { name: 'ต่อมพิษอึ่งลายทอง', kind: 'mat', price: 0, sell: 32, desc: 'พิษร้ายแรง ใช้ทำยาได้ถ้ารู้วิธี', icon: 'potion' },
   m_jfur: { name: 'หนังเสือดาวป่าลึก', kind: 'mat', price: 0, sell: 40, desc: 'หนังลายจุดนุ่มมือ', icon: 'cloak' },
-  m_silk: { name: 'ใยแมงมุมยักษ์', kind: 'mat', price: 0, sell: 38, desc: 'เหนียวยิ่งกว่าเชือกเหล็ก', icon: 'scroll' },
+  m_silk: { name: 'ใยบึ้งยักษ์', kind: 'mat', price: 0, sell: 38, desc: 'เหนียวยิ่งกว่าเชือกเหล็ก', icon: 'scroll' },
   m_scale: { name: 'เกล็ดงูเหลือมยักษ์', kind: 'mat', price: 0, sell: 45, desc: 'เกล็ดเขียวเข้มแข็งดั่งเกราะ', icon: 'shield' },
   m_seed: { name: 'เมล็ดไทรผีสิง', kind: 'mat', price: 0, sell: 42, desc: 'เมล็ดที่เต้นตุบๆ เหมือนหัวใจ', icon: 'jelly' },
   m_hide: { name: 'หนังจระเข้บึง', kind: 'mat', price: 0, sell: 50, desc: 'หนังหนาแข็งแรงมาก', icon: 'armor' },
@@ -3057,27 +3057,27 @@ Object.assign(ITEMS, {
   w_fang: { name: 'ดาบเขี้ยวงูเหลือมยักษ์', kind: 'gear', slot: 'weapon', atk: 34, spd: .2, lvl: 18, price: 0, sell: 1200, desc: 'ATK +34 · SPD +0.2 (Lv.18) ดรอปหายากจากงูเหลือมยักษ์', icon: 'sword3', rare: true },
   a_jaguar: { name: 'เสื้อหนังเสือดาวป่าลึก', kind: 'gear', slot: 'armor', def: 22, hp: 120, spd: .4, lvl: 17, price: 0, sell: 1000, desc: 'DEF +22 · HP +120 · SPD +0.4 (Lv.17)', icon: 'cloak', rare: true },
   r_totem: { name: 'สร้อยโทเท็มหมอผี', kind: 'gear', slot: 'acc', atk: 14, hp: 90, mp: 50, lvl: 20, price: 0, sell: 1100, desc: 'ATK +14 · HP +90 · MP +50 (Lv.20)', icon: 'totem', rare: true },
-  jg_antidote: { name: 'ยาแก้พิษป่าอเมซอน', kind: 'use', holy: true, heal: 260, price: 90, desc: 'ล้างพิษและสถานะผิดปกติทั้งหมด ฟื้น HP 260', icon: 'potB' },
+  jg_antidote: { name: 'ยาแก้พิษป่าหิมพานต์', kind: 'use', holy: true, heal: 260, price: 90, desc: 'ล้างพิษและสถานะผิดปกติทั้งหมด ฟื้น HP 260', icon: 'potB' },
   jg_spear: { name: 'หอกพรานป่า', kind: 'gear', slot: 'weapon', atk: 26, lvl: 15, price: 2600, desc: 'ATK +26 (Lv.15)', icon: 'sword2' },
   jg_vest: { name: 'เสื้อกั๊กนักสำรวจ', kind: 'gear', slot: 'armor', def: 17, hp: 80, lvl: 15, price: 2400, desc: 'DEF +17 · HP +80 (Lv.15)', icon: 'armor2' }
 });
-WARPS.push({ id: 'w_amazon', name: 'ค่ายนักสำรวจอเมซอน', zone: 'amazon', x: AX + 8, z: 86 });
+WARPS.push({ id: 'w_amazon', name: 'ค่ายนักสำรวจหิมพานต์', zone: 'amazon', x: AX + 8, z: 86 });
 Object.assign(NPCS, {
-  marco: { name: 'ดร.มาร์โก้', role: 'หัวหน้าคณะสำรวจอเมซอน', sheet: 'knight', zone: 'amazon', x: AX - 3, z: 88, face: 3.1, voice: [.8, .95], hair: 30, pose: 9, lines: ['ป่านี้ยังมีความลับอีกมาก', 'ระวังตัวด้วย ทุกอย่างที่นี่อยากกินเรา', 'เผ่ายักษ์ป่าอยู่ทางเหนือ อย่าเข้าไปคนเดียว'] },
-  emma: { name: 'นักชีววิทยาเอมม่า', role: 'ผู้เชี่ยวชาญสัตว์ป่า', sheet: 'priest', zone: 'amazon', x: AX + 4, z: 94, face: 3.4, voice: [1.3, 1.05], hair: 15, pose: 11, lines: ['ไทรผีสิงพวกนี้น่าสนใจที่สุด!', 'กบสีสดแปลว่าพิษร้าย จำไว้นะ', 'ฉันต้องการตัวอย่างเพิ่มอีก'] },
-  jose: { name: 'พรานป่าโฮเซ่', role: 'ร้านเสบียงป่า', sheet: 'archer', zone: 'amazon', x: AX - 10, z: 92, face: 2.4, shop: 'jungle', voice: [.9, 1.05], hair: 'black', pose: 13, lines: ['ยาแก้พิษ! อย่าออกไปโดยไม่มีมัน', 'เสือดาวป่าลึกล่าตอนเงียบที่สุด', 'แม่น้ำนี้มีปลาช่อนผีเป็นพันตัว'] }
+  marco: { name: 'ดร.มานพ', role: 'หัวหน้าคณะสำรวจหิมพานต์', sheet: 'knight', zone: 'amazon', x: AX - 3, z: 88, face: 3.1, voice: [.8, .95], hair: 30, pose: 9, lines: ['ป่านี้ยังมีความลับอีกมาก', 'ระวังตัวด้วย ทุกอย่างที่นี่อยากกินเรา', 'เผ่ายักษ์ป่าอยู่ทางเหนือ อย่าเข้าไปคนเดียว'] },
+  emma: { name: 'นักชีววิทยาเอื้อมพร', role: 'ผู้เชี่ยวชาญสัตว์ป่า', sheet: 'priest', zone: 'amazon', x: AX + 4, z: 94, face: 3.4, voice: [1.3, 1.05], hair: 15, pose: 11, lines: ['ไทรผีสิงพวกนี้น่าสนใจที่สุด!', 'กบสีสดแปลว่าพิษร้าย จำไว้นะ', 'ฉันต้องการตัวอย่างเพิ่มอีก'] },
+  jose: { name: 'พรานป่าโชติ', role: 'ร้านเสบียงป่า', sheet: 'archer', zone: 'amazon', x: AX - 10, z: 92, face: 2.4, shop: 'jungle', voice: [.9, 1.05], hair: 'black', pose: 13, lines: ['ยาแก้พิษ! อย่าออกไปโดยไม่มีมัน', 'เสือดาวป่าลึกล่าตอนเงียบที่สุด', 'แม่น้ำนี้มีปลาช่อนผีเป็นพันตัว'] }
 });
 const JUNGLE_SHOP = ['jg_antidote', 'hp_l', 'mp_s', 'jg_spear', 'jg_vest', 'rf_stone', 'pet_food'];
 const Q_AMAZON = {
   a1: { type: 'main', giver: 'marco', minLv: AMAZON_LV, title: 'ยินดีต้อนรับสู่ป่ามรณะ', obj: [{ k: 'kill', mon: 'piranha', n: 6 }, { k: 'collect', item: 'm_tooth', n: 4 }],
     text: 'นักผจญภัยจากสยาม! ดีใจที่มาถึง เรือของคณะสำรวจถูกปลาช่อนผีรุมจนข้ามแม่น้ำไม่ได้ ช่วยปราบพวกมันในทะเลสาบทางตะวันออก 6 ตัว แล้วเก็บฟันมา 4 ซี่เป็นหลักฐาน',
-    done: 'ยอดเยี่ยม! ตอนนี้เราข้ามแม่น้ำได้แล้ว ป่าข้างหน้ายังมีอะไรรออยู่อีกเยอะ', rew: { xp: 2400, coin: 600, items: [['jg_antidote', 3], ['hp_l', 3]] }, take: true, award: 'ผู้พิชิตป่าอเมซอน' },
+    done: 'ยอดเยี่ยม! ตอนนี้เราข้ามแม่น้ำได้แล้ว ป่าข้างหน้ายังมีอะไรรออยู่อีกเยอะ', rew: { xp: 2400, coin: 600, items: [['jg_antidote', 3], ['hp_l', 3]] }, take: true, award: 'ผู้พิชิตป่าหิมพานต์' },
   a2: { type: 'main', giver: 'marco', req: 'a1', title: 'ร่องรอยของคณะสำรวจที่หายไป', obj: [{ k: 'reach', zone: 'amazon', x: AX - 58, z: -10, r: 9, label: 'สำรวจซากวิหารโบราณทางตะวันตก' }, { k: 'kill', mon: 'jaguar', n: 5 }],
     text: 'เมื่อเดือนก่อนคณะสำรวจชุดแรกหายไปใกล้ซากวิหารโบราณทางตะวันตก ไปดูให้หน่อย และระวังเสือดาวป่าลึกที่เฝ้าอยู่แถวนั้นด้วย',
     done: 'บันทึกการเดินทาง… พวกเขาเขียนว่า "อย่าเข้าใกล้หมู่บ้านยักษ์ป่า" แย่แล้ว…', rew: { xp: 3200, coin: 800, items: [['hp_l', 4], ['rf_stone', 2]] } },
   a3: { type: 'main', giver: 'marco', req: 'a2', minLv: 20, title: 'หมู่บ้านยักษ์ป่า', obj: [{ k: 'kill', mon: 'ogre', n: 8 }, { k: 'kill', mon: 'ogresham', n: 4 }],
-    text: 'ยักษ์ป่าจับตัวนักสำรวจไปที่หมู่บ้านทางเหนือ ปราบยักษ์ป่านักรบ 8 ตัวและหมอผี 4 ตัวเพื่อให้พวกเขาหนีออกมาได้ ระวังหัวหน้าเผ่าที่ตัวใหญ่ยักษ์!',
-    done: 'คณะสำรวจกลับมาครบทุกคน! เจ้าคือวีรบุรุษของป่าอเมซอน', rew: { xp: 5200, coin: 1500, items: [['rf_stone2', 1], ['hp_l', 5]] }, gems: 40, award: 'ผู้ปลดปล่อยแห่งอเมซอน' },
+    text: 'ยักษ์ป่าจับตัวนักสำรวจไปที่หมู่บ้านทางเหนือ ปราบนักรบยักษ์ป่า 8 ตัวและยักษ์หมอผี 4 ตัวเพื่อให้พวกเขาหนีออกมาได้ ระวังหัวหน้าเผ่าที่ตัวใหญ่ยักษ์!',
+    done: 'คณะสำรวจกลับมาครบทุกคน! เจ้าคือวีรบุรุษของป่าหิมพานต์', rew: { xp: 5200, coin: 1500, items: [['rf_stone2', 1], ['hp_l', 5]] }, gems: 40, award: 'ผู้ปลดปล่อยแห่งหิมพานต์' },
   a4: { type: 'side', giver: 'emma', req: 'a1', title: 'ตัวอย่างไทรผีสิง', obj: [{ k: 'collect', item: 'm_seed', n: 5 }, { k: 'collect', item: 'm_venom', n: 4 }],
     text: 'ฉันกำลังศึกษาไทรผีสิงในดงไม้ทางตะวันออกเฉียงเหนือ กับอึ่งพิษลายทองริมลำธาร ช่วยเก็บเมล็ดไทรผีสิง 5 เมล็ดและต่อมพิษ 4 ชิ้นได้ไหม?',
     done: 'ตัวอย่างสมบูรณ์มาก! ฉันทำยาแก้พิษสูตรพิเศษให้ด้วยนะ', rew: { xp: 2600, coin: 700, items: [['jg_antidote', 5], ['mp_s', 5]] }, take: true },
@@ -3088,11 +3088,11 @@ const Q_AMAZON = {
     text: 'ฤดูฝนใกล้มาแล้ว ข้าต้องการหนังเสือดาวป่าลึก 4 ผืนกับหนังจระเข้บึง 3 ผืนทำเต็นท์กันฝน จระเข้บึงนอนอาบแดดริมแม่น้ำนะ',
     done: 'หนังชั้นดีทั้งนั้น! รับเสื้อกั๊กนักสำรวจไปใส่เลย', rew: { xp: 2800, coin: 600, items: [['jg_vest', 1]] }, take: true },
   ad1: { type: 'daily', giver: 'jose', req: 'a1', title: 'ล่าประจำวันในป่ามรณะ', obj: [{ k: 'kill', mon: 'dartfrog', n: 8 }, { k: 'kill', mon: 'spider', n: 5 }],
-    text: 'ภารกิจประจำวัน: กบพิษกับแมงมุมยักษ์มาใกล้ค่ายทุกวัน ช่วยปราบอึ่งพิษลายทอง 8 ตัวและแมงมุมยักษ์ 5 ตัว',
+    text: 'ภารกิจประจำวัน: อึ่งพิษกับบึ้งยักษ์มาใกล้ค่ายทุกวัน ช่วยปราบอึ่งพิษลายทอง 8 ตัวและบึ้งยักษ์ 5 ตัว',
     done: 'ค่ายปลอดภัยไปอีกวัน ขอบใจ!', rew: { xp: 2000, coin: 500, items: [['jg_antidote', 2]] } }
 };
 Object.assign(QUESTS, Q_AMAZON); QUEST_ORDER.push('a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'ad1');
-const AMAZON_AREAS = [[0, 90, 14, 'ค่ายนักสำรวจอเมซอน'], [46, 30, 13, 'ทะเลสาบปลาช่อนผี'], [-58, -64, 16, 'หนองน้ำงูเหลือมยักษ์'], [52, -52, 15, 'ดงไทรผีสิง'], [-58, -10, 15, 'ซากวิหารโบราณ'], [0, -84, 18, 'หมู่บ้านยักษ์ป่า'], [-8, 52, 12, 'ลำธารกบพิษ'], [-30, 40, 10, 'ป่าทึบเสือดาวป่าลึก']];
+const AMAZON_AREAS = [[0, 90, 14, 'ค่ายนักสำรวจหิมพานต์'], [46, 30, 13, 'ทะเลสาบปลาช่อนผี'], [-58, -64, 16, 'หนองน้ำงูเหลือมยักษ์'], [52, -52, 15, 'ดงไทรผีสิง'], [-58, -10, 15, 'ซากวิหารโบราณ'], [0, -84, 18, 'หมู่บ้านยักษ์ป่า'], [-8, 52, 12, 'ลำธารอึ่งพิษ'], [-30, 40, 10, 'ป่าทึบเสือดาว']];
 /* ============================================================
    World building: terrain, town, forest, dungeon, colliders
    ============================================================ */
@@ -3557,9 +3557,9 @@ const World = {
     e.x = clamp(e.x, b.x0, b.x1); e.z = clamp(e.z, b.z0, b.z1);
   },
   placeName(x, z) {
-    if (x > 500) return z < -76 ? 'ลานผู้พิทักษ์ผลึก' : 'ถ้ำผลึกใต้พิภพ';
+    if (x > 500) return z < -76 ? 'ลานผู้พิทักษ์ผลึก' : 'ถ้ำนาคาใต้พิภพ';
     if (Math.hypot(x - TOWN.x, z - TOWN.z) < TOWN.r) return 'เมืองหลวงสยาม';
-    if (z > 12) return 'ทุ่งหญ้าใบเขียว';
+    if (z > 12) return 'ทุ่งนาสยาม';
     if (z > -12) return 'แม่น้ำเงินยวง';
     if (Math.hypot(x - 74, z + 88) < 20) return 'ค่ายยักษ์น้อย';
     if (z < -112) return 'หุบผาผลึก';
@@ -4218,8 +4218,8 @@ function buildEastGate(g) {
   World.build = function (R) { ob.call(this, R); buildAmazonZone(R); const eg = new Geo(314); buildEastGate(eg); World.meshes.eastgate = R.mesh(eg); };
   const op = World.placeName.bind(World);
   World.placeName = function (x, z) {
-    if (x > 2500) { const lx = x - AX; for (const [ax, az, r, n] of AMAZON_AREAS) if (Math.hypot(lx - ax, z - az) < r) return n; if (aRiverDist(lx, z) < 8) return 'แม่น้ำอเมซอน'; return 'ป่าดิบชื้นอเมซอน'; }
-    if (x > 128 && Math.abs(z - 70) < 16) return 'ทางไปป่าอเมซอน';
+    if (x > 2500) { const lx = x - AX; for (const [ax, az, r, n] of AMAZON_AREAS) if (Math.hypot(lx - ax, z - az) < r) return n; if (aRiverDist(lx, z) < 8) return 'แม่น้ำหิมพานต์'; return 'ป่าดิบชื้นหิมพานต์'; }
+    if (x > 128 && Math.abs(z - 70) < 16) return 'ทางไปป่าหิมพานต์';
     return op(x, z);
   };
 }
@@ -6609,7 +6609,7 @@ const JobSys = {
     UI.refreshAll(); Achievements.check(); Save.write(); if (Net.joined) Net.send(true);
   },
   giveStone(id, why) { const S = Save.d; if (!S || !S.quests.awk || S.quests.awk.s !== 'active' || S.inv[id]) return; Game.addItem(id, 1); UI.toast(`${ITEMS[id].name}: ${why}`, 'rare'); },
-  onDaily(correct) { if (correct >= 5) this.giveStone('st_wisdom', 'ปราชญ์โอรินมอบให้ผู้ตอบถูกครบทุกข้อ'); },
+  onDaily(correct) { if (correct >= 5) this.giveStone('st_wisdom', 'ปราชญ์พรหมมอบให้ผู้ตอบถูกครบทุกข้อ'); },
   awkFx(x, z, t) { for (let k = 0; k < 2; k++) if (Math.random() < .7) { const a = Math.random() * TAU, r = .5 + Math.random() * .4; Particles.add(x + Math.cos(a) * r, .05, z + Math.sin(a) * r, { c: Math.random() < .3 ? [1, .95, .6] : [1, .5 + Math.random() * .3, .15], s: .45, life: .7, vy: rand(1.5, 3), drag: 1 }); } },
   stoneProgress(S) { return ['st_light', 'st_dark', 'st_wisdom', 'st_spirit'].map(k => ({ id: k, have: !!(S.inv[k]) })); }
 };
@@ -8470,7 +8470,7 @@ const Quests = {
     if (q.rew.xp) Game.gainXP(q.rew.xp); if (q.rew.coin) Game.gainCoins(q.rew.coin); if (q.gems) { Gems.add(q.gems, 'เควส ' + q.title); UI.toast(`ได้รับเพชร ${q.gems} เม็ด`, 'rare'); }
     for (const [it, n] of q.rew.items) Game.addItem(it, n);
     if (q.unlock === 'bridge') { S.flags.bridge = true; Game.applyUnlocks(); UI.toast('สะพานข้ามแม่น้ำเปิดแล้ว!', 'quest'); }
-    if (q.unlock === 'gate') { S.flags.gate = true; Game.applyUnlocks(); UI.toast('ประตูถ้ำผลึกปลดล็อกแล้ว (ต้องเลเวล 5)', 'quest'); }
+    if (q.unlock === 'gate') { S.flags.gate = true; Game.applyUnlocks(); UI.toast('ประตูถ้ำนาคาปลดล็อกแล้ว (ต้องเลเวล 5)', 'quest'); }
     if (q.type === 'side') S.stats.sideDone++; if (q.award) Titles.grant(q.award, 'เควส ' + q.title);
     Season.addXP(QUEST_SXP[q.type] || 100, 'เควส ' + q.title); Season.bump('quest');
     Audio.sfx('quest'); Player.doAct('cheer', 1.0);
@@ -8887,9 +8887,9 @@ const Game = {
     const P = Player, S = Save.d;
     this.msgT -= dt;
     if (P.zone === 'world') {
-      if (S.flags.gate && S.level >= 5 && P.z < -139 && Math.abs(P.x) < 5) { this.teleport(DX, 5, 'เข้าสู่ถ้ำผลึกใต้พิภพ'); return; }
+      if (S.flags.gate && S.level >= 5 && P.z < -139 && Math.abs(P.x) < 5) { this.teleport(DX, 5, 'เข้าสู่ถ้ำนาคาใต้พิภพ'); return; }
       if (this.msgT <= 0 && World.gate.col.on && dist2(P.x, P.z, 0, -135.5) < 36) { this.msgT = 4; UI.toast(!S.flags.gate ? 'ประตูถ้ำถูกผนึกไว้ ต้องทำเควสหลัก "เงามืดในป่ากระซิบ" ให้สำเร็จก่อน' : 'ต้องมีเลเวล 5 ขึ้นไปจึงจะผ่านประตูถ้ำได้', 'warn'); }
-      if (this.msgT <= 0 && World.barricade.col.on && dist2(P.x, P.z, 0, 13.5) < 20) { this.msgT = 4; UI.toast('สะพานปิดอยู่ ไปรับเควสจากกัปตันลีร่าในเมืองก่อน', 'warn'); }
+      if (this.msgT <= 0 && World.barricade.col.on && dist2(P.x, P.z, 0, 13.5) < 20) { this.msgT = 4; UI.toast('สะพานปิดอยู่ ไปรับเควสจากนายกองลำดวนในเมืองก่อน', 'warn'); }
     } else {
       if (P.z > 10.2 && Math.abs(P.x - DX) < 3.6) { this.teleport(0, -131, 'กลับสู่หุบผาผลึก'); return; }
     }
@@ -9505,19 +9505,19 @@ const AmazonGfx = {
   Game.checkTriggers = function (dt) {
     const P = Player, S = Save.d;
     if (P.zone === 'world' && P.x > 138 && Math.abs(P.z - 70) < 5) {
-      if (S.level >= AMAZON_LV) { if (P.x > 144.2) { this.teleport(AX, 104, 'ป่าอเมซอนมรณะ'); return; } }
+      if (S.level >= AMAZON_LV) { if (P.x > 144.2) { this.teleport(AX, 104, 'ป่าหิมพานต์มรณะ'); return; } }
       else if (this.msgT <= 0) { this.msgT = 4; UI.toast(`ป่าดิบข้างหน้าอันตรายมาก ต้องมีเลเวล ${AMAZON_LV} ขึ้นไปจึงจะเข้าไปได้`, 'warn'); }
     }
     if (P.zone === 'amazon') {
       if (P.z > 107 && Math.abs(P.x - AX) < 6) { this.teleport(137, 70, 'ถนนสายตะวันออก'); return; }
-      if (!S.stats.amazonVisit) { S.stats.amazonVisit = 1; S.warps.w_amazon = true; setTimeout(() => UI.toast('ป่าอเมซอนมรณะ… ทุกสิ่งที่นี่อยากกินคุณ! คุยกับ ดร.มาร์โก้ ที่ค่ายนักสำรวจ', 'boss'), 1500); }
+      if (!S.stats.amazonVisit) { S.stats.amazonVisit = 1; S.warps.w_amazon = true; setTimeout(() => UI.toast('ป่าหิมพานต์มรณะ… ทุกสิ่งที่นี่อยากกินคุณ! คุยกับ ดร.มานพ ที่ค่ายนักสำรวจ', 'boss'), 1500); }
     }
     oct(dt);
   };
   const ox = Nav.exitTo; Nav.exitTo = function (from, to) {
     const S = Save.d;
     if (from === 'amazon') return { x: AX, z: 109, dir: [0, 1] };
-    if (to === 'amazon' && from === 'world') { if (S.level < AMAZON_LV) { UI.toast(`ต้องมีเลเวล ${AMAZON_LV} ขึ้นไปจึงจะเดินทางไปป่าอเมซอนได้`, 'warn'); return null; } return { x: 141, z: 70, dir: [1, 0] }; }
+    if (to === 'amazon' && from === 'world') { if (S.level < AMAZON_LV) { UI.toast(`ต้องมีเลเวล ${AMAZON_LV} ขึ้นไปจึงจะเดินทางไปป่าหิมพานต์ได้`, 'warn'); return null; } return { x: 141, z: 70, dir: [1, 0] }; }
     if (to === 'amazon') return ox.call(this, from, 'world');
     return ox.call(this, from, to);
   };
@@ -9610,7 +9610,7 @@ const icon = (k, cls = '') => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-h
 
 /* shop registry: [title, NPC button label, () => item list, can sell] — modules add their own shops */
 const SHOPS = {
-  items: ['ร้านไอเทมของพิป', 'ดูสินค้า', () => SHOP_ITEMS, 1],
+  items: ['ร้านไอเทมของพิพัฒน์', 'ดูสินค้า', () => SHOP_ITEMS, 1],
   tailor: ['ร้านชุดแต่งตัวของมีนา', 'ดูชุดแต่งตัว', () => TAILOR_ITEMS, 0],
   temple: ['เครื่องรางกันผีของตาเผือก', 'ดูเครื่องรางกันผี', () => TEMPLE_SHOP, 1]
 };
@@ -9888,7 +9888,7 @@ const UI = {
       if (it.kind === 'use') act = `<button class="btn sm" data-use="${id}">ใช้</button>`;
       else if (it.kind === 'gear' || it.kind === 'cos') act = `<button class="btn sm ${eq ? 'ghost' : ''}" data-eq="${id}">${eq ? 'ถอด' : 'สวมใส่'}</button>`;
       return `<li class="${eq ? 'eq' : ''} hasinfo" data-info="${id}">${this.itemIcon(id)}<div class="in"><b>${it.name}</b><small>${it.desc}</small></div><span class="qty">${it.kind === 'gear' || it.kind === 'cos' ? (eq ? 'สวมอยู่' : '') : '×' + S.inv[id]}</span>${act}</li>`;
-    }).join('') || `<li class="emptyrow">ยังไม่มีไอเทมในหมวดนี้${tab === 'cos' ? ' ซื้อได้ที่ร้านของช่างตัดเสื้อมีนาในเมือง' : tab === 'gear' ? ' ซื้อได้ที่ร้านพ่อค้าพิปในเมือง' : ''}</li>`;
+    }).join('') || `<li class="emptyrow">ยังไม่มีไอเทมในหมวดนี้${tab === 'cos' ? ' ซื้อได้ที่ร้านของช่างตัดเสื้อมีนาในเมือง' : tab === 'gear' ? ' ซื้อได้ที่ร้านพ่อค้าพิพัฒน์ในเมือง' : ''}</li>`;
     this.setPanel(`${icon('bag')} กระเป๋า <span class="coin">${icon('coin')}${fmt(S.coins)}</span>`, `
       <div class="eqgrid"><div><h4>สวมใส่</h4><div class="slots">${slots}</div></div><div><h4>ของแต่งตัว</h4><div class="slots">${cslots}</div></div></div>
       <div class="tabs" role="tablist">${tabs.map(([k, l]) => `<button role="tab" class="tab ${k === tab ? 'on' : ''}" data-tab="${k}">${l}</button>`).join('')}</div>
@@ -9939,7 +9939,7 @@ const UI = {
     for (const w of WARPS) if (w.zone === 'world') { const [a, b] = tp(w.x, w.z); x.fillStyle = S.warps[w.id] ? '#7fe6ff' : '#5a6b78'; x.beginPath(); x.moveTo(a, b - 8); x.lineTo(a + 6, b); x.lineTo(a, b + 8); x.lineTo(a - 6, b); x.fill(); }
     for (const s of SHRINES) { const [a, b] = tp(s.x, s.z); x.fillStyle = BUFFS[s.buff].col; x.beginPath(); x.arc(a, b, 6, 0, TAU); x.fill(); x.strokeStyle = '#1d1712'; x.lineWidth = 2; x.stroke(); }
     if (P.zone === 'world') { const [a, b] = tp(P.x, P.z); x.fillStyle = '#a5e84a'; x.strokeStyle = '#1d1712'; x.lineWidth = 2; x.beginPath(); x.arc(a, b, 7, 0, TAU); x.fill(); x.stroke(); }
-    else lbl('คุณอยู่ในถ้ำผลึก', 0, -110, '#a5e84a');
+    else lbl('คุณอยู่ในถ้ำนาคา', 0, -110, '#a5e84a');
     this.el.pbody.onclick = e => { const b = e.target.closest('[data-w]'); if (!b || b.disabled) return; const w = WARPS.find(v => v.id === b.dataset.w); if (Monsters.boss.engaged) { this.toast('วาร์ปไม่ได้ระหว่างต่อสู้กับบอส', 'warn'); return; } this.closePanel(); Game.teleport(w.x + 2.5, w.z + 2.5, w.name); };
   },
   pAch() {
@@ -9989,7 +9989,7 @@ const UI = {
   },
   pHelp() {
     this.setPanel(`${icon('help')} วิธีเล่น`, `<div class="help">
-      <section><h4>เป้าหมาย</h4><p>รับเควสจาก <b>กัปตันลีร่า</b> ในเมืองสยาม ปราบมอนสเตอร์ในทุ่งหญ้า ข้ามสะพานไปป่ากระซิบ แล้วบุกถ้ำผลึกเพื่อปราบบอส <b>ยักษ์ศิลา</b></p></section>
+      <section><h4>เป้าหมาย</h4><p>รับเควสจาก <b>นายกองลำดวน</b> ในเมืองสยาม ปราบมอนสเตอร์ในทุ่งหญ้า ข้ามสะพานไปป่ากระซิบ แล้วบุกถ้ำนาคาเพื่อปราบบอส <b>ยักษ์ศิลา</b></p></section>
       <section><h4>วัดร้างกลางป่า (เลเวล 6+)</h4><p>เดินตามถนนสายตะวันตกจากประตูเมืองไปจนสุดทาง จะพบวัดร้างที่มีผีไทย 17 ชนิด รับเควสจาก <b>หลวงตาพุฒ</b> ซื้อน้ำมนต์และธูปกันผีจาก <b>ตาเผือก</b> แล้วตามล่าบอส <b>แม่นาก</b> ที่เรือนไทยริมคลอง เมื่อแม่นากกลายเป็นวิญญาณ ให้กด F ที่เสาสายสิญจน์ทั้ง 3 ต้นแล้วตอบคำถามเพื่อสะกดนาง · เปิด <b>ตำราผีไทย</b> (B) เพื่ออ่านตำนานผีแต่ละชนิด</p></section>
       <section><h4>คอมพิวเตอร์</h4><ul>
         <li><kbd>คลิกซ้าย</kbd> บนพื้นเพื่อเดิน กดค้างเพื่อเดินตามเมาส์ · คลิกมอนสเตอร์เพื่อโจมตี · คลิก NPC เพื่อคุย</li>
@@ -10002,7 +10002,7 @@ const UI = {
         <li><b>สกิลใหญ่ (X)</b> มีคำถามเด้งขึ้น ตอบถูกในเวลา พลัง ×2 · ตอบผิด สกิลฟาวล์และติดคูลดาวน์</li>
         <li><b>แท่นบูชา</b> 3 แห่งบนแผนที่ ตอบถูกรับบัฟ 10 นาที</li>
         <li><b>บอส</b> จะสร้างเกราะผลึกที่ HP 70% และ 35% ต้องตอบถูกติดกัน 3 ข้อ (Chain Quiz) เพื่อทำลายเกราะ</li>
-        <li><b>ปราชญ์โอริน</b> มีบททดสอบประจำวันให้ XP และเหรียญ</li></ul></section>
+        <li><b>ปราชญ์พรหม</b> มีบททดสอบประจำวันให้ XP และเหรียญ</li></ul></section>
       <section><h4>เคล็ดลับ</h4><ul><li>มอนสเตอร์ชื่อสีเหลืองรักสงบ จะสู้กลับเมื่อโดนตีก่อน · ชื่อสีแดงดุร้าย จะวิ่งเข้าหาเมื่อเข้าใกล้</li><li>วงสีแดงบนพื้นคือท่าโจมตีของบอส เดินออกจากวงก่อนที่มันจะเต็ม</li><li>เกมบันทึกอัตโนมัติในเบราว์เซอร์เครื่องนี้</li></ul></section></div>`, true);
     this.el.pbody.onclick = null;
   },
@@ -10021,7 +10021,7 @@ const UI = {
       if (ready) { text = QUESTS[ready].done; buttons.push([`turn:${ready}`, 'ส่งเควส: ' + QUESTS[ready].title, 'primary']); }
       else if (avail) { text = QUESTS[avail].text; buttons.push([`acc:${avail}`, (QUESTS[avail].type === 'daily' && QUESTS[avail].obj[0].k === 'quiz' ? 'เริ่มบททดสอบ' : 'รับเควส: ') + (QUESTS[avail].obj[0].k === 'quiz' ? '' : QUESTS[avail].title), 'primary']); }
       else if (act) { const pr = Quests.progress(act); text = `ภารกิจ "${QUESTS[act].title}" เป็นยังไงบ้าง? ` + pr.map(p => `${p.label} ${p.have}/${p.n}`).join(' · '); }
-      else text = NPC_IDLE[o.npc] || { lyra: 'สยาม สงบสุขได้ก็เพราะนักผจญภัยอย่างเจ้า กลับมาหาฉันพรุ่งนี้สำหรับภารกิจล่าประจำวันนะ', orin: 'วันนี้เจ้าทดสอบไปแล้ว พรุ่งนี้ค่อยมาใหม่ ระหว่างนี้แท่นบูชาทั้งสามก็มีคำถามรออยู่', pip: 'ยินดีต้อนรับ! ยา อาวุธ ชุดเกราะ มีครบ', mina: 'อยากเปลี่ยนลุคไหม? ฉันมีหมวก ปีก ออร่า และชุดทั้งหกแบบ', kaze: 'ซุปเห็ดหม้อนั้นอร่อยมาก ขอบใจอีกครั้งนะ', rook: 'ป่ากระซิบช่วงนี้อันตราย ระวังหมาในที่ล่าเป็นฝูงด้วย' }[o.npc];
+      else text = NPC_IDLE[o.npc] || { lyra: 'สยามสงบสุขได้ก็เพราะนักผจญภัยอย่างเจ้า กลับมาหาฉันพรุ่งนี้สำหรับภารกิจล่าประจำวันนะ', orin: 'วันนี้เจ้าทดสอบไปแล้ว พรุ่งนี้ค่อยมาใหม่ ระหว่างนี้แท่นบูชาทั้งสามก็มีคำถามรออยู่', pip: 'ยินดีต้อนรับ! ยา อาวุธ ชุดเกราะ มีครบ', mina: 'อยากเปลี่ยนลุคไหม? ฉันมีหมวก ปีก ออร่า และชุดทั้งหกแบบ', kaze: 'ซุปเห็ดหม้อนั้นอร่อยมาก ขอบใจอีกครั้งนะ', rook: 'ป่ากระซิบช่วงนี้อันตราย ระวังหมาในที่ล่าเป็นฝูงด้วย' }[o.npc];
       if (n.shop) buttons.push([`shop:${n.shop}`, (SHOPS[n.shop] || SHOPS.items)[1], '']);
       if (o.npc === 'kuman') buttons.push(['bless', 'ขอพรกุมารทอง', '']);
       if (o.npc === 'zen') { if (!S.job) buttons.push(['jobs', 'เปลี่ยนอาชีพขั้นสอง', 'primary']); else if (!S.awk && S.quests.awk && S.quests.awk.s === 'done') buttons.push(['ritual', 'เข้าพิธีกรรมปลุกพลัง (5,000 เหรียญ)', 'primary']); else buttons.push(['jobs', 'ดูสายอาชีพ', '']); }
@@ -10652,17 +10652,17 @@ const RotScroll = {
    Item detail popup: description, properties, where to get it
    ============================================================ */
 const ITEM_LORE = {
-  hp_s: 'ยาสมุนไพรสีแดงที่พ่อค้าพิปต้มเองทุกเช้า กลิ่นคล้ายสตรอว์เบอร์รี',
+  hp_s: 'ยาสมุนไพรสีแดงที่พ่อค้าพิพัฒน์ต้มเองทุกเช้า กลิ่นคล้ายสตรอว์เบอร์รี',
   hp_l: 'ยาเข้มข้นในขวดแก้วหนา ดื่มอึกเดียวก็รู้สึกกลับมามีแรงเต็มที่',
   mp_s: 'น้ำค้างจากดอกจันทราผสมผงผลึก ช่วยให้จิตใจสงบและมานาไหลกลับคืน',
-  scroll: 'คัมภีร์ที่ปราชญ์โอรินจารึกพิกัดของลานน้ำพุผลึกไว้ ฉีกเมื่อไรก็กลับบ้านได้ทันที',
+  scroll: 'คัมภีร์ที่ปราชญ์พรหมจารึกพิกัดของลานน้ำพุผลึกไว้ ฉีกเมื่อไรก็กลับบ้านได้ทันที',
   w_iron: 'อาวุธคู่ใจของนักผจญภัยมือใหม่ ตีจากเหล็กกล้าสมดุล ใช้งานง่าย ทนทาน',
   w_mith: 'มิทริลเบาราวขนนกแต่แข็งกว่าเหล็กหลายเท่า เหมาะกับผู้ที่ผ่านศึกมาบ้างแล้ว',
   w_gob: 'มีดสั้นหยาบๆ ที่ยักษ์น้อยใช้ ถึงหน้าตาไม่สวยแต่คมและเบามือ ฟันได้รวดเร็ว',
   w_crys: 'ตีขึ้นจากแกนผลึกของยักษ์ศิลา ผู้พิทักษ์ผลึก ใบมีดเรืองแสงสีฟ้าอ่อนเมื่อจับไว้',
   a_leather: 'เสื้อหนังที่สอดใยเหนียวไว้ข้างใน กันรอยข่วนจากสัตว์ป่าได้ดี',
   a_moon: 'เกราะเงินที่หลอมใต้แสงจันทร์เต็มดวง สะท้อนพลังโจมตีได้ดีเยี่ยม',
-  a_hunter: 'เสื้อคลุมที่นายพรานรุกใช้ตอนหนุ่มๆ เบาและพรางตัวในป่าได้ดี',
+  a_hunter: 'เสื้อคลุมที่นายพรานรุ่งใช้ตอนหนุ่มๆ เบาและพรางตัวในป่าได้ดี',
   r_mana: 'แหวนฝังหินมานาสีน้ำเงิน ช่วยให้ร่างกายเก็บพลังเวทได้มากขึ้น',
   r_wind: 'รองเท้าที่ปักลายขนนกสายลม สวมแล้วฝีเท้าเบาราวกับลอยได้',
   r_heart: 'หัวใจผลึกที่ยังเต้นอ่อนๆ หลงเหลือจากยักษ์ศิลา มอบทั้งพลังและชีวิต',
@@ -10683,10 +10683,10 @@ const ITEM_LORE = {
   statbook: 'ตำราโบราณที่บันทึกเคล็ดลับการฝึกฝน อ่านจบแล้วจะรู้สึกแข็งแกร่งขึ้นทันที',
   m_jelly: 'เมือกใสเหนียวหนึบ ช่างฝีมือใช้ทำกาวและยาบางชนิด',
   m_cap: 'หมวกเห็ดสีแดงจุดขาว คาเสะบอกว่าเอาไปทำซุปอร่อยมาก',
-  m_fang: 'เขี้ยวหมาในที่ยังคมกริบ นายพรานรุกรับซื้อไว้ทำเครื่องราง',
-  m_totem: 'เครื่องรางไม้แกะสลักที่ยักษ์น้อยใช้เรียกพวก กัปตันลีร่าต้องการเป็นหลักฐาน',
+  m_fang: 'เขี้ยวหมาในที่ยังคมกริบ นายพรานรุ่งรับซื้อไว้ทำเครื่องราง',
+  m_totem: 'เครื่องรางไม้แกะสลักที่ยักษ์น้อยใช้เรียกพวก นายกองลำดวนต้องการเป็นหลักฐาน',
   m_bone: 'กระดูกเก่าแก่จากทหารโครงกระดูกกรุงเก่าในถ้ำ แห้งและเปราะ',
-  m_shard: 'ผลึกเรืองแสงหายากจากถ้ำผลึก พ่อค้าทุกคนอยากได้'
+  m_shard: 'ผลึกเรืองแสงหายากจากถ้ำนาคา พ่อค้าทุกคนอยากได้'
 };
 const KIND_TH = { gear: 'อุปกรณ์', use: 'ไอเทมใช้งาน', mat: 'วัตถุดิบ', cos: 'ของแต่งตัว' };
 const SLOT_TH = { weapon: 'อาวุธ (มือขวา)', armor: 'ชุดเกราะ', acc: 'เครื่องประดับ', head: 'ศีรษะ', face: 'ใบหน้า', back: 'หลัง', aura: 'ออร่า', outfit: 'ชุดทั้งตัว', wskin: 'สกินอาวุธ' };
@@ -10707,8 +10707,8 @@ const ItemInfo = {
     for (const [m, d] of Object.entries(MONSTERS)) for (const dr of d.drops || []) if (dr[0] === id)
       out.push({ ic: 'sword', t: `ดรอปจาก ${d.name} (Lv.${d.lvl})`, s: `โอกาส ${this.pct(dr[1])}${dr[2] ? ' · ดรอปเฉพาะตอนรับเควสอยู่' : ''} · ${this.where(m)}`, go: { mon: m } });
     const boss = { c_crown: 'ปราบครั้งแรกได้แน่นอน 100%', w_crys: 'โอกาส 45% ทุกครั้งที่ปราบ', r_heart: 'โอกาส 45% ทุกครั้งที่ปราบ' }[id];
-    if (boss) out.push({ ic: 'crown', t: 'ดรอปจากบอส ยักษ์ศิลา ผู้พิทักษ์ผลึก (Lv.10)', s: boss + ' · ลานผู้พิทักษ์ ในถ้ำผลึก', go: { boss: 1 } });
-    if (SHOP_ITEMS.includes(id)) out.push({ ic: 'bag', t: 'ร้านไอเทมของพ่อค้าพิป', s: `ราคา ${fmt(it.price)} เหรียญ${it.lvl ? ' · ต้องเลเวล ' + it.lvl : ''} · เมืองหลวงสยาม`, go: { npc: 'pip' } });
+    if (boss) out.push({ ic: 'crown', t: 'ดรอปจากบอส ยักษ์ศิลา ผู้พิทักษ์ผลึก (Lv.10)', s: boss + ' · ลานผู้พิทักษ์ ในถ้ำนาคา', go: { boss: 1 } });
+    if (SHOP_ITEMS.includes(id)) out.push({ ic: 'bag', t: 'ร้านไอเทมของพ่อค้าพิพัฒน์', s: `ราคา ${fmt(it.price)} เหรียญ${it.lvl ? ' · ต้องเลเวล ' + it.lvl : ''} · เมืองหลวงสยาม`, go: { npc: 'pip' } });
     if (TAILOR_ITEMS.includes(id)) out.push({ ic: 'outfit', t: 'ร้านชุดของช่างตัดเสื้อมีนา', s: `ราคา ${fmt(it.price)} เหรียญ · เมืองหลวงสยาม`, go: { npc: 'mina' } });
     for (const [qid, q] of Object.entries(QUESTS)) { const r = q.rew && q.rew.items && q.rew.items.find(x => x[0] === id); if (r) out.push({ ic: 'scroll', t: `รางวัลเควส: ${q.title}`, s: `×${r[1]} · รับเควสจาก ${NPCS[q.giver] ? NPCS[q.giver].name : ''}`, go: { quest: qid } }); }
     const gi = GEM_ITEMS.filter(g => g.item === id || (g.give && g.give.some(x => x[0] === id)));
@@ -11929,12 +11929,12 @@ UI.buildTempleMap = function () {
     x.font = '600 13px Mitr, sans-serif'; x.textAlign = 'center';
     const lbl = (t, wx, wz, c = '#fff') => { const [a, b] = tp(wx, wz); x.lineWidth = 4; x.strokeStyle = 'rgba(14,10,18,.85)'; x.strokeText(t, a, b); x.fillStyle = c; x.fillText(t, a, b); };
     for (const [ax, az, r, n] of TEMPLE_AREAS) if (r >= 6) lbl(n, TX + ax, az + (n === 'อุโบสถร้าง' ? 0 : -r * .55), '#f3e7cc');
-    const sp = {}; for (const [t, sx, sz] of SPAWNS) if (sx > 1500 && MONSTERS[t].ghost && !sp[t]) { sp[t] = 1; const [a, b] = tp(sx, sz); x.fillStyle = MONSTERS[t].wboss ? '#ff5fd0' : MONSTERS[t].elite ? '#ffc04a' : '#b48aff'; x.beginPath(); x.arc(a, b, MONSTERS[t].wboss || MONSTERS[t].elite ? 8 : 5, 0, TAU); x.fill(); x.strokeStyle = '#1d1712'; x.lineWidth = 2; x.stroke(); if (S.ghostSeen && S.ghostSeen[t]) { x.font = '500 11px Mitr, sans-serif'; x.lineWidth = 3; x.strokeText(MONSTERS[t].name.split(' ')[0], a, b + 17); x.fillStyle = '#e8d8ff'; x.fillText(MONSTERS[t].name.split(' ')[0], a, b + 17); x.font = '600 13px Mitr, sans-serif'; } }
+    if (typeof SiamMap === 'undefined') { const sp = {}; for (const [t, sx, sz] of SPAWNS) if (sx > 1500 && MONSTERS[t].ghost && !sp[t]) { sp[t] = 1; const [a, b] = tp(sx, sz); x.fillStyle = MONSTERS[t].wboss ? '#ff5fd0' : MONSTERS[t].elite ? '#ffc04a' : '#b48aff'; x.beginPath(); x.arc(a, b, MONSTERS[t].wboss || MONSTERS[t].elite ? 8 : 5, 0, TAU); x.fill(); x.strokeStyle = '#1d1712'; x.lineWidth = 2; x.stroke(); if (S.ghostSeen && S.ghostSeen[t]) { x.font = '500 11px Mitr, sans-serif'; x.lineWidth = 3; x.strokeText(MONSTERS[t].name.split(' ')[0], a, b + 17); x.fillStyle = '#e8d8ff'; x.fillText(MONSTERS[t].name.split(' ')[0], a, b + 17); x.font = '600 13px Mitr, sans-serif'; } } }
     for (const w of WARPS) if (w.zone === 'temple') { const [a, b] = tp(w.x, w.z); x.fillStyle = S.warps[w.id] ? '#7fe6ff' : '#5a6b78'; x.beginPath(); x.moveTo(a, b - 9); x.lineTo(a + 7, b); x.lineTo(a, b + 9); x.lineTo(a - 7, b); x.fill(); }
-    for (const n of NPCList) if (n.zone === 'temple') { const [a, b] = tp(n.x, n.z); x.fillStyle = '#ffd24a'; x.beginPath(); x.arc(a, b, 5, 0, TAU); x.fill(); }
+    if (typeof SiamMap === 'undefined') { for (const n of NPCList) if (n.zone === 'temple') { const [a, b] = tp(n.x, n.z); x.fillStyle = '#ffd24a'; x.beginPath(); x.arc(a, b, 5, 0, TAU); x.fill(); } }
     lbl('ทางออก ↓ ถนนสายตะวันตก', TX, 72, '#cfe8ff');
     if (P.zone === 'temple') { const [a, b] = tp(P.x, P.z); x.fillStyle = '#a5e84a'; x.strokeStyle = '#1d1712'; x.lineWidth = 2; x.beginPath(); x.arc(a, b, 7, 0, TAU); x.fill(); x.stroke(); }
-    else lbl(P.zone === 'world' ? 'คุณอยู่บนแดนสยาม' : 'คุณอยู่ในถ้ำผลึก', TX, 0, '#a5e84a');
+    else lbl(P.zone === 'world' ? 'คุณอยู่บนแดนสยาม' : 'คุณอยู่ในถ้ำนาคา', TX, 0, '#a5e84a');
     this.el.pbody.onclick = e => {
       const t = e.target.closest('[data-mt]'); if (t) { this.panelOpt.tab = t.dataset.mt; return this.renderPanel(); }
       const b = e.target.closest('[data-w]'); if (!b || b.disabled) return; const w = WARPS.find(v => v.id === b.dataset.w); if (Monsters.boss.engaged || NakBoss.cur) { this.toast('วาร์ปไม่ได้ระหว่างต่อสู้กับบอส', 'warn'); return; } this.closePanel(); Game.teleport(w.x + 2.5, w.z + 2.5, w.name);
@@ -12026,7 +12026,7 @@ UI.pJobs = function (o) {
 };
 {
   const oh = UI.pHelp.bind(UI);
-  UI.pHelp = function () { oh(); const h = this.el.pbody.querySelector('.help'); if (h) h.insertAdjacentHTML('afterbegin', `<section><h4>สายอาชีพและการปลุกพลัง</h4><p>เลเวล ${JOB_LV} ไปหา <b>อาจารย์เซน</b> ในเมืองเพื่อเลือกอาชีพขั้นสอง (อาชีพละ 2 สาย ได้สกิลใหม่ 3 สกิล) เลเวล ${AWK_LV} รับเควส "ปลดผนึกแห่งพลัง" เก็บศิลา 4 ชนิดจากยักษ์ศิลา แม่นาก ปู่โสม และบททดสอบของโอริน แล้วเข้าพิธีกรรมเพื่อปลุกพลัง เลเวลสูงสุดจะขยายเป็น ${AWK_LV_CAP} · กด <kbd>J</kbd> เพื่อดูสายอาชีพ</p></section>`); };
+  UI.pHelp = function () { oh(); const h = this.el.pbody.querySelector('.help'); if (h) h.insertAdjacentHTML('afterbegin', `<section><h4>สายอาชีพและการปลุกพลัง</h4><p>เลเวล ${JOB_LV} ไปหา <b>อาจารย์เซน</b> ในเมืองเพื่อเลือกอาชีพขั้นสอง (อาชีพละ 2 สาย ได้สกิลใหม่ 3 สกิล) เลเวล ${AWK_LV} รับเควส "ปลดผนึกแห่งพลัง" เก็บศิลา 4 ชนิดจากยักษ์ศิลา แม่นาก ปู่โสม และบททดสอบของพรหม แล้วเข้าพิธีกรรมเพื่อปลุกพลัง เลเวลสูงสุดจะขยายเป็น ${AWK_LV_CAP} · กด <kbd>J</kbd> เพื่อดูสายอาชีพ</p></section>`); };
 }
 
 /* ============================================================
@@ -12214,12 +12214,14 @@ KIND_ICON.vehicle = 'star';
    PATCH_NEW for every game update (shown in lobby → บันทึกอัปเดต)
    ============================================================ */
 const PATCH_NEW = [
+  { d: '30/10', ic: 'map', t: 'v0.3 ชื่อโซน สถานที่ และ NPC เป็นไทย', x: 'ถ้ำนาคาใต้พิภพ · ป่าหิมพานต์มรณะ · ทุ่งนาสยาม · NPC: นายกองลำดวน ปราชญ์พรหม พ่อค้าพิพัฒน์ นายพรานรุ่ง ดร.มานพ นักชีววิทยาเอื้อมพร พรานป่าโชติ นักสำรวจลลิตา นักดนตรีปี่แก้ว ทหารยามบุญรอด ฤๅษีสวิน นิลุบล (คลังสินค้า) · เควสและบทพูดเดิมทั้งหมดยังทำต่อได้' },
+  { d: '30/10', ic: 'gear', t: 'v0.2.1 แก้บั๊กข้อความหลังเปลี่ยนชื่อมอนสเตอร์', x: 'แก้ชื่อที่ยังเปลี่ยนไม่ครบในป่าลึก (เควสประจำวัน ชื่อพื้นที่ คำแนะนำร้านค้า) และข้อความที่อ่านแปลก เช่น ต่อมพิษอึ่งลายทอง นักรบยักษ์ป่า ป่าทึบเสือดาว · มินิบอสในแพตช์โน้ตใช้ชื่อ ท้าวยักษ์หิมพานต์ ตรงกับในเกม' },
   { d: '30/10', ic: 'paw', t: 'มอนสเตอร์และบอสเปลี่ยนเป็นธีมไทย (v0.2)', x: 'ทุ่งนา: วุ้นใบเตย เห็ดโคนซุกซน หมาใน ยักษ์น้อยเฝ้าทุ่ง · ถ้ำ: ค้างคาวแม่ไก่ ทหารโครงกระดูกกรุงเก่า ยักษ์ศิลา · ป่าลึก: ปลาช่อนผี อึ่งพิษลายทอง เสือดาวป่าลึก บึ้งยักษ์ งูเหลือมยักษ์ ต้นไทรผีสิง จระเข้บึง ยักษ์ป่าหิมพานต์ · MVP: ราชาวุ้นใบเตย จ่าฝูงหมาในเขี้ยวเงิน เห็ดโคนพันปี ท้าวยักษ์คุมทุ่ง นางพญาค้างคาว แม่ทัพกระดูกกรุงเก่า นางไม้ไทรพันปี ท้าวยักษ์หิมพานต์ พญางูเหลือม ความแรง ของดรอป และเควสเหมือนเดิมทุกอย่าง' },
   { d: '30/10', ic: 'star', t: 'เปิดทดลอง สยาม RPG (2.5D ธีมไทย)', x: 'แยกออกมาจาก Aurelion Quest เป็นเกมใหม่ โลก 3D ตัวละครภาพพิกเซลแบบ RO เซฟเกม ตั้งค่า และห้องออนไลน์ CH1–CH3 แยกจากเกมเดิม เริ่มเปลี่ยนเมือง NPC และมอนสเตอร์เป็นธีมไทยในอัปเดตถัดไป' },
   { d: '30/10', ic: 'sword', t: 'อัศวินเดินและฟันดาบด้วยภาพวาดใหม่ทีละเฟรม', x: 'อาชีพอัศวิน (และอาชีพต่อยอด) มีภาพเดินวาดใหม่ 8 เฟรมต่อทิศ ทั้งด้านหน้า เฉียง ด้านข้าง และด้านหลัง ขาก้าวจริง ผ้าคลุมพลิ้วตามจังหวะเดิน · ท่าโจมตีฟันดาบ 6 เฟรม เงื้อดาบ ฟันลง ตามแรง แบบเกม RO · อาชีพอื่นจะทยอยได้ภาพเดินแบบใหม่ในอัปเดตถัดไป' },
   { d: '30/10', ic: 'person', t: 'ตัวละครแบบภาพวาด 2D เหมือน RO + ท่าทาง 98 ท่า', x: 'ตัวละคร ผู้เล่นอื่น และ NPC แสดงเป็นภาพวาด 2D สวยๆ แบบเดียวกับหน้าเลือกอาชีพ หันได้ 8 ทิศ เดินโยกตัว มีท่าโจมตี ร่ายเวท เจ็บ ล้ม NPC แต่ละคนสีผมไม่ซ้ำกัน (เปลี่ยนกลับเป็นโมเดล 3D ได้ที่ ตั้งค่า → ภาพตัวละคร) · อีโมตเพิ่มเป็น 98 ท่า: กระโดด หมุนตัว ไหว้ นอนหลับ วิดพื้น โยคะ นั่งสมาธิ กังฟู ไหว้ครูมวยไทย มูนวอล์ก หุ่นยนต์ บัลเล่ต์ รำไทย ตีลังกา ยืนหัว ซอมบี้ ผีหลอก ท่าไก่ ว่ายน้ำ ยกน้ำหนัก เซลฟี่ และอีกมาก (กดปุ่ม 😊 ข้างแชท)' },
-  { d: '30/10', ic: 'bag', t: 'คลังสินค้าแบบ RO + นั่งพักฟื้นพลัง + ตรวจบัคทั้งระบบ', x: 'NPC เนลลี่ พนักงานคลังสินค้าในเมืองหลวง ฝากของได้ 300 ช่อง ใช้ร่วมกันทุกตัวละครในเครื่อง (ค่าบริการ 40 เหรียญ) · อีโมต "นั่งพัก" ฟื้น HP/MP เร็วขึ้น 2 เท่าเหมือน RO · ตรวจสอบสกิลทุกอาชีพ ทุกอาชีพขั้นสองและตื่นรู้ อุปกรณ์ทุกชิ้น ชุดแต่งตัว 166 ชิ้น สัตว์ขี่ทุกตัว หน้าต่างทุกหน้าต่าง และมอนสเตอร์ทุกแมพ ไม่พบข้อผิดพลาด' },
-  { d: '30/10', ic: 'map', t: 'แมพใหม่: ป่าอเมซอนมรณะ (Lv.15+)', x: 'ทางเข้าอยู่ถนนสายตะวันออกของแดนสยาม (ซุ้มประตูเถาวัลย์ขวาสุดของแผนที่) · มอนสเตอร์ใหม่ 9 ชนิด เลเวล 15–26 สูงกว่าวัดร้าง: ปลาช่อนผี อึ่งพิษลายทอง เสือดาวป่าลึก แมงมุมยักษ์ งูเหลือมยักษ์ ต้นไทรผีสิง จระเข้บึง ยักษ์ป่านักรบและยักษ์หมอผี · พื้นที่: ค่ายนักสำรวจ แม่น้ำอเมซอน ทะเลสาบปลาช่อนผี หนองน้ำงูเหลือมยักษ์ ดงไทรผีสิง ซากวิหารโบราณ หมู่บ้านยักษ์ป่า · บอส MVP พญางูเหลือม และมินิบอส หัวหน้าเผ่ายักษ์ป่า นางไม้ไทรพันปี · NPC และเควสใหม่ 7 เควส อุปกรณ์หายากใหม่ · เสียงป่าดิบ นก กบ ลิง แม่น้ำ และแสงหิ่งห้อย' },
+  { d: '30/10', ic: 'bag', t: 'คลังสินค้าแบบ RO + นั่งพักฟื้นพลัง + ตรวจบัคทั้งระบบ', x: 'NPC นิลุบล พนักงานคลังสินค้าในเมืองหลวง ฝากของได้ 300 ช่อง ใช้ร่วมกันทุกตัวละครในเครื่อง (ค่าบริการ 40 เหรียญ) · อีโมต "นั่งพัก" ฟื้น HP/MP เร็วขึ้น 2 เท่าเหมือน RO · ตรวจสอบสกิลทุกอาชีพ ทุกอาชีพขั้นสองและตื่นรู้ อุปกรณ์ทุกชิ้น ชุดแต่งตัว 166 ชิ้น สัตว์ขี่ทุกตัว หน้าต่างทุกหน้าต่าง และมอนสเตอร์ทุกแมพ ไม่พบข้อผิดพลาด' },
+  { d: '30/10', ic: 'map', t: 'แมพใหม่: ป่าหิมพานต์มรณะ (Lv.15+)', x: 'ทางเข้าอยู่ถนนสายตะวันออกของแดนสยาม (ซุ้มประตูเถาวัลย์ขวาสุดของแผนที่) · มอนสเตอร์ใหม่ 9 ชนิด เลเวล 15–26 สูงกว่าวัดร้าง: ปลาช่อนผี อึ่งพิษลายทอง เสือดาวป่าลึก บึ้งยักษ์ งูเหลือมยักษ์ ต้นไทรผีสิง จระเข้บึง นักรบยักษ์ป่าและยักษ์หมอผี · พื้นที่: ค่ายนักสำรวจ แม่น้ำหิมพานต์ ทะเลสาบปลาช่อนผี หนองน้ำงูเหลือมยักษ์ ดงไทรผีสิง ซากวิหารโบราณ หมู่บ้านยักษ์ป่า · บอส MVP พญางูเหลือม และมินิบอส ท้าวยักษ์หิมพานต์ นางไม้ไทรพันปี · NPC และเควสใหม่ 7 เควส อุปกรณ์หายากใหม่ · เสียงป่าดิบ นก กบ ลิง แม่น้ำ และแสงหิ่งห้อย' },
   { d: '30/10', ic: 'star', t: 'กิจกรรมตามปฏิทิน + ตู้กิจกรรม + อุปกรณ์ 8 ขั้น', x: 'ทุกปีมีเทศกาล ฮาโลวีน ลอยกระทง คริสต์มาส ปีใหม่ วาเลนไทน์ และสงกรานต์ ช่วงเทศกาลมี NPC ประจำงานที่จัตุรัสเมืองหลวง พร้อมเควสประจำวันและเควสพิเศษ มอนสเตอร์ทุกตัวดรอปเหรียญกิจกรรม (เช่น ลูกอมฮาโลวีน ขันน้ำสงกรานต์) นำไปแลกชุด หมวก ปีก และกล่องนำโชคที่ตู้กิจกรรม · กล่องนำโชคสุ่มอุปกรณ์ 8 ขั้น: ธรรมดา เหล็กกล้า ทองแดง เงิน ทอง แพลทินัม เพชร และเทพในตำนาน (0.15%) อาวุธตรงตามอาชีพ ขั้นเงินขึ้นไปมีเอฟเฟกต์เมื่อสวมใส่ · GM เปิดกิจกรรมทั้งเซิร์ฟเวอร์ เสกไอเทม และส่งของขวัญให้ทุกคนได้ · ตอนนี้เทศกาลฮาโลวีนกำลังจัดอยู่!' },
   { d: '30/10', ic: 'star', t: 'สกิลทรีแบบ RO (กด P)', x: 'ทุกอาชีพมีสกิลเพิ่ม: สกิลติดตัว (Passive) 4 สกิล สูงสุด Lv.10 เช่น ความชำนาญอาวุธ ร่างกายเหล็กไหล จุดตาย ฟื้นฟูมานา พลังรักษา และสกิลกดใช้ใหม่อีก 2 สกิล เช่น แทงทะลวง ออร่าศักดิ์สิทธิ์ มีดอาบพิษ ศรเพลิง สายฟ้าฟาด แสงศักดิ์สิทธิ์ · สกิลมีเงื่อนไขก่อนเรียน แสดงเป็นเส้นเชื่อมในทรี พร้อมสกิลอาชีพขั้นสอง · เลือกสกิลใส่ปุ่ม Q E R T เองได้' },
   { d: '30/10', ic: 'crown', t: 'บอส MVP และมินิบอสเกิดตามเวลา + ประกาศทั้งเซิร์ฟเวอร์', x: 'ราชาวุ้นใบเตย จ่าฝูงหมาในเขี้ยวเงิน นางพญาค้างคาว (มินิบอส) และเห็ดโคนพันปี ท้าวยักษ์คุมทุ่ง แม่ทัพกระดูกกรุงเก่า (บอส MVP) เกิดตามเวลาเดียวกันทั้งเซิร์ฟเวอร์ ตอนเกิดจะประกาศให้ทุกคนรู้ ผู้ที่ปิดฉากได้ MVP รับ EXP โบนัส ของรางวัล เพชร และฉายา "MVP" ชื่อผู้กำจัดและของดรอปที่หายากที่สุด 2 ชิ้นจะถูกประกาศทั้งเซิร์ฟเวอร์ · ดูเวลาเกิดและนำทางได้ที่เมนู → บอส MVP (ไอคอนมงกุฎ)' },
@@ -12227,7 +12229,7 @@ const PATCH_NEW = [
   { d: '30/10', ic: 'gear', t: 'ระบบตีบวก +0 ถึง +20 แบบ RO', x: 'คุยกับช่างโบรันในเมืองหลวง → ตีบวกอุปกรณ์ ใช้หินตีบวก (+1–+10) และหินตีบวกขั้นสูง (+11–+20) ปลอดภัยถึง +4 หลังจากนั้นโอกาสลดลงเรื่อยๆ ล้มเหลวที่ +5–+9 ระดับลด −1 ตั้งแต่ +10 ขึ้นไปอุปกรณ์แตก! เว้นแต่ใช้หินกันแตก · อาวุธ +7 ขึ้นไปมีประกายแสงรอบตัว (+7 ฟ้า +10 ม่วง +15 ทอง +20 สายรุ้ง) · ตีบวก +10 ขึ้นไปประกาศทั้งเซิร์ฟเวอร์' },
   { d: '30/10', ic: 'star', t: 'การ์ดมอนสเตอร์และการ์ดบอส', x: 'มอนสเตอร์ทุกชนิดมีการ์ดของตัวเอง แบ่งเป็น ธรรมดา หายาก มินิบอส และบอส MVP ดรอปได้ยากมาก นำไปใส่ช่องการ์ดของอาวุธ ชุดเกราะ หรือเครื่องประดับที่ช่างโบรันเพื่อเพิ่มพลัง เช่น ATK DEF HP คริติคอล ดูดเลือด EXP โอกาสดรอป · ได้การ์ดมินิบอส/บอสประกาศทั้งเซิร์ฟเวอร์ · ดูสมุดสะสมการ์ดได้จากหน้าต่างช่างโบรัน' },
   { d: '30/10', ic: 'gear', t: 'HUD ใหม่แบบเกม MMO มือถือ + ปุ่ม AUTO', x: 'รูปตัวละครและแถบ HP/MP บางๆ มุมซ้ายบน แผนที่ย่อและชื่อพื้นที่ใต้รูป เงินและเพชรตรงกลางบน ไอคอน ประกาศ/Season/ร้าน/กระเป๋า(%)/เมนู มุมขวาบน การ์ดเควสสีทองพร้อมไอคอนลัดด้านขวา ปุ่มโจมตีใหญ่ขวาล่างพร้อมปุ่มเปลี่ยนเป้า เก็บของ AUTO และขี่สัตว์ แถบสกิล/ยากว้างด้านล่าง เลเวล พลังต่อสู้ EXP% และนาฬิกามุมซ้ายล่าง · ปุ่ม AUTO ต่อสู้อัตโนมัติ (ใช้สกิลและยาให้เอง) · เปลี่ยนกลับเป็นแบบเดิมได้ที่ ตั้งค่า → รูปแบบ HUD' },
-  { d: '30/10', ic: 'book', t: 'NPC ใหม่ 10 คน + เควสใหม่ 16 เควส', x: 'ยายบุญมา (เก็บดอกไม้เรืองแสง) ช่างโบรัน (ตีอาวุธ/เกราะ) น้องต้นข้าว (ตามหาแมวหาย) บุรุษไปรษณีย์สมปอง (ส่งจดหมาย) นักสำรวจลิซ่า (สำรวจ 3 มุมโลก) นักดนตรีปีโป้ (เต้นด้วยอีโมต) ทหารยามบอร์ก (ลาดตระเวนประจำวัน) ป้าแตง (เก็บมะละกอ/ส่งส้มตำ) พ่อมดซาวิน (สัตว์เลี้ยง/ค้างคาวแม่ไก่) นักวิจัยมิรา (ป่ากระซิบ) · มีจุดเก็บของให้กด F เก็บ และนำทางอัตโนมัติทุกเควส' },
+  { d: '30/10', ic: 'book', t: 'NPC ใหม่ 10 คน + เควสใหม่ 16 เควส', x: 'ยายบุญมา (เก็บดอกไม้เรืองแสง) ช่างโบรัน (ตีอาวุธ/เกราะ) น้องต้นข้าว (ตามหาแมวหาย) บุรุษไปรษณีย์สมปอง (ส่งจดหมาย) นักสำรวจลลิตา (สำรวจ 3 มุมโลก) นักดนตรีปี่แก้ว (เต้นด้วยอีโมต) ทหารยามบุญรอด (ลาดตระเวนประจำวัน) ป้าแตง (เก็บมะละกอ/ส่งส้มตำ) พ่อมดสวิน (สัตว์เลี้ยง/ค้างคาวแม่ไก่) นักวิจัยมิรา (ป่ากระซิบ) · มีจุดเก็บของให้กด F เก็บ และนำทางอัตโนมัติทุกเควส' },
   { d: '30/10', ic: 'person', t: 'หน้าต่างคุยแบบ MMO: รูป NPC ขนาดใหญ่ + เสียงพูด', x: 'คุยกับ NPC จะมีภาพตัวละครขนาดใหญ่สไลด์ขึ้นมาด้านขวาแบบ cut-in ข้อความพิมพ์ทีละตัว NPC พูดออกเสียง (ใช้เสียงภาษาไทยของเครื่อง ถ้าไม่มีเป็นเสียงจิ๊บๆ) กด 🔊 ฟังซ้ำ ปิดได้ที่ตั้งค่า · NPC ในเมืองพูดลอยเหนือหัวเป็นระยะ · แก้บัค: ชื่อเควสบางเควสแสดงเป็นชื่อฉายาแทน' },
   { d: '30/10', ic: 'paw', t: 'สัตว์เลี้ยง 20 ชนิด + ของดรอปตกพื้นแบบ RO', x: 'ซื้อไข่ที่ร้านของปุยฝ้าย (เมืองหลวง) หรือร้านเพชร แล้วใช้ไข่เพื่อฟัก สัตว์เลี้ยงเดินตาม มีความหิวและความสนิทสนม 5 ระดับ (ห่างเหิน → ภักดี) ยิ่งสนิทความสามารถยิ่งแรง เช่น EXP เพิ่ม คริติคอล ดูดเลือด ฟื้น HP/MP พ่นไฟใส่ศัตรู · ของที่มอนดรอปจะตกพื้นเป็นถุง เดินทับหรือให้สัตว์เลี้ยงไปเก็บให้ กด Z เก็บรอบตัว กด U เปิดหน้าต่างสัตว์เลี้ยง' },
   { d: '30/10', ic: 'person', t: 'ระบบเพื่อน (Y)', x: 'แตะชื่อผู้เล่นแล้วกด "เพิ่มเพื่อน" ดูว่าเพื่อนออนไลน์อยู่เซิร์ฟเวอร์ไหน แมพไหน กด "ไปหา" เพื่อวาร์ปไปหาเพื่อน และชวนเข้าปาร์ตี้ได้ทันที เพื่อนได้สูงสุด 50 คน' },
@@ -12235,7 +12237,7 @@ const PATCH_NEW = [
   { d: '30/10', ic: 'person', t: 'ภาพแบบ RO: ตัวละครและมอนสเตอร์เป็นสไปรต์พิกเซล', x: 'ตัวละคร NPC มอนสเตอร์ และพาหนะ แสดงเป็นภาพพิกเซลขอบดำหันได้ 8 ทิศแบบเกม 2D คลาสสิก บนแมพ 3 มิติ กล้องมุมเอียงแบบ RO ชื่อและแถบ HP/SP อยู่ใต้เท้า ตัวเลขดาเมจเด้งโค้งตกลง คริติคอลเป็นตัวเลขเหลืองมีดาวแดง ปิด/เปิดได้ในตั้งค่า → ภาพแบบ RO' },
   { d: '30/10', ic: 'star', t: 'เอฟเฟกต์แบบ RO: วงเวทใต้เท้าตอนร่าย ประกายตอนโจมตี เลเวลอัป', x: 'ร่ายเวท/บัฟ/ฮีลมีวงเวทหมุนใต้เท้า ฮีลมีเสาแสงและประกายเขียวลอยขึ้น บัฟมีประกายหมุนรอบตัว ตีโดนมีประกายแตก คริติคอลประกายทอง เลเวลอัปมีเสาแสงทองและเสียงเฉพาะ' },
   { d: '30/10', ic: 'gear', t: 'หน้าต่างลากได้ เปิดได้หลายหน้าต่างพร้อมกัน', x: 'ทุกหน้าต่าง (กระเป๋า ตัวละคร สกิล เควส ฯลฯ) ลากแถบหัวเพื่อย้ายได้ เปิดซ้อนกันได้หลายอัน จำตำแหน่งไว้ให้ กดปุ่มลัดซ้ำ (I C L K J P O) เพื่อปิด ตั้งค่าให้เล่นต่อได้ขณะเปิดหน้าต่างแบบ RO' },
-  { d: '30/10', ic: 'star', t: 'ลบสภาพอากาศ เปลี่ยนเป็นเสียงบรรยากาศประจำแมพ', x: 'ทวีป: นกร้อง ลมพัด · ถ้ำ: น้ำหยด เสียงก้อง · วัดร้าง: เสียงกระซิบ ระฆังไกลๆ นกฮูก เสียงโหยหวน ไม้ลั่น · ป่าอเมซอน (เร็วๆ นี้): แมลง นกแก้ว ลิง กบ สายน้ำ' },
+  { d: '30/10', ic: 'star', t: 'ลบสภาพอากาศ เปลี่ยนเป็นเสียงบรรยากาศประจำแมพ', x: 'ทวีป: นกร้อง ลมพัด · ถ้ำ: น้ำหยด เสียงก้อง · วัดร้าง: เสียงกระซิบ ระฆังไกลๆ นกฮูก เสียงโหยหวน ไม้ลั่น · ป่าหิมพานต์ (เร็วๆ นี้): แมลง นกแก้ว ลิง กบ สายน้ำ' },
   { d: '30/10', ic: 'bag', t: 'แก้บัค: ช่องอุปกรณ์ในกระเป๋ายืดสูงผิดปกติ', x: 'ช่องสวมใส่ในหน้ากระเป๋ากลับมาเป็นแถวกะทัดรัด' },
   { d: '30/10', ic: 'map', t: 'โลกสมจริงขึ้น: เท็กซ์เจอร์ แสงนุ่ม ขอบเส้นตัวละคร', x: 'พื้นหญ้า ดิน ทราย หินปูพื้น ผนังปูน หลังคากระเบื้อง ไม้ เปลือกไม้ ใบไม้ มีลายจริงทั้งแมพหลักและวัดร้าง ตัวละคร/พาหนะผิวเรียบไม่เหลี่ยม มีขอบเส้นแบบการ์ตูน แสงแบบเซล และทรงผมใหม่แบบอนิเมะ' },
   { d: '29/10', ic: 'paw', t: 'พาหนะหลายที่นั่ง 2–4 คน 6 คัน', x: 'ไดโนเสาร์เร็กซ์ (2) รถตุ๊กๆ (3) รถจี๊ปลุยป่า (4) เรือหางยาว (4) ช้างศึกบุษบก (3) รถม้าราชสำนัก (4) เพื่อนกด "ขึ้นนั่งด้วย" จากการ์ดผู้เล่นแล้วเคลื่อนที่ตามผู้ขับ กดเดินเพื่อลง ล้อ/ใบพัดหมุนจริง' },
@@ -12261,12 +12263,13 @@ ANNOUNCE.unshift({ tag: 'อัปเดตใหญ่', title: 'ตีบว�
 ANNOUNCE.unshift({ tag: 'อัปเดตใหญ่', title: 'บอส MVP มาแล้ว! และกรอบโปรไฟล์ 17 แบบ', body: 'บอส MVP เกิดตามเวลาทั้งเซิร์ฟเวอร์ ใครปิดฉากได้ชื่อประกาศให้ทุกคนเห็น · แตะรูปตัวละครเพื่อดูอุปกรณ์แบบ RO และเปลี่ยนกรอบโปรไฟล์' });
 ANNOUNCE.unshift({ tag: 'อัปเดต', title: 'สกิลทรีแบบ RO มาแล้ว (กด P)', body: 'ทุกอาชีพได้สกิลติดตัว 4 สกิล และสกิลใหม่อีก 2 สกิล เรียนตามเงื่อนไขในทรี และเลือกใส่ปุ่มลัดได้เอง' });
 ANNOUNCE.unshift({ tag: 'กิจกรรม', title: '🎃 ฮาโลวีน: ไปหาแม่มดปัมกิ้นที่จัตุรัสเมืองหลวง', body: 'มอนสเตอร์ทุกตัวดรอปลูกอมฮาโลวีน นำไปแลกชุดฟักทอง หมวกแม่มด ชุดแวมไพร์ และกล่องนำโชคที่อาจได้อุปกรณ์ขั้นเทพในตำนาน! รับเควสประจำวันได้ทุกวัน' });
-ANNOUNCE.unshift({ tag: 'แมพใหม่', title: '🌴 ป่าอเมซอนมรณะเปิดแล้ว! (Lv.15+)', body: 'เดินไปทางขวาสุดของแดนสยาม ผ่านซุ้มประตูเถาวัลย์ เจอปลาช่อนผี งูเหลือมยักษ์ ต้นไทรผีสิง และหมู่บ้านยักษ์ป่า · บอส MVP พญางูเหลือมรออยู่ที่หนองน้ำ' });
+ANNOUNCE.unshift({ tag: 'แมพใหม่', title: '🌴 ป่าหิมพานต์มรณะเปิดแล้ว! (Lv.15+)', body: 'เดินไปทางขวาสุดของแดนสยาม ผ่านซุ้มประตูเถาวัลย์ เจอปลาช่อนผี งูเหลือมยักษ์ ต้นไทรผีสิง และหมู่บ้านยักษ์ป่า · บอส MVP พญางูเหลือมรออยู่ที่หนองน้ำ' });
 ANNOUNCE.unshift({ tag: 'อัปเดตใหญ่', title: 'ตัวละครโฉมใหม่แบบภาพวาด 2D + ท่าทาง 98 ท่า!', body: 'ตัวละครทุกตัวในเกมเป็นภาพวาดสวยแบบ RO หันได้ 8 ทิศ · กดปุ่ม 😊 เพื่อเลือกท่าทางกว่า 98 ท่า ทั้งเต้น ตีลังกา รำไทย และท่าตลกๆ' });
 ANNOUNCE.unshift({ tag: 'อัปเดต', title: 'อัศวินเดินและฟันดาบแบบภาพวาดเต็มเฟรม!', body: 'อัศวินมีท่าเดิน 8 เฟรมทุกทิศ และท่าฟันดาบ 6 เฟรมแบบ RO อาชีพอื่นตามมาเร็วๆ นี้' });
 
 ANNOUNCE.unshift({ tag: 'ข่าวใหญ่', title: 'ยินดีต้อนรับสู่ สยาม RPG', hot: 1, body: 'เกม 2.5D ธีมไทยที่พัฒนาต่อจาก Aurelion Quest ตอนนี้ระบบทั้งหมดของเกมเดิมเล่นได้ครบ ส่วนวัดร้างกลางป่า (Lv.6+) มีผีไทย 20 ชนิดให้ปราบ เมืองและมอนสเตอร์ธีมไทยจะทยอยมาในอัปเดตถัดไป', date: '30 ต.ค. 2569' });
 ANNOUNCE.unshift({ tag: 'อัปเดต', title: 'v0.2: มอนสเตอร์และบอสธีมไทย', hot: 1, body: 'ทุ่งนามีวุ้นใบเตยกับหมาใน ถ้ำมียักษ์ศิลาเฝ้า ป่าลึกมีบึ้งยักษ์และพญางูเหลือม ความแรงและของรางวัลเท่าเดิม เควสเดิมทำต่อได้ตามปกติ', date: '30 ต.ค. 2569' });
+ANNOUNCE.unshift({ tag: 'อัปเดต', title: 'v0.3: เมือง ถ้ำ ป่า และชาวเมืองเป็นไทยแล้ว', hot: 1, body: 'ถ้ำใต้พิภพตอนนี้ชื่อถ้ำนาคา ป่าลึกทางตะวันออกคือป่าหิมพานต์ รับเควสแรกจากนายกองลำดวนในเมืองหลวง ความคืบหน้าเควสเดิมยังอยู่ครบ', date: '30 ต.ค. 2569' });
 /* ============================================================
    RO-style presentation: casting circles, hit sparks, level-up
    column, skill shout, RO click/hit sounds
@@ -12629,7 +12632,7 @@ UI.extraPanels = UI.extraPanels || {}; UI.extraPanels.friends = 'pFriends';
 UI.pFriends = function () {
   const L = Friends.list(), ids = Object.keys(L).sort((a, b) => (Friends.where[b] ? 1 : 0) - (Friends.where[a] ? 1 : 0) || L[a].n.localeCompare(L[b].n));
   const job = j => ((JOBS[j] || CLASSES[j] || {}).name) || '';
-  const zn = { world: 'แดนสยาม', dungeon: 'ถ้ำผลึก', temple: 'วัดร้าง', amazon: 'ป่าอเมซอน' };
+  const zn = { world: 'แดนสยาม', dungeon: 'ถ้ำนาคา', temple: 'วัดร้าง', amazon: 'ป่าหิมพานต์' };
   const reqs = Friends.reqs.map(r => `<div class="fr req"><span class="dotst on"></span><div class="frn"><b>${esc(r.n)}</b><small>Lv.${r.lv} · ${job(r.j)} · ขอเป็นเพื่อน</small></div><div class="fract"><button class="btn sm primary" data-fr="ok:${r.from}">ตอบรับ</button><button class="btn sm ghost" data-fr="no:${r.from}">ปฏิเสธ</button></div></div>`).join('');
   const rows = ids.map(uid => { const f = L[uid], w = Friends.where[uid]; return `<div class="fr ${w ? 'on' : ''}"><span class="dotst ${w ? 'on' : ''}"></span><div class="frn"><b>${esc(f.n)}</b><small>Lv.${f.lv} · ${job(f.j)} · ${w ? `ออนไลน์ CH${w.ch} · ${zn[w.st.zn] || w.st.zn}` : 'ออฟไลน์'}</small></div><div class="fract">${w ? `<button class="btn sm" data-fr="go:${uid}">ไปหา</button><button class="btn sm ghost" data-fr="pt:${uid}" ${Remote.map.get(uid) ? '' : 'disabled'}>ชวนปาร์ตี้</button>` : ''}<button class="btn sm ghost danger" data-fr="rm:${uid}">ลบ</button></div></div>`; }).join('') || '<p class="muted">ยังไม่มีเพื่อน แตะชื่อผู้เล่นคนอื่นแล้วกด "เพิ่มเพื่อน" หรือเลือกจากผู้เล่นใกล้ตัวด้านล่าง</p>';
   const near = [...Remote.map.values()].filter(p => p.st && p.zone === Player.zone && !Friends.is(p.uid) && !Net.stale(p)).slice(0, 12).map(p => `<div class="fr"><span class="dotst on"></span><div class="frn"><b>${esc(p.name)}</b><small>Lv.${p.st.lv} · ${job(p.st.j || p.st.c)}</small></div><div class="fract"><button class="btn sm" data-fr="add:${p.uid}">เพิ่มเพื่อน</button></div></div>`).join('');
@@ -12722,8 +12725,8 @@ Object.assign(ITEMS, {
   n_moonflower: { name: 'ดอกจันทร์เรืองแสง', kind: 'mat', quest: true, price: 0, desc: 'ดอกไม้ที่เรืองแสงอ่อนๆ ในทุ่งหญ้าทางใต้ของเมือง', icon: 'flower' },
   n_ore: { name: 'แร่เหล็กดำ', kind: 'mat', quest: true, price: 0, desc: 'แร่หนักสีดำจากเนินหินใกล้ค่ายยักษ์น้อย', icon: 'ore' },
   n_papaya: { name: 'มะละกอป่า', kind: 'mat', quest: true, price: 0, desc: 'มะละกอดิบลูกโตจากดงไม้ทางตะวันตก', icon: 'fruit' },
-  n_letter1: { name: 'จดหมายถึงนายพรานรุก', kind: 'mat', quest: true, price: 0, desc: 'จดหมายผนึกครั่งจากที่ทำการไปรษณีย์', icon: 'letter' },
-  n_letter2: { name: 'พัสดุถึงพ่อมดซาวิน', kind: 'mat', quest: true, price: 0, desc: 'กล่องเล็กๆ ที่สั่นได้เอง… อย่าเปิดดูนะ', icon: 'letter' },
+  n_letter1: { name: 'จดหมายถึงนายพรานรุ่ง', kind: 'mat', quest: true, price: 0, desc: 'จดหมายผนึกครั่งจากที่ทำการไปรษณีย์', icon: 'letter' },
+  n_letter2: { name: 'พัสดุถึงพ่อมดสวิน', kind: 'mat', quest: true, price: 0, desc: 'กล่องเล็กๆ ที่สั่นได้เอง… อย่าเปิดดูนะ', icon: 'letter' },
   n_somtam: { name: 'ส้มตำป้าแตง (กล่อง)', kind: 'mat', quest: true, price: 0, desc: 'ส้มตำรสแซ่บสำหรับทหารยามที่หน้าประตูเมือง', icon: 'fruit' }
 });
 
@@ -12733,17 +12736,17 @@ Object.assign(NPCS, {
   boran: { name: 'ช่างโบรัน', role: 'ช่างตีเหล็กประจำเมือง', sheet: 'knight', zone: 'world', x: 24, z: 63, face: -1.6, voice: [.6, .95], hair: 'brown', pose: 9, lines: ['เหล็กดีต้องตีตอนร้อน!', 'อาวุธทื่อแล้วเอามาให้ข้าลับได้นะ', 'ได้ยินว่าเนินหินใกล้ค่ายยักษ์น้อยมีแร่เหล็กดำ'] },
   tonkhao: { name: 'น้องต้นข้าว', role: 'เด็กน้อยผู้ตามหาแมว', sheet: 'adventurer', zone: 'world', x: -6, z: 57, face: 0, voice: [1.55, 1.05], hair: 30, pose: 10, lines: ['ส้มจี๊ดหายไปไหนนะ…', 'ฮือๆ คิดถึงส้มจี๊ด', 'พี่เห็นแมวสีส้มบ้างไหม?'] },
   sompong: { name: 'บุรุษไปรษณีย์สมปอง', role: 'ไปรษณีย์ส่งด่วน', sheet: 'ninja', zone: 'world', x: 6, z: 82, face: 3.1, voice: [1.1, 1.25], hair: 210, pose: 13, lines: ['ส่งไว ส่งชัวร์ ส่งถึงมือ!', 'วันนี้จดหมายเยอะเหลือเกิน', 'มีใครอยากช่วยส่งของบ้างไหม?'] },
-  lisa: { name: 'นักสำรวจลิซ่า', role: 'นักทำแผนที่', sheet: 'archer', zone: 'world', x: -20, z: 80, face: 1.2, voice: [1.3, 1.1], hair: 330, pose: 11, lines: ['แผนที่ทวีปนี้ยังมีที่ว่างอีกเยอะ!', 'เคยไปถึงประตูมิติทางเหนือสุดไหม?', 'สำรวจให้ทั่วแล้วกลับมาเล่าให้ฟังนะ'] },
-  pipo: { name: 'นักดนตรีปีโป้', role: 'นักดนตรีเร่', sheet: 'mage', zone: 'world', x: -1, z: 71, face: 3.1, voice: [1.2, 1.15], hair: 275, pose: 10, lines: ['♪ ลา ลา ลั้น ลา ~', 'เพลงนี้แต่งให้เมืองสยาม นะ', 'เต้นด้วยกันไหม? (อีโมต: เต้น)'] },
-  borg: { name: 'ทหารยามบอร์ก', role: 'ยามเฝ้าประตูเหนือ', sheet: 'knight', zone: 'world', x: 5, z: 24, face: 3.1, voice: [.7, 1], hair: 'black', pose: 0, lines: ['หยุด! อ๋อ… นักผจญภัยนี่เอง ผ่านไปได้', 'หิวจัง อยากกินส้มตำป้าแตง', 'หมาในช่วงนี้กล้าเข้ามาใกล้ประตูเมืองมาก'] },
+  lisa: { name: 'นักสำรวจลลิตา', role: 'นักทำแผนที่', sheet: 'archer', zone: 'world', x: -20, z: 80, face: 1.2, voice: [1.3, 1.1], hair: 330, pose: 11, lines: ['แผนที่ทวีปนี้ยังมีที่ว่างอีกเยอะ!', 'เคยไปถึงประตูมิติทางเหนือสุดไหม?', 'สำรวจให้ทั่วแล้วกลับมาเล่าให้ฟังนะ'] },
+  pipo: { name: 'นักดนตรีปี่แก้ว', role: 'นักดนตรีเร่', sheet: 'mage', zone: 'world', x: -1, z: 71, face: 3.1, voice: [1.2, 1.15], hair: 275, pose: 10, lines: ['♪ ลา ลา ลั้น ลา ~', 'เพลงนี้แต่งให้เมืองสยาม นะ', 'เต้นด้วยกันไหม? (อีโมต: เต้น)'] },
+  borg: { name: 'ทหารยามบุญรอด', role: 'ยามเฝ้าประตูเหนือ', sheet: 'knight', zone: 'world', x: 5, z: 24, face: 3.1, voice: [.7, 1], hair: 'black', pose: 0, lines: ['หยุด! อ๋อ… นักผจญภัยนี่เอง ผ่านไปได้', 'หิวจัง อยากกินส้มตำป้าแตง', 'หมาในช่วงนี้กล้าเข้ามาใกล้ประตูเมืองมาก'] },
   tang: { name: 'ป้าแตง', role: 'แม่ค้าส้มตำ', sheet: 'adventurer', zone: 'world', x: -24, z: 68, face: 1.5, voice: [1.15, 1.15], hair: 15, pose: 15, lines: ['ส้มตำจ้า ส้มตำ แซ่บๆ!', 'มะละกอหมดอีกแล้ว ทำไงดีน้า', 'เผ็ดแค่ไหนบอกป้าได้เลย'] },
-  savin: { name: 'พ่อมดเฒ่าซาวิน', role: 'ผู้รอบรู้เรื่องสัตว์อสูร', sheet: 'mage', zone: 'world', x: -14, z: 88, face: .4, voice: [.65, .85], hair: 'white', pose: 11, lines: ['อืม… พลังมานาในอากาศวันนี้แปรปรวน', 'สัตว์เลี้ยงที่ผูกพันกับเจ้าของจะแข็งแกร่งขึ้น', 'ค้างคาวแม่ไก่ในถ้ำนั่น… น่าศึกษายิ่งนัก'] },
+  savin: { name: 'ฤๅษีสวิน', role: 'ผู้รอบรู้เรื่องสัตว์อสูร', sheet: 'mage', zone: 'world', x: -14, z: 88, face: .4, voice: [.65, .85], hair: 'white', pose: 11, lines: ['อืม… พลังมานาในอากาศวันนี้แปรปรวน', 'สัตว์เลี้ยงที่ผูกพันกับเจ้าของจะแข็งแกร่งขึ้น', 'ค้างคาวแม่ไก่ในถ้ำนั่น… น่าศึกษายิ่งนัก'] },
   mira: { name: 'นักวิจัยมิรา', role: 'นักพฤกษศาสตร์แห่งป่ากระซิบ', sheet: 'priest', zone: 'world', x: -18, z: -30, face: 0, voice: [1.25, 1.05], hair: 185, pose: 11, lines: ['เห็ดที่นี่เรืองแสงได้ น่าสนใจมาก!', 'ระวังหมาในนะ พวกมันล่าเป็นฝูง', 'ฉันกำลังเขียนตำราพืชพรรณแห่งป่ากระซิบ'] }
 });
 // voices/looks for the original NPCs too
 Object.assign(NPCS.lyra, { voice: [1.05, 1.05], hair: 0, pose: 9, lines: ['ทหารทุกนายเตรียมพร้อม!', 'เมืองนี้ต้องปลอดภัย', 'นักผจญภัยหน้าใหม่ มาลงทะเบียนกับฉันได้'] });
 Object.assign(NPCS.orin, { voice: [.8, .9], hair: 'white', pose: 11, lines: ['ความรู้คืออาวุธที่ไม่มีวันทื่อ', 'วันนี้อยากทดสอบปัญญาไหม?', 'อ่านหนังสือวันละนิด จิตแจ่มใส'] });
-Object.assign(NPCS.pip, { voice: [1.1, 1.2], hair: 40, pose: 15, lines: ['ยาฟื้นพลังลดราคาวันนี้!', 'ของดี ราคาถูก มีที่ร้านพิปเท่านั้น', 'ก่อนออกไปผจญภัยอย่าลืมซื้อยานะ'] });
+Object.assign(NPCS.pip, { voice: [1.1, 1.2], hair: 40, pose: 15, lines: ['ยาฟื้นพลังลดราคาวันนี้!', 'ของดี ราคาถูก มีที่ร้านพิพัฒน์เท่านั้น', 'ก่อนออกไปผจญภัยอย่าลืมซื้อยานะ'] });
 Object.assign(NPCS.mina, { voice: [1.35, 1.05], hair: 320, pose: 15, lines: ['ชุดใหม่มาแล้วจ้า!', 'ใส่หมวกแกะแล้วน่ารักมากเลยนะ', 'แฟชั่นก็สำคัญพอๆ กับอาวุธ'] });
 Object.assign(NPCS.kaze, { voice: [1, 1.15], hair: 'black', pose: 13, lines: ['หอมกลิ่นซุปเห็ด…', 'นินจาก็ต้องกินให้อิ่ม', 'วันนี้จะทำเมนูอะไรดีนะ'] });
 Object.assign(NPCS.rook, { voice: [.75, .95], hair: 25, pose: 11, lines: ['ป่ากระซิบไม่เคยหลับ', 'รอยเท้าหมาในสดๆ อยู่แถวนี้', 'ธนูของข้าไม่เคยพลาดเป้า'] });
@@ -12779,10 +12782,10 @@ const Q2 = {
     text: 'พี่… ส้มจี๊ดแมวของหนูวิ่งตามผีเสื้อเข้าไปในป่ากระซิบทางตะวันตกตั้งแต่เมื่อวานแล้ว ฮือๆ พี่ช่วยไปตามหาให้หนูหน่อยได้ไหม?',
     done: 'ส้มจี๊ด! ขอบคุณพี่มากๆ เลย! นี่… หนูให้ไข่แมวที่ส้มจี๊ดเพิ่งออก… เอ๊ะ แมวไม่ออกไข่นี่นา ช่างเถอะ! ไข่ใบนี้พี่เอาไปฟักเลยนะ', rew: { xp: 200, coin: 60, items: [['egg_cat', 1], ['pet_food', 5]] } },
   n_mail: { type: 'side', giver: 'sompong', req: 'm1', turnTo: 'rook', title: 'จดหมายด่วนถึงป่ากระซิบ', give: [['n_letter1', 1]], obj: [{ k: 'collect', item: 'n_letter1', n: 1 }],
-    text: 'แย่แล้ว! จดหมายด่วนฉบับนี้ต้องส่งถึง "นายพรานรุก" ในป่ากระซิบวันนี้ แต่ขาฉันเคล็ด ช่วยเอาไปส่งแทนหน่อยนะ!',
+    text: 'แย่แล้ว! จดหมายด่วนฉบับนี้ต้องส่งถึง "นายพรานรุ่ง" ในป่ากระซิบวันนี้ แต่ขาฉันเคล็ด ช่วยเอาไปส่งแทนหน่อยนะ!',
     done: 'จดหมายจากบ้านเกิดข้า… ขอบใจมากนักผจญภัย นี่ค่าเหนื่อย', rew: { xp: 120, coin: 120, items: [['hp_s', 2]] }, take: true },
   n_mail2: { type: 'side', giver: 'sompong', req: 'n_mail', turnTo: 'savin', title: 'พัสดุสั่นได้', give: [['n_letter2', 1]], obj: [{ k: 'collect', item: 'n_letter2', n: 1 }],
-    text: 'ฝีมือส่งของของเธอเยี่ยมมาก! มีพัสดุถึง "พ่อมดเฒ่าซาวิน" ที่บ้านทางใต้ของเมือง แต่… กล่องมันสั่นได้เองแฮะ ฉันไม่กล้าถือ ฝากด้วยนะ!',
+    text: 'ฝีมือส่งของของเธอเยี่ยมมาก! มีพัสดุถึง "ฤๅษีสวิน" ที่บ้านทางใต้ของเมือง แต่… กล่องมันสั่นได้เองแฮะ ฉันไม่กล้าถือ ฝากด้วยนะ!',
     done: 'อ้า ไข่มังกรจำลองของข้ามาถึงแล้ว! อย่ากังวลไป มันไม่กัดหรอก… ส่วนใหญ่น่ะ รับรางวัลไปเถอะ', rew: { xp: 150, coin: 150, items: [['pet_treat', 1]] }, take: true },
   n_explore: { type: 'side', giver: 'lisa', req: 'm1', title: 'สามมุมโลกของนักทำแผนที่', obj: [
       { k: 'reach', zone: 'world', x: -92, z: 120, r: 7, label: 'สำรวจทุ่งเห็ดตะวันตกเฉียงใต้' },
@@ -12793,7 +12796,7 @@ const Q2 = {
   n_level: { type: 'side', giver: 'lisa', req: 'n_explore', title: 'นักผจญภัยตัวจริง', obj: [{ k: 'level', n: 10 }],
     text: 'นักสำรวจที่ดีต้องแข็งแกร่งด้วย ฝึกฝนจนถึงเลเวล 10 แล้วกลับมาหาฉัน ฉันมีของขวัญพิเศษให้!', gems: 30,
     done: 'เลเวล 10 แล้ว! สุดยอดเลย นี่เพชรสำหรับนักผจญภัยตัวจริง', rew: { xp: 300, coin: 300, items: [['hp_l', 3]] } },
-  n_song: { type: 'side', giver: 'pipo', title: 'เต้นรำกลางจัตุรัส', obj: [{ k: 'emote', id: 'dance', npc: 'pipo', label: 'เต้น (อีโมต 💃) ใกล้ปีโป้' }, { k: 'emote', id: 'cheer', npc: 'pipo', label: 'ส่งเสียงเฮ (อีโมต 🎉) ใกล้ปีโป้' }],
+  n_song: { type: 'side', giver: 'pipo', title: 'เต้นรำกลางจัตุรัส', obj: [{ k: 'emote', id: 'dance', npc: 'pipo', label: 'เต้น (อีโมต 💃) ใกล้ปี่แก้ว' }, { k: 'emote', id: 'cheer', npc: 'pipo', label: 'ส่งเสียงเฮ (อีโมต 🎉) ใกล้ปี่แก้ว' }],
     text: '♪ เพลงใหม่ของฉันต้องมีคนเต้นด้วยถึงจะสนุก! กดปุ่มอีโมต 😊 ข้างแชทแล้วเลือก "เต้น" กับ "เฮ!" ใกล้ๆ ฉันหน่อยนะ ♪',
     done: '♪ เยี่ยมไปเลย! ทั้งจัตุรัสครึกครื้น! ♪ นี่ค่าขนมจากหมวกนักดนตรีของฉัน', rew: { xp: 90, coin: 150, items: [['pet_treat', 1]] } },
   n_patrol: { type: 'daily', giver: 'borg', req: 'm1', title: 'ลาดตระเวนประตูเหนือ', obj: [{ k: 'kill', mon: 'wolf', n: 6 }, { k: 'kill', mon: 'goblin', n: 3 }],
@@ -12803,13 +12806,13 @@ const Q2 = {
     text: 'ตายแล้ว มะละกอหมด! ดงไม้ทางตะวันตกนอกกำแพงเมืองมีมะละกอป่าลูกโตๆ ช่วยเก็บมาให้ป้า 5 ลูกนะจ๊ะ (เดินไปใกล้แล้วกด F)',
     done: 'ลูกโตสวยเชียว! เดี๋ยวป้าตำให้เลย', rew: { xp: 110, coin: 80, items: [['hp_s', 3]] }, take: true },
   n_somtam2: { type: 'side', giver: 'tang', req: 'n_somtam', turnTo: 'borg', title: 'ส้มตำส่งด่วนถึงประตูเหนือ', give: [['n_somtam', 1]], obj: [{ k: 'collect', item: 'n_somtam', n: 1 }],
-    text: 'ส้มตำกล่องนี้ป้าตั้งใจทำให้ "ทหารยามบอร์ก" ที่ประตูเหนือ เขาบ่นอยากกินมาหลายวันแล้ว ช่วยเอาไปส่งให้หน่อยนะ',
+    text: 'ส้มตำกล่องนี้ป้าตั้งใจทำให้ "ทหารยามบุญรอด" ที่ประตูเหนือ เขาบ่นอยากกินมาหลายวันแล้ว ช่วยเอาไปส่งให้หน่อยนะ',
     done: 'ส้มตำป้าแตง!? เผ็ด… แต่อร่อยมาก! ขอบใจนะ นี่ยาของกองทหาร เอาไปเลย', rew: { xp: 120, coin: 100, items: [['hp_l', 2]] }, take: true },
   n_petfriend: { type: 'side', giver: 'savin', title: 'เพื่อนคู่ใจ', obj: [{ k: 'pet', label: 'เรียกสัตว์เลี้ยงออกมา' }, { k: 'feed', n: 2, label: 'ให้อาหารสัตว์เลี้ยง' }],
     text: 'เจ้ามีสัตว์เลี้ยงหรือยัง? สัตว์ที่ผูกพันกับเจ้าของจะแข็งแกร่งขึ้นตามความสนิทสนม ไปซื้อไข่ที่ร้านปุยฝ้าย ฟักออกมา แล้วให้อาหารน้อง 2 ครั้ง ข้าจะสอนเคล็ดลับให้',
     done: 'ดูสิ น้องมีความสุขมาก เคล็ดลับคือ ป้อนตอนหิว อย่าป้อนตอนอิ่ม! รับขนมพรีเมียมนี่ไป', rew: { xp: 120, coin: 80, items: [['pet_treat', 2], ['pet_food', 5]] } },
   n_bat: { type: 'side', giver: 'savin', req: 'm2', minLv: 6, title: 'ปีกค้างคาวแม่ไก่', obj: [{ k: 'kill', mon: 'bat', n: 6 }, { k: 'kill', mon: 'skel', n: 3 }],
-    text: 'ค้างคาวแม่ไก่กับทหารโครงกระดูกกรุงเก่าในถ้ำผลึกดูดพลังมานาจากผลึก ข้าต้องการศึกษามัน ปราบค้างคาว 6 ตัว กับโครงกระดูก 3 ตัว แล้วข้าจะมอบแหวนมานาให้',
+    text: 'ค้างคาวแม่ไก่กับทหารโครงกระดูกกรุงเก่าในถ้ำนาคาดูดพลังมานาจากผลึก ข้าต้องการศึกษามัน ปราบค้างคาว 6 ตัว กับโครงกระดูก 3 ตัว แล้วข้าจะมอบแหวนมานาให้',
     done: 'น่าทึ่ง! พลังผลึกพวกนี้… รับแหวนมานาไป มันจะช่วยเรื่องเวทมนตร์ของเจ้า', rew: { xp: 520, coin: 260, items: [['r_mana', 1]] } },
   n_shroom: { type: 'side', giver: 'mira', req: 'm1', title: 'ตำราพืชพรรณป่ากระซิบ', obj: [{ k: 'kill', mon: 'shroom', n: 8 }, { k: 'reach', zone: 'world', x: -100, z: -22, r: 8, label: 'สำรวจดงเห็ดตะวันตก' }],
     text: 'เห็ดโคนซุกซนที่ดงเห็ดตะวันตกของป่าเป็นพันธุ์ใหม่! ช่วยไปสำรวจดงเห็ดนั้นและปราบเห็ด 8 ตัว ฉันจะได้บันทึกลงตำรา',
@@ -13128,7 +13131,7 @@ const MVP_DEFS = {
     drops: [['m_cap', 1], ['rf_stone', 1], ['rf_stone2', .35], ['rf_guard', .15], ['hp_l', .9], ['r_mana', .25], ['egg_fox', .05]] },
   mvp_warlord: { base: 'goblin', tier: 'mvp', name: 'ท้าวยักษ์คุมทุ่ง', lvl: 15, k: 2.1, hp: 4200, atk: 42, def: 15, xp: 3000, coin: [500, 800], period: 1500, zone: 'world', x: 82, z: -96, place: 'ค่ายยักษ์น้อย',
     drops: [['rf_stone', 1], ['rf_stone2', .45], ['rf_guard', .2], ['w_mith', .35], ['a_moon', .25], ['r_heart', .08], ['egg_monkey', .06]] },
-  mvp_batqueen: { base: 'bat', tier: 'mini', name: 'นางพญาค้างคาว', lvl: 12, k: 2.0, hp: 1600, atk: 32, def: 8, xp: 1100, coin: [200, 320], period: 720, zone: 'dungeon', x: DX - 2, z: -30, place: 'ถ้ำผลึกชั้นบน',
+  mvp_batqueen: { base: 'bat', tier: 'mini', name: 'นางพญาค้างคาว', lvl: 12, k: 2.0, hp: 1600, atk: 32, def: 8, xp: 1100, coin: [200, 320], period: 720, zone: 'dungeon', x: DX - 2, z: -30, place: 'ถ้ำนาคาชั้นบน',
     drops: [['mp_s', 1], ['rf_stone', .7], ['r_mana', .2], ['egg_bat', .05]] },
   mvp_deathknight: { base: 'skel', tier: 'mvp', name: 'แม่ทัพกระดูกกรุงเก่า', lvl: 18, k: 1.8, hp: 6000, atk: 50, def: 20, xp: 4800, coin: [700, 1000], period: 1800, zone: 'dungeon', x: DX + 4, z: -58, place: 'ทางเดินโครงกระดูก',
     drops: [['m_bone', 1], ['rf_stone2', .6], ['rf_guard', .3], ['w_crys', .06], ['r_heart', .1], ['a_moon', .35], ['egg_dragon', .02]] }
@@ -13185,7 +13188,7 @@ const MVPSys = {
     S.stats.mvpKills = (S.stats.mvpKills || 0) + (D.tier === 'mvp' ? 1 : 0); Save.write();
   }
 };
-const zoneTH = z => ({ world: 'แดนสยาม', dungeon: 'ถ้ำผลึก', temple: 'วัดร้าง', amazon: 'ป่าอเมซอน' }[z] || z);
+const zoneTH = z => ({ world: 'แดนสยาม', dungeon: 'ถ้ำนาคา', temple: 'วัดร้าง', amazon: 'ป่าหิมพานต์' }[z] || z);
 {
   const omi = Monsters.init.bind(Monsters); Monsters.init = function () { omi(); MVPSys.init(); };
   const ok = Combat.kill.bind(Combat);
@@ -13793,8 +13796,8 @@ UI.pEvents = function () {
 /* ============================================================
    Amazon UI: jungle shop, minimap / world-map tab, patch notes.
    ============================================================ */
-SHOPS.jungle = ['ร้านเสบียงป่าของโฮเซ่', 'ดูยาแก้พิษและอุปกรณ์', () => JUNGLE_SHOP, 1];
-Object.assign(NPC_IDLE, { marco: 'ค่ายนี้เป็นที่ปลอดภัยแห่งเดียวในป่า พักให้หายเหนื่อยก่อนออกไปนะ', emma: 'สิ่งมีชีวิตในป่านี้มีมากกว่าหมื่นชนิด ฉันศึกษาไปได้แค่นิดเดียวเอง', jose: 'ซื้อยาแก้พิษไว้เยอะๆ นะ กบพิษกับงูเหลือมยักษ์ไม่ปรานีใคร' });
+SHOPS.jungle = ['ร้านเสบียงป่าของโชติ', 'ดูยาแก้พิษและอุปกรณ์', () => JUNGLE_SHOP, 1];
+Object.assign(NPC_IDLE, { marco: 'ค่ายนี้เป็นที่ปลอดภัยแห่งเดียวในป่า พักให้หายเหนื่อยก่อนออกไปนะ', emma: 'สิ่งมีชีวิตในป่านี้มีมากกว่าหมื่นชนิด ฉันศึกษาไปได้แค่นิดเดียวเอง', jose: 'ซื้อยาแก้พิษไว้เยอะๆ นะ อึ่งพิษกับงูเหลือมยักษ์ไม่ปรานีใคร' });
 UI.buildAmazonMap = function () {
   const N = 220, c = document.createElement('canvas'); c.width = N; c.height = N; const x = c.getContext('2d'); const img = x.createImageData(N, N);
   for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
@@ -13811,9 +13814,9 @@ UI.buildAmazonMap = function () {
   const opm = UI.pMap.bind(UI);
   UI.pMap = function (o) {
     const P = Player, S = Save.d; if (!o.tab && P.zone === 'amazon') o.tab = 'amazon';
-    if (o.tab !== 'amazon') { opm(o); const t = this.el.pbody.querySelector('.maptabs'); if (t && !t.querySelector('[data-mt="amazon"]')) t.insertAdjacentHTML('beforeend', `<button class="tab" data-mt="amazon">ป่าอเมซอน${S.level < AMAZON_LV ? ' 🔒' : ''}</button>`); return; }
+    if (o.tab !== 'amazon') { opm(o); const t = this.el.pbody.querySelector('.maptabs'); if (t && !t.querySelector('[data-mt="amazon"]')) t.insertAdjacentHTML('beforeend', `<button class="tab" data-mt="amazon">ป่าหิมพานต์${S.level < AMAZON_LV ? ' 🔒' : ''}</button>`); return; }
     this.panelOpt.tab = 'amazon'; if (!this.amzImg) this.buildAmazonMap();
-    this.setPanel(`${icon('map')} แผนที่ป่าอเมซอนมรณะ${o.warp ? ' · เลือกจุดวาร์ป' : ''}`, `<div class="tabs maptabs"><button class="tab" data-mt="world">แดนสยาม</button><button class="tab" data-mt="temple">วัดร้างกลางป่า</button><button class="tab on" data-mt="amazon">ป่าอเมซอน</button></div>
+    this.setPanel(`${icon('map')} แผนที่ป่าหิมพานต์มรณะ${o.warp ? ' · เลือกจุดวาร์ป' : ''}`, `<div class="tabs maptabs"><button class="tab" data-mt="world">แดนสยาม</button><button class="tab" data-mt="temple">วัดร้างกลางป่า</button><button class="tab on" data-mt="amazon">ป่าหิมพานต์</button></div>
       <div class="mapwrap"><canvas id="bigmap" width="660" height="660"></canvas></div>
       <div class="warps"><h4>จุดวาร์ป</h4>${WARPS.map(w => `<button class="btn ${S.warps[w.id] ? '' : 'ghost'}" data-w="${w.id}" ${S.warps[w.id] && o.warp ? '' : 'disabled'}>${w.name}${S.warps[w.id] ? '' : ' (ยังไม่ค้นพบ)'}</button>`).join('')}
       <p class="muted">ทางเข้า: ถนนสายตะวันออกของแดนสยาม (ขวาสุดของแผนที่) ต้องมีเลเวล ${AMAZON_LV} ขึ้นไป · มอนสเตอร์ Lv.15–26 ${o.warp ? '· แตะชื่อจุดวาร์ปเพื่อเดินทาง' : ''}</p></div>`, true);
@@ -13821,9 +13824,9 @@ UI.buildAmazonMap = function () {
     const tp = (wx, wz) => [(wx - AX + 110) * 3, (wz + 110) * 3]; x.font = '600 13px Mitr, sans-serif'; x.textAlign = 'center';
     const lbl = (t, wx, wz, c = '#fff') => { const [a, b] = tp(wx, wz); x.lineWidth = 4; x.strokeStyle = 'rgba(8,16,8,.85)'; x.strokeText(t, a, b); x.fillStyle = c; x.fillText(t, a, b); };
     for (const [ax, az, r, n] of AMAZON_AREAS) lbl(n, AX + ax, az - r * .6, '#f3e7cc');
-    const sp = {}; for (const [t, sx, sz] of SPAWNS) if (sx > 2500 && !sp[t]) { sp[t] = 1; const [a, b] = tp(sx, sz); x.fillStyle = '#ff8a5a'; x.beginPath(); x.arc(a, b, 6, 0, TAU); x.fill(); lbl(MONSTERS[t].name + ' Lv.' + MONSTERS[t].lvl, sx, sz + 6, '#ffd0b0'); }
-    for (const m of MVPSys.list) if (m.zone === 'amazon') { const [a, b] = tp(m.home.x, m.home.z); x.fillStyle = m.d.mvp === 'mvp' ? '#ffb02e' : '#c46bff'; x.beginPath(); x.arc(a, b, 9, 0, TAU); x.fill(); lbl((m.d.mvp === 'mvp' ? '👑 ' : '★ ') + m.d.name, m.home.x, m.home.z - 4, '#ffe08a'); }
-    for (const n of NPCList) if (n.zone === 'amazon') { const [a, b] = tp(n.x, n.z); x.fillStyle = '#ffd24a'; x.beginPath(); x.arc(a, b, 5, 0, TAU); x.fill(); }
+    if (typeof SiamMap === 'undefined') { const sp = {}; for (const [t, sx, sz] of SPAWNS) if (sx > 2500 && !sp[t]) { sp[t] = 1; const [a, b] = tp(sx, sz); x.fillStyle = '#ff8a5a'; x.beginPath(); x.arc(a, b, 6, 0, TAU); x.fill(); lbl(MONSTERS[t].name + ' Lv.' + MONSTERS[t].lvl, sx, sz + 6, '#ffd0b0'); } }
+    if (typeof SiamMap === 'undefined') { for (const m of MVPSys.list) if (m.zone === 'amazon') { const [a, b] = tp(m.home.x, m.home.z); x.fillStyle = m.d.mvp === 'mvp' ? '#ffb02e' : '#c46bff'; x.beginPath(); x.arc(a, b, 9, 0, TAU); x.fill(); lbl((m.d.mvp === 'mvp' ? '👑 ' : '★ ') + m.d.name, m.home.x, m.home.z - 4, '#ffe08a'); } }
+    if (typeof SiamMap === 'undefined') { for (const n of NPCList) if (n.zone === 'amazon') { const [a, b] = tp(n.x, n.z); x.fillStyle = '#ffd24a'; x.beginPath(); x.arc(a, b, 5, 0, TAU); x.fill(); } }
     lbl('ทางออก ↓ ถนนสายตะวันออก', AX, 106, '#cfe8ff');
     if (P.zone === 'amazon') { const [a, b] = tp(P.x, P.z); x.fillStyle = '#a5e84a'; x.strokeStyle = '#1d1712'; x.lineWidth = 2; x.beginPath(); x.arc(a, b, 7, 0, TAU); x.fill(); x.stroke(); }
     this.el.pbody.onclick = e => {
@@ -13838,7 +13841,7 @@ Object.assign(CARD_EMOJI, { piranha: '🐟', dartfrog: '🐸', jaguar: '🐆', s
    RO touches: account storage NPC (คลังสินค้า) in the capital,
    and sitting down (emote "นั่งพัก") doubles HP/SP regeneration.
    ============================================================ */
-NPCS.nelly = { name: 'เนลลี่', role: 'พนักงานคลังสินค้า', sheet: 'priest', zone: 'world', x: -9, z: 62, face: 2.2, voice: [1.4, 1.1], hair: 45, pose: 15, lines: ['ฝากของไว้กับคลังสินค้าได้นะคะ', 'คลังสินค้ายินดีให้บริการค่ะ', 'กระเป๋าเต็มแล้วเหรอคะ?'] };
+NPCS.nelly = { name: 'นิลุบล', role: 'พนักงานคลังสินค้า', sheet: 'priest', zone: 'world', x: -9, z: 62, face: 2.2, voice: [1.4, 1.1], hair: 45, pose: 15, lines: ['ฝากของไว้กับคลังสินค้าได้นะคะ', 'คลังสินค้ายินดีให้บริการค่ะ', 'กระเป๋าเต็มแล้วเหรอคะ?'] };
 NPC_IDLE.nelly = 'สวัสดีค่ะ คลังสินค้าสยาม ยินดีให้บริการ ฝากของได้ 300 ช่อง ใช้ร่วมกันทุกตัวละครในเครื่องนี้ ค่าบริการครั้งละ 40 เหรียญค่ะ';
 const STORAGE_KEY = 'siam_storage_v1', STORAGE_MAX = 300;
 const Storage = {

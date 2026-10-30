@@ -210,9 +210,9 @@ const Game = {
     const P = Player, S = Save.d;
     this.msgT -= dt;
     if (P.zone === 'world') {
-      if (S.flags.gate && S.level >= 5 && P.z < -139 && Math.abs(P.x) < 5) { this.teleport(DX, 5, 'เข้าสู่ถ้ำผลึกใต้พิภพ'); return; }
+      if (S.flags.gate && S.level >= 5 && P.z < -139 && Math.abs(P.x) < 5) { this.teleport(DX, 5, 'เข้าสู่ถ้ำนาคาใต้พิภพ'); return; }
       if (this.msgT <= 0 && World.gate.col.on && dist2(P.x, P.z, 0, -135.5) < 36) { this.msgT = 4; UI.toast(!S.flags.gate ? 'ประตูถ้ำถูกผนึกไว้ ต้องทำเควสหลัก "เงามืดในป่ากระซิบ" ให้สำเร็จก่อน' : 'ต้องมีเลเวล 5 ขึ้นไปจึงจะผ่านประตูถ้ำได้', 'warn'); }
-      if (this.msgT <= 0 && World.barricade.col.on && dist2(P.x, P.z, 0, 13.5) < 20) { this.msgT = 4; UI.toast('สะพานปิดอยู่ ไปรับเควสจากกัปตันลีร่าในเมืองก่อน', 'warn'); }
+      if (this.msgT <= 0 && World.barricade.col.on && dist2(P.x, P.z, 0, 13.5) < 20) { this.msgT = 4; UI.toast('สะพานปิดอยู่ ไปรับเควสจากนายกองลำดวนในเมืองก่อน', 'warn'); }
     } else {
       if (P.z > 10.2 && Math.abs(P.x - DX) < 3.6) { this.teleport(0, -131, 'กลับสู่หุบผาผลึก'); return; }
     }

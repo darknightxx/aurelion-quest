@@ -13,7 +13,7 @@ const { boot } = require('./lib');
   const { execSync } = require('child_process');
   execSync(`python3 -c "
 from PIL import Image
-L=${JSON.stringify(list)}
+L=${JSON.stringify(list).replace(/"/g, "'")}
 c=Image.new('RGB',(300*len(L),360))
 for i,k in enumerate(L): c.paste(Image.open('out/cls_'+k+'.png'),(300*i,0))
 c.save('out/cls_all.png')"`, { cwd: __dirname });

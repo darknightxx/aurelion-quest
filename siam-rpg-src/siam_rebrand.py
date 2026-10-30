@@ -27,10 +27,31 @@ NAME_MAP = [
     ('หัวหน้าเผ่าโอกรกินคน', 'ท้าวยักษ์หิมพานต์'), ('หมู่บ้านโอกรเผ่ากินคน', 'หมู่บ้านยักษ์ป่า'),
     ('โอกรนักรบเผ่ากินคน', 'ยักษ์ป่าหิมพานต์'), ('โอกรหมอผีเผ่ากินคน', 'ยักษ์หมอผี'),
     ('โอกรเผ่ากินคน', 'ยักษ์ป่า'), ('เผ่าโอกร', 'เผ่ายักษ์ป่า'), ('โอกร', 'ยักษ์ป่า'),
+    # step 2: zones, places, NPCs
+    ('ถ้ำผลึก', 'ถ้ำนาคา'), ('ป่าอเมซอน', 'ป่าหิมพานต์'), ('อเมซอน', 'หิมพานต์'), ('ทุ่งหญ้าใบเขียว', 'ทุ่งนาสยาม'),
+    ('กัปตันลีร่า', 'นายกองลำดวน'), ('ลีร่า', 'ลำดวน'), ('โอริน', 'พรหม'), ('พิป', 'พิพัฒน์'), ('พรานรุก', 'พรานรุ่ง'),
+    ('ดร.มาร์โก้', 'ดร.มานพ'), ('มาร์โก้', 'มานพ'), ('เอมม่า', 'เอื้อมพร'), ('โฮเซ่', 'โชติ'), ('ลิซ่า', 'ลลิตา'),
+    ('ปีโป้', 'ปี่แก้ว'), ('บอร์ก', 'บุญรอด'), ('พ่อมดเฒ่าซาวิน', 'ฤๅษีสวิน'), ('ซาวิน', 'สวิน'), ('เนลลี่', 'นิลุบล'),
 ]
 for _old, _new in NAME_MAP:
     for _o2, _ in NAME_MAP:
         assert _o2 not in _new, f'new name {_new} contains old name {_o2}'
+
+
+# Fixes for phrases the plain renames leave awkward or half-renamed (applied after NAME_MAP).
+FIX_MAP = [
+    ('ต่อมพิษอึ่งพิษ', 'ต่อมพิษอึ่งลายทอง'),
+    ('ยักษ์ป่านักรบ', 'นักรบยักษ์ป่า'),
+    ('ตัวและหมอผี 4 ตัว', 'ตัวและยักษ์หมอผี 4 ตัว'),
+    ('ป่าทึบเสือดาวป่าลึก', 'ป่าทึบเสือดาว'),
+    ('หัวหน้าเผ่ายักษ์ป่า', 'ท้าวยักษ์หิมพานต์'),
+    ('แมงมุมยักษ์', 'บึ้งยักษ์'),
+    ('กบพิษ', 'อึ่งพิษ'),
+    ('สยาม สงบสุข', 'สยามสงบสุข'),
+]
+for _old, _new in FIX_MAP:
+    for _o2, _ in FIX_MAP + NAME_MAP:
+        assert _o2 not in _new, f'fix {_new} contains {_o2}'
 
 def rebrand_text(s):
     # credit lines that must keep the original name
@@ -47,7 +68,7 @@ def rebrand_text(s):
     s = re.sub(rf'([{THAI}]) Aurelion', r'\1สยาม', s)  # Thai has no spaces between words
     s = s.replace('Aurelion', 'สยาม')
     s = s.replace('เกม 3D Action RPG', 'เกม 2.5D Action RPG ธีมไทย')
-    for old, new in NAME_MAP:
+    for old, new in NAME_MAP + FIX_MAP:
         s = s.replace(old, new)
     return s.replace('\x00AQ\x00', 'จาก Aurelion Quest')
 
@@ -56,11 +77,32 @@ NET_OLD = "  r(p) { return this.D.ref(this.db, p); }"
 NET_NEW = ("  // สยาม RPG: shift channel ids so this game's players never share a room with the original AQ game\n"
            "  r(p) { return this.D.ref(this.db, typeof p === 'string' ? p.replace(/^ch\\/(\\d+)/, (m, n) => 'ch/' + (+n + SIAM_CH_BASE)) : p); }")
 
+
+# Map markers: สยาม draws monsters / MVPs / NPCs itself (08zz_siam_map.js, with filters),
+# so the AQ map tabs skip theirs when SiamMap exists. Applied per line, idempotent.
+MAP_MARKER_LINES = {
+    '08k_temple_ui.js': ["const sp = {}; for (const [t, sx, sz] of SPAWNS) if (sx > 1500", "for (const n of NPCList) if (n.zone === 'temple')"],
+    '08zb_amazon_ui.js': ["const sp = {}; for (const [t, sx, sz] of SPAWNS) if (sx > 2500", "for (const m of MVPSys.list) if (m.zone === 'amazon')", "for (const n of NPCList) if (n.zone === 'amazon')"],
+}
+def patch_map_markers(fname, text):
+    starts = MAP_MARKER_LINES.get(fname)
+    if not starts: return text
+    lines = text.split('\n'); hit = 0
+    for i, l in enumerate(lines):
+        st = l.lstrip()
+        for p in starts:
+            if st.startswith(p):
+                lines[i] = l[:len(l) - len(st)] + "if (typeof SiamMap === 'undefined') { " + st + ' }'; hit += 1
+            elif st.startswith("if (typeof SiamMap === 'undefined') { " + p):
+                hit += 1
+    assert hit == len(starts), f'{fname}: map marker lines changed upstream — update siam_rebrand.py'
+    return '\n'.join(lines)
+
 changed = []
 files = sorted(glob.glob(os.path.join(D, 'src', '*.js'))) + [os.path.join(D, f) for f in ('head.html', 'template.html')]
 for f in files:
     s = open(f, encoding='utf-8').read()
-    t = rebrand_text(s)
+    t = patch_map_markers(os.path.basename(f), rebrand_text(s))
     if f.endswith('08i_multi.js') and 'SIAM_CH_BASE' not in t:
         assert NET_OLD in t, 'FirebaseBackend.r() changed upstream — update siam_rebrand.py'
         t = t.replace(NET_OLD, NET_NEW)

@@ -27,7 +27,7 @@ const { boot } = require('./lib');
   ok(mapped[0] === 'ch/11/players/x' && mapped[1] === 'ch/13/chat' && mapped[2] === 'parties/abc' && mapped[3] === '.info/serverTimeOffset', 'online channels shifted to 11-13, other paths untouched');
 
   // patch notes / announcement
-  ok(await ev(() => PATCH[0].t.includes('v0.2') && PATCH.some(p => p.t.includes('เปิดทดลอง สยาม RPG')) && ANNOUNCE[0].title.includes('v0.2')), 'patch notes: v0.2 on top, launch note kept');
+  ok(await ev(() => PATCH[0].t.includes('v0.3') && PATCH.some(p => p.t.includes('v0.2.1')) && PATCH.some(p => p.t.includes('(v0.2)')) && PATCH.some(p => p.t.includes('เปิดทดลอง สยาม RPG')) && ANNOUNCE[0].title.includes('v0.3')), 'patch notes: v0.2 on top, launch note kept');
 
   // temple zone with Thai ghosts still works
   const temple = await ev(() => {
@@ -51,9 +51,9 @@ const { boot } = require('./lib');
 
 
   // v0.2: Thai monster names — no old AQ names anywhere players can see
-  const oldNames = ['สไลม์', 'เห็ดซุกซน', 'หมาป่า', 'ก็อบลิน', 'ค้างคาวผลึก', 'โครงกระดูกยาม', 'คราก', 'ปิรันย่า', 'กบลูกดอก', 'จากัวร์', 'ทารันทูล่า', 'อนาคอนด้า', 'พืชกินคน', 'เคแมน', 'โอกร'];
+  const oldNames = ['สไลม์', 'เห็ดซุกซน', 'หมาป่า', 'ก็อบลิน', 'ค้างคาวผลึก', 'โครงกระดูกยาม', 'คราก', 'ปิรันย่า', 'กบลูกดอก', 'จากัวร์', 'ทารันทูล่า', 'อนาคอนด้า', 'พืชกินคน', 'เคแมน', 'โอกร', 'แมงมุมยักษ์', 'กบพิษ', 'ต่อมพิษอึ่งพิษ', 'ยักษ์ป่านักรบ', 'ลีร่า', 'โอริน', 'พ่อค้าพิป', 'พรานรุก', 'มาร์โก้', 'เอมม่า', 'โฮเซ่', 'ลิซ่า', 'ปีโป้', 'บอร์ก', 'ซาวิน', 'เนลลี่', 'อเมซอน', 'ถ้ำผลึก', 'ทุ่งหญ้าใบเขียว'];
   const leak = await ev(names => {
-    const blobs = [JSON.stringify(MONSTERS), JSON.stringify(ITEMS), JSON.stringify(QUESTS), JSON.stringify(MVP_DEFS), JSON.stringify(PATCH), JSON.stringify(ANNOUNCE), document.body.innerText];
+    const blobs = [JSON.stringify(MONSTERS), JSON.stringify(ITEMS), JSON.stringify(QUESTS), JSON.stringify(MVP_DEFS), JSON.stringify(PATCH), JSON.stringify(ANNOUNCE), JSON.stringify(NPCS), JSON.stringify(PLACES), JSON.stringify(WARPS), document.body.innerText];
     return names.filter(n => blobs.some(b => b.includes(n)));
   }, oldNames);
   ok(leak.length === 0, 'no old monster names left' + (leak.length ? ': ' + leak.join(', ') : ''));
@@ -65,7 +65,7 @@ const { boot } = require('./lib');
   console.log('quest m1:', JSON.stringify(q));
 
   await page.screenshot({ path: __dirname + '/out_siam_lobby.png' });
-  const real = errors.filter(e => !/ERR_TUNNEL_CONNECTION_FAILED|ERR_NAME_NOT_RESOLVED|fonts\.g/.test(e)); // sandbox has no internet (Google Fonts)
+  const real = errors.filter(e => !/ERR_TUNNEL_CONNECTION_FAILED|ERR_NAME_NOT_RESOLVED|ERR_FAILED|fonts\.g/.test(e)); // sandbox has no internet (Google Fonts)
   errors.length = 0; errors.push(...real);
   ok(errors.length === 0, 'no page/console errors' + (errors.length ? ': ' + errors.slice(0, 5).join(' || ') : ''));
   console.log(`done in ${((Date.now() - t0) / 1000).toFixed(0)}s — ${bad.length ? bad.length + ' FAILED' : 'ALL PASS'}`);

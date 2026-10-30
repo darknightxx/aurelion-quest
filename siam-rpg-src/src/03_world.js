@@ -462,9 +462,9 @@ const World = {
     e.x = clamp(e.x, b.x0, b.x1); e.z = clamp(e.z, b.z0, b.z1);
   },
   placeName(x, z) {
-    if (x > 500) return z < -76 ? 'ลานผู้พิทักษ์ผลึก' : 'ถ้ำผลึกใต้พิภพ';
+    if (x > 500) return z < -76 ? 'ลานผู้พิทักษ์ผลึก' : 'ถ้ำนาคาใต้พิภพ';
     if (Math.hypot(x - TOWN.x, z - TOWN.z) < TOWN.r) return 'เมืองหลวงสยาม';
-    if (z > 12) return 'ทุ่งหญ้าใบเขียว';
+    if (z > 12) return 'ทุ่งนาสยาม';
     if (z > -12) return 'แม่น้ำเงินยวง';
     if (Math.hypot(x - 74, z + 88) < 20) return 'ค่ายยักษ์น้อย';
     if (z < -112) return 'หุบผาผลึก';

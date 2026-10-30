@@ -87,12 +87,12 @@ const MONSTERS = {
 
 /* NPCs */
 const NPCS = {
-  lyra: { name: 'กัปตันลีร่า', role: 'ผู้บัญชาการทหารเมือง', sheet: 'knight', zone: 'world', x: 5, z: 49, face: 0 },
-  orin: { name: 'ปราชญ์โอริน', role: 'นักปราชญ์ประจำเมือง', sheet: 'priest', zone: 'world', x: -12, z: 55, face: .9 },
-  pip: { name: 'พ่อค้าพิป', role: 'ร้านไอเทม', sheet: 'adventurer', zone: 'world', x: 13, z: 66, face: -1.4, shop: 'items' },
+  lyra: { name: 'นายกองลำดวน', role: 'ผู้บัญชาการทหารเมือง', sheet: 'knight', zone: 'world', x: 5, z: 49, face: 0 },
+  orin: { name: 'ปราชญ์พรหม', role: 'นักปราชญ์ประจำเมือง', sheet: 'priest', zone: 'world', x: -12, z: 55, face: .9 },
+  pip: { name: 'พ่อค้าพิพัฒน์', role: 'ร้านไอเทม', sheet: 'adventurer', zone: 'world', x: 13, z: 66, face: -1.4, shop: 'items' },
   mina: { name: 'ช่างตัดเสื้อมีนา', role: 'ร้านชุดแต่งตัว', sheet: 'mage', zone: 'world', x: -13, z: 68, face: 1.4, shop: 'tailor' },
   kaze: { name: 'คาเสะ', role: 'นินจาชอบทำอาหาร', sheet: 'ninja', zone: 'world', x: -4, z: 76, face: 3.0 },
-  rook: { name: 'นายพรานรุก', role: 'นายพรานแห่งป่ากระซิบ', sheet: 'archer', zone: 'world', x: 7, z: -38, face: 0 }
+  rook: { name: 'นายพรานรุ่ง', role: 'นายพรานแห่งป่ากระซิบ', sheet: 'archer', zone: 'world', x: 7, z: -38, face: 0 }
 };
 
 /* Quests. objective kinds: kill(mon,n) collect(item,n) quiz(n) boss reach(place) */
@@ -106,14 +106,14 @@ const QUESTS = {
   m2: {
     type: 'main', giver: 'lyra', req: 'm1', title: 'เงามืดในป่ากระซิบ', obj: [{ k: 'kill', mon: 'wolf', n: 5 }, { k: 'collect', item: 'm_totem', n: 4 }],
     text: 'พวกยักษ์น้อยตั้งค่ายอยู่ทางตะวันออกของป่ากระซิบ และใช้โทเท็มเรียกหมาในมาล้อมเมือง ปราบหมาใน 5 ตัว แล้วยึดโทเท็มยักษ์น้อยมา 4 ชิ้น',
-    done: 'โทเท็มพวกนี้มีเศษผลึกฝังอยู่... มันมาจากถ้ำผลึกทางเหนือสุด ประตูถ้ำเปิดให้แล้ว แต่ต้องมีเลเวล 5 ขึ้นไปถึงจะผ่านเข้าไปได้',
+    done: 'โทเท็มพวกนี้มีเศษผลึกฝังอยู่... มันมาจากถ้ำนาคาทางเหนือสุด ประตูถ้ำเปิดให้แล้ว แต่ต้องมีเลเวล 5 ขึ้นไปถึงจะผ่านเข้าไปได้',
     rew: { xp: 420, coin: 260, items: [['hp_l', 2], ['mp_s', 2]] }, unlock: 'gate', award: 'ผู้ปราบยักษ์น้อย'
   },
   m3: {
     type: 'main', giver: 'lyra', req: 'm2', title: 'หัวใจผลึกแห่งถ้ำลึก', obj: [{ k: 'boss', n: 1 }],
-    text: 'ลึกเข้าไปในถ้ำผลึกมีผู้พิทักษ์ชื่อ "ยักษ์ศิลา" มันใช้เกราะผลึกที่อาวุธธรรมดาทำลายไม่ได้ ต้องใช้ปัญญาตอบคำถามต่อเนื่องเพื่อทำลายเกราะ ฝากความหวังของสยาม ไว้ด้วย!',
+    text: 'ลึกเข้าไปในถ้ำนาคามีผู้พิทักษ์ชื่อ "ยักษ์ศิลา" มันใช้เกราะผลึกที่อาวุธธรรมดาทำลายไม่ได้ ต้องใช้ปัญญาตอบคำถามต่อเนื่องเพื่อทำลายเกราะ ฝากความหวังของสยาม ไว้ด้วย!',
     done: 'เจ้าทำได้! สยาม ปลอดภัยแล้ว ชื่อของเจ้าจะถูกจารึกไว้ในบันทึกนักผจญภัยของเมือง',
-    rew: { xp: 1000, coin: 800, items: [] }, award: 'วีรชนแห่งถ้ำผลึก'
+    rew: { xp: 1000, coin: 800, items: [] }, award: 'วีรชนแห่งถ้ำนาคา'
   },
   s1: {
     type: 'side', giver: 'rook', req: 'm1', title: 'เขี้ยวหมาในสำหรับฤดูหนาว', obj: [{ k: 'collect', item: 'm_fang', n: 4 }],
@@ -338,17 +338,17 @@ function genMath(d) {
 /* Map places */
 const PLACES = {
   town: { name: 'เมืองหลวงสยาม', x: 0, z: 62 },
-  meadow: { name: 'ทุ่งหญ้าใบเขียว', x: 0, z: 118 },
+  meadow: { name: 'ทุ่งนาสยาม', x: 0, z: 118 },
   forest: { name: 'ป่ากระซิบ', x: 0, z: -70 },
   camp: { name: 'ค่ายนายพราน', x: 0, z: -40 },
   goblin: { name: 'ค่ายยักษ์น้อย', x: 74, z: -88 },
-  gate: { name: 'ประตูถ้ำผลึก', x: 0, z: -132 },
-  dungeon: { name: 'ถ้ำผลึกใต้พิภพ', x: 1000, z: -40 }
+  gate: { name: 'ประตูถ้ำนาคา', x: 0, z: -132 },
+  dungeon: { name: 'ถ้ำนาคาใต้พิภพ', x: 1000, z: -40 }
 };
 const WARPS = [
   { id: 'w_town', name: 'จัตุรัสสยาม', zone: 'world', x: 9, z: 73 },
   { id: 'w_camp', name: 'ค่ายนายพราน', zone: 'world', x: -8, z: -46 },
-  { id: 'w_gate', name: 'หน้าประตูถ้ำผลึก', zone: 'world', x: -14, z: -116 },
+  { id: 'w_gate', name: 'หน้าประตูถ้ำนาคา', zone: 'world', x: -14, z: -116 },
   { id: 'w_deep', name: 'ห้องโถงผลึก (ในถ้ำ)', zone: 'dungeon', x: 1012, z: -46 }
 ];
 const SHRINES = [

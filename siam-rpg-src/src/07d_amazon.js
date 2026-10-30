@@ -27,19 +27,19 @@ const AmazonGfx = {
   Game.checkTriggers = function (dt) {
     const P = Player, S = Save.d;
     if (P.zone === 'world' && P.x > 138 && Math.abs(P.z - 70) < 5) {
-      if (S.level >= AMAZON_LV) { if (P.x > 144.2) { this.teleport(AX, 104, 'ป่าอเมซอนมรณะ'); return; } }
+      if (S.level >= AMAZON_LV) { if (P.x > 144.2) { this.teleport(AX, 104, 'ป่าหิมพานต์มรณะ'); return; } }
       else if (this.msgT <= 0) { this.msgT = 4; UI.toast(`ป่าดิบข้างหน้าอันตรายมาก ต้องมีเลเวล ${AMAZON_LV} ขึ้นไปจึงจะเข้าไปได้`, 'warn'); }
     }
     if (P.zone === 'amazon') {
       if (P.z > 107 && Math.abs(P.x - AX) < 6) { this.teleport(137, 70, 'ถนนสายตะวันออก'); return; }
-      if (!S.stats.amazonVisit) { S.stats.amazonVisit = 1; S.warps.w_amazon = true; setTimeout(() => UI.toast('ป่าอเมซอนมรณะ… ทุกสิ่งที่นี่อยากกินคุณ! คุยกับ ดร.มาร์โก้ ที่ค่ายนักสำรวจ', 'boss'), 1500); }
+      if (!S.stats.amazonVisit) { S.stats.amazonVisit = 1; S.warps.w_amazon = true; setTimeout(() => UI.toast('ป่าหิมพานต์มรณะ… ทุกสิ่งที่นี่อยากกินคุณ! คุยกับ ดร.มานพ ที่ค่ายนักสำรวจ', 'boss'), 1500); }
     }
     oct(dt);
   };
   const ox = Nav.exitTo; Nav.exitTo = function (from, to) {
     const S = Save.d;
     if (from === 'amazon') return { x: AX, z: 109, dir: [0, 1] };
-    if (to === 'amazon' && from === 'world') { if (S.level < AMAZON_LV) { UI.toast(`ต้องมีเลเวล ${AMAZON_LV} ขึ้นไปจึงจะเดินทางไปป่าอเมซอนได้`, 'warn'); return null; } return { x: 141, z: 70, dir: [1, 0] }; }
+    if (to === 'amazon' && from === 'world') { if (S.level < AMAZON_LV) { UI.toast(`ต้องมีเลเวล ${AMAZON_LV} ขึ้นไปจึงจะเดินทางไปป่าหิมพานต์ได้`, 'warn'); return null; } return { x: 141, z: 70, dir: [1, 0] }; }
     if (to === 'amazon') return ox.call(this, from, 'world');
     return ox.call(this, from, to);
   };

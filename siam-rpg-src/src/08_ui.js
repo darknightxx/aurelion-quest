@@ -63,7 +63,7 @@ const icon = (k, cls = '') => `<svg class="ic ${cls}" viewBox="0 0 24 24" aria-h
 
 /* shop registry: [title, NPC button label, () => item list, can sell] — modules add their own shops */
 const SHOPS = {
-  items: ['ร้านไอเทมของพิป', 'ดูสินค้า', () => SHOP_ITEMS, 1],
+  items: ['ร้านไอเทมของพิพัฒน์', 'ดูสินค้า', () => SHOP_ITEMS, 1],
   tailor: ['ร้านชุดแต่งตัวของมีนา', 'ดูชุดแต่งตัว', () => TAILOR_ITEMS, 0],
   temple: ['เครื่องรางกันผีของตาเผือก', 'ดูเครื่องรางกันผี', () => TEMPLE_SHOP, 1]
 };
@@ -341,7 +341,7 @@ const UI = {
       if (it.kind === 'use') act = `<button class="btn sm" data-use="${id}">ใช้</button>`;
       else if (it.kind === 'gear' || it.kind === 'cos') act = `<button class="btn sm ${eq ? 'ghost' : ''}" data-eq="${id}">${eq ? 'ถอด' : 'สวมใส่'}</button>`;
       return `<li class="${eq ? 'eq' : ''} hasinfo" data-info="${id}">${this.itemIcon(id)}<div class="in"><b>${it.name}</b><small>${it.desc}</small></div><span class="qty">${it.kind === 'gear' || it.kind === 'cos' ? (eq ? 'สวมอยู่' : '') : '×' + S.inv[id]}</span>${act}</li>`;
-    }).join('') || `<li class="emptyrow">ยังไม่มีไอเทมในหมวดนี้${tab === 'cos' ? ' ซื้อได้ที่ร้านของช่างตัดเสื้อมีนาในเมือง' : tab === 'gear' ? ' ซื้อได้ที่ร้านพ่อค้าพิปในเมือง' : ''}</li>`;
+    }).join('') || `<li class="emptyrow">ยังไม่มีไอเทมในหมวดนี้${tab === 'cos' ? ' ซื้อได้ที่ร้านของช่างตัดเสื้อมีนาในเมือง' : tab === 'gear' ? ' ซื้อได้ที่ร้านพ่อค้าพิพัฒน์ในเมือง' : ''}</li>`;
     this.setPanel(`${icon('bag')} กระเป๋า <span class="coin">${icon('coin')}${fmt(S.coins)}</span>`, `
       <div class="eqgrid"><div><h4>สวมใส่</h4><div class="slots">${slots}</div></div><div><h4>ของแต่งตัว</h4><div class="slots">${cslots}</div></div></div>
       <div class="tabs" role="tablist">${tabs.map(([k, l]) => `<button role="tab" class="tab ${k === tab ? 'on' : ''}" data-tab="${k}">${l}</button>`).join('')}</div>
@@ -392,7 +392,7 @@ const UI = {
     for (const w of WARPS) if (w.zone === 'world') { const [a, b] = tp(w.x, w.z); x.fillStyle = S.warps[w.id] ? '#7fe6ff' : '#5a6b78'; x.beginPath(); x.moveTo(a, b - 8); x.lineTo(a + 6, b); x.lineTo(a, b + 8); x.lineTo(a - 6, b); x.fill(); }
     for (const s of SHRINES) { const [a, b] = tp(s.x, s.z); x.fillStyle = BUFFS[s.buff].col; x.beginPath(); x.arc(a, b, 6, 0, TAU); x.fill(); x.strokeStyle = '#1d1712'; x.lineWidth = 2; x.stroke(); }
     if (P.zone === 'world') { const [a, b] = tp(P.x, P.z); x.fillStyle = '#a5e84a'; x.strokeStyle = '#1d1712'; x.lineWidth = 2; x.beginPath(); x.arc(a, b, 7, 0, TAU); x.fill(); x.stroke(); }
-    else lbl('คุณอยู่ในถ้ำผลึก', 0, -110, '#a5e84a');
+    else lbl('คุณอยู่ในถ้ำนาคา', 0, -110, '#a5e84a');
     this.el.pbody.onclick = e => { const b = e.target.closest('[data-w]'); if (!b || b.disabled) return; const w = WARPS.find(v => v.id === b.dataset.w); if (Monsters.boss.engaged) { this.toast('วาร์ปไม่ได้ระหว่างต่อสู้กับบอส', 'warn'); return; } this.closePanel(); Game.teleport(w.x + 2.5, w.z + 2.5, w.name); };
   },
   pAch() {
@@ -442,7 +442,7 @@ const UI = {
   },
   pHelp() {
     this.setPanel(`${icon('help')} วิธีเล่น`, `<div class="help">
-      <section><h4>เป้าหมาย</h4><p>รับเควสจาก <b>กัปตันลีร่า</b> ในเมืองสยาม ปราบมอนสเตอร์ในทุ่งหญ้า ข้ามสะพานไปป่ากระซิบ แล้วบุกถ้ำผลึกเพื่อปราบบอส <b>ยักษ์ศิลา</b></p></section>
+      <section><h4>เป้าหมาย</h4><p>รับเควสจาก <b>นายกองลำดวน</b> ในเมืองสยาม ปราบมอนสเตอร์ในทุ่งหญ้า ข้ามสะพานไปป่ากระซิบ แล้วบุกถ้ำนาคาเพื่อปราบบอส <b>ยักษ์ศิลา</b></p></section>
       <section><h4>วัดร้างกลางป่า (เลเวล 6+)</h4><p>เดินตามถนนสายตะวันตกจากประตูเมืองไปจนสุดทาง จะพบวัดร้างที่มีผีไทย 17 ชนิด รับเควสจาก <b>หลวงตาพุฒ</b> ซื้อน้ำมนต์และธูปกันผีจาก <b>ตาเผือก</b> แล้วตามล่าบอส <b>แม่นาก</b> ที่เรือนไทยริมคลอง เมื่อแม่นากกลายเป็นวิญญาณ ให้กด F ที่เสาสายสิญจน์ทั้ง 3 ต้นแล้วตอบคำถามเพื่อสะกดนาง · เปิด <b>ตำราผีไทย</b> (B) เพื่ออ่านตำนานผีแต่ละชนิด</p></section>
       <section><h4>คอมพิวเตอร์</h4><ul>
         <li><kbd>คลิกซ้าย</kbd> บนพื้นเพื่อเดิน กดค้างเพื่อเดินตามเมาส์ · คลิกมอนสเตอร์เพื่อโจมตี · คลิก NPC เพื่อคุย</li>
@@ -455,7 +455,7 @@ const UI = {
         <li><b>สกิลใหญ่ (X)</b> มีคำถามเด้งขึ้น ตอบถูกในเวลา พลัง ×2 · ตอบผิด สกิลฟาวล์และติดคูลดาวน์</li>
         <li><b>แท่นบูชา</b> 3 แห่งบนแผนที่ ตอบถูกรับบัฟ 10 นาที</li>
         <li><b>บอส</b> จะสร้างเกราะผลึกที่ HP 70% และ 35% ต้องตอบถูกติดกัน 3 ข้อ (Chain Quiz) เพื่อทำลายเกราะ</li>
-        <li><b>ปราชญ์โอริน</b> มีบททดสอบประจำวันให้ XP และเหรียญ</li></ul></section>
+        <li><b>ปราชญ์พรหม</b> มีบททดสอบประจำวันให้ XP และเหรียญ</li></ul></section>
       <section><h4>เคล็ดลับ</h4><ul><li>มอนสเตอร์ชื่อสีเหลืองรักสงบ จะสู้กลับเมื่อโดนตีก่อน · ชื่อสีแดงดุร้าย จะวิ่งเข้าหาเมื่อเข้าใกล้</li><li>วงสีแดงบนพื้นคือท่าโจมตีของบอส เดินออกจากวงก่อนที่มันจะเต็ม</li><li>เกมบันทึกอัตโนมัติในเบราว์เซอร์เครื่องนี้</li></ul></section></div>`, true);
     this.el.pbody.onclick = null;
   },
@@ -474,7 +474,7 @@ const UI = {
       if (ready) { text = QUESTS[ready].done; buttons.push([`turn:${ready}`, 'ส่งเควส: ' + QUESTS[ready].title, 'primary']); }
       else if (avail) { text = QUESTS[avail].text; buttons.push([`acc:${avail}`, (QUESTS[avail].type === 'daily' && QUESTS[avail].obj[0].k === 'quiz' ? 'เริ่มบททดสอบ' : 'รับเควส: ') + (QUESTS[avail].obj[0].k === 'quiz' ? '' : QUESTS[avail].title), 'primary']); }
       else if (act) { const pr = Quests.progress(act); text = `ภารกิจ "${QUESTS[act].title}" เป็นยังไงบ้าง? ` + pr.map(p => `${p.label} ${p.have}/${p.n}`).join(' · '); }
-      else text = NPC_IDLE[o.npc] || { lyra: 'สยาม สงบสุขได้ก็เพราะนักผจญภัยอย่างเจ้า กลับมาหาฉันพรุ่งนี้สำหรับภารกิจล่าประจำวันนะ', orin: 'วันนี้เจ้าทดสอบไปแล้ว พรุ่งนี้ค่อยมาใหม่ ระหว่างนี้แท่นบูชาทั้งสามก็มีคำถามรออยู่', pip: 'ยินดีต้อนรับ! ยา อาวุธ ชุดเกราะ มีครบ', mina: 'อยากเปลี่ยนลุคไหม? ฉันมีหมวก ปีก ออร่า และชุดทั้งหกแบบ', kaze: 'ซุปเห็ดหม้อนั้นอร่อยมาก ขอบใจอีกครั้งนะ', rook: 'ป่ากระซิบช่วงนี้อันตราย ระวังหมาในที่ล่าเป็นฝูงด้วย' }[o.npc];
+      else text = NPC_IDLE[o.npc] || { lyra: 'สยามสงบสุขได้ก็เพราะนักผจญภัยอย่างเจ้า กลับมาหาฉันพรุ่งนี้สำหรับภารกิจล่าประจำวันนะ', orin: 'วันนี้เจ้าทดสอบไปแล้ว พรุ่งนี้ค่อยมาใหม่ ระหว่างนี้แท่นบูชาทั้งสามก็มีคำถามรออยู่', pip: 'ยินดีต้อนรับ! ยา อาวุธ ชุดเกราะ มีครบ', mina: 'อยากเปลี่ยนลุคไหม? ฉันมีหมวก ปีก ออร่า และชุดทั้งหกแบบ', kaze: 'ซุปเห็ดหม้อนั้นอร่อยมาก ขอบใจอีกครั้งนะ', rook: 'ป่ากระซิบช่วงนี้อันตราย ระวังหมาในที่ล่าเป็นฝูงด้วย' }[o.npc];
       if (n.shop) buttons.push([`shop:${n.shop}`, (SHOPS[n.shop] || SHOPS.items)[1], '']);
       if (o.npc === 'kuman') buttons.push(['bless', 'ขอพรกุมารทอง', '']);
       if (o.npc === 'zen') { if (!S.job) buttons.push(['jobs', 'เปลี่ยนอาชีพขั้นสอง', 'primary']); else if (!S.awk && S.quests.awk && S.quests.awk.s === 'done') buttons.push(['ritual', 'เข้าพิธีกรรมปลุกพลัง (5,000 เหรียญ)', 'primary']); else buttons.push(['jobs', 'ดูสายอาชีพ', '']); }

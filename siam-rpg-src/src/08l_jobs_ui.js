@@ -50,6 +50,6 @@ UI.pJobs = function (o) {
 };
 {
   const oh = UI.pHelp.bind(UI);
-  UI.pHelp = function () { oh(); const h = this.el.pbody.querySelector('.help'); if (h) h.insertAdjacentHTML('afterbegin', `<section><h4>สายอาชีพและการปลุกพลัง</h4><p>เลเวล ${JOB_LV} ไปหา <b>อาจารย์เซน</b> ในเมืองเพื่อเลือกอาชีพขั้นสอง (อาชีพละ 2 สาย ได้สกิลใหม่ 3 สกิล) เลเวล ${AWK_LV} รับเควส "ปลดผนึกแห่งพลัง" เก็บศิลา 4 ชนิดจากยักษ์ศิลา แม่นาก ปู่โสม และบททดสอบของโอริน แล้วเข้าพิธีกรรมเพื่อปลุกพลัง เลเวลสูงสุดจะขยายเป็น ${AWK_LV_CAP} · กด <kbd>J</kbd> เพื่อดูสายอาชีพ</p></section>`); };
+  UI.pHelp = function () { oh(); const h = this.el.pbody.querySelector('.help'); if (h) h.insertAdjacentHTML('afterbegin', `<section><h4>สายอาชีพและการปลุกพลัง</h4><p>เลเวล ${JOB_LV} ไปหา <b>อาจารย์เซน</b> ในเมืองเพื่อเลือกอาชีพขั้นสอง (อาชีพละ 2 สาย ได้สกิลใหม่ 3 สกิล) เลเวล ${AWK_LV} รับเควส "ปลดผนึกแห่งพลัง" เก็บศิลา 4 ชนิดจากยักษ์ศิลา แม่นาก ปู่โสม และบททดสอบของพรหม แล้วเข้าพิธีกรรมเพื่อปลุกพลัง เลเวลสูงสุดจะขยายเป็น ${AWK_LV_CAP} · กด <kbd>J</kbd> เพื่อดูสายอาชีพ</p></section>`); };
 }
 

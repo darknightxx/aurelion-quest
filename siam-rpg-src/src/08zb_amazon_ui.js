@@ -1,8 +1,8 @@
 /* ============================================================
    Amazon UI: jungle shop, minimap / world-map tab, patch notes.
    ============================================================ */
-SHOPS.jungle = ['ร้านเสบียงป่าของโฮเซ่', 'ดูยาแก้พิษและอุปกรณ์', () => JUNGLE_SHOP, 1];
-Object.assign(NPC_IDLE, { marco: 'ค่ายนี้เป็นที่ปลอดภัยแห่งเดียวในป่า พักให้หายเหนื่อยก่อนออกไปนะ', emma: 'สิ่งมีชีวิตในป่านี้มีมากกว่าหมื่นชนิด ฉันศึกษาไปได้แค่นิดเดียวเอง', jose: 'ซื้อยาแก้พิษไว้เยอะๆ นะ กบพิษกับงูเหลือมยักษ์ไม่ปรานีใคร' });
+SHOPS.jungle = ['ร้านเสบียงป่าของโชติ', 'ดูยาแก้พิษและอุปกรณ์', () => JUNGLE_SHOP, 1];
+Object.assign(NPC_IDLE, { marco: 'ค่ายนี้เป็นที่ปลอดภัยแห่งเดียวในป่า พักให้หายเหนื่อยก่อนออกไปนะ', emma: 'สิ่งมีชีวิตในป่านี้มีมากกว่าหมื่นชนิด ฉันศึกษาไปได้แค่นิดเดียวเอง', jose: 'ซื้อยาแก้พิษไว้เยอะๆ นะ อึ่งพิษกับงูเหลือมยักษ์ไม่ปรานีใคร' });
 UI.buildAmazonMap = function () {
   const N = 220, c = document.createElement('canvas'); c.width = N; c.height = N; const x = c.getContext('2d'); const img = x.createImageData(N, N);
   for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
@@ -19,9 +19,9 @@ UI.buildAmazonMap = function () {
   const opm = UI.pMap.bind(UI);
   UI.pMap = function (o) {
     const P = Player, S = Save.d; if (!o.tab && P.zone === 'amazon') o.tab = 'amazon';
-    if (o.tab !== 'amazon') { opm(o); const t = this.el.pbody.querySelector('.maptabs'); if (t && !t.querySelector('[data-mt="amazon"]')) t.insertAdjacentHTML('beforeend', `<button class="tab" data-mt="amazon">ป่าอเมซอน${S.level < AMAZON_LV ? ' 🔒' : ''}</button>`); return; }
+    if (o.tab !== 'amazon') { opm(o); const t = this.el.pbody.querySelector('.maptabs'); if (t && !t.querySelector('[data-mt="amazon"]')) t.insertAdjacentHTML('beforeend', `<button class="tab" data-mt="amazon">ป่าหิมพานต์${S.level < AMAZON_LV ? ' 🔒' : ''}</button>`); return; }
     this.panelOpt.tab = 'amazon'; if (!this.amzImg) this.buildAmazonMap();
-    this.setPanel(`${icon('map')} แผนที่ป่าอเมซอนมรณะ${o.warp ? ' · เลือกจุดวาร์ป' : ''}`, `<div class="tabs maptabs"><button class="tab" data-mt="world">แดนสยาม</button><button class="tab" data-mt="temple">วัดร้างกลางป่า</button><button class="tab on" data-mt="amazon">ป่าอเมซอน</button></div>
+    this.setPanel(`${icon('map')} แผนที่ป่าหิมพานต์มรณะ${o.warp ? ' · เลือกจุดวาร์ป' : ''}`, `<div class="tabs maptabs"><button class="tab" data-mt="world">แดนสยาม</button><button class="tab" data-mt="temple">วัดร้างกลางป่า</button><button class="tab on" data-mt="amazon">ป่าหิมพานต์</button></div>
       <div class="mapwrap"><canvas id="bigmap" width="660" height="660"></canvas></div>
       <div class="warps"><h4>จุดวาร์ป</h4>${WARPS.map(w => `<button class="btn ${S.warps[w.id] ? '' : 'ghost'}" data-w="${w.id}" ${S.warps[w.id] && o.warp ? '' : 'disabled'}>${w.name}${S.warps[w.id] ? '' : ' (ยังไม่ค้นพบ)'}</button>`).join('')}
       <p class="muted">ทางเข้า: ถนนสายตะวันออกของแดนสยาม (ขวาสุดของแผนที่) ต้องมีเลเวล ${AMAZON_LV} ขึ้นไป · มอนสเตอร์ Lv.15–26 ${o.warp ? '· แตะชื่อจุดวาร์ปเพื่อเดินทาง' : ''}</p></div>`, true);
@@ -29,9 +29,9 @@ UI.buildAmazonMap = function () {
     const tp = (wx, wz) => [(wx - AX + 110) * 3, (wz + 110) * 3]; x.font = '600 13px Mitr, sans-serif'; x.textAlign = 'center';
     const lbl = (t, wx, wz, c = '#fff') => { const [a, b] = tp(wx, wz); x.lineWidth = 4; x.strokeStyle = 'rgba(8,16,8,.85)'; x.strokeText(t, a, b); x.fillStyle = c; x.fillText(t, a, b); };
     for (const [ax, az, r, n] of AMAZON_AREAS) lbl(n, AX + ax, az - r * .6, '#f3e7cc');
-    const sp = {}; for (const [t, sx, sz] of SPAWNS) if (sx > 2500 && !sp[t]) { sp[t] = 1; const [a, b] = tp(sx, sz); x.fillStyle = '#ff8a5a'; x.beginPath(); x.arc(a, b, 6, 0, TAU); x.fill(); lbl(MONSTERS[t].name + ' Lv.' + MONSTERS[t].lvl, sx, sz + 6, '#ffd0b0'); }
-    for (const m of MVPSys.list) if (m.zone === 'amazon') { const [a, b] = tp(m.home.x, m.home.z); x.fillStyle = m.d.mvp === 'mvp' ? '#ffb02e' : '#c46bff'; x.beginPath(); x.arc(a, b, 9, 0, TAU); x.fill(); lbl((m.d.mvp === 'mvp' ? '👑 ' : '★ ') + m.d.name, m.home.x, m.home.z - 4, '#ffe08a'); }
-    for (const n of NPCList) if (n.zone === 'amazon') { const [a, b] = tp(n.x, n.z); x.fillStyle = '#ffd24a'; x.beginPath(); x.arc(a, b, 5, 0, TAU); x.fill(); }
+    if (typeof SiamMap === 'undefined') { const sp = {}; for (const [t, sx, sz] of SPAWNS) if (sx > 2500 && !sp[t]) { sp[t] = 1; const [a, b] = tp(sx, sz); x.fillStyle = '#ff8a5a'; x.beginPath(); x.arc(a, b, 6, 0, TAU); x.fill(); lbl(MONSTERS[t].name + ' Lv.' + MONSTERS[t].lvl, sx, sz + 6, '#ffd0b0'); } }
+    if (typeof SiamMap === 'undefined') { for (const m of MVPSys.list) if (m.zone === 'amazon') { const [a, b] = tp(m.home.x, m.home.z); x.fillStyle = m.d.mvp === 'mvp' ? '#ffb02e' : '#c46bff'; x.beginPath(); x.arc(a, b, 9, 0, TAU); x.fill(); lbl((m.d.mvp === 'mvp' ? '👑 ' : '★ ') + m.d.name, m.home.x, m.home.z - 4, '#ffe08a'); } }
+    if (typeof SiamMap === 'undefined') { for (const n of NPCList) if (n.zone === 'amazon') { const [a, b] = tp(n.x, n.z); x.fillStyle = '#ffd24a'; x.beginPath(); x.arc(a, b, 5, 0, TAU); x.fill(); } }
     lbl('ทางออก ↓ ถนนสายตะวันออก', AX, 106, '#cfe8ff');
     if (P.zone === 'amazon') { const [a, b] = tp(P.x, P.z); x.fillStyle = '#a5e84a'; x.strokeStyle = '#1d1712'; x.lineWidth = 2; x.beginPath(); x.arc(a, b, 7, 0, TAU); x.fill(); x.stroke(); }
     this.el.pbody.onclick = e => {

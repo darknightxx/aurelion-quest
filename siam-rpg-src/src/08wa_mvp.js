@@ -15,7 +15,7 @@ const MVP_DEFS = {
     drops: [['m_cap', 1], ['rf_stone', 1], ['rf_stone2', .35], ['rf_guard', .15], ['hp_l', .9], ['r_mana', .25], ['egg_fox', .05]] },
   mvp_warlord: { base: 'goblin', tier: 'mvp', name: 'ท้าวยักษ์คุมทุ่ง', lvl: 15, k: 2.1, hp: 4200, atk: 42, def: 15, xp: 3000, coin: [500, 800], period: 1500, zone: 'world', x: 82, z: -96, place: 'ค่ายยักษ์น้อย',
     drops: [['rf_stone', 1], ['rf_stone2', .45], ['rf_guard', .2], ['w_mith', .35], ['a_moon', .25], ['r_heart', .08], ['egg_monkey', .06]] },
-  mvp_batqueen: { base: 'bat', tier: 'mini', name: 'นางพญาค้างคาว', lvl: 12, k: 2.0, hp: 1600, atk: 32, def: 8, xp: 1100, coin: [200, 320], period: 720, zone: 'dungeon', x: DX - 2, z: -30, place: 'ถ้ำผลึกชั้นบน',
+  mvp_batqueen: { base: 'bat', tier: 'mini', name: 'นางพญาค้างคาว', lvl: 12, k: 2.0, hp: 1600, atk: 32, def: 8, xp: 1100, coin: [200, 320], period: 720, zone: 'dungeon', x: DX - 2, z: -30, place: 'ถ้ำนาคาชั้นบน',
     drops: [['mp_s', 1], ['rf_stone', .7], ['r_mana', .2], ['egg_bat', .05]] },
   mvp_deathknight: { base: 'skel', tier: 'mvp', name: 'แม่ทัพกระดูกกรุงเก่า', lvl: 18, k: 1.8, hp: 6000, atk: 50, def: 20, xp: 4800, coin: [700, 1000], period: 1800, zone: 'dungeon', x: DX + 4, z: -58, place: 'ทางเดินโครงกระดูก',
     drops: [['m_bone', 1], ['rf_stone2', .6], ['rf_guard', .3], ['w_crys', .06], ['r_heart', .1], ['a_moon', .35], ['egg_dragon', .02]] }
@@ -72,7 +72,7 @@ const MVPSys = {
     S.stats.mvpKills = (S.stats.mvpKills || 0) + (D.tier === 'mvp' ? 1 : 0); Save.write();
   }
 };
-const zoneTH = z => ({ world: 'แดนสยาม', dungeon: 'ถ้ำผลึก', temple: 'วัดร้าง', amazon: 'ป่าอเมซอน' }[z] || z);
+const zoneTH = z => ({ world: 'แดนสยาม', dungeon: 'ถ้ำนาคา', temple: 'วัดร้าง', amazon: 'ป่าหิมพานต์' }[z] || z);
 {
   const omi = Monsters.init.bind(Monsters); Monsters.init = function () { omi(); MVPSys.init(); };
   const ok = Combat.kill.bind(Combat);
