@@ -41,7 +41,7 @@ const GhostAI = {
   },
   cast(m, k, t, clip, track) { m.cast = { k, t, track }; m.wind = 0; if (clip && m.rig) m.rig.play(clip, 1); },
   // ---- hit helpers ----
-  near(x, z, r) { const P = Player; return !P.dead && P.zone === 'temple' && dist2(P.x, P.z, x, z) <= (r + .35) ** 2; },
+  near(x, z, r) { const P = Player; return !P.dead && (P.zone === 'temple' || P.zone === 'amazon') && dist2(P.x, P.z, x, z) <= (r + .35) ** 2; },
   apply(m, mult, fx = {}) {
     const P = Player, S = Save.d; Combat.hitPlayer(m.d.atk * mult, m);
     if (P.dead) return;
@@ -63,7 +63,7 @@ const GhostAI = {
   },
   rect(m, x0, z0, rot, len, w, dur, col, mult, fx, onFire) {
     return Effects.add({ tele: true, kind: 'rect', x: x0 + Math.sin(rot) * len / 2, z: z0 + Math.cos(rot) * len / 2, x0, z0, w, l: len / 2, len, rot, dur, col: col || [1, .3, .25, .55], onFire: e => {
-      if (m.dead) return; const P = Player; if (!P.dead && P.zone === 'temple') { const dx = P.x - e.x0, dz = P.z - e.z0, fx0 = Math.sin(e.rot), fz0 = Math.cos(e.rot); const al = dx * fx0 + dz * fz0, sd = dx * fz0 - dz * fx0; if (al >= -.5 && al <= e.len + .4 && Math.abs(sd) <= e.w + .4) this.apply(m, mult, fx); } onFire && onFire(e);
+      if (m.dead) return; const P = Player; if (!P.dead && (P.zone === 'temple' || P.zone === 'amazon')) { const dx = P.x - e.x0, dz = P.z - e.z0, fx0 = Math.sin(e.rot), fz0 = Math.cos(e.rot); const al = dx * fx0 + dz * fz0, sd = dx * fz0 - dz * fx0; if (al >= -.5 && al <= e.len + .4 && Math.abs(sd) <= e.w + .4) this.apply(m, mult, fx); } onFire && onFire(e);
     } });
   },
   displace(tx, tz, dur) { const P = Player; if (P.dashT > 0) return; P.kb = { x0: P.x, z0: P.z, x1: tx, z1: tz, t: 0, dur }; P.moveTo = null; },
@@ -129,11 +129,11 @@ const GhostAI = {
     if (P.kb) { const k = P.kb; k.t += dt; const u = Math.min(1, k.t / k.dur); const r = Col.resolve(lerp(k.x0, k.x1, u), lerp(k.z0, k.z1, u), .55); P.x = r[0]; P.z = r[1]; World.clampBounds(P); if (u >= 1) P.kb = null; }
     for (let i = this.proj.length - 1; i >= 0; i--) {
       const p = this.proj[i]; p.life -= dt;
-      if (P.zone === 'temple' && !P.dead) { const a = Math.atan2(P.x - p.x, P.z - p.z); p.dir += clamp(angWrap(a - p.dir), -dt * .9, dt * .9); }
+      if ((P.zone === 'temple' || P.zone === 'amazon') && !P.dead) { const a = Math.atan2(P.x - p.x, P.z - p.z); p.dir += clamp(angWrap(a - p.dir), -dt * .9, dt * .9); }
       p.x += Math.sin(p.dir) * p.sp * dt; p.z += Math.cos(p.dir) * p.sp * dt;
       if (Math.random() < .8) Particles.add(p.x, p.y, p.z, { c: p.col, s: .4, life: .35, vy: .5 });
       let done = p.life <= 0 || Col.blocked(p.x, p.z, .1);
-      if (!done && !P.dead && P.zone === 'temple' && dist2(p.x, p.z, P.x, P.z) < .8) { Combat.hitPlayer(p.dmg, p.src); Particles.burst(p.x, p.y, p.z, 14, p.col, 3, .4, .35, 2); done = true; }
+      if (!done && !P.dead && (P.zone === 'temple' || P.zone === 'amazon') && dist2(p.x, p.z, P.x, P.z) < .8) { Combat.hitPlayer(p.dmg, p.src); Particles.burst(p.x, p.y, p.z, 14, p.col, 3, .4, .35, 2); done = true; }
       if (done) this.proj.splice(i, 1);
     }
     for (let i = this.hazards.length - 1; i >= 0; i--) {
@@ -153,7 +153,7 @@ const GhostAI = {
   },
   // drawn in the opaque pass
   draw(R) {
-    const M = Game.tmpM, P = Player; if (P.zone !== 'temple') return;
+    const M = Game.tmpM, P = Player; if (P.zone !== 'temple' && P.zone !== 'amazon') return;
     for (const p of this.proj) { M4.compose(M, p.x, p.y, p.z, 0, Game.time * 4, 0, .7, .7, .7); R.drawMesh(Models.orb, M, [.2, .4, .35], [.35, .9, .75]); GhostDraw.glow(p.x, p.y, p.z, .9, [.05, .2, .17]); }
     for (const h of this.hands) { const u = h.t / h.dur, y = -1.3 + Math.sin(Math.min(1, u * 1.6) * Math.PI * .5) * 1.2 - smooth(.7, 1, u) * 1.2; M4.compose(M, h.x, y, h.z, (Math.sin(Game.time * 8 + h.a)) * .15, h.a, 0, 1, 1, 1); R.drawMesh(GM.hand, M, null, [.1, .2, .25]); }
     for (const m of this.heads) {

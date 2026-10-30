@@ -3017,6 +3017,75 @@ const Titles = {
   all(S) { return ACHIEVEMENTS.filter(a => S.ach[a.id]).map(a => a.title).concat(S.extraTitles || []); }
 };
 
+
+/* ============================================================
+   Amazon jungle zone "ป่าอเมซอนมรณะ" — data: monsters (Lv.15–26,
+   higher than the abandoned temple), drops, gear, NPCs, quests.
+   local coords: lx = x - AX, z. Base camp at the south (z≈90),
+   river running north→south-east, piranha lake, anaconda swamp,
+   man-eating plant grove, ancient ruins, and an ogre tribe village.
+   ============================================================ */
+const AX = 3000, AMAZON_LV = 15;
+Object.assign(MONSTERS, {
+  piranha: { name: 'ปลาปิรันย่า', lvl: 15, hp: 240, atk: 30, def: 8, spd: 5.6, aggro: 7, range: 1.8, rate: .9, xp: 150, coin: [22, 34], r: .55, h: .7, jungle: true, swim: true, drops: [['m_tooth', .55], ['hp_l', .06]] },
+  dartfrog: { name: 'กบลูกดอกพิษ', lvl: 16, hp: 230, atk: 28, def: 7, spd: 4.2, aggro: 9, range: 8, rate: 1.6, xp: 160, coin: [22, 36], r: .5, h: .7, jungle: true, ranged: true, shot: 'poison', drops: [['m_venom', .5], ['mp_s', .1]] },
+  jaguar: { name: 'เสือจากัวร์', lvl: 17, hp: 430, atk: 34, def: 11, spd: 6.4, aggro: 11, range: 2.2, rate: 1.0, xp: 190, coin: [26, 40], r: .9, h: 1.3, jungle: true, sp: [{ k: 'pounce', cd: 7, rng: 8, r: 3.2 }], drops: [['m_jfur', .5], ['a_jaguar', .012], ['hp_l', .07]] },
+  spider: { name: 'แมงมุมยักษ์ทารันทูล่า', lvl: 18, hp: 470, atk: 33, def: 12, spd: 4.6, aggro: 9, range: 2.2, rate: 1.1, xp: 205, coin: [28, 42], r: 1.0, h: 1.0, jungle: true, sp: [{ k: 'hands', cd: 9, rng: 9, r: 2.6 }], drops: [['m_silk', .5], ['hp_l', .07]] },
+  ana: { name: 'งูอนาคอนด้า', lvl: 19, hp: 560, atk: 36, def: 13, spd: 3.6, aggro: 9, range: 2.8, rate: 1.3, xp: 230, coin: [30, 46], r: 1.0, h: 1.0, jungle: true, sp: [{ k: 'devour', cd: 9, rng: 6, r: 3.6 }], drops: [['m_scale', .5], ['w_fang', .01], ['hp_l', .08]] },
+  plant: { name: 'ต้นไม้กินคน', lvl: 20, hp: 680, atk: 38, def: 15, spd: .05, aggro: 7, range: 3.4, rate: 1.4, xp: 250, coin: [32, 48], r: 1.2, h: 2.6, jungle: true, rooted: true, sp: [{ k: 'hair', cd: 8, rng: 7, r: 6.5 }], drops: [['m_seed', .5], ['mp_s', .12]] },
+  caiman: { name: 'จระเข้เคแมน', lvl: 21, hp: 760, atk: 40, def: 17, spd: 3.8, aggro: 8, range: 2.6, rate: 1.3, xp: 270, coin: [34, 52], r: 1.1, h: .8, jungle: true, sp: [{ k: 'pound', cd: 9, rng: 7, r: 3.2 }], drops: [['m_hide', .5], ['hp_l', .08]] },
+  ogre: { name: 'โอกรนักรบเผ่ากินคน', lvl: 22, hp: 860, atk: 43, def: 16, spd: 4.2, aggro: 10, range: 2.6, rate: 1.25, xp: 300, coin: [38, 58], r: 1.0, h: 2.4, jungle: true, sp: [{ k: 'leap', cd: 8, rng: 9, r: 2.8 }], drops: [['m_mask', .5], ['r_totem', .01], ['hp_l', .09]] },
+  ogresham: { name: 'โอกรหมอผีเผ่ากินคน', lvl: 23, hp: 640, atk: 42, def: 13, spd: 3.6, aggro: 10, range: 9, rate: 1.7, xp: 320, coin: [40, 60], r: .9, h: 2.3, jungle: true, ranged: true, shot: 'curse', sp: [{ k: 'scream', cd: 11, rng: 6, r: 5.5 }], drops: [['m_feather', .5], ['r_totem', .015], ['mp_s', .12]] }
+});
+Object.assign(ITEMS, {
+  m_tooth: { name: 'ฟันปิรันย่า', kind: 'mat', price: 0, sell: 30, desc: 'ฟันแหลมคมเรียงเป็นแถว', icon: 'fang' },
+  m_venom: { name: 'ต่อมพิษกบลูกดอก', kind: 'mat', price: 0, sell: 32, desc: 'พิษร้ายแรง ใช้ทำยาได้ถ้ารู้วิธี', icon: 'potion' },
+  m_jfur: { name: 'หนังจากัวร์', kind: 'mat', price: 0, sell: 40, desc: 'หนังลายจุดนุ่มมือ', icon: 'cloak' },
+  m_silk: { name: 'ใยแมงมุมยักษ์', kind: 'mat', price: 0, sell: 38, desc: 'เหนียวยิ่งกว่าเชือกเหล็ก', icon: 'scroll' },
+  m_scale: { name: 'เกล็ดอนาคอนด้า', kind: 'mat', price: 0, sell: 45, desc: 'เกล็ดเขียวเข้มแข็งดั่งเกราะ', icon: 'shield' },
+  m_seed: { name: 'เมล็ดพืชกินคน', kind: 'mat', price: 0, sell: 42, desc: 'เมล็ดที่เต้นตุบๆ เหมือนหัวใจ', icon: 'jelly' },
+  m_hide: { name: 'หนังจระเข้เคแมน', kind: 'mat', price: 0, sell: 50, desc: 'หนังหนาแข็งแรงมาก', icon: 'armor' },
+  m_mask: { name: 'หน้ากากกระดูกโอกร', kind: 'mat', price: 0, sell: 55, desc: 'หน้ากากที่โอกรสวมเวลาออกล่า', icon: 'bone' },
+  m_feather: { name: 'ขนนกหมอผีโอกร', kind: 'mat', price: 0, sell: 58, desc: 'ขนนกสีสดที่เต็มไปด้วยพลังลึกลับ', icon: 'wing' },
+  w_fang: { name: 'ดาบเขี้ยวอนาคอนด้า', kind: 'gear', slot: 'weapon', atk: 34, spd: .2, lvl: 18, price: 0, sell: 1200, desc: 'ATK +34 · SPD +0.2 (Lv.18) ดรอปหายากจากงูอนาคอนด้า', icon: 'sword3', rare: true },
+  a_jaguar: { name: 'เสื้อหนังจากัวร์', kind: 'gear', slot: 'armor', def: 22, hp: 120, spd: .4, lvl: 17, price: 0, sell: 1000, desc: 'DEF +22 · HP +120 · SPD +0.4 (Lv.17)', icon: 'cloak', rare: true },
+  r_totem: { name: 'สร้อยโทเท็มหมอผี', kind: 'gear', slot: 'acc', atk: 14, hp: 90, mp: 50, lvl: 20, price: 0, sell: 1100, desc: 'ATK +14 · HP +90 · MP +50 (Lv.20)', icon: 'totem', rare: true },
+  jg_antidote: { name: 'ยาแก้พิษป่าอเมซอน', kind: 'use', holy: true, heal: 260, price: 90, desc: 'ล้างพิษและสถานะผิดปกติทั้งหมด ฟื้น HP 260', icon: 'potB' },
+  jg_spear: { name: 'หอกพรานป่า', kind: 'gear', slot: 'weapon', atk: 26, lvl: 15, price: 2600, desc: 'ATK +26 (Lv.15)', icon: 'sword2' },
+  jg_vest: { name: 'เสื้อกั๊กนักสำรวจ', kind: 'gear', slot: 'armor', def: 17, hp: 80, lvl: 15, price: 2400, desc: 'DEF +17 · HP +80 (Lv.15)', icon: 'armor2' }
+});
+WARPS.push({ id: 'w_amazon', name: 'ค่ายนักสำรวจอเมซอน', zone: 'amazon', x: AX + 8, z: 86 });
+Object.assign(NPCS, {
+  marco: { name: 'ดร.มาร์โก้', role: 'หัวหน้าคณะสำรวจอเมซอน', sheet: 'knight', zone: 'amazon', x: AX - 3, z: 88, face: 3.1, voice: [.8, .95], hair: 30, pose: 9, lines: ['ป่านี้ยังมีความลับอีกมาก', 'ระวังตัวด้วย ทุกอย่างที่นี่อยากกินเรา', 'เผ่าโอกรอยู่ทางเหนือ อย่าเข้าไปคนเดียว'] },
+  emma: { name: 'นักชีววิทยาเอมม่า', role: 'ผู้เชี่ยวชาญสัตว์ป่า', sheet: 'priest', zone: 'amazon', x: AX + 4, z: 94, face: 3.4, voice: [1.3, 1.05], hair: 15, pose: 11, lines: ['พืชกินคนพวกนี้น่าสนใจที่สุด!', 'กบสีสดแปลว่าพิษร้าย จำไว้นะ', 'ฉันต้องการตัวอย่างเพิ่มอีก'] },
+  jose: { name: 'พรานป่าโฮเซ่', role: 'ร้านเสบียงป่า', sheet: 'archer', zone: 'amazon', x: AX - 10, z: 92, face: 2.4, shop: 'jungle', voice: [.9, 1.05], hair: 'black', pose: 13, lines: ['ยาแก้พิษ! อย่าออกไปโดยไม่มีมัน', 'เสือจากัวร์ล่าตอนเงียบที่สุด', 'แม่น้ำนี้มีปิรันย่าเป็นพันตัว'] }
+});
+const JUNGLE_SHOP = ['jg_antidote', 'hp_l', 'mp_s', 'jg_spear', 'jg_vest', 'rf_stone', 'pet_food'];
+const Q_AMAZON = {
+  a1: { type: 'main', giver: 'marco', minLv: AMAZON_LV, title: 'ยินดีต้อนรับสู่ป่ามรณะ', obj: [{ k: 'kill', mon: 'piranha', n: 6 }, { k: 'collect', item: 'm_tooth', n: 4 }],
+    text: 'นักผจญภัยจาก Aurelion! ดีใจที่มาถึง เรือของคณะสำรวจถูกปลาปิรันย่ารุมจนข้ามแม่น้ำไม่ได้ ช่วยปราบพวกมันในทะเลสาบทางตะวันออก 6 ตัว แล้วเก็บฟันมา 4 ซี่เป็นหลักฐาน',
+    done: 'ยอดเยี่ยม! ตอนนี้เราข้ามแม่น้ำได้แล้ว ป่าข้างหน้ายังมีอะไรรออยู่อีกเยอะ', rew: { xp: 2400, coin: 600, items: [['jg_antidote', 3], ['hp_l', 3]] }, take: true, award: 'ผู้พิชิตป่าอเมซอน' },
+  a2: { type: 'main', giver: 'marco', req: 'a1', title: 'ร่องรอยของคณะสำรวจที่หายไป', obj: [{ k: 'reach', zone: 'amazon', x: AX - 58, z: -10, r: 9, label: 'สำรวจซากวิหารโบราณทางตะวันตก' }, { k: 'kill', mon: 'jaguar', n: 5 }],
+    text: 'เมื่อเดือนก่อนคณะสำรวจชุดแรกหายไปใกล้ซากวิหารโบราณทางตะวันตก ไปดูให้หน่อย และระวังเสือจากัวร์ที่เฝ้าอยู่แถวนั้นด้วย',
+    done: 'บันทึกการเดินทาง… พวกเขาเขียนว่า "อย่าเข้าใกล้หมู่บ้านโอกร" แย่แล้ว…', rew: { xp: 3200, coin: 800, items: [['hp_l', 4], ['rf_stone', 2]] } },
+  a3: { type: 'main', giver: 'marco', req: 'a2', minLv: 20, title: 'หมู่บ้านโอกรเผ่ากินคน', obj: [{ k: 'kill', mon: 'ogre', n: 8 }, { k: 'kill', mon: 'ogresham', n: 4 }],
+    text: 'โอกรเผ่ากินคนจับตัวนักสำรวจไปที่หมู่บ้านทางเหนือ ปราบโอกรนักรบ 8 ตัวและหมอผี 4 ตัวเพื่อให้พวกเขาหนีออกมาได้ ระวังหัวหน้าเผ่าที่ตัวใหญ่ยักษ์!',
+    done: 'คณะสำรวจกลับมาครบทุกคน! เจ้าคือวีรบุรุษของป่าอเมซอน', rew: { xp: 5200, coin: 1500, items: [['rf_stone2', 1], ['hp_l', 5]] }, gems: 40, award: 'ผู้ปลดปล่อยแห่งอเมซอน' },
+  a4: { type: 'side', giver: 'emma', req: 'a1', title: 'ตัวอย่างพืชกินคน', obj: [{ k: 'collect', item: 'm_seed', n: 5 }, { k: 'collect', item: 'm_venom', n: 4 }],
+    text: 'ฉันกำลังศึกษาพืชกินคนในดงไม้ทางตะวันออกเฉียงเหนือ กับกบลูกดอกพิษริมลำธาร ช่วยเก็บเมล็ดพืชกินคน 5 เมล็ดและต่อมพิษ 4 ชิ้นได้ไหม?',
+    done: 'ตัวอย่างสมบูรณ์มาก! ฉันทำยาแก้พิษสูตรพิเศษให้ด้วยนะ', rew: { xp: 2600, coin: 700, items: [['jg_antidote', 5], ['mp_s', 5]] }, take: true },
+  a5: { type: 'side', giver: 'emma', req: 'a4', title: 'งูยักษ์แห่งหนองน้ำ', obj: [{ k: 'kill', mon: 'ana', n: 6 }, { k: 'collect', item: 'm_scale', n: 4 }],
+    text: 'หนองน้ำทางตะวันตกเฉียงเหนือมีงูอนาคอนด้ายาวกว่า 10 เมตร! ฉันอยากได้เกล็ดมาศึกษา ระวังมันรัดนะ',
+    done: 'เกล็ดสวยงามมาก! ได้ข่าวว่าในหนองน้ำมีราชันย์อนาคอนด้าตัวใหญ่กว่านี้อีก…', rew: { xp: 3000, coin: 800, items: [['rf_stone', 3], ['pet_treat', 2]] }, take: true },
+  a6: { type: 'side', giver: 'jose', req: 'a1', title: 'หนังสัตว์สำหรับฤดูฝน', obj: [{ k: 'collect', item: 'm_jfur', n: 4 }, { k: 'collect', item: 'm_hide', n: 3 }],
+    text: 'ฤดูฝนใกล้มาแล้ว ข้าต้องการหนังจากัวร์ 4 ผืนกับหนังจระเข้เคแมน 3 ผืนทำเต็นท์กันฝน เคแมนนอนอาบแดดริมแม่น้ำนะ',
+    done: 'หนังชั้นดีทั้งนั้น! รับเสื้อกั๊กนักสำรวจไปใส่เลย', rew: { xp: 2800, coin: 600, items: [['jg_vest', 1]] }, take: true },
+  ad1: { type: 'daily', giver: 'jose', req: 'a1', title: 'ล่าประจำวันในป่ามรณะ', obj: [{ k: 'kill', mon: 'dartfrog', n: 8 }, { k: 'kill', mon: 'spider', n: 5 }],
+    text: 'ภารกิจประจำวัน: กบพิษกับแมงมุมยักษ์มาใกล้ค่ายทุกวัน ช่วยปราบกบลูกดอกพิษ 8 ตัวและแมงมุมยักษ์ 5 ตัว',
+    done: 'ค่ายปลอดภัยไปอีกวัน ขอบใจ!', rew: { xp: 2000, coin: 500, items: [['jg_antidote', 2]] } }
+};
+Object.assign(QUESTS, Q_AMAZON); QUEST_ORDER.push('a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'ad1');
+const AMAZON_AREAS = [[0, 90, 14, 'ค่ายนักสำรวจอเมซอน'], [46, 30, 13, 'ทะเลสาบปิรันย่า'], [-58, -64, 16, 'หนองน้ำอนาคอนด้า'], [52, -52, 15, 'ดงไม้กินคน'], [-58, -10, 15, 'ซากวิหารโบราณ'], [0, -84, 18, 'หมู่บ้านโอกรเผ่ากินคน'], [-8, 52, 12, 'ลำธารกบพิษ'], [-30, 40, 10, 'ป่าทึบเสือจากัวร์']];
 /* ============================================================
    World building: terrain, town, forest, dungeon, colliders
    ============================================================ */
@@ -3972,6 +4041,187 @@ SPAWNS.push(
   ['huakhat', TX - 20, -30, 8, 3], ['tabo', TX + 26, 4, 5, 2], ['chakla', TX + 40, 45, 5, 3], ['saming', TX - 32, -56, 7, 2], ['pusom', TX, -29, 3, 1], ['maenak', TX + 47, -34, 2, 1]
 );
 
+
+/* ============================================================
+   Amazon zone world build: dense rainforest, river + piranha
+   lake, anaconda swamp, man-eating plant grove, ancient ruins,
+   ogre tribe village, explorers' base camp, east gate in Aurelion.
+   ============================================================ */
+BOUNDS.amazon = { x0: AX - 100, x1: AX + 100, z0: -102, z1: 108 };
+{ const oz = World.zoneOf; World.zoneOf = function (x) { return x > 2500 ? 'amazon' : oz.call(this, x); }; }
+const ALAKE = { x: 46, z: 30, r: 13 }, ASWAMP = { x: -58, z: -64, r: 19 }, AGROVE = { x: 52, z: -52, r: 15 }, ARUIN = { x: -58, z: -10, r: 15 }, AVILL = { x: -14, z: -84, r: 21 }, ACAMP = { x: 0, z: 90, r: 15 };
+const ABRIDGE = [{ z: -40, w: 3 }, { z: 66, w: 3 }];
+const riverX = z => 22 + 14 * Math.sin(z / 26) + 6 * Math.sin(z / 11);
+function aRiverDist(lx, z) {
+  if (z <= 30) return Math.abs(lx - riverX(z));
+  if (z > 30 && z < 44) { const d1 = Math.hypot(lx - riverX(z), z - 30); return Math.min(d1, 99); }
+  return 99;
+}
+function aOutflowDist(lx, z) { return segDist(lx, z, ALAKE.x + 10, ALAKE.z + 4, 112, 46); }
+const APATHS = [[[0, 112], [0, 90], [-6, 64], [-12, 40], [-20, 20], [-30, 2], [-44, -8]], [[-12, 40], [-4, 20], [2, -10], [0, -40], [11, -40], [22, -40], [36, -46], [48, -52]], [[2, -10], [-6, -40], [-12, -62], [-14, -84]], [[-30, 2], [-46, -30], [-58, -60]], [[0, 90], [20, 70], [34, 44]]];
+function aPathDist(lx, z) { let m = 1e9; for (const p of APATHS) for (let i = 0; i < p.length - 1; i++) m = Math.min(m, segDist(lx, z, p[i][0], p[i][1], p[i + 1][0], p[i + 1][1])); return m; }
+const inC = (lx, z, c, k = 1) => Math.hypot(lx - c.x, z - c.z) < c.r * k;
+function amazonHeight(lx, z) {
+  let h = 0;
+  const rd = aRiverDist(lx, z), od = aOutflowDist(lx, z); const rw = Math.min(rd, od);
+  if (rw < 5.5) h -= 1.5 * (1 - smooth(2.5, 5.5, rw));
+  const dl = Math.hypot(lx - ALAKE.x, z - ALAKE.z); if (dl < ALAKE.r + 3) h -= .7 * (1 - smooth(ALAKE.r - 3, ALAKE.r + 3, dl));
+  const ds = Math.hypot(lx - ASWAMP.x, z - ASWAMP.z); if (ds < ASWAMP.r + 2) h -= .32 * (1 - smooth(ASWAMP.r - 4, ASWAMP.r + 2, ds)) * (.7 + vnoise(lx * .2, z * .2) * .6);
+  const ex = Math.max(Math.abs(lx) - 98, z - 106, -z - 100); if (ex > 0 && !(Math.abs(lx) < 6 && z > 100)) h += ex * .9 + vnoise(lx * .08, z * .08) * ex * .5;
+  if (inC(lx, z, AVILL, .35)) h += .05;
+  return h;
+}
+const APAL = {
+  floor: hexc('#2f4a26'), floor2: hexc('#253d1f'), moss: hexc('#3f6a2c'), mud: hexc('#4a3a26'), mud2: hexc('#3a2c1c'), dirt: hexc('#6a5034'), sand: hexc('#9a8a62'),
+  stone: hexc('#7a7a6a'), stone2: hexc('#5e6256'), stoneM: hexc('#56704a'), bark: hexc('#4a3626'), bark2: hexc('#3a2a1c'), leaf: hexc('#1f4a22'), leaf2: hexc('#2a5c26'), leaf3: hexc('#3a7a2c'), leaf4: hexc('#16361a'),
+  palm: hexc('#3a8a3a'), thatch: hexc('#9a7a44'), hut: hexc('#7a5a36'), bone: hexc('#e6dcc4'), red: hexc('#c8323a'), purple: hexc('#8a3aa8'), yellow: hexc('#f2c43a'), canvas: hexc('#c8b88a'), canvas2: hexc('#8a7a4a'), crate: hexc('#8a6438'), water: hexc('#2a5a4a')
+};
+{ const T = { grass: ['floor', 'floor2'], moss: ['moss', 'stoneM'], rough: ['mud', 'mud2', 'dirt', 'stone2'], sand: ['sand'], brick: ['stone', 'stone2'], bark: ['bark', 'bark2'], leaves: ['leaf', 'leaf2', 'leaf3', 'leaf4', 'palm'], thatch: ['thatch'], planks: ['hut', 'crate'], cloth: ['canvas', 'canvas2'], water: ['water'] }; for (const t in T) for (const k of T[t]) tagTex(APAL[k], t); }
+function amazonColor(lx, z, h) {
+  const n = vnoise(lx * .08 + 11, z * .08), n2 = vnoise(lx * .27, z * .27 + 3);
+  let c = mixc(APAL.floor, APAL.floor2, n); c = mixc(c, APAL.moss, n2 * .35);
+  const pd = aPathDist(lx, z); if (pd < 2.4) c = mixc(c, mixc(APAL.dirt, APAL.mud, n2), 1 - smooth(1.2, 2.4, pd));
+  if (inC(lx, z, ACAMP)) c = mixc(c, APAL.dirt, (1 - smooth(ACAMP.r * .6, ACAMP.r, Math.hypot(lx - ACAMP.x, z - ACAMP.z))) * .85);
+  if (inC(lx, z, AVILL, 1.1)) c = mixc(c, mixc(APAL.dirt, APAL.mud2, n), (1 - smooth(AVILL.r * .7, AVILL.r * 1.1, Math.hypot(lx - AVILL.x, z - AVILL.z))) * .9);
+  if (inC(lx, z, ARUIN)) c = mixc(c, mixc(APAL.stone2, APAL.stoneM, n2), (1 - smooth(ARUIN.r * .5, ARUIN.r, Math.hypot(lx - ARUIN.x, z - ARUIN.z))) * .8);
+  if (inC(lx, z, ASWAMP, 1.15)) c = mixc(c, mixc(hexc('#3a4a26'), APAL.mud2, n), .7);
+  if (inC(lx, z, AGROVE, 1.1)) c = mixc(c, hexc('#4a2e3a'), .45 * (1 - smooth(AGROVE.r * .6, AGROVE.r * 1.1, Math.hypot(lx - AGROVE.x, z - AGROVE.z))));
+  if (h < -.25) c = mixc(c, APAL.mud, clamp(-h, 0, 1));
+  if (Math.hypot(lx - ALAKE.x, z - ALAKE.z) < ALAKE.r + 4 && h > -.6) c = mixc(c, APAL.sand, .4);
+  return c;
+}
+const AB = {
+  tree(g, x, z, s, rng) {
+    const H = (6.5 + rng() * 3) * s, r = .45 * s;
+    g.tex = 'bark'; g.cyl(x, 0, z, r, r * .7, H, 7, rng() < .5 ? APAL.bark : APAL.bark2);
+    for (let i = 0; i < 4; i++) { const a = i / 4 * TAU + rng(); g.cone(x + Math.sin(a) * r * .6, 1.2 * s, z + Math.cos(a) * r * .6, Math.sin(a), -1.1, Math.cos(a), r * .55, 1.6 * s, 4, APAL.bark2); }
+    g.tex = 'leaves'; const n = 4 + (rng() * 3 | 0);
+    for (let i = 0; i < n; i++) { const a = rng() * TAU, d = rng() * 2.2 * s; g.ell(x + Math.sin(a) * d * .7, H + (rng() - .3) * 1.2 * s, z + Math.cos(a) * d * .7, (1.35 + rng() * .9) * s, (.8 + rng() * .4) * s, (1.35 + rng() * .9) * s, pick([APAL.leaf, APAL.leaf2, APAL.leaf4]), 7, 5); }
+    if (rng() < .7) for (let i = 0; i < 3; i++) { const a = rng() * TAU, d = 1 + rng() * 1.6 * s, len = 2 + rng() * 4; g.cyl(x + Math.sin(a) * d, H - len, z + Math.cos(a) * d, .05, .05, len, 3, APAL.leaf3); }
+    g.tex = null; Col.addCircle(x, z, Math.max(.6, r * 1.3), 'atree');
+  },
+  palm(g, x, z, s, rng) {
+    const H = (4.5 + rng() * 2) * s, lean = (rng() - .5) * .5; g.tex = 'bark';
+    for (let i = 0; i < 5; i++) { const t = i / 5, t2 = (i + 1) / 5; g.cyl(x + lean * t * H * .3, t * H, z, .22 * s * (1 - t * .3), .2 * s * (1 - t2 * .3), H / 5 + .05, 6, APAL.bark); }
+    const tx = x + lean * H * .3; g.tex = 'leaves';
+    for (let i = 0; i < 7; i++) { const a = i / 7 * TAU + rng() * .3; g.cone(tx, H, z, Math.sin(a), -.25, Math.cos(a), .28 * s, 2.8 * s, 3, APAL.palm); }
+    g.sphere(tx, H - .1, z, .3 * s, APAL.bark2, 5, 4); g.tex = null; Col.addCircle(x, z, .4 * s, 'apalm');
+  },
+  fern(g, x, z, s, rng) { for (let i = 0; i < 6; i++) { const a = i / 6 * TAU + rng(); g.cone(x, .05, z, Math.sin(a), .55, Math.cos(a), .16 * s, 1.3 * s, 3, rng() < .5 ? APAL.leaf3 : APAL.leaf2); } },
+  bigLeaf(g, x, z, s, rng) { for (let i = 0; i < 3; i++) { const a = rng() * TAU; g.cyl(x, 0, z, .04, .04, .8 * s, 3, APAL.leaf3); g.ell(x + Math.sin(a) * .5 * s, .9 * s, z + Math.cos(a) * .5 * s, .5 * s, .05, .8 * s, APAL.leaf2, 6, 3, .4, a); } },
+  flower(g, x, z, s, col) { g.cyl(x, 0, z, .06 * s, .08 * s, 1.4 * s, 5, APAL.leaf3); for (let i = 0; i < 6; i++) { const a = i / 6 * TAU; g.ell(x + Math.sin(a) * .45 * s, 1.45 * s, z + Math.cos(a) * .45 * s, .4 * s, .08 * s, .25 * s, col, 6, 3, 0, a); } g.sphere(x, 1.5 * s, z, .2 * s, APAL.yellow, 6, 4); },
+  rock(g, x, z, r) { g.tex = 'moss'; g.rock(x, r * .3, z, r, mixc(APAL.stone2, APAL.stoneM, .5)); g.tex = null; Col.addCircle(x, z, r * .8, 'arock'); },
+  hut(g, x, z, r, rot) {
+    g.tex = 'planks'; g.cyl(x, 0, z, r, r, 2.2, 10, APAL.hut); g.tex = 'thatch'; g.cone(x, 2.1, z, 0, 1, 0, r * 1.35, 2.4, 10, APAL.thatch);
+    g.tex = null; const a = rot; g.box(x + Math.sin(a) * r, .9, z + Math.cos(a) * r, .9, 1.8, .2, hexc('#1a120c'), null);
+    for (let i = 0; i < 3; i++) g.sphere(x + Math.sin(a + .5 + i * .2) * (r + .05), 1.9 + i * .1, z + Math.cos(a + .5 + i * .2) * (r + .05), .16, APAL.bone, 5, 4);
+    Col.addCircle(x, z, r + .2, 'ahut');
+  },
+  totem(g, x, z, h) { g.tex = 'bark'; g.cyl(x, 0, z, .28, .25, h, 6, APAL.bark2); g.tex = null; for (let i = 0; i < 3; i++) { const y = h * (.35 + i * .25); g.box(x, y, z + .22, .5, .35, .1, [APAL.red, APAL.yellow, hexc('#2a8a6a')][i]); g.box(x - .12, y + .05, z + .28, .1, .08, .03, hexc('#111')); g.box(x + .12, y + .05, z + .28, .1, .08, .03, hexc('#111')); } g.sphere(x, h + .15, z, .3, APAL.bone, 6, 5); Col.addCircle(x, z, .45, 'atotem'); },
+  skullPole(g, x, z) { g.cyl(x, 0, z, .08, .07, 2.4, 4, APAL.bark2); g.sphere(x, 2.5, z, .22, APAL.bone, 6, 5); g.box(x - .07, 2.5, z + .18, .06, .06, .04, hexc('#111')); g.box(x + .07, 2.5, z + .18, .06, .06, .04, hexc('#111')); },
+  tent(g, x, z, rot, col) { g.push(x, 0, z, 0, rot, 0); g.tex = 'cloth'; g.roof(0, 0, 0, 3.6, 2.2, 3.2, col, true); g.tex = null; g.box(0, .6, 1.62, .9, 1.2, .05, hexc('#2a1e14')); g.box(0, .6, -1.62, 3.0, 1.1, .05, col); g.cyl(0, 0, 1.75, .05, .05, 2.4, 4, APAL.bark2); g.pop(); Col.addCircle(x, z, 1.9, 'atent'); },
+  crate(g, x, z, s = 1) { g.tex = 'planks'; g.box(x, .4 * s, z, .8 * s, .8 * s, .8 * s, APAL.crate); g.tex = null; Col.addCircle(x, z, .5 * s, 'acrate'); }
+};
+function buildAmazonZone(R) {
+  const rng = mulberry32(9191), g = new Geo(311), gw = new Geo(312), w = new Geo(313);
+  // ground
+  const S = 4, X0 = -112, X1 = 112, Z0 = -112, Z1 = 116, nx = (X1 - X0) / S, nz = (Z1 - Z0) / S, H = [], C = [];
+  for (let i = 0; i <= nx; i++) { H[i] = []; C[i] = []; for (let j = 0; j <= nz; j++) { const lx = X0 + i * S, z = Z0 + j * S; const h = amazonHeight(lx, z); H[i][j] = h; C[i][j] = amazonColor(lx, z, h); } }
+  const gg = new Geo(310); gg.jit = .02; gg.uvs = .5;
+  const tTex = (lx, z, h) => { if (aPathDist(lx, z) < 1.6 || inC(lx, z, ACAMP, .7) || inC(lx, z, AVILL, .8)) return 'rough'; if (inC(lx, z, ARUIN, .7)) return 'brick'; if (h < -.3) return 'rough'; return 'grass'; };
+  for (let i = 0; i < nx; i++) for (let j = 0; j < nz; j++) {
+    const x0 = AX + X0 + i * S, z0 = Z0 + j * S, x1 = x0 + S, z1 = z0 + S;
+    const a = [x0, H[i][j], z0], b = [x1, H[i + 1][j], z0], c = [x1, H[i + 1][j + 1], z1], d = [x0, H[i][j + 1], z1];
+    gg.tex = tTex(X0 + i * S + S / 2, Z0 + j * S + S / 2, (H[i][j] + H[i + 1][j + 1]) / 2);
+    gg.triC(d, c, b, C[i][j + 1], C[i + 1][j + 1], C[i + 1][j]); gg.triC(d, b, a, C[i][j + 1], C[i + 1][j], C[i][j]);
+  }
+  gg.smoothNormals(80); for (let k = 0; k < gg.d.length; k++) g.d.push(gg.d[k]);
+  g.jit = .05;
+  // water: river, outflow, lake, swamp (one plane per cell where the ground dips)
+  w.tex = 'water';
+  for (let i = 0; i < nx; i++) for (let j = 0; j < nz; j++) { const lx = X0 + i * S + S / 2, z = Z0 + j * S + S / 2; const hh = Math.min(H[i][j], H[i + 1][j], H[i][j + 1], H[i + 1][j + 1]); if (hh > -.18) continue; const x0 = AX + X0 + i * S, z0 = Z0 + j * S, y = inC(lx, z, ASWAMP, 1.2) ? -.08 : -.14; const col = inC(lx, z, ASWAMP, 1.2) ? hexc('#3a4a2a') : hexc('#2a5a52'); w.quadUV([x0, y, z0 + S], [x0 + S, y, z0 + S], [x0 + S, y, z0], [x0, y, z0], col, 'water'); }
+  // river collision (except bridges)
+  for (let z = -104; z <= 34; z += 1.6) { if (ABRIDGE.some(b => Math.abs(z - b.z) < b.w + .4)) continue; Col.addCircle(AX + riverX(z), z, 3.1, 'ariver'); }
+  for (let t = 0; t <= 1; t += .02) { const lx = lerp(ALAKE.x + 10, 112, t), z = lerp(ALAKE.z + 4, 46, t); if (Math.abs(lx - 20 - (ABRIDGE[1].z - 66)) < 0 ) continue; Col.addCircle(AX + lx, z, 3.0, 'ariver'); }
+  // bridges
+  for (const b of ABRIDGE) {
+    const cx = b.z === -40 ? riverX(-40) : riverX(30), cz = b.z === -40 ? -40 : 66;
+    if (b.z === 66) continue;
+    g.tex = 'planks'; for (let i = -5; i <= 5; i++) g.box(AX + cx + i * .9, .25, cz, .8, .12, b.w * 2, i % 2 ? APAL.hut : APAL.crate);
+    for (const s of [-1, 1]) { g.box(AX + cx, .9, cz + s * b.w, 10, .12, .12, APAL.bark2); for (let i = -5; i <= 5; i += 2) g.cyl(AX + cx + i * .9, 0, cz + s * b.w, .1, .1, 1, 4, APAL.bark2); }
+    g.tex = null;
+  }
+  // camp
+  { const cx = AX + ACAMP.x, cz = ACAMP.z; AB.tent(g, cx - 9, cz - 2, .4, APAL.canvas); AB.tent(g, cx + 10, cz + 2, -.5, APAL.canvas2); AB.tent(g, cx - 4, cz + 9, 3.2, APAL.canvas);
+    for (let i = 0; i < 6; i++) AB.crate(g, cx + 12 + (i % 3) * .9, cz - 6 + Math.floor(i / 3) * .9, .9 + rng() * .2);
+    g.tex = 'rough'; for (let i = 0; i < 8; i++) { const a = i / 8 * TAU; g.rock(cx + Math.cos(a) * 1.3, .15, cz + 4 + Math.sin(a) * 1.3, .32, APAL.stone2); } g.tex = null;
+    g.cyl(cx, 0, cz + 4, .9, .9, .15, 8, hexc('#2a1a10')); Col.addCircle(cx, cz + 4, 1.3, 'afire');
+    for (const [lx, lz] of [[-14, -8], [14, -8], [-14, 10], [14, 10]]) { g.cyl(cx + lx, 0, cz + lz, .12, .1, 3, 5, APAL.bark2); g.box(cx + lx, 3.05, cz + lz, .35, .45, .35, hexc('#3a2a1a')); gw.box(cx + lx, 3.05, cz + lz, .22, .3, .22, [1, .8, .4]); }
+    g.box(cx - 16, 1.2, cz + 2, .2, 2.4, .2, APAL.bark2); g.box(cx - 16, 2.2, cz + 2, .1, .9, 1.4, APAL.red);
+  }
+  // ogre village: palisade, huts, totems, bonfire, skull poles
+  { const vx = AX + AVILL.x, vz = AVILL.z, R0 = AVILL.r;
+    for (let i = 0; i < 60; i++) { const a = i / 60 * TAU; if (Math.abs(angWrap(a - Math.PI / 2)) < .22) continue; const x = vx + Math.cos(a) * R0, z = vz + Math.sin(a) * R0, hh = 3.2 + rng() * .8; g.tex = 'bark'; g.cyl(x, 0, z, .32, .25, hh, 5, APAL.bark2); g.cone(x, hh, z, 0, 1, 0, .25, .5, 5, APAL.bark2); g.tex = null; Col.addCircle(x, z, .5, 'apal'); }
+    for (let i = 0; i < 7; i++) { const a = i / 7 * TAU + .3, r = 13 + (i % 2) * 2.5; AB.hut(g, vx + Math.cos(a) * r, vz + Math.sin(a) * r, 2.2 + rng() * .5, a + Math.PI); }
+    for (const [dx, dz] of [[-5, 6], [5, 6], [-7, -3], [7, -3]]) AB.totem(g, vx + dx, vz + dz, 3.6);
+    for (let i = 0; i < 10; i++) { const a = i / 10 * TAU; AB.skullPole(g, vx + Math.cos(a) * 9, vz + Math.sin(a) * 9); }
+    for (const s of [-1, 1]) AB.totem(g, vx + s * 3.2, vz + R0 + 1, 4.6);
+    g.tex = 'rough'; for (let i = 0; i < 10; i++) { const a = i / 10 * TAU; g.rock(vx + Math.cos(a) * 2, .2, vz + Math.sin(a) * 2, .42, APAL.stone2); } g.tex = null; Col.addCircle(vx, vz, 2.2, 'afire');
+    g.cyl(vx, 0, vz, 1.6, 1.6, .2, 10, hexc('#1a100a')); g.box(vx - 1, 1.6, vz, .15, 3.2, .15, APAL.bark2); g.box(vx + 1, 1.6, vz, .15, 3.2, .15, APAL.bark2); g.box(vx, 3.2, vz, 2.4, .15, .15, APAL.bark2);
+  }
+  // ancient ruins: stepped pyramid, pillars, stone heads
+  { const rx = AX + ARUIN.x - 10, rz = ARUIN.z - 6;
+    g.tex = 'brick'; for (let i = 0; i < 5; i++) { const s = 12 - i * 2.2; g.box(rx, i * 1.4 + .7, rz, s, 1.4, s, i % 2 ? APAL.stone : APAL.stone2); }
+    g.box(rx, 1.6, rz + 6.2, 3, .3, 2.6, APAL.stone2); g.box(rx, 7.6, rz, 2.4, 1.6, 2.4, APAL.stoneM); g.tex = null; Col.addBox(rx - 6.2, rz - 6.2, rx + 6.2, rz + 6.2, 'apyr');
+    for (let i = 0; i < 8; i++) { const a = i / 8 * TAU, x = AX + ARUIN.x + Math.cos(a) * 10, z = ARUIN.z + Math.sin(a) * 10; if (Math.hypot(x - rx, z - rz) < 9) continue; const hh = 2 + rng() * 3; g.tex = 'brick'; g.box(x, hh / 2, z, 1, hh, 1, rng() < .5 ? APAL.stone : APAL.stoneM); g.tex = null; Col.addCircle(x, z, .8, 'apil'); if (rng() < .4) g.box(x + 1.2, .3, z + .6, 1.6, .6, .8, APAL.stone2); }
+    for (const [dx, dz] of [[6, 10], [-6, 12]]) { const x = AX + ARUIN.x + dx, z = ARUIN.z + dz; g.tex = 'moss'; g.box(x, 1.2, z, 2, 2.4, 1.8, APAL.stoneM); g.tex = null; g.box(x - .45, 1.6, z + .92, .4, .25, .06, hexc('#1a1a14')); g.box(x + .45, 1.6, z + .92, .4, .25, .06, hexc('#1a1a14')); g.box(x, .9, z + .92, .9, .2, .06, hexc('#1a1a14')); Col.addCircle(x, z, 1.3, 'ahead'); }
+  }
+  // man-eating plant grove: giant flowers
+  for (let i = 0; i < 16; i++) { const a = rng() * TAU, d = 4 + rng() * AGROVE.r; const x = AX + AGROVE.x + Math.cos(a) * d, z = AGROVE.z + Math.sin(a) * d; if (Col.blocked(x, z, 1.5)) continue; AB.flower(g, x, z, 1.4 + rng() * 1.4, pick([APAL.red, APAL.purple, hexc('#e85a9a')])); }
+  // swamp: reeds and dead trees
+  for (let i = 0; i < 120; i++) { const a = rng() * TAU, d = rng() * ASWAMP.r * 1.1; const x = AX + ASWAMP.x + Math.cos(a) * d, z = ASWAMP.z + Math.sin(a) * d; g.cyl(x, -.3, z, .03, .02, 1.2 + rng(), 3, hexc('#6a7a3a')); }
+  for (let i = 0; i < 9; i++) { const a = rng() * TAU, d = 6 + rng() * ASWAMP.r; const x = AX + ASWAMP.x + Math.cos(a) * d, z = ASWAMP.z + Math.sin(a) * d; if (Col.blocked(x, z, 2)) continue; g.tex = 'bark'; g.cyl(x, -.3, z, .4, .25, 5, 5, hexc('#3a3226')); for (let k = 0; k < 3; k++) { const b = rng() * TAU; g.cone(x, 3 + k * .6, z, Math.sin(b), .6, Math.cos(b), .14, 2, 4, hexc('#3a3226')); } g.tex = null; Col.addCircle(x, z, .6, 'adead'); }
+  WARPS.forEach(wp => { if (wp.zone === 'amazon') buildWarpBase(g, wp.x, wp.z); });
+  // forest
+  const clear = (x, z, r = 2.2) => { const lx = x - AX; if (aPathDist(lx, z) < 5) return false; if (inC(lx, z, ACAMP, 1.05) || inC(lx, z, AVILL, 1.12) || inC(lx, z, ARUIN, 1) || inC(lx, z, AGROVE, .9) || Math.hypot(lx - ALAKE.x, z - ALAKE.z) < ALAKE.r + 4) return false; if (aRiverDist(lx, z) < 6 || aOutflowDist(lx, z) < 6) return false; if (inC(lx, z, ASWAMP, .85)) return false; if (Col.blocked(x, z, r)) return false; return true; };
+  for (let i = 0; i < 420; i++) { const lx = -108 + rng() * 216, z = -108 + rng() * 222; const edge = Math.abs(lx) > 92 || z < -94 || z > 100; if (!edge && rng() < .3) continue; if (!clear(AX + lx, z, 3)) continue; AB.tree(g, AX + lx, z, .85 + rng() * .6, rng); }
+  for (let i = 0; i < 160; i++) { const lx = -96 + rng() * 192, z = -96 + rng() * 196; if (!clear(AX + lx, z, 1.6)) continue; AB.palm(g, AX + lx, z, .8 + rng() * .5, rng); }
+  for (let i = 0; i < 700; i++) { const lx = -100 + rng() * 200, z = -100 + rng() * 205; if (aPathDist(lx, z) < 2 || inC(lx, z, ACAMP, .8) || inC(lx, z, AVILL, .9) || amazonHeight(lx, z) < -.2) continue; if (rng() < .55) AB.fern(g, AX + lx, z, .7 + rng() * .8, rng); else AB.bigLeaf(g, AX + lx, z, .8 + rng() * .6, rng); }
+  for (let i = 0; i < 60; i++) { const lx = -96 + rng() * 192, z = -96 + rng() * 196; if (!clear(AX + lx, z, 1.4)) continue; AB.rock(g, AX + lx, z, .6 + rng() * 1.2); }
+  for (let i = 0; i < 90; i++) { const lx = -96 + rng() * 192, z = -96 + rng() * 196; if (amazonHeight(lx, z) < -.2 || aPathDist(lx, z) < 1.8) continue; AB.flower(g, AX + lx, z, .35 + rng() * .3, pick([APAL.red, APAL.yellow, APAL.purple, hexc('#ff8a3a')])); }
+  // glowing mushrooms
+  for (let i = 0; i < 70; i++) { const lx = -96 + rng() * 192, z = -96 + rng() * 196; if (amazonHeight(lx, z) < -.2) continue; const x = AX + lx; g.cyl(x, 0, z, .05, .06, .3, 4, hexc('#d8d0b0')); gw.sphere(x, .34, z, .14, pick([[.3, 1, .8], [.6, .9, 1], [1, .6, .9]]), 5, 3); }
+  World.meshes.amazon = R.mesh(g); World.meshes.aglow = R.mesh(gw); World.meshes.awater = R.mesh(w);
+  // lights
+  World.lights.push({ x: AX, y: 1.6, z: ACAMP.z + 4, r: 14, c: [1.3, .75, .35], zone: 'amazon' }, { x: AX + AVILL.x, y: 2, z: AVILL.z, r: 16, c: [1.4, .6, .25], zone: 'amazon' },
+    { x: AX + ARUIN.x - 10, y: 9, z: ARUIN.z - 6, r: 14, c: [.4, 1, .6], zone: 'amazon' }, { x: AX + AGROVE.x, y: 2, z: AGROVE.z, r: 14, c: [1, .4, .8], zone: 'amazon' },
+    { x: AX + ASWAMP.x, y: 2, z: ASWAMP.z, r: 16, c: [.5, .9, .3], zone: 'amazon' }, { x: AX + ALAKE.x, y: 2, z: ALAKE.z, r: 16, c: [.4, .8, 1], zone: 'amazon' });
+  for (const [lx, lz] of [[-14, -8], [14, -8], [-14, 10], [14, 10]]) World.lights.push({ x: AX + lx, y: 3, z: ACAMP.z + lz, r: 9, c: [1.2, .8, .4], zone: 'amazon' });
+  World.fires.push({ x: AX, z: ACAMP.z + 4, zone: 'amazon', s: .6 }, { x: AX + AVILL.x, z: AVILL.z, zone: 'amazon', s: 1 });
+}
+function buildEastGate(g) {
+  const X = 142.5, Z = 70;
+  for (const s of [-1, 1]) { g.cyl(X, 0, Z + s * 3.4, .4, .34, 5, 6, hexc('#4a3626')); Col.addCircle(X, Z + s * 3.4, .55, 'egate'); g.sphere(X, 5.1, Z + s * 3.4, .7, hexc('#2a5c26'), 7, 5); }
+  g.box(X, 4.6, Z, .5, .5, 7.6, hexc('#4a3626')); for (let i = 0; i < 9; i++) g.cyl(X + .2, 4.4 - (i % 3) * .6 - 1, Z - 3 + i * .75, .05, .05, 1 + (i % 3) * .6, 3, hexc('#3a7a2c'));
+  g.box(X - .3, 3.6, Z, .1, .8, 3.2, hexc('#3a2a1e')); g.box(X - .36, 3.6, Z, .04, .6, 2.8, hexc('#e6c86a'));
+  for (let i = 0; i < 10; i++) { const z = Z - 10 + i * 2.2; if (Math.abs(z - Z) < 4.5) continue; g.cyl(X + 1.5 + Math.random() * 3, 0, z, .45, .35, 4, 5, hexc('#3a2e22')); g.sphere(X + 2.5, 4.4, z, 2.4, hexc('#1f4a22'), 7, 5); }
+}
+{
+  const ob = World.build;
+  World.build = function (R) { ob.call(this, R); buildAmazonZone(R); const eg = new Geo(314); buildEastGate(eg); World.meshes.eastgate = R.mesh(eg); };
+  const op = World.placeName.bind(World);
+  World.placeName = function (x, z) {
+    if (x > 2500) { const lx = x - AX; for (const [ax, az, r, n] of AMAZON_AREAS) if (Math.hypot(lx - ax, z - az) < r) return n; if (aRiverDist(lx, z) < 8) return 'แม่น้ำอเมซอน'; return 'ป่าดิบชื้นอเมซอน'; }
+    if (x > 128 && Math.abs(z - 70) < 16) return 'ทางไปป่าอเมซอน';
+    return op(x, z);
+  };
+}
+SPAWNS.push(
+  ['piranha', AX + 46, 30, 9, 6], ['piranha', AX + 30, 58, 4, 2], ['dartfrog', AX - 8, 52, 12, 5], ['dartfrog', AX - 26, 24, 8, 3],
+  ['jaguar', AX - 52, 8, 14, 4], ['jaguar', AX - 30, 40, 10, 3], ['spider', AX - 64, -26, 10, 4], ['spider', AX - 20, 20, 8, 3],
+  ['ana', AX - 58, -64, 13, 5], ['plant', AX + 52, -52, 12, 5], ['caiman', AX + 6, -24, 6, 2], ['caiman', AX + 32, -70, 6, 2],
+  ['ogre', AX - 14, -80, 12, 6], ['ogresham', AX - 14, -90, 8, 3]
+);
 /* ============================================================
    Procedural 3D models: monsters, boss, projectiles, cosmetics
    ============================================================ */
@@ -6004,7 +6254,7 @@ const GhostAI = {
   },
   cast(m, k, t, clip, track) { m.cast = { k, t, track }; m.wind = 0; if (clip && m.rig) m.rig.play(clip, 1); },
   // ---- hit helpers ----
-  near(x, z, r) { const P = Player; return !P.dead && P.zone === 'temple' && dist2(P.x, P.z, x, z) <= (r + .35) ** 2; },
+  near(x, z, r) { const P = Player; return !P.dead && (P.zone === 'temple' || P.zone === 'amazon') && dist2(P.x, P.z, x, z) <= (r + .35) ** 2; },
   apply(m, mult, fx = {}) {
     const P = Player, S = Save.d; Combat.hitPlayer(m.d.atk * mult, m);
     if (P.dead) return;
@@ -6026,7 +6276,7 @@ const GhostAI = {
   },
   rect(m, x0, z0, rot, len, w, dur, col, mult, fx, onFire) {
     return Effects.add({ tele: true, kind: 'rect', x: x0 + Math.sin(rot) * len / 2, z: z0 + Math.cos(rot) * len / 2, x0, z0, w, l: len / 2, len, rot, dur, col: col || [1, .3, .25, .55], onFire: e => {
-      if (m.dead) return; const P = Player; if (!P.dead && P.zone === 'temple') { const dx = P.x - e.x0, dz = P.z - e.z0, fx0 = Math.sin(e.rot), fz0 = Math.cos(e.rot); const al = dx * fx0 + dz * fz0, sd = dx * fz0 - dz * fx0; if (al >= -.5 && al <= e.len + .4 && Math.abs(sd) <= e.w + .4) this.apply(m, mult, fx); } onFire && onFire(e);
+      if (m.dead) return; const P = Player; if (!P.dead && (P.zone === 'temple' || P.zone === 'amazon')) { const dx = P.x - e.x0, dz = P.z - e.z0, fx0 = Math.sin(e.rot), fz0 = Math.cos(e.rot); const al = dx * fx0 + dz * fz0, sd = dx * fz0 - dz * fx0; if (al >= -.5 && al <= e.len + .4 && Math.abs(sd) <= e.w + .4) this.apply(m, mult, fx); } onFire && onFire(e);
     } });
   },
   displace(tx, tz, dur) { const P = Player; if (P.dashT > 0) return; P.kb = { x0: P.x, z0: P.z, x1: tx, z1: tz, t: 0, dur }; P.moveTo = null; },
@@ -6092,11 +6342,11 @@ const GhostAI = {
     if (P.kb) { const k = P.kb; k.t += dt; const u = Math.min(1, k.t / k.dur); const r = Col.resolve(lerp(k.x0, k.x1, u), lerp(k.z0, k.z1, u), .55); P.x = r[0]; P.z = r[1]; World.clampBounds(P); if (u >= 1) P.kb = null; }
     for (let i = this.proj.length - 1; i >= 0; i--) {
       const p = this.proj[i]; p.life -= dt;
-      if (P.zone === 'temple' && !P.dead) { const a = Math.atan2(P.x - p.x, P.z - p.z); p.dir += clamp(angWrap(a - p.dir), -dt * .9, dt * .9); }
+      if ((P.zone === 'temple' || P.zone === 'amazon') && !P.dead) { const a = Math.atan2(P.x - p.x, P.z - p.z); p.dir += clamp(angWrap(a - p.dir), -dt * .9, dt * .9); }
       p.x += Math.sin(p.dir) * p.sp * dt; p.z += Math.cos(p.dir) * p.sp * dt;
       if (Math.random() < .8) Particles.add(p.x, p.y, p.z, { c: p.col, s: .4, life: .35, vy: .5 });
       let done = p.life <= 0 || Col.blocked(p.x, p.z, .1);
-      if (!done && !P.dead && P.zone === 'temple' && dist2(p.x, p.z, P.x, P.z) < .8) { Combat.hitPlayer(p.dmg, p.src); Particles.burst(p.x, p.y, p.z, 14, p.col, 3, .4, .35, 2); done = true; }
+      if (!done && !P.dead && (P.zone === 'temple' || P.zone === 'amazon') && dist2(p.x, p.z, P.x, P.z) < .8) { Combat.hitPlayer(p.dmg, p.src); Particles.burst(p.x, p.y, p.z, 14, p.col, 3, .4, .35, 2); done = true; }
       if (done) this.proj.splice(i, 1);
     }
     for (let i = this.hazards.length - 1; i >= 0; i--) {
@@ -6116,7 +6366,7 @@ const GhostAI = {
   },
   // drawn in the opaque pass
   draw(R) {
-    const M = Game.tmpM, P = Player; if (P.zone !== 'temple') return;
+    const M = Game.tmpM, P = Player; if (P.zone !== 'temple' && P.zone !== 'amazon') return;
     for (const p of this.proj) { M4.compose(M, p.x, p.y, p.z, 0, Game.time * 4, 0, .7, .7, .7); R.drawMesh(Models.orb, M, [.2, .4, .35], [.35, .9, .75]); GhostDraw.glow(p.x, p.y, p.z, .9, [.05, .2, .17]); }
     for (const h of this.hands) { const u = h.t / h.dur, y = -1.3 + Math.sin(Math.min(1, u * 1.6) * Math.PI * .5) * 1.2 - smooth(.7, 1, u) * 1.2; M4.compose(M, h.x, y, h.z, (Math.sin(Game.time * 8 + h.a)) * .15, h.a, 0, 1, 1, 1); R.drawMesh(GM.hand, M, null, [.1, .2, .25]); }
     for (const m of this.heads) {
@@ -7741,6 +7991,114 @@ const Pets = {
     const f0 = this.face; Sprites.capture(R, this.x, h / 2 - .2, this.z, w, h + .3, () => drawPet(R, k, this.x, 0, this.z, Sprites.snapFace(f0), this.st));
   }
 };
+
+/* ============================================================
+   Amazon monster models + animated drawers (GDRAW entries):
+   piranha, poison dart frog, jaguar, giant spider, anaconda,
+   man-eating plant, caiman, ogre warrior and ogre shaman.
+   ============================================================ */
+const JM = {};
+function buildJungleModels(R) {
+  const C = hexc, dk = C('#141010');
+  const mk = fn => { const g = new Geo(61); g.jit = .015; g.uvs = 1.6; fn(g); g.smoothNormals(58); return R.mesh(g); };
+  const eye = (g, x, y, z, r, col = [1, .9, .2]) => { g.sphere(x, y, z, r, col, 6, 4); g.sphere(x + Math.sign(x || 1) * r * .1, y, z + r * .55, r * .5, dk, 5, 3); };
+  // piranha
+  { const b = C('#6a7a8a'), red = C('#d8402a'), wh = C('#f4f0e6');
+    JM.piranha = { body: mk(g => { g.ell(0, .45, 0, .26, .34, .45, b, 10, 7); g.ell(0, .3, .08, .22, .22, .34, red, 8, 6); g.ell(0, .48, .42, .2, .24, .14, b, 8, 6); for (const s of [-1, 1]) eye(g, s * .16, .58, .42, .06); for (let i = 0; i < 6; i++) { g.cone(-.12 + i * .05, .34, .52, 0, -1, .2, .025, .1, 3, wh); } g.cone(0, .8, -.05, 0, 1, -.4, .1, .22, 4, b); }),
+      parts: [{ mesh: mk(g => g.cone(0, 0, 0, 0, 0, -1, .2, .34, 4, b)), p: [0, .45, -.42], a: 'tail' }, { mesh: mk(g => { g.ell(.08, 0, 0, .14, .03, .1, red, 5, 3); }), p: [.22, .36, .05], a: 'fin', off: 0 }, { mesh: mk(g => { g.ell(-.08, 0, 0, .14, .03, .1, red, 5, 3); }), p: [-.22, .36, .05], a: 'fin', off: 1 }] };
+  }
+  // poison dart frog (bright blue with black spots)
+  { const bl = C('#2a8aff'), bk = C('#101420'), y = C('#ffd22a');
+    JM.dartfrog = { body: mk(g => { g.ell(0, .3, 0, .34, .26, .38, bl, 10, 7); g.ell(0, .36, .3, .3, .2, .24, bl, 8, 6); for (const s of [-1, 1]) { g.sphere(s * .17, .52, .3, .11, bl, 6, 5); eye(g, s * .19, .55, .36, .07, bk); } for (let i = 0; i < 7; i++) g.sphere(Math.sin(i * 2.1) * .22, .45 + Math.cos(i * 1.3) * .05, -.15 + Math.cos(i * 2.1) * .2, .06, bk, 5, 3); g.ell(0, .2, .45, .2, .03, .06, y, 5, 3); }),
+      parts: [{ mesh: mk(g => { g.ell(0, -.08, -.1, .1, .1, .22, bl, 6, 4); g.ell(0, -.18, .05, .08, .04, .16, bk, 5, 3); }), p: [.3, .25, -.12], a: 'leg', off: 0 }, { mesh: mk(g => { g.ell(0, -.08, -.1, .1, .1, .22, bl, 6, 4); g.ell(0, -.18, .05, .08, .04, .16, bk, 5, 3); }), p: [-.3, .25, -.12], a: 'leg', off: 0 }] };
+  }
+  // jaguar
+  { const o = C('#d8a43a'), w = C('#f6ead0'), sp = C('#2a1a10');
+    const leg = () => mk(g => { g.cyl(0, -.55, 0, .09, .12, .55, 6, o); g.ell(0, -.55, .05, .12, .07, .16, o, 6, 3); });
+    JM.jaguar = { body: mk(g => { g.ell(0, .82, 0, .36, .34, .78, o, 10, 7); g.ell(0, .72, .1, .28, .24, .6, w, 8, 6); for (let i = 0; i < 18; i++) { const a = i * 2.4, zz = -.6 + (i / 18) * 1.2; g.sphere(Math.sin(a) * .3, .95 + Math.cos(a) * .12, zz, .07, sp, 4, 3); }
+        g.sphere(0, 1.08, .82, .3, o, 9, 7); g.ell(0, .98, 1.06, .18, .14, .14, w, 6, 4); g.sphere(0, 1.02, 1.18, .05, sp, 4, 3); for (const s of [-1, 1]) { eye(g, s * .13, 1.16, 1.02, .05, [.9, .95, .3]); g.cone(s * .2, 1.32, .76, s * .3, 1, -.2, .08, .16, 4, o); } }),
+      parts: [{ mesh: leg(), p: [.22, .62, .5], a: 'leg', off: 0 }, { mesh: leg(), p: [-.22, .62, .5], a: 'leg', off: Math.PI }, { mesh: leg(), p: [.22, .62, -.5], a: 'leg', off: Math.PI }, { mesh: leg(), p: [-.22, .62, -.5], a: 'leg', off: 0 },
+        { mesh: mk(g => { g.cone(0, 0, 0, 0, .2, -1, .08, .9, 5, o); g.sphere(0, .18, -.9, .07, sp, 4, 3); }), p: [0, .95, -.75], a: 'tail' },
+        { mesh: mk(g => { g.ell(0, -.04, .12, .14, .05, .12, w, 6, 3); for (let i = 0; i < 2; i++) g.cone((i ? .07 : -.07), -.02, .18, 0, -1, 0, .02, .1, 3, C('#fff')); }), p: [0, .94, 1.0], a: 'jaw' }] };
+  }
+  // giant spider
+  { const b = C('#3a2a22'), h = C('#8a3a22'), r = C('#e0402a');
+    const leg = s => mk(g => { g.cone(0, 0, 0, s * 1, .6, 0, .07, .7, 4, b); g.cone(s * .55, .42, 0, s * .5, -1, 0, .05, 1.0, 4, b); });
+    const parts = []; for (let i = 0; i < 4; i++) for (const s of [-1, 1]) parts.push({ mesh: leg(s), p: [s * .3, .55, .35 - i * .25], a: 'sleg', off: i * 1.2 + (s > 0 ? 0 : Math.PI), rot: s * (.5 - i * .32) });
+    JM.spider = { body: mk(g => { g.ell(0, .65, -.45, .55, .45, .6, b, 10, 7); for (let i = 0; i < 6; i++) g.ell(Math.sin(i) * .2, .95, -.45 + Math.cos(i * 1.7) * .3, .08, .03, .08, h, 4, 3); g.ell(0, .6, .25, .34, .28, .34, h, 8, 6); for (let i = 0; i < 4; i++) g.sphere(-.12 + i * .08, .74, .55, .045, r, 4, 3); for (const s of [-1, 1]) g.cone(s * .1, .48, .55, 0, -1, .3, .05, .2, 3, dk); }), parts };
+  }
+  // anaconda: head + body segments (drawn along a wave)
+  { const gr = C('#3a6a2a'), y = C('#c8b84a'), sp = C('#1a2a14');
+    JM.anaHead = mk(g => { g.ell(0, .35, .1, .3, .22, .42, gr, 9, 6); g.ell(0, .25, .2, .24, .1, .34, y, 7, 4); for (const s of [-1, 1]) eye(g, s * .2, .45, .25, .06, [1, .8, .1]); g.cone(0, .3, .5, 0, -.1, 1, .03, .3, 3, C('#d8323a')); for (let i = 0; i < 4; i++) g.sphere(Math.sin(i * 2) * .15, .5, -.1 + i * .08, .05, sp, 4, 3); });
+    JM.anaSeg = mk(g => { g.ell(0, .3, 0, .3, .28, .4, gr, 8, 6); g.ell(0, .12, 0, .22, .1, .34, y, 6, 3); for (let i = 0; i < 3; i++) g.ell(Math.sin(i * 2.1) * .22, .45, -.2 + i * .2, .08, .04, .1, sp, 4, 3); });
+  }
+  // man-eating plant
+  { const st = C('#3a7a2a'), lf = C('#2a5a22'), hd = C('#a8323a'), hd2 = C('#e8c84a'), tooth = C('#f6f0e0');
+    JM.plant = { body: mk(g => { g.cyl(0, 0, 0, .3, .22, 1.8, 7, st); for (let i = 0; i < 7; i++) { const a = i / 7 * TAU; g.ell(Math.sin(a) * .8, .12, Math.cos(a) * .8, .7, .06, .3, lf, 6, 3, 0, a); } g.ell(0, 1.9, 0, .5, .4, .5, hd2, 8, 6); }),
+      parts: [{ mesh: mk(g => { g.ell(0, .18, .35, .72, .38, .62, hd, 10, 6, 0, 0); for (let i = 0; i < 9; i++) { const a = -1.2 + i * .3; g.cone(Math.sin(a) * .6, .02, .35 + Math.cos(a) * .5, 0, -1, 0, .05, .22, 3, tooth); } for (let i = 0; i < 5; i++) g.sphere(-.4 + i * .2, .42, .5, .07, hd2, 4, 3); }), p: [0, 2.05, .1], a: 'jawU' },
+        { mesh: mk(g => { g.ell(0, -.1, .35, .66, .3, .58, hd, 10, 6); for (let i = 0; i < 8; i++) { const a = -1.1 + i * .3; g.cone(Math.sin(a) * .55, .05, .35 + Math.cos(a) * .46, 0, 1, 0, .05, .2, 3, tooth); } }), p: [0, 2.0, .1], a: 'jawL' },
+        { mesh: mk(g => { g.cone(0, 0, 0, .8, .4, .2, .08, 1.6, 4, st); g.ell(1.3, .7, .3, .2, .1, .2, lf, 5, 3); }), p: [.2, 1, 0], a: 'vine', off: 0 }, { mesh: mk(g => { g.cone(0, 0, 0, -.8, .5, .1, .08, 1.6, 4, st); g.ell(-1.3, .8, .15, .2, .1, .2, lf, 5, 3); }), p: [-.2, 1.1, 0], a: 'vine', off: 2 }] };
+  }
+  // caiman
+  { const gr = C('#4a5a34'), bel = C('#b8b088'), sp = C('#2a3420');
+    const leg = () => mk(g => { g.cyl(0, -.3, 0, .1, .12, .3, 5, gr); g.ell(0, -.3, .06, .14, .05, .16, gr, 5, 3); });
+    JM.caiman = { body: mk(g => { g.ell(0, .38, 0, .45, .3, 1.0, gr, 10, 6); g.ell(0, .25, 0, .38, .12, .9, bel, 8, 4); for (let i = 0; i < 9; i++) g.cone(0, .62, -.7 + i * .17, 0, 1, 0, .07, .15, 3, sp); g.ell(0, .38, 1.05, .32, .2, .4, gr, 8, 5); for (const s of [-1, 1]) eye(g, s * .18, .58, 1.0, .06, [1, .85, .3]); }),
+      parts: [{ mesh: leg(), p: [.4, .32, .55], a: 'leg', off: 0 }, { mesh: leg(), p: [-.4, .32, .55], a: 'leg', off: Math.PI }, { mesh: leg(), p: [.4, .32, -.5], a: 'leg', off: Math.PI }, { mesh: leg(), p: [-.4, .32, -.5], a: 'leg', off: 0 },
+        { mesh: mk(g => { g.ell(0, 0, .4, .22, .08, .55, gr, 8, 4); for (let i = 0; i < 6; i++) g.cone(-.12 + (i % 2) * .24, -.04, .1 + i * .13, 0, -1, 0, .02, .07, 3, C('#f6f0e0')); }), p: [0, .3, 1.3], a: 'jaw' },
+        { mesh: mk(g => { g.cone(0, 0, 0, 0, 0, -1, .3, 1.6, 6, gr); for (let i = 0; i < 6; i++) g.cone(0, .18 - i * .02, -.2 - i * .22, 0, 1, 0, .05, .12, 3, sp); }), p: [0, .38, -.95], a: 'tail' }] };
+  }
+  // ogres (warrior / shaman)
+  const ogre = (shaman) => {
+    const sk = C(shaman ? '#7a8a6a' : '#6a7a52'), sk2 = C(shaman ? '#5a6a4e' : '#4e5a3c'), cloth = C(shaman ? '#5a2a6a' : '#7a3a22'), bone = C('#e6dcc4'), red = C('#c8323a');
+    const leg = () => mk(g => { g.cyl(0, -.95, 0, .2, .26, .95, 7, sk); g.ell(0, -.95, .1, .26, .12, .34, sk2, 6, 3); });
+    const armR = mk(g => { g.cyl(0, -.9, 0, .17, .22, .9, 7, sk); g.sphere(0, -.95, 0, .22, sk2, 6, 5);
+      if (shaman) { g.cyl(0, -1.9, .12, .05, .05, 2.4, 5, C('#5a3a22')); g.sphere(0, .5, .12, .2, bone, 7, 5); g.ell(0, .65, .12, .1, .2, .03, C('#3ac8ff'), 5, 3); }
+      else { g.cyl(0, -1.05, .2, .08, .1, .5, 5, C('#4a3020')); g.cone(0, -.6, .2, 0, 1, .15, .26, 1.1, 7, C('#5a3a24'), .1); for (let i = 0; i < 5; i++) g.cone(Math.sin(i * 1.3) * .2, -.1 + i * .1, .2 + Math.cos(i * 1.3) * .2, Math.sin(i * 1.3), .2, Math.cos(i * 1.3), .04, .16, 3, bone); } });
+    const armL = mk(g => { g.cyl(0, -.9, 0, .17, .22, .9, 7, sk); g.sphere(0, -.95, 0, .22, sk2, 6, 5); });
+    return { body: mk(g => {
+        g.ell(0, 1.55, 0, .6, .62, .5, sk, 10, 8); g.ell(0, 1.35, .22, .5, .44, .34, sk2, 8, 6); g.cyl(0, .9, 0, .55, .62, .45, 9, cloth); for (let i = 0; i < 6; i++) g.box(-.45 + i * .18, .72, .5, .12, .3, .04, cloth);
+        g.sphere(0, 2.3, .05, .38, sk, 9, 7); g.ell(0, 2.3, .3, .32, .36, .14, bone, 8, 5); for (const s of [-1, 1]) { g.ell(s * .13, 2.38, .42, .08, .07, .03, dk, 5, 3); g.sphere(s * .13, 2.38, .43, .03, red, 4, 3); g.cone(s * .14, 2.05, .3, s * .2, 1, .3, .05, .22, 3, bone); g.ell(s * .38, 2.35, 0, .1, .16, .06, sk, 5, 4); }
+        if (shaman) { for (let i = 0; i < 7; i++) { const a = -1.2 + i * .4; g.cone(Math.sin(a) * .3, 2.6, Math.cos(a) * .1 - .1, Math.sin(a) * .5, 1, -.3, .06, .8, 3, [C('#3ac8ff'), C('#ffd22a'), C('#d8323a')][i % 3]); } g.ell(0, 1.7, .5, .12, .12, .04, C('#ffd22a'), 5, 3); }
+        else { for (let i = 0; i < 3; i++) g.cone(-.2 + i * .2, 2.62, 0, 0, 1, 0, .06, .3, 3, bone); for (let i = 0; i < 5; i++) g.sphere(-.36 + i * .18, 1.95, .38, .07, bone, 4, 3); }
+      }), parts: [{ mesh: leg(), p: [.28, .95, 0], a: 'leg', off: 0 }, { mesh: leg(), p: [-.28, .95, 0], a: 'leg', off: Math.PI }, { mesh: armR, p: [.66, 1.95, 0], a: 'armR', off: 0 }, { mesh: armL, p: [-.66, 1.95, 0], a: 'arm', off: Math.PI }] };
+  };
+  JM.ogre = ogre(false); JM.ogresham = ogre(true);
+}
+{
+  const ob = buildModels; buildModels = function (R) { ob(R); buildJungleModels(R); };
+  const _B = M4.ident(), _L = M4.ident(), _O = M4.ident();
+  const draw = (R, mm, m, sc, tint, fl, t, o = {}) => {
+    const mv = m.moving ? 1 : 0, ph = m.anim * (o.spd || 9), wind = m.wind > 0 ? 1 - m.wind / .45 : 0, s = (o.s || 1) * sc;
+    let y = o.y || 0, pitch = 0, roll = 0; if (o.hop && mv) { y += Math.abs(Math.sin(ph * .5)) * .5; pitch = -Math.cos(ph * .5) * .2; } if (m.jump) y += m.jump.y; if (o.bob) y += Math.sin(t * 2 + m.id) * o.bob;
+    if (o.swim) { const k = Math.max(0, Math.sin(t * 1.6 + m.id * 1.7)); y += k * k * 1.1 - .25; pitch = Math.cos(t * 1.6 + m.id * 1.7) * -.6 * (k > .05 ? 1 : 0); }
+    M4.compose(_B, m.x, y, m.z, pitch - wind * (o.lunge || .15), m.face, roll, s, s, s); R.drawMesh(mm.body, _B, tint, RIG_FILL, fl); R.drawOutline(mm.body, _B, .02);
+    for (const p of mm.parts || []) {
+      let rx = 0, ry = p.rot || 0, rz = 0;
+      if (p.a === 'leg') rx = Math.sin(ph + p.off) * .6 * mv; else if (p.a === 'sleg') { ry += Math.sin(ph * 1.4 + p.off) * .3 * mv; rz = Math.cos(ph * 1.4 + p.off) * .15 * mv; }
+      else if (p.a === 'tail') ry = Math.sin(t * (3 + mv * 4) + m.id) * .4; else if (p.a === 'fin') rz = (p.off ? -1 : 1) * Math.sin(t * 9) * .4;
+      else if (p.a === 'jaw') rx = .1 + Math.max(0, Math.sin(t * 2)) * .15 + wind * .6; else if (p.a === 'jawU') rx = -.2 - wind * .7 - Math.max(0, Math.sin(t * 1.5)) * .25; else if (p.a === 'jawL') rx = .15 + wind * .5;
+      else if (p.a === 'vine') { ry = Math.sin(t * 1.6 + p.off) * .5; rz = Math.cos(t * 1.3 + p.off) * .3 + wind * .5; }
+      else if (p.a === 'armR') rx = -wind * 2.2 + Math.sin(ph + p.off) * .4 * mv; else if (p.a === 'arm') rx = Math.sin(ph + p.off) * .45 * mv;
+      M4.compose(_L, p.p[0], p.p[1], p.p[2], rx, ry, rz, 1, 1, 1); M4.mul(_O, _B, _L); R.drawMesh(p.mesh, _O, tint, RIG_FILL, fl); R.drawOutline(p.mesh, _O, .018);
+    }
+  };
+  GDRAW.piranha = (R, m, sc, tint, fl, t) => draw(R, JM.piranha, m, sc, tint, fl, t, { swim: 1, s: 1.2 });
+  GDRAW.dartfrog = (R, m, sc, tint, fl, t) => draw(R, JM.dartfrog, m, sc, tint, fl, t, { hop: 1, s: 1.15 });
+  GDRAW.jaguar = (R, m, sc, tint, fl, t) => draw(R, JM.jaguar, m, sc, tint, fl, t, { spd: 11, lunge: .35 });
+  GDRAW.spider = (R, m, sc, tint, fl, t) => draw(R, JM.spider, m, sc, tint, fl, t, { s: 1.15, bob: .03 });
+  GDRAW.plant = (R, m, sc, tint, fl, t) => draw(R, JM.plant, m, sc, tint, fl, t, { lunge: .25 });
+  GDRAW.caiman = (R, m, sc, tint, fl, t) => draw(R, JM.caiman, m, sc, tint, fl, t, { spd: 6, lunge: .1 });
+  GDRAW.ogre = (R, m, sc, tint, fl, t) => draw(R, JM.ogre, m, sc, tint, fl, t, { spd: 7, lunge: .1 });
+  GDRAW.ogresham = (R, m, sc, tint, fl, t) => draw(R, JM.ogresham, m, sc, tint, fl, t, { spd: 6, lunge: .1 });
+  GDRAW.ana = (R, m, sc, tint, fl, t) => {
+    const n = 11, mv = m.moving ? 1 : .35, wind = m.wind > 0 ? 1 - m.wind / .45 : 0, f = m.face, sf = Math.sin(f), cf = Math.cos(f), s = sc * 1.1;
+    let lx = 0, lz = .45 + wind * .6; const pts = [];
+    for (let i = 0; i <= n; i++) { const zz = -i * .5, xx = Math.sin(m.anim * 5 * mv + i * .7) * .38 * (i / n + .25) + (m.jump ? 0 : 0); pts.push([xx, zz]); }
+    for (let i = n; i >= 0; i--) { const [xx, zz] = pts[i]; const tap = 1 - i / n * .55; const wx = m.x + (xx * cf + zz * sf) * s, wz = m.z + (-xx * sf + zz * cf) * s; const nx = pts[Math.max(0, i - 1)]; const ang = f + Math.atan2(nx[0] - xx, .5);
+      M4.compose(_B, wx, (m.jump ? m.jump.y : 0), wz, 0, ang, 0, s * tap, s * tap, s * tap); R.drawMesh(JM.anaSeg, _B, tint, RIG_FILL, fl); R.drawOutline(JM.anaSeg, _B, .02); }
+    M4.compose(_B, m.x + lz * sf * s, (m.jump ? m.jump.y : 0) + wind * .5, m.z + lz * cf * s, -wind * .4, f, 0, s * 1.15, s * 1.15, s * 1.15); R.drawMesh(JM.anaHead, _B, tint, RIG_FILL, fl); R.drawOutline(JM.anaHead, _B, .02);
+  };
+}
 /* ============================================================
    Systems: save, settings, audio, quiz, combat, quests
    ============================================================ */
@@ -8715,8 +9073,8 @@ const Game = {
     R.begin();
     if (zone === 'temple') TempleGfx.drawSky(R);
     R.useLit();
-    if (zone === 'temple') TempleGfx.drawOpaque(R); else R.drawMesh(World.meshes.static, null);
-    if (zone === 'world') R.drawMesh(World.meshes.westgate, null);
+    if (zone === 'temple') TempleGfx.drawOpaque(R); else if (zone === 'amazon') AmazonGfx.drawOpaque(R); else R.drawMesh(World.meshes.static, null);
+    if (zone === 'world') { R.drawMesh(World.meshes.westgate, null); if (World.meshes.eastgate) R.drawMesh(World.meshes.eastgate, null); }
     if (zone === 'dungeon') {
       const p = .6 + Math.sin(this.time * 1.5) * .15;
       R.drawMesh(World.meshes.glowA, null, null, [.15 * p, .5 * p, .6 * p]); R.drawMesh(World.meshes.glowB, null, null, [.4 * p, .2 * p, .6 * p]); R.drawMesh(World.meshes.torches, null);
@@ -8756,13 +9114,14 @@ const Game = {
       Remote.draw(R);
     }
     Sprites.end(R);
-    if (zone === 'temple') { GhostAI.draw(R); NakBoss.draw(R); }
+    if (zone === 'temple') { GhostAI.draw(R); NakBoss.draw(R); } else if (zone === 'amazon') GhostAI.draw(R);
     Projectiles.draw(R);
     Fx.drawSolid(R);
     // transparent meshes
     const gl = R.gl; R.useLit(); gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(false);
     if (zone === 'world') R.drawMesh(World.meshes.water, null, null, null, 0, .82, 1);
     if (zone === 'temple') R.drawMesh(World.meshes.twater, null, null, [.02, .04, .06], 0, .8, 1);
+    if (zone === 'amazon') R.drawMesh(World.meshes.awater, null, null, [.02, .05, .04], 0, .82, 1);
     const pin = World.portalIn, pout = World.portalOut;
     gl.disable(gl.CULL_FACE);
     if (zone === 'world' && pin.open) { M4.compose(M, 0, 4.4, -140.1, 0, 0, 0, 1.35, 1.35, 1); R.drawMesh(World.meshes.portal, M, [.4, .7, 1], [.3, .55, .9], 0, .55 + Math.sin(this.time * 3) * .1); }
@@ -8798,6 +9157,7 @@ const Game = {
       else if (e.kind === 'cone') R.drawDecal(e.x, .08, e.z, e.r, e.r, e.rot, 3, e.fired ? [1, 1, 1, .6] : e.col, p, e.ang);
       else if (e.kind === 'rect') R.drawDecal(e.x, .08, e.z, e.w, e.l, e.rot, 5, e.fired ? [1, 1, 1, .6] : e.col, p);
     }
+    if (zone === 'amazon') GhostAI.drawDecals(R);
     if (zone === 'temple') { GhostAI.drawDecals(R); TempleGfx.drawDecals(R); }
     R.endDecal();
     R.drawParticles(Particles.list);
@@ -9109,6 +9469,75 @@ const GhostTalk = {
   const od = NakBoss.defeated.bind(NakBoss); NakBoss.defeated = function (m) { GhostTalk.say(m, 'ขอบคุณ... นากไปแล้วนะ', 5); od(m); };
 }
 
+
+/* ============================================================
+   Amazon zone integration: humid green environment, east gate
+   portal, cross-zone navigation, swimmers stay in the water,
+   coloured projectiles, ambient particles (fireflies, pollen,
+   falling leaves), debuffs, music key.
+   ============================================================ */
+Object.assign(MON_DEBUFF, { dartfrog: ['poison', .3, 5], spider: ['slowed', .25, 3], ana: ['poison', .25, 5], plant: ['slowed', .2, 3], ogresham: ['curse', .25, 5] });
+MONSTERS.dartfrog.shotCol = [.4, 1, .3]; MONSTERS.ogresham.shotCol = [.8, .4, 1];
+Object.assign(Nav.ITEM_MON, { m_tooth: 'piranha', m_venom: 'dartfrog', m_jfur: 'jaguar', m_silk: 'spider', m_scale: 'ana', m_seed: 'plant', m_hide: 'caiman', m_mask: 'ogre', m_feather: 'ogresham' });
+MusicSys.SCALES.amazon = [0, 3, 5, 7, 10, 12, 15]; MusicSys.ROOT.amazon = 174.6;
+const AmazonGfx = {
+  drawOpaque(R) {
+    R.drawMesh(World.meshes.amazon, null);
+    const p = .7 + Math.sin(Game.time * 2.2) * .2; R.drawMesh(World.meshes.aglow, null, null, [.45 * p, .55 * p, .5 * p]);
+  }
+};
+{
+  const ose = Game.setEnv.bind(Game);
+  Game.setEnv = function (zone) {
+    if (zone !== 'amazon') return ose(zone);
+    const e = this.R.env;
+    Object.assign(e, { sun: [.35, .85, .3], sunC: [.62, .66, .46], sky: [.38, .5, .4], gnd: [.16, .2, .12], fogC: [.42, .54, .44], fog: [26, 130], top: [.36, .56, .5], bot: [.62, .74, .62], sprLight: .95, cloud: .6 });
+    const l = Math.hypot(...e.sun); e.sun = e.sun.map(v => v / l);
+  };
+  const oct = Game.checkTriggers.bind(Game);
+  Game.checkTriggers = function (dt) {
+    const P = Player, S = Save.d;
+    if (P.zone === 'world' && P.x > 138 && Math.abs(P.z - 70) < 5) {
+      if (S.level >= AMAZON_LV) { if (P.x > 144.2) { this.teleport(AX, 104, 'ป่าอเมซอนมรณะ'); return; } }
+      else if (this.msgT <= 0) { this.msgT = 4; UI.toast(`ป่าดิบข้างหน้าอันตรายมาก ต้องมีเลเวล ${AMAZON_LV} ขึ้นไปจึงจะเข้าไปได้`, 'warn'); }
+    }
+    if (P.zone === 'amazon') {
+      if (P.z > 107 && Math.abs(P.x - AX) < 6) { this.teleport(137, 70, 'ถนนสายตะวันออก'); return; }
+      if (!S.stats.amazonVisit) { S.stats.amazonVisit = 1; S.warps.w_amazon = true; setTimeout(() => UI.toast('ป่าอเมซอนมรณะ… ทุกสิ่งที่นี่อยากกินคุณ! คุยกับ ดร.มาร์โก้ ที่ค่ายนักสำรวจ', 'boss'), 1500); }
+    }
+    oct(dt);
+  };
+  const ox = Nav.exitTo; Nav.exitTo = function (from, to) {
+    const S = Save.d;
+    if (from === 'amazon') return { x: AX, z: 109, dir: [0, 1] };
+    if (to === 'amazon' && from === 'world') { if (S.level < AMAZON_LV) { UI.toast(`ต้องมีเลเวล ${AMAZON_LV} ขึ้นไปจึงจะเดินทางไปป่าอเมซอนได้`, 'warn'); return null; } return { x: 141, z: 70, dir: [1, 0] }; }
+    if (to === 'amazon') return ox.call(this, from, 'world');
+    return ox.call(this, from, to);
+  };
+  const onb = Nav.build.bind(Nav);
+  Nav.build = function () {
+    onb();
+    const x0 = AX - 100, x1 = AX + 100, z0 = -102, z1 = 110, S = 2, w = Math.round((x1 - x0) / S) + 1, h = Math.round((z1 - z0) / S) + 1, g = new Uint8Array(w * h);
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) g[j * w + i] = Col.blocked(x0 + i * S, z0 + j * S, .8) ? 1 : 0;
+    this.grids.amazon = { x0, z0, S, w, h, g };
+  };
+  // coloured enemy shots (frogs spit green poison, shamans throw purple curses)
+  const osh = GhostAI.shoot.bind(GhostAI); GhostAI.shoot = function (m, P) { osh(m, P); const p = this.proj[this.proj.length - 1]; if (p && m.d.shotCol) p.col = m.d.shotCol; };
+  // swimmers (piranhas) stay in deep water
+  const omu = Monsters.update.bind(Monsters);
+  Monsters.update = function (dt) {
+    omu(dt); if (Player.zone !== 'amazon') return;
+    for (const m of this.list) { if (m.dead || !m.d.swim || m.zone !== 'amazon') continue; if (amazonHeight(m.x - AX, m.z) > -.32) { const dx = m.home.x - m.x, dz = m.home.z - m.z, d = Math.hypot(dx, dz) || 1; m.x += dx / d * Math.min(d, 6 * dt); m.z += dz / d * Math.min(d, 6 * dt); } }
+  };
+  // ambience particles
+  const ou = Game.update.bind(Game);
+  Game.update = function (dt) {
+    ou(dt); const P = Player; if (!this.started || this.paused || P.zone !== 'amazon') return;
+    if (Math.random() < dt * 14) { const a = Math.random() * TAU, r = 4 + Math.random() * 18; Particles.add(P.x + Math.cos(a) * r, .4 + Math.random() * 2.5, P.z + Math.sin(a) * r, { c: Math.random() < .5 ? [.8, 1, .4] : [1, .95, .5], s: .22, life: 2.2, vy: .15, vx: rand(-.3, .3), vz: rand(-.3, .3) }); }
+    if (Math.random() < dt * 5) { const a = Math.random() * TAU, r = 3 + Math.random() * 14; Particles.add(P.x + Math.cos(a) * r, 7 + Math.random() * 3, P.z + Math.sin(a) * r, { c: [.35, .6, .25], s: .3, life: 4, vy: -1.4, vx: rand(-.4, .4), grav: 0 }); }
+    for (const f of World.fires) if (f.zone === 'amazon' && dist2(f.x, f.z, P.x, P.z) < 900 && Math.random() < dt * 30 * f.s) Particles.add(f.x + rand(-.4, .4) * f.s, .3, f.z + rand(-.4, .4) * f.s, { c: [1, .5 + Math.random() * .35, .15], s: .5 * f.s + .2, life: .7, vy: 2.2 });
+  };
+}
 /* ============================================================
    UI: HUD, panels, quiz, dialog, shop, map, summary, title
    ============================================================ */
@@ -9385,9 +9814,9 @@ const UI = {
     const ctx = this.miniCtx, cv = this.el.mini; const W = cv.width, H = cv.height; const P = Player;
     const scale = 1.6; ctx.save(); ctx.clearRect(0, 0, W, H);
     ctx.beginPath(); ctx.arc(W / 2, H / 2, W / 2 - 2, 0, TAU); ctx.clip();
-    ctx.fillStyle = P.zone === 'dungeon' ? '#1c1826' : P.zone === 'temple' ? '#1e2a1e' : '#4a7a3a'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = P.zone === 'dungeon' ? '#1c1826' : P.zone === 'temple' ? '#1e2a1e' : P.zone === 'amazon' ? '#16301a' : '#4a7a3a'; ctx.fillRect(0, 0, W, H);
     ctx.translate(W / 2, H / 2); ctx.scale(scale, scale);
-    if (P.zone === 'world') ctx.drawImage(this.mapImg, -150 - P.x, -150 - P.z); else if (P.zone === 'temple') { if (!this.tplImg) this.buildTempleMap(); ctx.drawImage(this.tplImg, (TX - 75) - P.x, -75 - P.z); } else ctx.drawImage(this.dunImg, 950 - P.x, -140 - P.z);
+    if (P.zone === 'world') ctx.drawImage(this.mapImg, -150 - P.x, -150 - P.z); else if (P.zone === 'temple') { if (!this.tplImg) this.buildTempleMap(); ctx.drawImage(this.tplImg, (TX - 75) - P.x, -75 - P.z); } else if (P.zone === 'amazon') { if (!this.amzImg) this.buildAmazonMap(); ctx.drawImage(this.amzImg, (AX - 110) - P.x, -110 - P.z); } else ctx.drawImage(this.dunImg, 950 - P.x, -140 - P.z);
     const dot = (x, z, c, r) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(x - P.x, z - P.z, r, 0, TAU); ctx.fill(); };
     for (const m of Monsters.list) if (!m.dead && m.zone === P.zone) dot(m.x, m.z, m.d.boss ? '#ff4fd8' : m.d.aggro ? '#ff5a3c' : '#f2d34b', m.d.boss ? 3 : 1.3);
     for (const w of WARPS) if (w.zone === P.zone) dot(w.x, w.z, Save.d.warps[w.id] ? '#7fe6ff' : '#5a6b78', 2);
@@ -11776,6 +12205,7 @@ KIND_ICON.vehicle = 'star';
    PATCH_NEW for every game update (shown in lobby → บันทึกอัปเดต)
    ============================================================ */
 const PATCH_NEW = [
+  { d: '30/10', ic: 'map', t: 'แมพใหม่: ป่าอเมซอนมรณะ (Lv.15+)', x: 'ทางเข้าอยู่ถนนสายตะวันออกของทวีป Aurelion (ซุ้มประตูเถาวัลย์ขวาสุดของแผนที่) · มอนสเตอร์ใหม่ 9 ชนิด เลเวล 15–26 สูงกว่าวัดร้าง: ปลาปิรันย่า กบลูกดอกพิษ เสือจากัวร์ แมงมุมยักษ์ งูอนาคอนด้า ต้นไม้กินคน จระเข้เคแมน โอกรนักรบและโอกรหมอผีเผ่ากินคน · พื้นที่: ค่ายนักสำรวจ แม่น้ำอเมซอน ทะเลสาบปิรันย่า หนองน้ำอนาคอนด้า ดงไม้กินคน ซากวิหารโบราณ หมู่บ้านโอกร · บอส MVP ราชันย์อนาคอนด้า และมินิบอส หัวหน้าเผ่าโอกร ราชินีพืชกินคน · NPC และเควสใหม่ 7 เควส อุปกรณ์หายากใหม่ · เสียงป่าดิบ นก กบ ลิง แม่น้ำ และแสงหิ่งห้อย' },
   { d: '30/10', ic: 'star', t: 'กิจกรรมตามปฏิทิน + ตู้กิจกรรม + อุปกรณ์ 8 ขั้น', x: 'ทุกปีมีเทศกาล ฮาโลวีน ลอยกระทง คริสต์มาส ปีใหม่ วาเลนไทน์ และสงกรานต์ ช่วงเทศกาลมี NPC ประจำงานที่จัตุรัสเมืองหลวง พร้อมเควสประจำวันและเควสพิเศษ มอนสเตอร์ทุกตัวดรอปเหรียญกิจกรรม (เช่น ลูกอมฮาโลวีน ขันน้ำสงกรานต์) นำไปแลกชุด หมวก ปีก และกล่องนำโชคที่ตู้กิจกรรม · กล่องนำโชคสุ่มอุปกรณ์ 8 ขั้น: ธรรมดา เหล็กกล้า ทองแดง เงิน ทอง แพลทินัม เพชร และเทพในตำนาน (0.15%) อาวุธตรงตามอาชีพ ขั้นเงินขึ้นไปมีเอฟเฟกต์เมื่อสวมใส่ · GM เปิดกิจกรรมทั้งเซิร์ฟเวอร์ เสกไอเทม และส่งของขวัญให้ทุกคนได้ · ตอนนี้เทศกาลฮาโลวีนกำลังจัดอยู่!' },
   { d: '30/10', ic: 'star', t: 'สกิลทรีแบบ RO (กด P)', x: 'ทุกอาชีพมีสกิลเพิ่ม: สกิลติดตัว (Passive) 4 สกิล สูงสุด Lv.10 เช่น ความชำนาญอาวุธ ร่างกายเหล็กไหล จุดตาย ฟื้นฟูมานา พลังรักษา และสกิลกดใช้ใหม่อีก 2 สกิล เช่น แทงทะลวง ออร่าศักดิ์สิทธิ์ มีดอาบพิษ ศรเพลิง สายฟ้าฟาด แสงศักดิ์สิทธิ์ · สกิลมีเงื่อนไขก่อนเรียน แสดงเป็นเส้นเชื่อมในทรี พร้อมสกิลอาชีพขั้นสอง · เลือกสกิลใส่ปุ่ม Q E R T เองได้' },
   { d: '30/10', ic: 'crown', t: 'บอส MVP และมินิบอสเกิดตามเวลา + ประกาศทั้งเซิร์ฟเวอร์', x: 'ราชาสไลม์ หมาป่าเขี้ยวเงิน ราชินีค้างคาวผลึก (มินิบอส) และเห็ดยักษ์โบราณ จอมทัพก็อบลิน อัศวินกระดูกมรณะ (บอส MVP) เกิดตามเวลาเดียวกันทั้งเซิร์ฟเวอร์ ตอนเกิดจะประกาศให้ทุกคนรู้ ผู้ที่ปิดฉากได้ MVP รับ EXP โบนัส ของรางวัล เพชร และฉายา "MVP" ชื่อผู้กำจัดและของดรอปที่หายากที่สุด 2 ชิ้นจะถูกประกาศทั้งเซิร์ฟเวอร์ · ดูเวลาเกิดและนำทางได้ที่เมนู → บอส MVP (ไอคอนมงกุฎ)' },
@@ -11817,6 +12247,7 @@ ANNOUNCE.unshift({ tag: 'อัปเดตใหญ่', title: 'ตีบว�
 ANNOUNCE.unshift({ tag: 'อัปเดตใหญ่', title: 'บอส MVP มาแล้ว! และกรอบโปรไฟล์ 17 แบบ', body: 'บอส MVP เกิดตามเวลาทั้งเซิร์ฟเวอร์ ใครปิดฉากได้ชื่อประกาศให้ทุกคนเห็น · แตะรูปตัวละครเพื่อดูอุปกรณ์แบบ RO และเปลี่ยนกรอบโปรไฟล์' });
 ANNOUNCE.unshift({ tag: 'อัปเดต', title: 'สกิลทรีแบบ RO มาแล้ว (กด P)', body: 'ทุกอาชีพได้สกิลติดตัว 4 สกิล และสกิลใหม่อีก 2 สกิล เรียนตามเงื่อนไขในทรี และเลือกใส่ปุ่มลัดได้เอง' });
 ANNOUNCE.unshift({ tag: 'กิจกรรม', title: '🎃 ฮาโลวีน: ไปหาแม่มดปัมกิ้นที่จัตุรัสเมืองหลวง', body: 'มอนสเตอร์ทุกตัวดรอปลูกอมฮาโลวีน นำไปแลกชุดฟักทอง หมวกแม่มด ชุดแวมไพร์ และกล่องนำโชคที่อาจได้อุปกรณ์ขั้นเทพในตำนาน! รับเควสประจำวันได้ทุกวัน' });
+ANNOUNCE.unshift({ tag: 'แมพใหม่', title: '🌴 ป่าอเมซอนมรณะเปิดแล้ว! (Lv.15+)', body: 'เดินไปทางขวาสุดของทวีป Aurelion ผ่านซุ้มประตูเถาวัลย์ เจอปิรันย่า อนาคอนด้า ต้นไม้กินคน และหมู่บ้านโอกรเผ่ากินคน · บอส MVP ราชันย์อนาคอนด้ารออยู่ที่หนองน้ำ' });
 /* ============================================================
    RO-style presentation: casting circles, hit sparks, level-up
    column, skill shout, RO click/hit sounds
@@ -12682,6 +13113,12 @@ const MVP_DEFS = {
     drops: [['mp_s', 1], ['rf_stone', .7], ['r_mana', .2], ['egg_bat', .05]] },
   mvp_deathknight: { base: 'skel', tier: 'mvp', name: 'อัศวินกระดูกมรณะ', lvl: 18, k: 1.8, hp: 6000, atk: 50, def: 20, xp: 4800, coin: [700, 1000], period: 1800, zone: 'dungeon', x: DX + 4, z: -58, place: 'ทางเดินโครงกระดูก',
     drops: [['m_bone', 1], ['rf_stone2', .6], ['rf_guard', .3], ['w_crys', .06], ['r_heart', .1], ['a_moon', .35], ['egg_dragon', .02]] }
+  ,mvp_queenplant: { base: 'plant', tier: 'mini', name: 'ราชินีพืชกินคน', lvl: 23, k: 1.6, hp: 4600, atk: 55, def: 20, xp: 4200, coin: [600, 900], period: 1080, zone: 'amazon', x: AX + 52, z: -52, place: 'ดงไม้กินคน',
+    drops: [['m_seed', 1], ['rf_stone2', .4], ['rf_guard', .15], ['jg_antidote', .8], ['egg_frog', .06]] },
+  mvp_ogrechief: { base: 'ogre', tier: 'mini', name: 'หัวหน้าเผ่าโอกรกินคน', lvl: 24, k: 1.5, hp: 5200, atk: 58, def: 22, xp: 4600, coin: [700, 1000], period: 1200, zone: 'amazon', x: AX - 14, z: -84, place: 'หมู่บ้านโอกรเผ่ากินคน',
+    drops: [['m_mask', 1], ['r_totem', .2], ['rf_stone2', .45], ['rf_guard', .2], ['egg_monkey', .06]] },
+  mvp_anaking: { base: 'ana', tier: 'mvp', name: 'ราชันย์อนาคอนด้า', lvl: 26, k: 2.3, hp: 12000, atk: 70, def: 26, xp: 9000, coin: [1500, 2200], period: 2400, zone: 'amazon', x: AX - 58, z: -64, place: 'หนองน้ำอนาคอนด้า',
+    drops: [['m_scale', 1], ['w_fang', .15], ['rf_stone2', .8], ['rf_guard', .4], ['a_jaguar', .2], ['tg_r_5', .02], ['egg_dragon', .03]] }
 };
 for (const id in MVP_DEFS) {
   const D = MVP_DEFS[id], b = MONSTERS[D.base];
@@ -12699,7 +13136,7 @@ for (const id in MVP_DEFS) {
 }
 
 const MVPSys = {
-  list: [], cycle: {}, collect: null,
+  list: [], cycle: {}, obs: {}, collect: null,
   now() { return (Net.be && Net.be.now ? Net.be.now() : Date.now()) / 1000; },
   cyc(D) { return Math.floor(this.now() / D.period); },
   left(D) { return D.period - (this.now() % D.period); },
@@ -12712,8 +13149,9 @@ const MVPSys = {
     const st = this.st();
     for (const m of this.list) {
       const D = MVP_DEFS[m.mvpId], c = this.cyc(D); if (!Monsters.list.includes(m)) Monsters.list.push(m);
-      if (m.dead) { m.respawn = 1e9; if (st.dead[m.mvpId] !== c && this.cycle[m.mvpId] !== c) { this.cycle[m.mvpId] = c; Monsters.revive(m); m.x = m.home.x; m.z = m.home.z; m.hp = m.max; const fresh = this.left(D) > D.period - 90; if (fresh) Announce.show('spawn', `${D.tier === 'mvp' ? 'บอส MVP' : 'มินิบอส'} ${D.name} ปรากฏตัวที่${D.place}! (${zoneTH(D.zone)})`); } }
+      if (m.dead) { m.respawn = 1e9; if (st.dead[m.mvpId] !== c && this.cycle[m.mvpId] !== c) { const fresh = this.obs[m.mvpId] && this.left(D) > D.period - 120; this.cycle[m.mvpId] = c; Monsters.revive(m); m.x = m.home.x; m.z = m.home.z; m.hp = m.max; if (fresh) Announce.show('spawn', `${D.tier === 'mvp' ? 'บอส MVP' : 'มินิบอส'} ${D.name} ปรากฏตัวที่${D.place}! (${zoneTH(D.zone)})`); } }
     }
+    for (const m of this.list) this.obs[m.mvpId] = 1;
   },
   onKill(m) {
     const D = MVP_DEFS[m.mvpId], S = Save.d, st = this.st(); st.dead[m.mvpId] = this.cyc(D); st.kills[m.mvpId] = (st.kills[m.mvpId] || 0) + 1; m.respawn = 1e9;
@@ -13333,6 +13771,49 @@ UI.pEvents = function () {
 {
   const oi = UI.itemIcon.bind(UI); UI.itemIcon = function (id) { const it = ITEMS[id]; if (it && it.tier !== undefined) return icon(it.icon, 'r-tier tt' + it.tier); return oi(id); };
 }
+/* ============================================================
+   Amazon UI: jungle shop, minimap / world-map tab, patch notes.
+   ============================================================ */
+SHOPS.jungle = ['ร้านเสบียงป่าของโฮเซ่', 'ดูยาแก้พิษและอุปกรณ์', () => JUNGLE_SHOP, 1];
+Object.assign(NPC_IDLE, { marco: 'ค่ายนี้เป็นที่ปลอดภัยแห่งเดียวในป่า พักให้หายเหนื่อยก่อนออกไปนะ', emma: 'สิ่งมีชีวิตในป่านี้มีมากกว่าหมื่นชนิด ฉันศึกษาไปได้แค่นิดเดียวเอง', jose: 'ซื้อยาแก้พิษไว้เยอะๆ นะ กบพิษกับงูอนาคอนด้าไม่ปรานีใคร' });
+UI.buildAmazonMap = function () {
+  const N = 220, c = document.createElement('canvas'); c.width = N; c.height = N; const x = c.getContext('2d'); const img = x.createImageData(N, N);
+  for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+    const lx = -110 + i, z = -110 + j, h = amazonHeight(lx, z); let col = amazonColor(lx, z, h); if (h < -.2) col = inC(lx, z, ASWAMP, 1.2) ? [.25, .32, .18] : [.16, .38, .4];
+    col = col.map(v => Math.min(1, v * 1.35)); const k = (j * N + i) * 4; img.data[k] = col[0] * 255; img.data[k + 1] = col[1] * 255; img.data[k + 2] = col[2] * 255; img.data[k + 3] = 255;
+  }
+  x.putImageData(img, 0, 0);
+  x.fillStyle = 'rgba(10,30,12,.55)'; for (const o of Col.circles) { if (o.x < AX - 110 || o.x > AX + 110 || !/atree|apalm/.test(o.tag)) continue; x.beginPath(); x.arc(o.x - AX + 110, o.z + 110, Math.max(1, o.r * 1.6), 0, TAU); x.fill(); }
+  x.fillStyle = '#8a6a44'; for (const o of Col.circles) { if (o.x < AX - 110 || o.x > AX + 110 || !/ahut|atent|apal/.test(o.tag)) continue; x.beginPath(); x.arc(o.x - AX + 110, o.z + 110, Math.max(1, o.r), 0, TAU); x.fill(); }
+  x.fillStyle = '#9a9a88'; for (const o of Col.boxes) { if (o.x0 < AX - 110 || o.x0 > AX + 110) continue; x.fillRect(o.x0 - AX + 110, o.z0 + 110, o.x1 - o.x0, o.z1 - o.z0); }
+  this.amzImg = c;
+};
+{
+  const opm = UI.pMap.bind(UI);
+  UI.pMap = function (o) {
+    const P = Player, S = Save.d; if (!o.tab && P.zone === 'amazon') o.tab = 'amazon';
+    if (o.tab !== 'amazon') { opm(o); const t = this.el.pbody.querySelector('.maptabs'); if (t && !t.querySelector('[data-mt="amazon"]')) t.insertAdjacentHTML('beforeend', `<button class="tab" data-mt="amazon">ป่าอเมซอน${S.level < AMAZON_LV ? ' 🔒' : ''}</button>`); return; }
+    this.panelOpt.tab = 'amazon'; if (!this.amzImg) this.buildAmazonMap();
+    this.setPanel(`${icon('map')} แผนที่ป่าอเมซอนมรณะ${o.warp ? ' · เลือกจุดวาร์ป' : ''}`, `<div class="tabs maptabs"><button class="tab" data-mt="world">ทวีป Aurelion</button><button class="tab" data-mt="temple">วัดร้างกลางป่า</button><button class="tab on" data-mt="amazon">ป่าอเมซอน</button></div>
+      <div class="mapwrap"><canvas id="bigmap" width="660" height="660"></canvas></div>
+      <div class="warps"><h4>จุดวาร์ป</h4>${WARPS.map(w => `<button class="btn ${S.warps[w.id] ? '' : 'ghost'}" data-w="${w.id}" ${S.warps[w.id] && o.warp ? '' : 'disabled'}>${w.name}${S.warps[w.id] ? '' : ' (ยังไม่ค้นพบ)'}</button>`).join('')}
+      <p class="muted">ทางเข้า: ถนนสายตะวันออกของทวีป Aurelion (ขวาสุดของแผนที่) ต้องมีเลเวล ${AMAZON_LV} ขึ้นไป · มอนสเตอร์ Lv.15–26 ${o.warp ? '· แตะชื่อจุดวาร์ปเพื่อเดินทาง' : ''}</p></div>`, true);
+    const cv = $('#bigmap'), x = cv.getContext('2d'); x.imageSmoothingEnabled = false; x.drawImage(this.amzImg, 0, 0, 660, 660);
+    const tp = (wx, wz) => [(wx - AX + 110) * 3, (wz + 110) * 3]; x.font = '600 13px Mitr, sans-serif'; x.textAlign = 'center';
+    const lbl = (t, wx, wz, c = '#fff') => { const [a, b] = tp(wx, wz); x.lineWidth = 4; x.strokeStyle = 'rgba(8,16,8,.85)'; x.strokeText(t, a, b); x.fillStyle = c; x.fillText(t, a, b); };
+    for (const [ax, az, r, n] of AMAZON_AREAS) lbl(n, AX + ax, az - r * .6, '#f3e7cc');
+    const sp = {}; for (const [t, sx, sz] of SPAWNS) if (sx > 2500 && !sp[t]) { sp[t] = 1; const [a, b] = tp(sx, sz); x.fillStyle = '#ff8a5a'; x.beginPath(); x.arc(a, b, 6, 0, TAU); x.fill(); lbl(MONSTERS[t].name + ' Lv.' + MONSTERS[t].lvl, sx, sz + 6, '#ffd0b0'); }
+    for (const m of MVPSys.list) if (m.zone === 'amazon') { const [a, b] = tp(m.home.x, m.home.z); x.fillStyle = m.d.mvp === 'mvp' ? '#ffb02e' : '#c46bff'; x.beginPath(); x.arc(a, b, 9, 0, TAU); x.fill(); lbl((m.d.mvp === 'mvp' ? '👑 ' : '★ ') + m.d.name, m.home.x, m.home.z - 4, '#ffe08a'); }
+    for (const n of NPCList) if (n.zone === 'amazon') { const [a, b] = tp(n.x, n.z); x.fillStyle = '#ffd24a'; x.beginPath(); x.arc(a, b, 5, 0, TAU); x.fill(); }
+    lbl('ทางออก ↓ ถนนสายตะวันออก', AX, 106, '#cfe8ff');
+    if (P.zone === 'amazon') { const [a, b] = tp(P.x, P.z); x.fillStyle = '#a5e84a'; x.strokeStyle = '#1d1712'; x.lineWidth = 2; x.beginPath(); x.arc(a, b, 7, 0, TAU); x.fill(); x.stroke(); }
+    this.el.pbody.onclick = e => {
+      const t = e.target.closest('[data-mt]'); if (t) { this.panelOpt.tab = t.dataset.mt; return this.renderPanel(); }
+      const b = e.target.closest('[data-w]'); if (!b || b.disabled) return; const w = WARPS.find(v => v.id === b.dataset.w); if (Monsters.boss.engaged || NakBoss.cur) { this.toast('วาร์ปไม่ได้ระหว่างต่อสู้กับบอส', 'warn'); return; } this.closePanel(); Game.teleport(w.x + 2.5, w.z + 1, w.name);
+    };
+  };
+}
+Object.assign(CARD_EMOJI, { piranha: '🐟', dartfrog: '🐸', jaguar: '🐆', spider: '🕷️', ana: '🐍', plant: '🌺', caiman: '🐊', ogre: '👹', ogresham: '🪶' });
 /* ============================================================
    Boot
    ============================================================ */

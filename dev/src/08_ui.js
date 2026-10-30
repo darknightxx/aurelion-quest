@@ -274,9 +274,9 @@ const UI = {
     const ctx = this.miniCtx, cv = this.el.mini; const W = cv.width, H = cv.height; const P = Player;
     const scale = 1.6; ctx.save(); ctx.clearRect(0, 0, W, H);
     ctx.beginPath(); ctx.arc(W / 2, H / 2, W / 2 - 2, 0, TAU); ctx.clip();
-    ctx.fillStyle = P.zone === 'dungeon' ? '#1c1826' : P.zone === 'temple' ? '#1e2a1e' : '#4a7a3a'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = P.zone === 'dungeon' ? '#1c1826' : P.zone === 'temple' ? '#1e2a1e' : P.zone === 'amazon' ? '#16301a' : '#4a7a3a'; ctx.fillRect(0, 0, W, H);
     ctx.translate(W / 2, H / 2); ctx.scale(scale, scale);
-    if (P.zone === 'world') ctx.drawImage(this.mapImg, -150 - P.x, -150 - P.z); else if (P.zone === 'temple') { if (!this.tplImg) this.buildTempleMap(); ctx.drawImage(this.tplImg, (TX - 75) - P.x, -75 - P.z); } else ctx.drawImage(this.dunImg, 950 - P.x, -140 - P.z);
+    if (P.zone === 'world') ctx.drawImage(this.mapImg, -150 - P.x, -150 - P.z); else if (P.zone === 'temple') { if (!this.tplImg) this.buildTempleMap(); ctx.drawImage(this.tplImg, (TX - 75) - P.x, -75 - P.z); } else if (P.zone === 'amazon') { if (!this.amzImg) this.buildAmazonMap(); ctx.drawImage(this.amzImg, (AX - 110) - P.x, -110 - P.z); } else ctx.drawImage(this.dunImg, 950 - P.x, -140 - P.z);
     const dot = (x, z, c, r) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(x - P.x, z - P.z, r, 0, TAU); ctx.fill(); };
     for (const m of Monsters.list) if (!m.dead && m.zone === P.zone) dot(m.x, m.z, m.d.boss ? '#ff4fd8' : m.d.aggro ? '#ff5a3c' : '#f2d34b', m.d.boss ? 3 : 1.3);
     for (const w of WARPS) if (w.zone === P.zone) dot(w.x, w.z, Save.d.warps[w.id] ? '#7fe6ff' : '#5a6b78', 2);

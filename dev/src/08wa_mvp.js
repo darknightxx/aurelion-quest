@@ -19,6 +19,12 @@ const MVP_DEFS = {
     drops: [['mp_s', 1], ['rf_stone', .7], ['r_mana', .2], ['egg_bat', .05]] },
   mvp_deathknight: { base: 'skel', tier: 'mvp', name: 'อัศวินกระดูกมรณะ', lvl: 18, k: 1.8, hp: 6000, atk: 50, def: 20, xp: 4800, coin: [700, 1000], period: 1800, zone: 'dungeon', x: DX + 4, z: -58, place: 'ทางเดินโครงกระดูก',
     drops: [['m_bone', 1], ['rf_stone2', .6], ['rf_guard', .3], ['w_crys', .06], ['r_heart', .1], ['a_moon', .35], ['egg_dragon', .02]] }
+  ,mvp_queenplant: { base: 'plant', tier: 'mini', name: 'ราชินีพืชกินคน', lvl: 23, k: 1.6, hp: 4600, atk: 55, def: 20, xp: 4200, coin: [600, 900], period: 1080, zone: 'amazon', x: AX + 52, z: -52, place: 'ดงไม้กินคน',
+    drops: [['m_seed', 1], ['rf_stone2', .4], ['rf_guard', .15], ['jg_antidote', .8], ['egg_frog', .06]] },
+  mvp_ogrechief: { base: 'ogre', tier: 'mini', name: 'หัวหน้าเผ่าโอกรกินคน', lvl: 24, k: 1.5, hp: 5200, atk: 58, def: 22, xp: 4600, coin: [700, 1000], period: 1200, zone: 'amazon', x: AX - 14, z: -84, place: 'หมู่บ้านโอกรเผ่ากินคน',
+    drops: [['m_mask', 1], ['r_totem', .2], ['rf_stone2', .45], ['rf_guard', .2], ['egg_monkey', .06]] },
+  mvp_anaking: { base: 'ana', tier: 'mvp', name: 'ราชันย์อนาคอนด้า', lvl: 26, k: 2.3, hp: 12000, atk: 70, def: 26, xp: 9000, coin: [1500, 2200], period: 2400, zone: 'amazon', x: AX - 58, z: -64, place: 'หนองน้ำอนาคอนด้า',
+    drops: [['m_scale', 1], ['w_fang', .15], ['rf_stone2', .8], ['rf_guard', .4], ['a_jaguar', .2], ['tg_r_5', .02], ['egg_dragon', .03]] }
 };
 for (const id in MVP_DEFS) {
   const D = MVP_DEFS[id], b = MONSTERS[D.base];
@@ -36,7 +42,7 @@ for (const id in MVP_DEFS) {
 }
 
 const MVPSys = {
-  list: [], cycle: {}, collect: null,
+  list: [], cycle: {}, obs: {}, collect: null,
   now() { return (Net.be && Net.be.now ? Net.be.now() : Date.now()) / 1000; },
   cyc(D) { return Math.floor(this.now() / D.period); },
   left(D) { return D.period - (this.now() % D.period); },
@@ -49,8 +55,9 @@ const MVPSys = {
     const st = this.st();
     for (const m of this.list) {
       const D = MVP_DEFS[m.mvpId], c = this.cyc(D); if (!Monsters.list.includes(m)) Monsters.list.push(m);
-      if (m.dead) { m.respawn = 1e9; if (st.dead[m.mvpId] !== c && this.cycle[m.mvpId] !== c) { this.cycle[m.mvpId] = c; Monsters.revive(m); m.x = m.home.x; m.z = m.home.z; m.hp = m.max; const fresh = this.left(D) > D.period - 90; if (fresh) Announce.show('spawn', `${D.tier === 'mvp' ? 'บอส MVP' : 'มินิบอส'} ${D.name} ปรากฏตัวที่${D.place}! (${zoneTH(D.zone)})`); } }
+      if (m.dead) { m.respawn = 1e9; if (st.dead[m.mvpId] !== c && this.cycle[m.mvpId] !== c) { const fresh = this.obs[m.mvpId] && this.left(D) > D.period - 120; this.cycle[m.mvpId] = c; Monsters.revive(m); m.x = m.home.x; m.z = m.home.z; m.hp = m.max; if (fresh) Announce.show('spawn', `${D.tier === 'mvp' ? 'บอส MVP' : 'มินิบอส'} ${D.name} ปรากฏตัวที่${D.place}! (${zoneTH(D.zone)})`); } }
     }
+    for (const m of this.list) this.obs[m.mvpId] = 1;
   },
   onKill(m) {
     const D = MVP_DEFS[m.mvpId], S = Save.d, st = this.st(); st.dead[m.mvpId] = this.cyc(D); st.kills[m.mvpId] = (st.kills[m.mvpId] || 0) + 1; m.respawn = 1e9;

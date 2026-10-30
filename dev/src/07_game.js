@@ -403,8 +403,8 @@ const Game = {
     R.begin();
     if (zone === 'temple') TempleGfx.drawSky(R);
     R.useLit();
-    if (zone === 'temple') TempleGfx.drawOpaque(R); else R.drawMesh(World.meshes.static, null);
-    if (zone === 'world') R.drawMesh(World.meshes.westgate, null);
+    if (zone === 'temple') TempleGfx.drawOpaque(R); else if (zone === 'amazon') AmazonGfx.drawOpaque(R); else R.drawMesh(World.meshes.static, null);
+    if (zone === 'world') { R.drawMesh(World.meshes.westgate, null); if (World.meshes.eastgate) R.drawMesh(World.meshes.eastgate, null); }
     if (zone === 'dungeon') {
       const p = .6 + Math.sin(this.time * 1.5) * .15;
       R.drawMesh(World.meshes.glowA, null, null, [.15 * p, .5 * p, .6 * p]); R.drawMesh(World.meshes.glowB, null, null, [.4 * p, .2 * p, .6 * p]); R.drawMesh(World.meshes.torches, null);
@@ -444,13 +444,14 @@ const Game = {
       Remote.draw(R);
     }
     Sprites.end(R);
-    if (zone === 'temple') { GhostAI.draw(R); NakBoss.draw(R); }
+    if (zone === 'temple') { GhostAI.draw(R); NakBoss.draw(R); } else if (zone === 'amazon') GhostAI.draw(R);
     Projectiles.draw(R);
     Fx.drawSolid(R);
     // transparent meshes
     const gl = R.gl; R.useLit(); gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(false);
     if (zone === 'world') R.drawMesh(World.meshes.water, null, null, null, 0, .82, 1);
     if (zone === 'temple') R.drawMesh(World.meshes.twater, null, null, [.02, .04, .06], 0, .8, 1);
+    if (zone === 'amazon') R.drawMesh(World.meshes.awater, null, null, [.02, .05, .04], 0, .82, 1);
     const pin = World.portalIn, pout = World.portalOut;
     gl.disable(gl.CULL_FACE);
     if (zone === 'world' && pin.open) { M4.compose(M, 0, 4.4, -140.1, 0, 0, 0, 1.35, 1.35, 1); R.drawMesh(World.meshes.portal, M, [.4, .7, 1], [.3, .55, .9], 0, .55 + Math.sin(this.time * 3) * .1); }
@@ -486,6 +487,7 @@ const Game = {
       else if (e.kind === 'cone') R.drawDecal(e.x, .08, e.z, e.r, e.r, e.rot, 3, e.fired ? [1, 1, 1, .6] : e.col, p, e.ang);
       else if (e.kind === 'rect') R.drawDecal(e.x, .08, e.z, e.w, e.l, e.rot, 5, e.fired ? [1, 1, 1, .6] : e.col, p);
     }
+    if (zone === 'amazon') GhostAI.drawDecals(R);
     if (zone === 'temple') { GhostAI.drawDecals(R); TempleGfx.drawDecals(R); }
     R.endDecal();
     R.drawParticles(Particles.list);
