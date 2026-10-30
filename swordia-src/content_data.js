@@ -188,3 +188,21 @@ const PET_DEFS = {
 };
 for (const id in PET_DEFS) { const p = PET_DEFS[id]; ITEMS['egg_' + id] = { name: 'ไข่' + p.name, glyph: '蛋', type: 'egg', pet: id, rarity: p.price >= 2000 ? 'Legendary' : p.price >= 900 ? 'Epic' : p.price >= 600 ? 'Rare' : 'Uncommon', price: p.price, desc: 'ฟักเป็น' + p.name + ' · ' + p.ab[2] }; }
 MAPS.village.npcs.find(n => n.id === 'ming').shop = Object.keys(PET_DEFS).map(k => 'egg_' + k);
+
+/* ---------------- painted start area: หมู่บ้านสายหยก (matches the reference art 1:1) ---------------- */
+MONSTERS.jrabbit = mkMon('กระต่ายป่าหยก', 1, { spd: 50, r: 13, hpK: .8, aggro: 70, drops: [['potion_hp', .25], ['mat_shroom', .15], ['sword_bamboo', .05], ['hat_straw', .04]] });
+MAPS.jadev = {
+  name: 'หมู่บ้านสายหยก', w: 1536, h: 1024, ground: '#7a9a3a', bg: 'jadev', __scaled: true,
+  walk: [[[300, 318], [420, 300], [560, 282], [650, 262], [700, 225], [745, 190], [835, 212], [850, 262], [860, 300], [915, 355], [985, 420], [1110, 470], [1230, 520], [1300, 560], [1345, 640], [1370, 720], [1420, 790], [1536, 850], [1536, 990], [1060, 990], [990, 880], [880, 830], [760, 805], [640, 790], [600, 740], [505, 690], [470, 630], [380, 600], [275, 560], [215, 470], [240, 380]], [[740, 150], [790, 138], [1290, 272], [1295, 322], [1240, 322], [760, 198]]],
+  paths: [], water: [], colliders: [], npcs: [],
+  spawns: [{ type: 'jrabbit', n: 7, area: [300, 330, 1000, 420] }],
+  portals: [{ x: 1236, y: 268, w: 60, h: 58, to: 'village', tx: 1300 * 1.6, ty: 515 * 1.6, label: 'หมู่บ้านสายหมอก' }, { x: 1470, y: 860, w: 66, h: 128, to: 'wind', tx: 200 * 1.6, ty: 620 * 1.6, label: 'ทุ่งสายลม' }],
+  start: { x: 720, y: 560 },
+  spots: [[612, 335], [400, 405], [305, 488], [527, 600], [825, 690], [1140, 685], [960, 560]],
+  glows: [[395, 205, 40], [628, 700, 46]], falls: [[1032, 96, 70, 60], [1142, 86, 92, 130], [1345, 395, 170, 260]],
+};
+MAPS.village.portals.push({ x: 1440, y: 300, w: 60, h: 150, to: 'jadev', tx: 1200, ty: 330, label: 'หมู่บ้านสายหยก' });
+QUESTS.unshift(
+  { id: 'j1', name: 'ก้าวแรกในป่าหยก', desc: 'กระต่ายป่าหยกแห่กันมากัดกินแปลงผักของหมู่บ้าน ช่วยกำจัด 5 ตัว', type: 'kill', target: 'jrabbit', need: 5, main: true, reward: { exp: 120, gold: 60, item: 'potion_hp', n: 3 }, rewardText: '120 EXP · 60 Zeny · ยาเลือด 3' },
+  { id: 'j2', name: 'ออกสำรวจอาณาจักร', desc: 'ข้ามสะพานไม้ไปยังหมู่บ้านสายหมอก แล้วพบผู้เฒ่าหลิน', type: 'reach', target: 'village', need: 1, main: false, reward: { exp: 80, gold: 50, item: 'potion_mp', n: 2 }, rewardText: '80 EXP · 50 Zeny · ยาพลัง 2' },
+);

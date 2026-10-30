@@ -3,7 +3,7 @@ src = 'src/'
 pre = open(src + 'pre.html', encoding='utf-8').read()
 post = open(src + 'post.html', encoding='utf-8').read()
 props = open(src + 'props.txt', encoding='utf-8').read()
-code = '\n'.join(open(src + f, encoding='utf-8').read() for f in ['game.js', 'content_data.js', 'pixel.js', 'content.js'])
+code = '\n'.join(open(src + f, encoding='utf-8').read() for f in ['game.js', 'bg_data.js', 'content_data.js', 'pixel.js', 'content.js'])
 tpl = pre + '<script type="text/x-dc"' + props + '>' + code + '</script>' + post
 orig = open('orig.html', encoding='utf-8').read()
 m = re.search(r'(<script type="__bundler/template">)(.*?)(</script>)', orig, re.S)

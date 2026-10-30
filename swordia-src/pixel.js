@@ -305,8 +305,10 @@ const PX = {
     m.colliders = (m.colliders || []).concat(a.cliffs || []);
   },
   inRect(x, y, r, pad = 0) { return x > r[0] - pad && x < r[0] + r[2] + pad && y > r[1] - pad && y < r[1] + r[3] + pad; },
+  bgImage(k) { const c = PX._bg || (PX._bg = {}); if (!c[k]) { c[k] = new Image(); c[k].src = BG_DATA[k]; } return c[k]; },
   layout(game, m, id) {
     if (m.__props) return m.__props;
+    if (m.bg) return m.__props = [];
     const a = PX.art[id] || {}, S = PX.S, rnd = PX.rnd(id.length * 977 + 31), props = [];
     const busy = (x, y, pad) => (m.paths || []).some(r => PX.inRect(x, y, r, pad)) || (m.water || []).some(r => PX.inRect(x, y, r, pad)) || (m.colliders || []).some(r => PX.inRect(x, y, r, pad))
       || (a.bridges || []).some(r => PX.inRect(x, y, r, pad)) || (m.portals || []).some(p => PX.inRect(x, y, [p.x, p.y, p.w, p.h], pad))
@@ -491,9 +493,9 @@ PX.scaleMap = function (id) {
     const LW = Math.ceil(W / S) + 1, LH = Math.ceil(H / S) + 1;
     if (!this.low || this.low.width !== LW || this.low.height !== LH) this.low = PX.canvas(LW, LH);
     const x = this.low.getContext('2d'); x.imageSmoothingEnabled = false;
-    x.fillStyle = '#1b2a1c'; x.fillRect(0, 0, LW, LH);
-    x.drawImage(PX.terrain(m, id), -ox, -oy);
-    PX.waterAnim(x, m, id, ox, oy, t);
+    const bgImg = m.bg ? PX.bgImage(m.bg) : null;
+    if (m.bg) x.clearRect(0, 0, LW, LH);
+    else { x.fillStyle = '#1b2a1c'; x.fillRect(0, 0, LW, LH); x.drawImage(PX.terrain(m, id), -ox, -oy); PX.waterAnim(x, m, id, ox, oy, t); }
     // drawables sorted by their ground y
     const art = PX.art[id] || {}, list = [];
     for (const p of PX.layout(this, m, id)) list.push(p);
@@ -550,12 +552,21 @@ PX.scaleMap = function (id) {
     }
     // blit pixel layer
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.imageSmoothingEnabled = false;
+    if (m.bg) {
+      ctx.fillStyle = '#0d1410'; ctx.fillRect(0, 0, cv.width, cv.height);
+      if (bgImg && bgImg.complete) { ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.imageSmoothingEnabled = true; ctx.drawImage(bgImg, -cx, -cy, m.w, m.h); ctx.imageSmoothingEnabled = false;
+        // living waterfalls: soft moving streaks over the painted falls
+        ctx.save(); ctx.globalCompositeOperation = 'lighter';
+        for (const f of m.falls || []) for (let i = 0; i < f[2]; i += 7) { const off = ((t * (70 + (i * 13) % 40) + i * 37) % f[3]); ctx.fillStyle = 'rgba(220,245,255,.22)'; ctx.fillRect(f[0] + i - cx, f[1] + off - cy, 3, 14); }
+        ctx.restore(); ctx.setTransform(1, 0, 0, 1, 0, 0); }
+    }
     ctx.drawImage(this.low, 0, 0, LW, LH, 0, 0, LW * S * dpr, LH * S * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.translate(-cx, -cy);
     // soft layers: fog, lantern glow, portals, drops, fx, labels, floats
     if (art.fog) { const fg = ctx.createLinearGradient(cx, cy, cx, cy + H); fg.addColorStop(0, 'rgba(220,240,230,.22)'); fg.addColorStop(.5, 'rgba(220,240,230,.04)'); fg.addColorStop(1, 'rgba(220,240,230,.16)'); ctx.fillStyle = fg; ctx.fillRect(cx, cy, W, H); }
     if (art.night) { ctx.fillStyle = art.night; ctx.fillRect(cx, cy, W, H); const hx = g.p.x, hy = g.p.y - 40, gr0 = ctx.createRadialGradient(hx, hy, 40, hx, hy, 420); gr0.addColorStop(0, 'rgba(0,0,0,0)'); gr0.addColorStop(1, 'rgba(4,6,14,.45)'); ctx.fillStyle = gr0; ctx.fillRect(cx, cy, W, H); }
     ctx.globalCompositeOperation = 'lighter';
+    for (const gl of m.glows || []) this._labels.push({ glow: true, x: gl[0], y: gl[1], r: gl[2] });
     for (const l of this._labels) if (l.glow) { const k = .8 + .2 * Math.sin(t * 3 + l.x); const gr = ctx.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.r); gr.addColorStop(0, l.col ? l.col.replace('A', .4 * k) : `rgba(255,200,90,${.35 * k})`); gr.addColorStop(1, 'rgba(255,160,60,0)'); ctx.fillStyle = gr; ctx.fillRect(l.x - l.r, l.y - l.r, l.r * 2, l.r * 2); }
     for (const pt of m.portals || []) {
       const px = pt.x + pt.w / 2, py = pt.y + pt.h / 2, rr = Math.max(pt.w, pt.h) * .55, k = .7 + .3 * Math.sin(t * 2.5);
@@ -587,11 +598,11 @@ PX.scaleMap = function (id) {
       if (l.npc) { const n = l.npc; this.label(ctx, n.name, n.x, n.y - 130, '#ffd56a', 13); const k = .6 + .4 * Math.sin(now / 300); ctx.globalAlpha = k; this.bubble(ctx, n.x, n.y - 156); ctx.globalAlpha = 1; }
       if (l.mob) {
         const mo = l.mob, d = MONSTERS[mo.type], topY = (l.top + oy) * S - 8;
-        this.label(ctx, d.name, mo.x, topY - 20, d.boss ? '#ffd56a' : '#ffffff', d.boss ? 15 : 13);
-        const bw = d.boss ? 96 : 60, bx = mo.x - bw / 2, by = topY - 14;
+        this.label(ctx, d.name, mo.x, topY - 22, d.boss ? '#ffd56a' : '#ffffff', d.boss ? 16 : 15);
+        const bw = d.boss ? 96 : 64, bx = mo.x - bw / 2, by = topY - 15;
         ctx.fillStyle = 'rgba(16,14,18,.85)'; ctx.beginPath(); ctx.roundRect(bx - 2, by - 2, bw + 4, 14, 4); ctx.fill();
-        ctx.fillStyle = '#5a1a1a'; ctx.fillRect(bx, by, bw, 10); ctx.fillStyle = d.boss ? '#ff6a4a' : '#e8463a'; ctx.fillRect(bx, by, bw * Math.max(0, mo.hp / mo.max), 10);
-        ctx.font = "700 9px 'IBM Plex Sans Thai',sans-serif"; ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.fillText('Lv.' + d.lv, mo.x, by + 8.5);
+        ctx.fillStyle = '#4a3a3a'; ctx.fillRect(bx, by, bw, 11); ctx.fillStyle = d.boss ? '#ff6a4a' : '#e8463a'; ctx.fillRect(bx, by, bw * Math.max(0, mo.hp / mo.max), 11);
+        ctx.font = "800 10px 'IBM Plex Sans Thai',sans-serif"; ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.fillText('Lv.' + d.lv, mo.x, by + 8.5);
       }
     }
     ctx.textAlign = 'center';
@@ -617,19 +628,23 @@ PX.scaleMap = function (id) {
   CP.drawMini = function () {
     const cv = this.miniRef.current; if (!cv) return;
     const ctx = cv.getContext('2d'), m = this.mapDef(), g = this.g, z = this.state.zoom, id = mapId(this);
-    PX.prep(m, id); const T = PX.terrain(m, id);
+    PX.prep(m, id); const T = m.bg ? PX.bgImage(m.bg) : PX.terrain(m, id);
     ctx.imageSmoothingEnabled = false; ctx.fillStyle = '#16202a'; ctx.fillRect(0, 0, cv.width, cv.height);
     ctx.save();
     const sx = cv.width / m.w * z, sy = cv.height / m.h * z;
     if (z > 1) ctx.translate(cv.width / 2 - g.p.x * sx, cv.height / 2 - g.p.y * sy);
     ctx.drawImage(T, 0, 0, m.w * sx, m.h * sy);
-    ctx.fillStyle = '#4a4f5c'; for (const c of (m.colliders || [])) if (!(PX.art[id].cliffs || []).includes(c)) ctx.fillRect(c[0] * sx, c[1] * sy, c[2] * sx, c[3] * sy);
+    ctx.fillStyle = '#4a4f5c'; for (const c of (m.colliders || [])) if (!((PX.art[id] || {}).cliffs || []).includes(c)) ctx.fillRect(c[0] * sx, c[1] * sy, c[2] * sx, c[3] * sy);
     ctx.fillStyle = '#5fe0ff'; for (const p of (m.portals || [])) { ctx.beginPath(); ctx.arc((p.x + p.w / 2) * sx, (p.y + p.h / 2) * sy, 4, 0, 7); ctx.fill(); }
     ctx.fillStyle = '#ff5a4a'; for (const mo of g.mobs) if (!mo.dead) ctx.fillRect(mo.x * sx - 1.5, mo.y * sy - 1.5, 3, 3);
     ctx.fillStyle = '#ffd24a'; for (const n of (m.npcs || [])) ctx.fillRect(n.x * sx - 2, n.y * sy - 2, 4, 4);
     ctx.save(); ctx.translate(g.p.x * sx, g.p.y * sy); ctx.rotate(Math.PI / 4); ctx.fillStyle = '#5fd8ff'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.fillRect(-4, -4, 8, 8); ctx.strokeRect(-4, -4, 8, 8); ctx.restore();
     ctx.restore();
   };
+  // painted maps: walkable areas are polygons
+  const inPoly = (x, y, P) => { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, yi] = P[i], [xj, yj] = P[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
+  const obl = CP.blocked;
+  CP.blocked = function (x, y, r) { const m = this.mapDef(); if (!m.walk) return obl.call(this, x, y, r); const k = Math.min(r, 10); for (const [dx, dy] of [[0, 0], [k, 0], [-k, 0], [0, k], [0, -k]]) if (!m.walk.some(P => inPoly(x + dx, y + dy, P))) return true; return false; };
   // attack pose timing for basic attacks and skills
   const oba = CP.basicAttack;
   CP.basicAttack = function () { const g = this.g, p = g.p, a0 = p.atkT, n0 = g.fx.length; oba.call(this); if (p.atkT > 0 && !a0) { p.atkMax = p.atkT; if (g.fx.length > n0) g.fx[g.fx.length - 1].t = .3; } };

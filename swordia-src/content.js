@@ -74,6 +74,18 @@
     ogre: [56, 66, (x, f) => hum(x, f, { h: 66, cx: 26, robe: '#7a5a3a', robe2: '#a87a4a', skin: '#8aa858', leg: '#6a8a42', eyes: '#ff3a3a', tusk: 1, club: 1, hr: 10 })],
     ogrechief: [74, 86, (x, f) => { x.save(); x.translate(8, 0); hum(x, f, { h: 84, cx: 30, robe: '#5a3a22', robe2: '#c89a3a', skin: '#6a8a42', leg: '#4a6a32', eyes: '#ffd84a', tusk: 1, club: 1, feathers: 1, necklace: 1, hr: 12 }); x.restore(); }],
   };
+  // rabbit redrawn after the reference: cream fur, leaf collar, big glossy eyes
+  const bunny = [32, 30, (x, f) => {
+    const j = f ? -2 : 0;
+    E(x, '#fbf3e6', 12, 20 + j, 8, f ? 5 : 6); E(x, '#e6d8c2', 11, 24 + j, 6, 2); E(x, '#fffaf2', 4, 18 + j, 3, 3);
+    E(x, '#fbf3e6', 15, 4 + j, 2, 6); E(x, '#fbf3e6', 21, 3 + j, 2, 6); R(x, '#f2a0b2', 15, 1 + j, 1, 7); R(x, '#f2a0b2', 21, 0 + j, 1, 7);
+    E(x, '#fbf3e6', 20, 13 + j, 7, 6); E(x, '#fffaf2', 18, 11 + j, 3, 2);
+    for (const [lx, ly, c] of [[12, 15, '#3f8a2e'], [15, 18, '#5aa83a'], [18, 19, '#7cc04a'], [10, 17, '#5aa83a'], [14, 13, '#7cc04a'], [9, 13, '#3f8a2e'], [21, 19, '#3f8a2e']]) E(x, c, lx, ly + j, 2, 2);
+    R(x, '#1a1014', 21, 10 + j, 3, 4); R(x, '#e8384a', 21, 13 + j, 3, 1); R(x, '#ffffff', 22, 10 + j, 1, 1);
+    R(x, '#f4a8b8', 17, 15 + j, 2, 1); R(x, '#e87890', 26, 13 + j, 1, 1); R(x, '#b05a5a', 25, 15 + j, 1, 1);
+    R(x, '#f4ebdc', 8, 25, 4, 2); R(x, '#f4ebdc', 16, 25, 4, 2);
+  }];
+  MON_SPR.rabbit = bunny; MON_SPR.jrabbit = bunny;
   const baseMob = PX.mob;
   PX.mob = (type, f) => { const d = MON_SPR[type]; return d ? PX.mk('mob_' + type + f, d[0], d[1], (x) => d[2](x, f)) : baseMob(type, f); };
 
@@ -285,6 +297,17 @@
   const obuy = CP.buy;
   CP.buy = function (id) { const it = ITEMS[id], g = this.g; if (it && it.type === 'cos' && (g.wardrobe.includes(id) || g.inv.some(s => s.id === id))) { this.push('มี ' + it.name + ' แล้ว', '#d8b878'); return; } if (it && it.type === 'egg' && g.pets.includes(it.pet)) { this.push('มี ' + PET_DEFS[it.pet].name + ' แล้ว', '#d8b878'); return; } obuy.call(this, id); };
 
+  // starter area + reach quests
+  WARP_LIST.unshift(['jadev', 'หมู่บ้านสายหยก', 1]);
+  { const vp = MAPS.village.portals.find(p => p.to === 'jadev'); vp.tx = 1200; vp.ty = 330; }
+  const oem2 = CP.enterMap;
+  CP.enterMap = function (id, tx, ty) {
+    oem2.call(this, id, tx, ty); const g = this.g;
+    if (MAPS[id].spots) g.mobs.forEach((m, i) => { const sp = MAPS[id].spots[i % MAPS[id].spots.length]; m.x = m.hx = m.tx = sp[0]; m.y = m.hy = m.ty = sp[1]; });
+    for (const q of QUESTS) if (q.type === 'reach' && q.target === id && g.quests[q.id] && g.quests[q.id].state === 'active') { g.quests[q.id].n = 1; g.quests[q.id].state = 'ready'; this.push('เควสพร้อมส่ง: ' + q.name, '#f2c14e'); }
+  };
+  const ocq = CP.checkQuests;
+  CP.checkQuests = function () { const g = this.g, keep = {}; for (const q of QUESTS) if (q.type === 'reach' && g.quests[q.id]) keep[q.id] = { ...g.quests[q.id] }; ocq.call(this); Object.assign(g.quests, keep); };
   const EXTRA = { wardrobe: ['衣', 'ตู้แฟชั่น'], pets: ['寵', 'สัตว์เลี้ยง'] };
   const orv = CP.renderVals;
   CP.renderVals = function () {
@@ -337,7 +360,25 @@
         });
       }
     } else { v.extraRows = []; v.extraHint = ''; }
-    // shop icons for cosmetics and eggs
+    const os2 = v.onStart;
+    v.onStart = () => {
+      os2(); const st = MAPS.jadev.start; this.enterMap('jadev', st.x, st.y); const g = this.g; g.log = [];
+      g.quests.j1 = { state: 'active', n: 0 }; g.quests.j2 = { state: 'active', n: 0 };
+      this.push('ยินดีต้อนรับสู่ Swordia', '#ffd56a'); this.push('คุณเดินทางมาถึงหมู่บ้านสายหยก', '#e9eef4'); this.push('WASD หรือคลิกเพื่อเคลื่อนที่', '#e9eef4');
+      this.push('คลิกกระต่ายเพื่อโจมตีเป้าหมาย', '#e9eef4'); this.push('Space โจมตี · 1 ใช้วิชากระบี่', '#e9eef4');
+    };
+    // quest tracker: show the starter pair together like the reference, and describe reach quests
+    v.trackedQuests = QUESTS.filter(q => g.quests[q.id] && g.quests[q.id].state !== 'done' && (q.main === (s.questTab === 'เควสหลัก') || ['j1', 'j2'].includes(q.id) && s.questTab === 'เควสหลัก')).map(q => {
+      const st = g.quests[q.id];
+      return { name: q.name, color: q.main ? '#f2c14e' : '#5fd0e8', dot: q.main ? '#f2c14e' : '#5fd0e8',
+        progress: st.state === 'ready' ? 'พร้อมส่ง — กลับไปหาผู้เฒ่าหลิน' : q.type === 'reach' ? 'ข้ามสะพานไป' + MAPS[q.target].name : (q.type === 'kill' ? 'กำจัด' + MONSTERS[q.target].name + '  ' : 'เก็บ ' + ITEMS[q.target].name + '  ') + (st.n || 0) + '/' + q.need };
+    });
+    v.noQuests = v.trackedQuests.length === 0;
+    const sk = SKILLS[0];
+    v.skill1Use = () => this.useSkill(sk.id); v.skill1Cd = ((g.cds[sk.id] || 0) / sk.cd * 100) + '%';
+    v.bladeIcon = PX.url(PX.icon('sword'), 2);
+    v.openSkills = () => this.togglePanel('skills'); v.openBag = () => this.togglePanel('inventory');
+    v.pickTarget = () => { const p = g.p, list = g.mobs.filter(m => !m.dead).sort((a, b) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b.x - p.x, b.y - p.y)); const cur = list.indexOf(g.target); const m = list[(cur + 1) % Math.max(1, list.length)]; if (!m) return; g.target = m; g.moveTo = { x: m.x - Math.sign(m.x - p.x || 1) * 34, y: m.y }; this.push('เลือกเป้าหมาย: ' + MONSTERS[m.type].name, '#9fd8ff'); };
     return v;
   };
 }

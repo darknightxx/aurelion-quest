@@ -2008,31 +2008,28 @@
     </div>
   </div>
 
-  <div style="position:absolute; right:22px; bottom:60px; width:300px; height:250px;">
-    <div sc-camel-on-click="{{ onAttackBtn }}" style="position:absolute; right:0; bottom:0; width:112px; height:112px; border-radius:50%; border:4px solid #c9a052; background:radial-gradient(circle at 50% 35%, #3b4252, #14171e); display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 2px #1a1208, 0 8px 24px rgba(0,0,0,.6); cursor:pointer;" style-hover="border-color:#f2c14e;">
-      <img src="{{ swordIcon }}" style="width:56px; height:56px; image-rendering:pixelated; margin-top:-10px;"><span style="position:absolute; bottom:12px; font-size:15px; font-weight:800; color:#fff; text-shadow:0 2px 3px #000;">โจมตี</span>
+  <div style="position:absolute; right:22px; bottom:44px; width:300px; height:300px;">
+    <div sc-camel-on-click="{{ onAttackBtn }}" style="position:absolute; right:0; bottom:0; width:118px; height:118px; border-radius:50%; border:4px solid #c9a052; background:radial-gradient(circle at 50% 35%, #3b4252, #14171e); display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 2px #1a1208, 0 8px 24px rgba(0,0,0,.6); cursor:pointer;" style-hover="border-color:#f2c14e;">
+      <img src="{{ swordIcon }}" style="width:58px; height:58px; image-rendering:pixelated; margin-top:-12px;"><span style="position:absolute; bottom:13px; font-size:16px; font-weight:800; color:#fff; text-shadow:0 2px 3px #000;">โจมตี</span>
     </div>
-    <div sc-camel-on-click="{{ toggleAuto }}" style="position:absolute; right:126px; bottom:96px; width:60px; height:60px; border-radius:50%; border:2px solid {{ autoBorder }}; background:{{ autoBg }}; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; color:{{ autoColor }}; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,.55);">AUTO</div>
-    <sc-for list="{{ skillPads }}" as="s" hint-placeholder-count="5">
-      <div sc-camel-on-click="{{ s.onUse }}" style="position:absolute; right:{{ s.right }}; bottom:{{ s.bottom }}; width:{{ s.size }}; height:{{ s.size }}; border-radius:50%; border:2px solid {{ s.border }}; background:{{ s.bg }}; display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden; box-shadow:0 6px 16px rgba(0,0,0,.5);" style-hover="border-color:#f2c14e;">
-        <span style="font-family:'Noto Serif SC',serif; font-size:22px; color:{{ s.fg }};">{{ s.glyph }}</span>
-        <span style="position:absolute; right:6px; bottom:4px; font-size:10px; font-weight:700; color:#cdd7e2;">{{ s.key }}</span>
-        <div style="position:absolute; left:0; right:0; bottom:0; background:rgba(8,11,15,.72); height: {{ s.cdPct }}; pointer-events:none;"></div>
-      </div>
-    </sc-for>
-    <div style="position:absolute; right:250px; bottom:8px; display:flex; flex-direction:column; align-items:center; gap:3px;">
-      <div style="width:46px; height:46px; border-radius:50%; border:2px solid rgba(255,255,255,.24); background:rgba(20,26,34,.85); display:flex; align-items:center; justify-content:center; font-family:'Noto Serif SC',serif; font-size:19px; color:#dfe7ef;">⌖</div>
-      <span style="font-size:12px; font-weight:700; color:#fff; text-shadow:0 1px 3px #000;">เลือกเป้า</span>
+    <div sc-camel-on-click="{{ skill1Use }}" style="position:absolute; right:112px; bottom:118px; width:72px; height:72px; border-radius:50%; border:3px solid #d8b878; background:radial-gradient(circle at 50% 35%, #4aa8ff, #123a8a); box-shadow:0 0 18px rgba(80,170,255,.7), 0 6px 16px rgba(0,0,0,.55); display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden;">
+      <img src="{{ bladeIcon }}" style="width:44px; height:44px; image-rendering:pixelated;">
+      <span style="position:absolute; bottom:4px; font-size:13px; font-weight:800; color:#fff; text-shadow:0 1px 2px #000;">1</span>
+      <div style="position:absolute; left:0; right:0; bottom:0; background:rgba(8,11,15,.7); height: {{ skill1Cd }}; pointer-events:none;"></div>
     </div>
-  </div>
-
-  <div style="position:absolute; right:22px; bottom:186px; display:flex; gap:10px;">
-    <sc-for list="{{ potionPads }}" as="p" hint-placeholder-count="2">
-      <div sc-camel-on-click="{{ p.onUse }}" style="position:relative; width:52px; height:52px; border-radius:50%; border:2px solid rgba(255,255,255,.24); background:radial-gradient(circle at 50% 35%, #2a333e, #141a21); display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 5px 14px rgba(0,0,0,.5);" style-hover="border-color:#f2c14e;">
-        <span style="font-family:'Noto Serif SC',serif; font-size:20px; color:{{ p.color }};">{{ p.glyph }}</span>
-        <span style="position:absolute; right:-2px; bottom:-2px; min-width:19px; height:19px; padding:0 4px; border-radius:10px; background:#1b232c; border:1px solid rgba(255,255,255,.25); font-size:10px; font-weight:700; color:#f2c14e; display:flex; align-items:center; justify-content:center;">{{ p.count }}</span>
-      </div>
-    </sc-for>
+    <div sc-camel-on-click="{{ openSkills }}" style="position:absolute; right:134px; bottom:6px; display:flex; flex-direction:column; align-items:center; cursor:pointer;">
+      <div style="width:64px; height:64px; border-radius:50%; border:3px solid #d8b878; background:radial-gradient(circle at 50% 35%, #8a6aff, #2a1a6a); box-shadow:0 0 16px rgba(150,110,255,.65); display:flex; align-items:center; justify-content:center;"><img src="{{ starIcon }}" style="width:40px; height:40px; image-rendering:pixelated;"></div>
+      <span style="font-size:13px; font-weight:700; color:#fff; text-shadow:0 1px 3px #000; margin-top:-2px;">กระบี่</span>
+    </div>
+    <div sc-camel-on-click="{{ openBag }}" style="position:absolute; right:216px; bottom:0; display:flex; flex-direction:column; align-items:center; cursor:pointer;">
+      <div style="width:50px; height:50px; border-radius:50%; border:3px solid #b8904a; background:radial-gradient(circle at 50% 35%, #3b3428, #16120c); display:flex; align-items:center; justify-content:center;"><img src="{{ bagIcon }}" style="width:32px; height:32px; image-rendering:pixelated;"></div>
+      <span style="font-size:13px; font-weight:700; color:#fff; text-shadow:0 1px 3px #000; margin-top:-2px;">กระเป๋า</span>
+    </div>
+    <div sc-camel-on-click="{{ pickTarget }}" style="position:absolute; right:14px; bottom:150px; display:flex; flex-direction:column; align-items:center; cursor:pointer;">
+      <div style="width:54px; height:54px; border-radius:50%; border:3px solid #b8904a; background:radial-gradient(circle at 50% 35%, #2f3a48, #11161c); display:flex; align-items:center; justify-content:center; font-size:26px; color:#e9eef4;">⌖</div>
+      <span style="font-size:13px; font-weight:700; color:#fff; text-shadow:0 1px 3px #000; margin-top:-2px;">เลือกเป้า</span>
+    </div>
+    <div sc-camel-on-click="{{ toggleAuto }}" style="position:absolute; right:10px; bottom:228px; padding:3px 10px; border-radius:12px; border:2px solid {{ autoBorder }}; background:{{ autoBg }}; font-size:12px; font-weight:800; color:{{ autoColor }}; cursor:pointer;">AUTO</div>
   </div>
 
   <sc-if value="{{ touchMode }}" hint-placeholder-val="{{ false }}">
