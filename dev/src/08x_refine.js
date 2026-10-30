@@ -42,7 +42,7 @@ const CARDS = {};
   const tmpl = [['atk', 1.1], ['def', .7], ['hp', 7], ['mp', 4], ['crit', .004], ['xp', .007], ['coin', .01], ['drop', .006], ['regen', .0006], ['leech', .002], ['hpPct', .006], ['reduce', .004]];
   const keys = Object.keys(MONSTERS); keys.forEach((k, i) => {
     const d = MONSTERS[k]; if (d.summon || d.noCard) return; const lv = d.lvl || 1;
-    const tier = d.boss || d.wboss ? 'b' : d.elite ? 'm' : lv >= 7 ? 'u' : 'n';
+    const tier = d.cardTier || (d.boss || d.wboss ? 'b' : d.elite ? 'm' : lv >= 7 ? 'u' : 'n');
     let fx = CARD_DEF[k];
     if (!fx) { const [a, f] = tmpl[i % tmpl.length], [b, g] = tmpl[(i * 5 + 3) % tmpl.length]; const v = x => CARD_PCT.has(x) ? +(lv * 1 * (x === a ? f : g)).toFixed(3) : Math.round(lv * (x === a ? f : g)); fx = { [a]: v(a) }; if (tier !== 'n' && tier !== 'u') fx[b] = v(b) * 1.5; if (tier === 'b') { fx.atkPct = .08; fx.boss = .12; } if (tier === 'm') for (const x in fx) fx[x] = CARD_PCT.has(x) ? +(fx[x] * 1.6).toFixed(3) : Math.round(fx[x] * 1.6); }
     const slot = CARD_SLOT_OF[Object.keys(fx)[0]] || 'acc';
@@ -102,7 +102,7 @@ const Announce = {
     const k = kind + text; if (this.seen.has(k)) return; this.seen.add(k); setTimeout(() => this.seen.delete(k), 20000);
     const lab = { mvp: '👑 MVP', spawn: '⚠️ บอสปรากฏ', drop: '🎁 ของหายาก', refine: '🔨 ตีบวก', card: '🃏 การ์ด' }[kind] || '📢 ประกาศ';
     { const el = document.getElementById('annbar'); if (el) { el.innerHTML = `<b>${lab}</b><span>${esc(text)}</span>`; el.hidden = false; el.classList.remove('out'); void el.offsetWidth; el.classList.add('in'); clearTimeout(this._t); this._t = setTimeout(() => { el.classList.add('out'); setTimeout(() => { el.hidden = true; }, 500); }, 8000); } }
-    Net.chat.push({ k: 'aq' + Date.now() + Math.random(), u: '', n: lab, m: text, t: Date.now(), kind: 'sys', gm: true }); if (Net.chat.length > 80) Net.chat.shift(); UI.chatLog();
+    Net.chat.push({ k: 'aq' + Date.now() + Math.random(), u: '', n: lab, m: text, t: Date.now(), kind: 'sys', gm: false }); if (Net.chat.length > 80) Net.chat.shift(); UI.chatLog();
     if (kind === 'mvp' || kind === 'spawn') Audio.sfx('level');
   }
 };

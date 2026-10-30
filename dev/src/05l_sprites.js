@@ -88,6 +88,7 @@ const Sprites = {
 { const op = Rig.prototype.pose; Rig.prototype.pose = function (x, y, z, face, s, fall) { return op.call(this, x, y, z, Sprites.snapFace(face), s, fall); }; }
 { const op = GlbRig.prototype.pose; GlbRig.prototype.pose = function (x, y, z, face, s, fall) { return op.call(this, x, y, z, Sprites.snapFace(face), s, fall); }; }
 // monsters: each one captured into its own cell
+Monsters._drawRaw = Monsters.draw;
 {
   const od = Monsters.draw;
   Monsters.draw = function (R, t) {
