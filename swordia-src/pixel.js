@@ -33,6 +33,7 @@ const PX = {
   e(x, col, cx, cy, rx, ry) { x.fillStyle = col; for (let yy = -ry; yy <= ry; yy++) { const k = rx * Math.sqrt(Math.max(0, 1 - (yy * yy) / (ry * ry + .25))); x.fillRect(Math.round(cx - k), Math.round(cy + yy), Math.max(1, Math.round(2 * k)), 1); } },
   poly(x, col, pts) { x.fillStyle = col; x.beginPath(); x.moveTo(pts[0], pts[1]); for (let i = 2; i < pts.length; i += 2) x.lineTo(pts[i], pts[i + 1]); x.closePath(); x.fill(); },
   line(x, col, x0, y0, x1, y1, w = 1) { x.fillStyle = col; const n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)) || 1; for (let i = 0; i <= n; i++) { const t = i / n; x.fillRect(Math.round(x0 + (x1 - x0) * t - (w - 1) / 2), Math.round(y0 + (y1 - y0) * t - (w - 1) / 2), w, w); } },
+  extraProps: {},
   rnd(seed) { let s = seed >>> 0 || 1; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; },
 
   /* ---------------- characters ---------------- */
@@ -258,6 +259,13 @@ const PX = {
     }, '#1d1a20');
   },
 
+  themes: {
+    meadow: { base: '#78b944', tones: ['#66a63a', '#8bc950', '#71b03f'], tuft: '#5a9a34', tuftHi: '#a3dc62', flowers: ['#ff9cc4', '#ffffff', '#ffe066', '#ff7fae'], path: ['#c99a5a', '#d8ab6a', '#b88a4c', '#a8804a', '#e2bd82'] },
+    forest: { dark: 1, base: '#5f9d3c', tones: ['#4f8a33', '#6aab45', '#578f37'], tuft: '#467d2e', tuftHi: '#7cbc52', flowers: ['#ffffff', '#c8b6ff', '#ffe066'], path: ['#c99a5a', '#d8ab6a', '#b88a4c', '#a8804a', '#e2bd82'] },
+    cave: { dark: 1, base: '#3b3f4c', tones: ['#33363f', '#474b5a', '#3f4352'], tuft: '#2c2f37', tuftHi: '#5a5f72', flowers: ['#7ae8ff', '#c89aff'], path: ['#5e5448', '#6e6252', '#4e463c', '#3e3830', '#7e7262'] },
+    temple: { dark: 1, base: '#56693e', tones: ['#4a5c36', '#61744a', '#53653c'], tuft: '#3e4e2e', tuftHi: '#7a8c5a', flowers: ['#e8e2d2', '#ffd06a'], path: ['#9a948a', '#aaa498', '#86807a', '#6e6a64', '#bab4a8'] },
+    jungle: { dark: 1, base: '#3f7a2e', tones: ['#356a26', '#4a8a36', '#2f5e22'], tuft: '#2a5420', tuftHi: '#6aa848', flowers: ['#ff5a7a', '#ffd84a', '#ff8a3a'], path: ['#7a5a3a', '#8a6a46', '#664a30', '#563c26', '#9a7a52'] },
+  },
   /* ---------------- map art: layout + terrain ---------------- */
   art: {
     village: {
@@ -323,6 +331,7 @@ const PX = {
     place('bamboo', a.bamboo || 0, 30, a.bambooZone);
     place('cherry', a.cherry || 0, 50);
     place('pine', a.pine || 0, 50);
+    for (const k in a.extra || {}) place(k, a.extra[k], PX.extraProps[k] ? PX.extraProps[k].pad : 30, a.extraZone && a.extraZone[k]);
     place('rock', a.rocks || 0, 18);
     place('bush', a.bushes || 0, 18);
     return m.__props = props;
@@ -331,22 +340,22 @@ const PX = {
     if (m.__terrain) return m.__terrain;
     const S = PX.S, W = Math.ceil(m.w / S), H = Math.ceil(m.h / S), c = PX.canvas(W, H), x = c.getContext('2d'), a = PX.art[id] || {}, rnd = PX.rnd(id.length * 4111 + 7), R = PX.r;
     const L = (r) => [Math.round(r[0] / S), Math.round(r[1] / S), Math.round(r[2] / S), Math.round(r[3] / S)];
-    const forest = id === 'jade';
-    // grass
-    R(x, forest ? '#5f9d3c' : '#78b944', 0, 0, W, H);
-    const tones = forest ? ['#4f8a33', '#6aab45', '#578f37'] : ['#66a63a', '#8bc950', '#71b03f'];
+    const TH = PX.themes[a.theme || (id === 'jade' ? 'forest' : 'meadow')], forest = !!TH.dark;
+    // ground
+    R(x, TH.base, 0, 0, W, H);
+    const tones = TH.tones;
     for (let i = 0; i < W * H / 40; i++) { const bx = rnd() * W | 0, by = rnd() * H | 0, s = 1 + rnd() * 4 | 0; PX.e(x, tones[i % 3], bx, by, s + 1, Math.max(1, s >> 1)); }
-    for (let i = 0; i < W * H / 22; i++) { const bx = rnd() * W | 0, by = rnd() * H | 0; R(x, forest ? '#467d2e' : '#5a9a34', bx, by, 1, 2); R(x, forest ? '#7cbc52' : '#a3dc62', bx, by - 1, 1, 1); }
-    const fl = forest ? ['#ffffff', '#c8b6ff', '#ffe066'] : ['#ff9cc4', '#ffffff', '#ffe066', '#ff7fae'];
-    for (let i = 0; i < W * H / 900; i++) { const cx = rnd() * W, cy = rnd() * H, col = fl[i % fl.length]; for (let k = 0; k < 5; k++) { const fx = cx + (rnd() - .5) * 12 | 0, fy = cy + (rnd() - .5) * 8 | 0; R(x, col, fx, fy, 1, 1); R(x, '#f6d04a', fx, fy + 1, 1, 1); } }
+    for (let i = 0; i < W * H / 22; i++) { const bx = rnd() * W | 0, by = rnd() * H | 0; R(x, TH.tuft, bx, by, 1, 2); R(x, TH.tuftHi, bx, by - 1, 1, 1); }
+    const fl = TH.flowers;
+    for (let i = 0; i < (fl.length ? W * H / 900 : 0); i++) { const cx = rnd() * W, cy = rnd() * H, col = fl[i % fl.length]; for (let k = 0; k < 5; k++) { const fx = cx + (rnd() - .5) * 12 | 0, fy = cy + (rnd() - .5) * 8 | 0; R(x, col, fx, fy, 1, 1); R(x, '#f6d04a', fx, fy + 1, 1, 1); } }
     // paths with ragged edges and cobbles
     for (const p of m.paths || []) {
       const [px, py, pw, ph] = L(p);
-      R(x, '#c99a5a', px, py, pw, ph);
-      for (let i = 0; i < pw * ph / 6; i++) R(x, rnd() < .5 ? '#d8ab6a' : '#b88a4c', px + rnd() * pw | 0, py + rnd() * ph | 0, 1 + (rnd() * 2 | 0), 1);
-      for (let i = 0; i < pw * ph / 55; i++) { const sx = px + 2 + rnd() * (pw - 6) | 0, sy = py + 2 + rnd() * (ph - 5) | 0; R(x, '#a8804a', sx, sy, 4, 3); R(x, '#e2bd82', sx, sy, 3, 2); }
+      const PC = TH.path; R(x, PC[0], px, py, pw, ph);
+      for (let i = 0; i < pw * ph / 6; i++) R(x, rnd() < .5 ? PC[1] : PC[2], px + rnd() * pw | 0, py + rnd() * ph | 0, 1 + (rnd() * 2 | 0), 1);
+      for (let i = 0; i < pw * ph / 55; i++) { const sx = px + 2 + rnd() * (pw - 6) | 0, sy = py + 2 + rnd() * (ph - 5) | 0; R(x, PC[3], sx, sy, 4, 3); R(x, PC[4], sx, sy, 3, 2); }
       const edge = (horiz) => {
-        if (horiz) for (let i = px; i < px + pw; i++) { const t1 = rnd() * 3 | 0, t2 = rnd() * 3 | 0; R(x, tones[1], i, py, 1, t1); R(x, '#a37c46', i, py + t1, 1, 1); R(x, tones[0], i, py + ph - t2, 1, t2); }
+        if (horiz) for (let i = px; i < px + pw; i++) { const t1 = rnd() * 3 | 0, t2 = rnd() * 3 | 0; R(x, tones[1], i, py, 1, t1); R(x, PC[3], i, py + t1, 1, 1); R(x, tones[0], i, py + ph - t2, 1, t2); }
         else for (let j = py; j < py + ph; j++) { const t1 = rnd() * 3 | 0, t2 = rnd() * 3 | 0; R(x, tones[1], px, j, t1, 1); R(x, tones[0], px + pw - t2, j, t2, 1); }
       };
       edge(pw >= ph); edge(pw < ph);
@@ -446,20 +455,25 @@ const PX = {
 
 /* bigger world so the camera travels like a real field (sprites are 3x pixels now) */
 PX.K = 1.6;
-{
+PX.scaleMap = function (id) {
   const K = PX.K, sc = (r) => r.map(v => typeof v === 'number' ? Math.round(v * K) : v);
-  for (const id in MAPS) {
-    const m = MAPS[id]; m.w = Math.round(m.w * K); m.h = Math.round(m.h * K);
+  {
+    const m = MAPS[id]; if (m.__scaled) return; m.__scaled = true; m.w = Math.round(m.w * K); m.h = Math.round(m.h * K);
     for (const k of ['paths', 'water', 'colliders']) m[k] = (m[k] || []).map(sc);
     for (const n of m.npcs || []) { n.x = Math.round(n.x * K); n.y = Math.round(n.y * K); }
     for (const sp of m.spawns || []) sp.area = sc(sp.area);
     for (const pt of m.portals || []) { pt.x = Math.round(pt.x * K); pt.y = Math.round(pt.y * K); pt.w = Math.round(pt.w * K); pt.h = Math.round(pt.h * K); pt.tx = Math.round(pt.tx * K); pt.ty = Math.round(pt.ty * K); }
     m.start = { x: Math.round(m.start.x * K), y: Math.round(m.start.y * K) };
-    const a = PX.art[id]; if (!a) continue;
+    const a = PX.art[id]; if (!a) return;
     for (const k of ['cliffs', 'falls', 'rivers', 'bridges', 'extraPaths', 'ponds', 'lamps', 'stoneLanterns', 'fences']) if (a[k]) a[k] = a[k].map(sc);
     if (a.wheel) a.wheel = sc(a.wheel); if (a.bambooZone) a.bambooZone = sc(a.bambooZone);
+    if (a.extraZone) for (const k in a.extraZone) a.extraZone[k] = sc(a.extraZone[k]);
   }
-  MAPS.village.npcs.find(n => n.id === 'elder').y = Math.round(405 * K);
+};
+{
+  if (typeof NEW_ART !== 'undefined') Object.assign(PX.art, NEW_ART);
+  for (const id in MAPS) PX.scaleMap(id);
+  MAPS.village.npcs.find(n => n.id === 'elder').y = Math.round(405 * PX.K);
 }
 
 /* ---------------- renderer hooked into the game component ---------------- */
@@ -486,6 +500,7 @@ PX.K = 1.6;
     for (const n of m.npcs || []) list.push({ kind: 'npc', x: n.x, y: n.y + 14, n });
     for (const mo of g.mobs) if (!mo.dead) list.push({ kind: 'mob', x: mo.x, y: mo.y + mo.r * .6, mo });
     list.push({ kind: 'hero', x: g.p.x, y: g.p.y + 14 });
+    if (this.moreDrawables) this.moreDrawables(list, now);
     list.sort((a, b) => a.y - b.y);
     const sx = (wx) => Math.round(wx / S - ox), sy = (wy) => Math.round(wy / S - oy);
     const shadow = (wx, wy, rx, ry) => { x.globalAlpha = .28; PX.e(x, '#13240f', sx(wx), sy(wy), rx, ry); x.globalAlpha = 1; };
@@ -508,6 +523,8 @@ PX.K = 1.6;
       else if (o.kind === 'fence') blit(PX.fence(Math.round(o.len / S)), o.x, o.y, 0, 15);
       else if (o.kind === 'railing') { const b = o.b, bx = sx(b[0]), by = sy(b[1] + b[3]), bw = Math.round(b[2] / S); for (let i = 0; i <= bw - 2; i += 10) { PX.r(x, '#3a2418', bx + i - 1, by - 11, 5, 12); PX.r(x, '#7a5233', bx + i, by - 10, 3, 10); } PX.r(x, '#3a2418', bx, by - 9, bw, 4); PX.r(x, '#9a6a42', bx, by - 8, bw, 2); }
       else if (o.kind === 'wheel') PX.wheelDraw(x, sx(o.x), sy(o.y - 50), t);
+      else if (o.draw) o.draw(x, sx, sy, shadow, blit);
+      else if (PX.extraProps[o.kind]) { const ep = PX.extraProps[o.kind], img = ep.img(o.v); if (ep.sh) shadow(o.x + ep.sh[2], o.y + 1, ep.sh[0], ep.sh[1]); blit(img, o.x, o.y, ep.ax(img), ep.ay(img)); if (ep.glow) this._labels.push({ glow: true, x: o.x, y: o.y - ep.glow[0], r: ep.glow[1], col: ep.glow[2] }); }
       else if (o.kind === 'npc') { shadow(o.x, o.y, 7, 2); blit(PX.npc(o.n.id), o.x, o.y, 20, 46); this._labels.push({ npc: o.n }); }
       else if (o.kind === 'mob') {
         const mo = o.mo, d = MONSTERS[mo.type], moving = mo.state === 'chase' || mo.state === 'wander' || mo.state === 'return';
@@ -521,15 +538,15 @@ PX.K = 1.6;
       else if (o.kind === 'hero') {
         const p = g.p; if (p.dead) x.globalAlpha = .45;
         shadow(p.x, o.y, 8, 2);
-        const img = PX.heroFrame(p, now); blit(img, p.x, o.y, 24, 47, p.face < 0); x.globalAlpha = 1;
+        const img = PX.heroFrame(p, now, g); blit(img, p.x, o.y, 24, 47, p.face < 0); x.globalAlpha = 1;
       }
     }
     // drifting petals / leaves
-    const petals = id === 'jade' ? 18 : 34, pr = PX.rnd(99);
+    const petals = art.petals ?? (id === 'jade' ? 18 : 34), pr = PX.rnd(99);
     for (let i = 0; i < petals; i++) {
       const bx = pr() * LW, by = pr() * LH, sp = 6 + pr() * 10;
       const px = ((bx + t * sp * .7 + Math.sin(t + i) * 6) % LW + LW) % LW, py = ((by + t * sp) % LH + LH) % LH;
-      PX.r(x, id === 'jade' ? (i % 2 ? '#9fd45c' : '#d8f0a8') : (i % 3 ? '#ffb3cf' : '#ffe1ec'), px | 0, py | 0, 2, 1);
+      PX.r(x, art.petalCol ? art.petalCol[i % art.petalCol.length] : id === 'jade' ? (i % 2 ? '#9fd45c' : '#d8f0a8') : (i % 3 ? '#ffb3cf' : '#ffe1ec'), px | 0, py | 0, 2, 1);
     }
     // blit pixel layer
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.imageSmoothingEnabled = false;
@@ -537,8 +554,9 @@ PX.K = 1.6;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.translate(-cx, -cy);
     // soft layers: fog, lantern glow, portals, drops, fx, labels, floats
     if (art.fog) { const fg = ctx.createLinearGradient(cx, cy, cx, cy + H); fg.addColorStop(0, 'rgba(220,240,230,.22)'); fg.addColorStop(.5, 'rgba(220,240,230,.04)'); fg.addColorStop(1, 'rgba(220,240,230,.16)'); ctx.fillStyle = fg; ctx.fillRect(cx, cy, W, H); }
+    if (art.night) { ctx.fillStyle = art.night; ctx.fillRect(cx, cy, W, H); const hx = g.p.x, hy = g.p.y - 40, gr0 = ctx.createRadialGradient(hx, hy, 40, hx, hy, 420); gr0.addColorStop(0, 'rgba(0,0,0,0)'); gr0.addColorStop(1, 'rgba(4,6,14,.45)'); ctx.fillStyle = gr0; ctx.fillRect(cx, cy, W, H); }
     ctx.globalCompositeOperation = 'lighter';
-    for (const l of this._labels) if (l.glow) { const k = .8 + .2 * Math.sin(t * 3 + l.x); const gr = ctx.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.r); gr.addColorStop(0, `rgba(255,200,90,${.35 * k})`); gr.addColorStop(1, 'rgba(255,160,60,0)'); ctx.fillStyle = gr; ctx.fillRect(l.x - l.r, l.y - l.r, l.r * 2, l.r * 2); }
+    for (const l of this._labels) if (l.glow) { const k = .8 + .2 * Math.sin(t * 3 + l.x); const gr = ctx.createRadialGradient(l.x, l.y, 0, l.x, l.y, l.r); gr.addColorStop(0, l.col ? l.col.replace('A', .4 * k) : `rgba(255,200,90,${.35 * k})`); gr.addColorStop(1, 'rgba(255,160,60,0)'); ctx.fillStyle = gr; ctx.fillRect(l.x - l.r, l.y - l.r, l.r * 2, l.r * 2); }
     for (const pt of m.portals || []) {
       const px = pt.x + pt.w / 2, py = pt.y + pt.h / 2, rr = Math.max(pt.w, pt.h) * .55, k = .7 + .3 * Math.sin(t * 2.5);
       const gr = ctx.createRadialGradient(px, py, 0, px, py, rr); gr.addColorStop(0, `rgba(120,230,255,${.42 * k})`); gr.addColorStop(1, 'rgba(60,160,255,0)');
@@ -551,6 +569,7 @@ PX.K = 1.6;
       ctx.beginPath(); ctx.ellipse(px, py, pt.w * .45 + 10, Math.min(pt.h, pt.w) * .3 + 8, 0, 0, 7); ctx.stroke(); ctx.setLineDash([]);
       this.label(ctx, '➜ ' + pt.label, px, pt.y - 6, '#e6fbff', 14);
     }
+    if (this.softHook) this.softHook(ctx, t);
     for (const d of g.drops) this.drawDrop(ctx, d);
     for (const f of g.fx) {
       if (f.kind === 'slash') {

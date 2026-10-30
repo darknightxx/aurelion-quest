@@ -2161,6 +2161,22 @@
             </div>
           </sc-if>
 
+          <sc-if value="{{ isExtra }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:12px; color:#a9b4c0; margin-bottom:10px;">{{ extraHint }}</div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:8px;">
+              <sc-for list="{{ extraRows }}" as="r" hint-placeholder-count="6">
+                <div sc-camel-on-click="{{ r.onClick }}" style="display:flex; gap:10px; align-items:center; padding:8px; border:1px solid {{ r.border }}; border-radius:6px; background:{{ r.bg }}; cursor:pointer;" style-hover="border-color:#f2c14e;">
+                  <img src="{{ r.icon }}" style="width:52px; height:48px; image-rendering:pixelated; flex:none; object-fit:contain;">
+                  <div style="min-width:0;">
+                    <div style="font-size:13px; font-weight:700; color:{{ r.color }};">{{ r.name }}</div>
+                    <div style="font-size:11px; color:#a9b4c0;">{{ r.desc }}</div>
+                    <div style="font-size:11px; font-weight:700; color:#f2c14e; margin-top:2px;">{{ r.state }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
           <sc-if value="{{ isQuests }}" hint-placeholder-val="{{ false }}">
             <div style="display:flex; flex-direction:column; gap:10px;">
               <sc-for list="{{ questRows }}" as="q" hint-placeholder-count="3">
