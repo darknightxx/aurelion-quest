@@ -35,7 +35,26 @@ const CharArt = {
     const npc = NPCList.find(n => n.rig === rig); if (npc && NPCS[npc.id] && NPCS[npc.id].hair !== undefined) hair = NPCS[npc.id].hair;
     let t = sheet && Game.tex[sheet] ? Game.tex[sheet] : null;
     if (t && hair !== undefined) { const k = sheet + '|' + hair; if (!this.cache[k]) { const img = Game.images[sheet]; const c = document.createElement('canvas'); c.width = 1024; c.height = 512; c.getContext('2d').drawImage(img, 0, 0, 1024, 512); try { this.recolor(c, hair); this.cache[k] = Game.R.texture(c); } catch (e) { this.cache[k] = t; } } t = this.cache[k]; }
-    rig._artTex = t; rig._artFor = rig.cls; return t;
+    rig._artTex = t; rig._artFor = rig.cls; rig._artSheet = sheet; rig._artHair = hair; return t;
+  },
+  /* AI-drawn walk / attack frames (SPRITE_ANIM): 320x384 cells, 8 per row */
+  anim: {}, ACW: 320, ACH: 384, AW: 2560, AHT: 1920,
+  animTex(sheet) {
+    if (typeof SPRITE_ANIM === 'undefined' || !SPRITE_ANIM[sheet] || !this.on()) return null;
+    const a = this.anim[sheet]; if (a) return a.tex || null;
+    const o = this.anim[sheet] = { tex: null }; const im = new Image(); im.onload = () => { try { o.tex = Game.R.texture(im); } catch (e) { } }; im.src = SPRITE_ANIM[sheet]; return null;
+  },
+  animUV(row, i) { const k = row * 8 + i; if (!this._auv) this._auv = {}; return this._auv[k] || (this._auv[k] = new Float32Array([i * this.ACW / this.AW, row * this.ACH / this.AHT, (i + 1) * this.ACW / this.AW, (row + 1) * this.ACH / this.AHT])); },
+  animPose(rig, o, d, clip, u, st) {
+    if (rig._artHair !== undefined || !this.animTex(rig._artSheet)) return;
+    if (clip && ATK_CLIPS.has(clip) && d.f !== AF.back && d.f !== AF.b34) {
+      o.anim = { row: 4, i: Math.min(5, Math.floor(u * 6)) }; o.flip = (d.dir || 0) < 0; if (clip === 'spin') o.flip = Math.floor(u * 8) % 2 === 1; o.lean = 0; o.h = 1; return;
+    }
+    if (!clip && o.amp > .2) {
+      const row = d.f === AF.front ? 0 : d.f === AF.f34 ? 1 : (d.f === AF.sideR || d.f === AF.sideL) ? 2 : 3;
+      const ph = ((st.ph || 0) % TAU + TAU) % TAU;
+      o.anim = { row, i: Math.floor(ph / TAU * 8) % 8 }; o.flip = row === 1 ? (d.dir || 0) > 0 : row === 2 ? d.f === AF.sideL : false; o.amp = 0; o.lean = 0;
+    }
   },
   dirFrame(face, x, z) {
     const R = Game.R; let cx = R.cam[0] - x, cz = R.cam[2] - z; const l = Math.hypot(cx, cz) || 1; cx /= l; cz /= l;
@@ -53,13 +72,14 @@ const CharArt = {
     o.lean = (d.dir || 0) * o.amp * .05 * o.stride;
     if (st.dead || it.fall > 0) { o.f = AF.hurt; o.rot = (it.fall || 1) * 1.45 * (d.dir || 1); o.y = -.35 * (it.fall || 1); o.amp = 0; return o; }
     if (clip && EMO2D[clip]) { Object.assign(o, EMO2D[clip](u, t, d)); return o; }
-    if (clip && ATK_CLIPS.has(clip)) { const k = Math.sin(Math.min(1, u * 1.6) * Math.PI); if (d.st >= .6) { o.lean = (d.dir || 1) * k * .35; } else { o.f = AF.ready; o.flip = d.dir > 0; o.h = 1 + k * .05; } if (clip === 'spin') o.flip = Math.floor(u * 8) % 2 === 1; if (clip === 'leap' || clip === 'slam') o.y = Math.sin(u * Math.PI) * 1.2; return o; }
+    if (clip && ATK_CLIPS.has(clip)) { this.animPose(rig, o, d, clip, u, st); if (o.anim) { if (clip === 'leap' || clip === 'slam') o.y = Math.sin(u * Math.PI) * 1.2; return o; } const k = Math.sin(Math.min(1, u * 1.6) * Math.PI); if (d.st >= .6) { o.lean = (d.dir || 1) * k * .35; } else { o.f = AF.ready; o.flip = d.dir > 0; o.h = 1 + k * .05; } if (clip === 'spin') o.flip = Math.floor(u * 8) % 2 === 1; if (clip === 'leap' || clip === 'slam') o.y = Math.sin(u * Math.PI) * 1.2; return o; }
     if (clip === 'cast' || clip === 'pray') { o.f = clip === 'pray' ? AF.think : AF.wave; o.flip = (d.dir || 0) > 0; o.y = Math.sin(u * Math.PI) * .15; return o; }
     if (clip === 'cheer') { o.f = AF.cheer; o.y = Math.abs(Math.sin(u * Math.PI * 2)) * .4; return o; }
     if (clip === 'hurt') { o.f = AF.hurt; o.lean = -(d.dir || 1) * .15 * (1 - u); return o; }
     if (st.think) { o.f = AF.think; return o; }
     if (st.wave) { o.f = AF.wave; return o; }
     if (it.sit) { o.f = AF.front; o.h = .72; o.y = -.05; o.amp = 0; }
+    else this.animPose(rig, o, d, clip, u, st);
     return o;
   },
   flush(R) {
@@ -70,6 +90,7 @@ const CharArt = {
       const o = this.pose(it.rig, it), s = it.s || 1, k = s / CHAR_SCALE;
       const an = { ph: o.ph, amp: o.amp, lean: o.lean, br: o.br, stride: o.stride, sq: o.sq };
       R.sprRot = o.rot || 0;
+      if (o.anim) { an.amp = 0; an.stride = 0; R.drawSprite(this.anim[it.rig._artSheet].tex, it.x, it.y + (o.y || 0), it.z, SPR_H * k, SPR_H * k * this.ACH / this.ACW * (o.h || 1), this.animUV(o.anim.row, o.anim.i), o.flip, null, it.flash || 0, 1, 1, an); continue; }
       R.drawSprite(it.tex, it.x, it.y + (o.y || 0), it.z, SPR_W * k, SPR_H * k * (o.h || 1), UVS[o.f], o.flip, null, it.flash || 0, 1, 1, an);
     }
     R.sprRot = 0; R.endSprite(); R.useLit();
