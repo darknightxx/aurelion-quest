@@ -1,0 +1,23 @@
+const { chromium } = require('playwright'); const { serve } = require('./lib');
+(async () => {
+  const srv = await serve(8871);
+  const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  const ctx = await browser.newContext({ viewport: { width: 1000, height: 640 } }); const errs = [];
+  const open = async (name) => { const p = await ctx.newPage(); p.on('pageerror', e => errs.push(name + ': ' + e.message)); await p.goto('http://localhost:8871/index.html?net=local'); await p.waitForFunction(() => document.getElementById('loading').hidden, null, { timeout: 120000 }); await p.evaluate(n => { const d = Save.fresh(n, 'mage'); d.seenIntro = 1; Save.d = d; Game.start(d); }, name); return p; };
+  const A = await open('อลิซ'), B = await open('บ็อบ');
+  await A.waitForTimeout(4000);
+  const ch = await A.evaluate(() => [Net.joined, Net.ch, Remote.map.size]); console.log('A net', ch, await B.evaluate(() => [Net.joined, Net.ch, Remote.map.size]));
+  await A.evaluate(() => { const p = [...Remote.map.values()][0]; Friends.request(p); });
+  await B.waitForTimeout(1500);
+  console.log('B reqs', await B.evaluate(() => Friends.reqs.map(r => r.n)));
+  await B.evaluate(() => { UI.openPanel('friends'); });
+  await B.waitForTimeout(500); await B.screenshot({ path: __dirname + '/out/fr_req.png' });
+  await B.evaluate(() => Friends.answer(Friends.reqs[0].from, true));
+  await A.waitForTimeout(1500);
+  console.log('A friends', await A.evaluate(() => Object.values(Friends.list()).map(f => f.n)), 'B friends', await B.evaluate(() => Object.values(Friends.list()).map(f => f.n)));
+  await A.evaluate(() => Friends.poll()); await A.waitForTimeout(1500);
+  console.log('A where', await A.evaluate(() => Object.values(Friends.where).map(w => w.ch)));
+  await A.evaluate(() => UI.openPanel('friends')); await A.waitForTimeout(600); await A.screenshot({ path: __dirname + '/out/fr_list.png' });
+  console.log(errs);
+  await browser.close(); srv.close();
+})();
