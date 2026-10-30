@@ -1251,9 +1251,120 @@ body.compact .uwin .pwin { max-height: calc(100cqh - 12px); }
 #npccut::before { content: ''; position: absolute; inset: 30% -10% -4% -10%; background: radial-gradient(ellipse at 50% 70%, rgba(255,220,140,.28), rgba(0,0,0,0) 65%); z-index: -1; }
 @container (max-width: 720px) { #npccut { height: min(62cqh, 420px); } .dlg.dlg2 > img { display: none; } }
 body.compact #npccut { height: 86cqh; }
+/* ===== HUD layout: mobile MMO (body.hud2) ===== */
+.h2 { display: none; }
+body.hud2 .h2 { display: flex; position: absolute; pointer-events: auto; }
+body.hud2 .h2 button { position: relative; display: grid; place-items: center; background: none; border: 0; color: #e9dcc0; cursor: pointer; padding: 0; filter: drop-shadow(0 2px 2px rgba(0,0,0,.85)); }
+body.hud2 .h2 button.dot::after { content: ''; position: absolute; top: 0; right: 0; width: 9px; height: 9px; border-radius: 50%; background: #e0453a; box-shadow: 0 0 0 1.5px #000; }
+body.hud2 #menubtns { display: none; }
+/* top-left: portrait + thin bars */
+body.hud2 #netbar { top: auto; left: auto; bottom: max(2px, var(--sb)); right: max(10px, var(--sr)); font-size: 10.5px; background: rgba(0,0,0,.35); border-color: transparent; z-index: 3; }
+body.hud2 #status { left: max(10px, var(--sl)); top: max(8px, var(--st)); width: 300px; padding: 0; gap: 8px; align-items: center; background: none; border: 0; box-shadow: none; }
+body.hud2 #status::before, body.hud2 #status::after { display: none; }
+body.hud2 #portrait { width: 54px; height: 54px; border: 2px solid #c9b48a; box-shadow: 0 0 0 2px rgba(0,0,0,.6); }
+body.hud2 .lvbadge { display: none; }
+body.hud2 .nameline { font-size: 12px; margin-bottom: 1px; text-shadow: 0 1px 2px #000; }
+body.hud2 .bar { height: 11px; margin-top: 2px; border-radius: 2px; border: 1px solid rgba(0,0,0,.8); background: rgba(10,8,8,.7); }
+body.hud2 .bar.mp { height: 9px; }
+body.hud2 .bar span { font-size: 9.5px; line-height: 10px; }
+body.hud2 .bar.xp { display: none; }
+/* minimap + location under the portrait */
+body.hud2 #mapcol { left: max(12px, var(--sl)); right: auto; top: calc(max(8px, var(--st)) + 64px); width: auto; flex-direction: row; align-items: center; gap: 8px; }
+body.hud2 .miniwrap, body.hud2 #minimap { width: 92px; height: 92px; }
+body.hud2 .miniwrap { margin: 0; box-shadow: 0 0 0 1.5px #c9b48a, 0 0 0 3px rgba(0,0,0,.55); }
+body.hud2 #place { position: absolute; left: calc(100% + 8px); top: 50%; bottom: auto; transform: translateY(-50%); white-space: nowrap; background: none; border: 0; font-size: 12.5px; color: #f2e6c8; text-shadow: 0 1px 2px #000, 0 0 4px #000; padding: 0; }
+body.hud2 #partyhud { top: calc(max(8px, var(--st)) + 168px); left: calc(max(12px, var(--sl)) + 52px); }
+/* top-centre currencies */
+body.hud2 #h2cur { left: 50%; top: max(8px, var(--st)); transform: translateX(-50%); gap: 16px; align-items: center; }
+body.hud2 #h2cur #coinbox, body.hud2 #h2cur #gembox { margin: 0; font-size: 15px; text-shadow: 0 1px 2px #000; }
+body.hud2 #h2cur #gembox { background: rgba(0,0,0,.35); }
+body.hud2 #topc { top: calc(max(8px, var(--st)) + 34px); }
+body.hud2 #toasts { top: calc(max(8px, var(--st)) + 86px); }
+/* top-right icon row */
+body.hud2 #h2top { right: max(12px, var(--sr)); top: max(6px, var(--st)); gap: 18px; }
+body.hud2 #h2top button { width: 36px; height: 36px; } body.hud2 #h2top .ic { width: 28px; height: 28px; }
+body.hud2 #h2top small { position: absolute; right: -8px; bottom: -4px; font-size: 10px; font-weight: 700; color: #fff; text-shadow: 0 1px 2px #000; }
+/* right: gold quest card + icon column */
+body.hud2 #h2right { right: max(10px, var(--sr)); top: calc(max(6px, var(--st)) + 50px); gap: 10px; align-items: flex-start; }
+body.hud2 #h2side { display: flex; flex-direction: column; gap: 12px; }
+body.hud2 #h2side button { width: 38px; height: 38px; } body.hud2 #h2side .ic { width: 28px; height: 28px; }
+body.hud2 #h2quest #tracker { display: block; position: static; width: 270px; padding: 8px 12px; border-radius: 4px; background: linear-gradient(90deg, rgba(60,45,20,.15), rgba(150,115,45,.55) 70%, rgba(200,160,70,.7)); border: 1px solid rgba(240,205,120,.75); box-shadow: 0 0 14px rgba(240,190,80,.25), inset 0 0 18px rgba(255,220,140,.12); font-size: 12.5px; }
+body.hud2 #trackhead { color: #ffe7a6; font-size: 12px; }
+body.hud2 #tracklist li { border-left: 0; padding-left: 0; }
+body.hud2 #tracklist b { color: #fff3cf; font-size: 13.5px; text-shadow: 0 1px 2px #000; }
+body.hud2 #tracklist b::before { content: '◈ '; color: #ffd45a; }
+body.hud2 #tracklist span { color: #f0e2c0; text-shadow: 0 1px 2px #000; }
+body.hud2 #tracklist li:not(:first-child) { opacity: .85; }
+/* left icons */
+body.hud2 #h2left { left: max(12px, var(--sl)); top: calc(max(8px, var(--st)) + 166px); flex-direction: column; gap: 12px; }
+body.hud2 #h2left button { width: 38px; height: 38px; } body.hud2 #h2left .ic { width: 27px; height: 27px; }
+body.hud2 #h2left .fbadge { position: absolute; right: -4px; top: -4px; min-width: 16px; height: 16px; border-radius: 8px; background: #e0453a; color: #fff; font-size: 10px; line-height: 16px; text-align: center; }
+/* bottom-left info */
+body.hud2 #h2bl { left: max(14px, var(--sl)); bottom: max(4px, var(--sb)); align-items: flex-end; gap: 10px; color: #e9dcc0; text-shadow: 0 1px 2px #000, 0 0 4px #000; pointer-events: none; }
+body.hud2 #h2lv { font: 700 30px/1 var(--f-display); color: #fff; }
+body.hud2 #h2bl div { display: flex; flex-direction: column; font-size: 12px; gap: 1px; } body.hud2 #h2bl em { font-style: normal; }
+body.hud2 #h2cp { font-size: 13.5px; font-weight: 700; }
+body.hud2 #joy { bottom: calc(max(4px, var(--sb)) + 52px); }
+/* bottom-right action cluster */
+body.hud2 #h2act { right: max(18px, var(--sr)); bottom: calc(max(10px, var(--sb)) + 14px); width: 236px; height: 214px; }
+body.hud2 #h2act button { position: absolute; border-radius: 50%; background: radial-gradient(circle at 50% 40%, rgba(60,56,64,.55), rgba(10,10,14,.75)); border: 1.5px solid rgba(220,210,190,.45); }
+body.hud2 #h2act .h2big { right: 0; bottom: 0; width: 104px; height: 104px; border-color: rgba(230,220,200,.6); }
+body.hud2 #h2act .h2big .ic { width: 58px; height: 58px; }
+body.hud2 #h2act .h2c { width: 54px; height: 54px; } body.hud2 #h2act .h2c .ic { width: 30px; height: 30px; }
+body.hud2 #h2act .c1 { right: 172px; bottom: 132px; } body.hud2 #h2act .c2 { right: 26px; bottom: 140px; } body.hud2 #h2act .c3 { right: 122px; bottom: 54px; } body.hud2 #h2act .c4 { right: 98px; bottom: 140px; }
+body.hud2 #h2act .h2c.on { border-color: #ffd45a; color: #ffd45a; box-shadow: 0 0 12px rgba(255,200,80,.6); }
+body.hud2 #h2act button[hidden] { display: none; }
+body.hud2 #h2act button:active { transform: scale(.94); }
+/* quick slots: wide row bottom-centre */
+body.hud2 #bottomc { bottom: max(6px, var(--sb)); }
+body.hud2 #skillbar { background: none; border: 0; box-shadow: none; padding: 0; gap: 4px; }
+body.hud2 #skillbar::before, body.hud2 #skillbar::after { display: none; }
+body.hud2 #skillbar .sk { width: 52px; height: 52px; border-radius: 4px; background: rgba(10,10,14,.55); border: 1px solid rgba(220,210,190,.28); }
+body.hud2 #skillbar .sk.atk { display: none; }
+body.hud2 #skillbar .sk.pot { margin-left: 10px; } body.hud2 #skillbar .sk.pot ~ .sk.pot { margin-left: 0; }
+body.hud2 #skillbar .sk.art .skart, body.hud2 #skillbar .sk .cd { border-radius: 4px; }
+body.hud2 #mountbtns { display: none !important; }
+/* chat lines: plain text bottom-centre */
+body.hud2 #chatwrap { left: calc(50% - 250px); bottom: calc(max(6px, var(--sb)) + 66px); width: 380px; }
+body.hud2 #chatlog p { background: none; padding: 0 2px; text-shadow: 0 1px 2px #000, 0 0 3px #000; color: #f1dfb6; }
+body.hud2 .chatbtns { position: absolute; left: calc(-50cqw + 262px); bottom: 150px; flex-direction: column; }
+/* compact phones (landscape) */
+body.hud2.compact #status { width: 220px; } body.hud2.compact #portrait { width: 42px; height: 42px; }
+body.hud2.compact #mapcol { top: calc(max(4px, var(--st)) + 50px); } body.hud2.compact .miniwrap, body.hud2.compact #minimap { width: 66px; height: 66px; }
+body.hud2.compact #h2left { top: calc(max(4px, var(--st)) + 122px); gap: 6px; } body.hud2.compact #h2left button { width: 30px; height: 30px; } body.hud2.compact #h2left .ic { width: 21px; height: 21px; }
+body.hud2.compact #h2top { gap: 10px; } body.hud2.compact #h2top button { width: 28px; height: 28px; } body.hud2.compact #h2top .ic { width: 22px; height: 22px; }
+body.hud2.compact #h2right { top: calc(max(4px, var(--st)) + 36px); } body.hud2.compact #h2quest #tracker { width: 200px; padding: 5px 8px; font-size: 11px; } body.hud2.compact #tracklist b { font-size: 12px; } body.hud2.compact #tracklist li:not(:first-child) { display: none; }
+body.hud2.compact #h2side { gap: 5px; } body.hud2.compact #h2side button { width: 30px; height: 30px; } body.hud2.compact #h2side .ic { width: 21px; height: 21px; }
+body.hud2.compact #h2act { width: 180px; height: 160px; right: max(10px, var(--sr)); bottom: calc(max(4px, var(--sb)) + 6px); }
+body.hud2.compact #h2act .h2big { width: 80px; height: 80px; } body.hud2.compact #h2act .h2big .ic { width: 44px; height: 44px; }
+body.hud2.compact #h2act .h2c { width: 42px; height: 42px; } body.hud2.compact #h2act .h2c .ic { width: 24px; height: 24px; }
+body.hud2.compact #h2act .c1 { right: 132px; bottom: 98px; } body.hud2.compact #h2act .c2 { right: 18px; bottom: 104px; } body.hud2.compact #h2act .c3 { right: 92px; bottom: 40px; } body.hud2.compact #h2act .c4 { right: 74px; bottom: 104px; }
+body.hud2.compact #skillbar .sk, body.hud2.compact #skillbar .sk.art { width: 42px; height: 42px; }
+body.hud2.compact #bottomc { transform: translateX(-58%); }
+body.hud2.compact #h2lv { font-size: 22px; } body.hud2.compact #h2bl div { font-size: 10px; } body.hud2.compact #h2cp { font-size: 11px; }
+body.hud2.compact #joy { bottom: calc(max(4px, var(--sb)) + 34px); }
+body.hud2.compact #chatwrap { width: 260px; left: calc(50% - 190px); bottom: calc(max(4px, var(--sb)) + 50px); font-size: 11px; }
+body.hud2.compact .chatbtns { left: calc(-50cqw + 202px); bottom: 118px; flex-direction: row; }
+body.hud2.compact #h2cur #coinbox, body.hud2.compact #h2cur #gembox { font-size: 12px; }
+body.hud2 #netbar { left: 50%; right: auto; bottom: 0; transform: translateX(-50%); }
+body.hud2 #bottomc { bottom: calc(max(6px, var(--sb)) + 12px); }
+body.hud2 .compass { display: none; }
+body.hud2.compact #bottomc { left: 50%; right: auto; bottom: calc(max(4px, var(--sb)) + 12px); }
+body.hud2.compact #skillbar { display: flex; grid-template-columns: none; grid-template-rows: none; padding: 0; gap: 4px; background: none; border: 0; }
+body.hud2.compact #skillbar .sk, body.hud2.compact #skillbar .sk.art, body.hud2.compact #skillbar [data-a="s4"].sk.art { width: 40px; height: 40px; border-radius: 4px; }
+body.hud2.compact #skillbar .sk.art .skart, body.hud2.compact #skillbar .sk.art .cd, body.hud2.compact #skillbar .sk .cd { border-radius: 4px; }
+body.hud2.compact #h2left { flex-direction: row; top: calc(max(4px, var(--st)) + 124px); }
+body.hud2.compact #mapcol { top: calc(max(4px, var(--st)) + 52px); }
+body.hud2.compact #netbar { font-size: 9px; }
+/* news */
+.newslist { list-style: none; padding: 0; margin: 0 0 10px; display: grid; gap: 8px; }
+.newslist .nw { padding: 8px 10px; border-radius: 8px; background: rgba(0,0,0,.2); } .newslist .nw p { margin: 3px 0 0; opacity: .85; font-size: .92em; line-height: 1.5; }
+.newslist .ntag { font-style: normal; font-size: 10.5px; padding: 1px 7px; border-radius: 8px; background: #c0384a; color: #fff; margin-right: 6px; }
+.newslist small { opacity: .6; }
 /* UI scale (settings) */
 #status, #mapcol, #topc, #netbar, #partyhud { zoom: var(--uiz, 1); }
-#bottomc, #joy { zoom: var(--btz, 1); }
+#bottomc, #joy, #h2act { zoom: var(--btz, 1); }
+#h2cur, #h2top, #h2right, #h2left, #h2bl { zoom: var(--uiz, 1); }
 #chatwrap, #toasts, #annbar, #banner, #placename { zoom: var(--chz, 1); }
 .uwin .pwin { zoom: var(--wiz, 1); }
 .uwin .pwin { max-height: calc(min(84cqh, 820px) / var(--wiz, 1)); }
@@ -11547,6 +11658,7 @@ KIND_ICON.vehicle = 'star';
    PATCH_NEW for every game update (shown in lobby → บันทึกอัปเดต)
    ============================================================ */
 const PATCH_NEW = [
+  { d: '30/10', ic: 'gear', t: 'HUD ใหม่แบบเกม MMO มือถือ + ปุ่ม AUTO', x: 'รูปตัวละครและแถบ HP/MP บางๆ มุมซ้ายบน แผนที่ย่อและชื่อพื้นที่ใต้รูป เงินและเพชรตรงกลางบน ไอคอน ประกาศ/Season/ร้าน/กระเป๋า(%)/เมนู มุมขวาบน การ์ดเควสสีทองพร้อมไอคอนลัดด้านขวา ปุ่มโจมตีใหญ่ขวาล่างพร้อมปุ่มเปลี่ยนเป้า เก็บของ AUTO และขี่สัตว์ แถบสกิล/ยากว้างด้านล่าง เลเวล พลังต่อสู้ EXP% และนาฬิกามุมซ้ายล่าง · ปุ่ม AUTO ต่อสู้อัตโนมัติ (ใช้สกิลและยาให้เอง) · เปลี่ยนกลับเป็นแบบเดิมได้ที่ ตั้งค่า → รูปแบบ HUD' },
   { d: '30/10', ic: 'book', t: 'NPC ใหม่ 10 คน + เควสใหม่ 16 เควส', x: 'ยายบุญมา (เก็บดอกไม้เรืองแสง) ช่างโบรัน (ตีอาวุธ/เกราะ) น้องต้นข้าว (ตามหาแมวหาย) บุรุษไปรษณีย์สมปอง (ส่งจดหมาย) นักสำรวจลิซ่า (สำรวจ 3 มุมโลก) นักดนตรีปีโป้ (เต้นด้วยอีโมต) ทหารยามบอร์ก (ลาดตระเวนประจำวัน) ป้าแตง (เก็บมะละกอ/ส่งส้มตำ) พ่อมดซาวิน (สัตว์เลี้ยง/ค้างคาวผลึก) นักวิจัยมิรา (ป่ากระซิบ) · มีจุดเก็บของให้กด F เก็บ และนำทางอัตโนมัติทุกเควส' },
   { d: '30/10', ic: 'person', t: 'หน้าต่างคุยแบบ MMO: รูป NPC ขนาดใหญ่ + เสียงพูด', x: 'คุยกับ NPC จะมีภาพตัวละครขนาดใหญ่สไลด์ขึ้นมาด้านขวาแบบ cut-in ข้อความพิมพ์ทีละตัว NPC พูดออกเสียง (ใช้เสียงภาษาไทยของเครื่อง ถ้าไม่มีเป็นเสียงจิ๊บๆ) กด 🔊 ฟังซ้ำ ปิดได้ที่ตั้งค่า · NPC ในเมืองพูดลอยเหนือหัวเป็นระยะ · แก้บัค: ชื่อเควสบางเควสแสดงเป็นชื่อฉายาแทน' },
   { d: '30/10', ic: 'paw', t: 'สัตว์เลี้ยง 20 ชนิด + ของดรอปตกพื้นแบบ RO', x: 'ซื้อไข่ที่ร้านของปุยฝ้าย (เมืองหลวง) หรือร้านเพชร แล้วใช้ไข่เพื่อฟัก สัตว์เลี้ยงเดินตาม มีความหิวและความสนิทสนม 5 ระดับ (ห่างเหิน → ภักดี) ยิ่งสนิทความสามารถยิ่งแรง เช่น EXP เพิ่ม คริติคอล ดูดเลือด ฟื้น HP/MP พ่นไฟใส่ศัตรู · ของที่มอนดรอปจะตกพื้นเป็นถุง เดินทับหรือให้สัตว์เลี้ยงไปเก็บให้ กด Z เก็บรอบตัว กด U เปิดหน้าต่างสัตว์เลี้ยง' },
@@ -11576,6 +11688,7 @@ ANNOUNCE.unshift({ tag: 'อัปเดตใหญ่', title: 'อัปเ�
 ANNOUNCE.unshift({ tag: 'อัปเดต', title: 'ใหม่! ปรับขนาด UI ได้เอง', body: 'กดเมนู → ปรับขนาด UI เพื่อขยายหรือย่อแถบสถานะ ปุ่มสกิล จอยสติ๊ก หน้าต่าง ชื่อตัวละคร และแชท แยกกันได้ เหมาะกับมือถือจอเล็กหรือแท็บเล็ต' });
 ANNOUNCE.unshift({ tag: 'อัปเดต', title: 'มาแล้ว! สัตว์เลี้ยง 20 ชนิด และระบบเพื่อน', body: 'ไปหาปุยฝ้ายที่ร้านสัตว์เลี้ยงในเมืองหลวงเพื่อซื้อไข่ ฟักแล้วน้องจะเดินตามและช่วยเก็บของที่ตกพื้น · กด Y เพื่อเพิ่มเพื่อนและวาร์ปไปหาเพื่อน' });
 ANNOUNCE.unshift({ tag: 'อัปเดต', title: 'NPC ใหม่ 10 คน เควสใหม่ 16 เควส พร้อมเสียงพูด', body: 'ชาวเมือง Aurelion มีเรื่องให้ช่วยเพียบ ตามหาแมวหาย ส่งจดหมาย เก็บสมุนไพร สำรวจโลก และอีกมาก · คุยกับ NPC จะเห็นภาพตัวละครใหญ่และได้ยินเสียงพูด' });
+ANNOUNCE.unshift({ tag: 'อัปเดต', title: 'หน้าจอใหม่แบบเกม MMO มือถือ + ปุ่ม AUTO', body: 'ปุ่มโจมตีใหญ่มุมขวาล่าง กด AUTO ให้ตัวละครสู้เอง ใช้สกิลและยาเอง · ชอบแบบเดิมเปลี่ยนกลับได้ที่ ตั้งค่า → รูปแบบ HUD' });
 /* ============================================================
    RO-style presentation: casting circles, hit sparks, level-up
    column, skill shout, RO click/hit sounds
@@ -12321,6 +12434,105 @@ const NpcCut = {
     fs.querySelector('#npcvox').onchange = e => { Settings.d.npcVoice = e.target.checked ? 1 : 0; Settings.save(); if (!e.target.checked) NpcVoice.stop(); };
   };
 }
+
+/* ============================================================
+   Mobile-MMO HUD layout (default): portrait + thin bars top-left,
+   currencies top-centre, icon row top-right, gold quest card and
+   side icon column on the right, big attack button with target /
+   AUTO / mount buttons bottom-right, wide quick-slot row bottom-
+   centre, level · combat power · EXP % · clock bottom-left.
+   Settings → รูปแบบ HUD switches back to the classic layout.
+   ============================================================ */
+ICONS.bell = '<path d="M12 3a6 6 0 0 0-6 6v4l-2 3h16l-2-3V9a6 6 0 0 0-6-6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 19a2.5 2.5 0 0 0 5 0" stroke="currentColor" stroke-width="1.8" fill="none"/>';
+ICONS.shop = '<path d="M4 9l1.5-5h13L20 9M4 9h16v2a2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1-5 0zM5 13v7h14v-7" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round"/>';
+ICONS.menu = '<path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>';
+ICONS.target = '<circle cx="12" cy="12" r="7.5" stroke="currentColor" stroke-width="1.8" fill="none"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4" stroke="currentColor" stroke-width="1.8"/>';
+ICONS.auto = '<path d="M20 12a8 8 0 1 1-2.3-5.7" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M18 2.5v4.2h-4.2" stroke="currentColor" stroke-width="1.8" fill="none"/><text x="12" y="15.2" font-size="7.5" font-weight="700" text-anchor="middle" fill="currentColor" font-family="sans-serif">AUTO</text>';
+ICONS.claw = '<path d="M5 19C9 13 14 8 20 4M7 21c4-5 8-9 14-12M3 16c4-5 8-9 13-12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>';
+ICONS.chart = '<path d="M4 20V4M4 20h16M8 16v-5M12 16V8M16 16v-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>';
+
+/* ---- auto battle (AUTO button) ---- */
+const AutoBattle = {
+  on: false, t: 0,
+  toggle(v) { this.on = v === undefined ? !this.on : v; UI.toast(this.on ? 'เปิดต่อสู้อัตโนมัติ (AUTO)' : 'ปิดต่อสู้อัตโนมัติ', this.on ? 'quest' : 'info'); Audio.sfx('ui'); HUD2.sync(); },
+  update(dt) {
+    if (!this.on) return; this.t -= dt; if (this.t > 0) return; this.t = .35;
+    const P = Player, S = Save.d; if (P.dead || Game.paused || AutoHunt.on || Nav.active || Mounts.riding() && Seats && Seats.driver) return;
+    if (S.hp < P.stats.maxhp * .4 && (S.inv.hp_s || S.inv.hp_l) && !(Skills.potCD > 0)) Game.useItem(S.inv.hp_s ? 'hp_s' : 'hp_l', true);
+    if (S.mp < P.stats.maxmp * .2 && S.inv.mp_s && !(Skills.potCD > 0)) Game.useItem('mp_s', true);
+    let t = P.target && P.target.kind === 'mon' && !P.target.ref.dead && P.target.ref.zone === P.zone ? P.target.ref : null;
+    if (!t) { let bd = 18 * 18; for (const m of Monsters.list) { if (m.dead || m.zone !== P.zone || m.d.boss && !m.engaged) continue; const d = dist2(m.x, m.z, P.x, P.z); if (d < bd) { bd = d; t = m; } } if (t) { P.target = { kind: 'mon', ref: t }; UI.setTarget(t); } else return; }
+    if (Input.moveVec().x || Input.moveVec().z) return;
+    const d = Math.sqrt(dist2(t.x, t.z, P.x, P.z)); const ids = Cls.of(S).skills;
+    if (!Player.getRig().busy && d < 7) for (let i = 0; i < ids.length; i++) { const sk = SKILLS[ids[i]]; if (!sk || sk.quiz || Skills.cd[i] > 0 || S.mp < SkillLv.mp(ids[i])) continue; if (sk.type === 'combo' && d > sk.r + .8) continue; Skills.use(i); break; }
+    if (!P.moveTo && !Player.getRig().busy) Game.attackNearest();
+  }
+};
+
+const HUD2 = {
+  on() { return Settings.d.hud !== 'classic'; },
+  built: false,
+  build() {
+    if (this.built) return; this.built = true; const hud = $('#hud');
+    const mk = (id, html) => { const d = document.createElement('div'); d.id = id; d.className = 'h2'; d.innerHTML = html; hud.appendChild(d); return d; };
+    const ib = (p, ic, label, extra = '') => `<button data-p="${p}" title="${label}" aria-label="${label}">${icon(ic)}${extra}</button>`;
+    mk('h2cur', '');
+    mk('h2top', ib('news', 'bell', 'ประกาศ') + ib('season', 'pass', 'Season Pass') + ib('gemshop', 'shop', 'ร้านเพชร') + ib('inv', 'bag', 'กระเป๋า (I)', '<small id="h2bag">0%</small>') + ib('menu', 'menu', 'เมนู'));
+    mk('h2right', `<div id="h2quest"></div><div id="h2side">${ib('skills', 'star', 'สกิล (P)')}${ib('char', 'person', 'ตัวละคร (C)')}${ib('quest', 'book', 'เควส (L)')}${ib('map', 'map', 'แผนที่ (M)')}${ib('pets', 'paw', 'สัตว์เลี้ยง (U)')}${ib('ach', 'chart', 'ความสำเร็จ (K)')}</div>`);
+    mk('h2left', ib('friends', 'person', 'เพื่อน (Y)', '<b class="fbadge" hidden>0</b>') + ib('wardrobe', 'outfit', 'ตู้เสื้อผ้า (O)') + ib('jobs', 'trophy', 'สายอาชีพ (J)'));
+    mk('h2bl', `<b id="h2lv">1</b><div><span id="h2cp">⚔ 0</span><span><em id="h2xp">EXP 0.00%</em> · <em id="h2clock">00:00</em></span></div>`);
+    mk('h2act', `<button class="h2big" data-x="atk" aria-label="โจมตี (Space)">${icon('claw')}</button><button class="h2c c1" data-x="tgt" aria-label="เปลี่ยนเป้าหมาย (Tab)">${icon('target')}</button><button class="h2c c2" data-x="auto" aria-label="ต่อสู้อัตโนมัติ">${icon('auto')}</button><button class="h2c c3" data-x="ride" aria-label="ขี่สัตว์ (V)">${icon('ride')}</button><button class="h2c c4" data-x="loot" aria-label="เก็บของรอบตัว (Z)">${icon('bag')}</button>`);
+    hud.addEventListener('click', e => {
+      const b = e.target.closest('.h2 [data-p]'); if (b) { Audio.init(); Audio.sfx('ui'); const p = b.dataset.p; if (WM.isOpen(p)) WM.close(p); else UI.openPanel(p); return; }
+      const x = e.target.closest('.h2 [data-x]'); if (!x) return; Audio.init(); const k = x.dataset.x;
+      if (k === 'atk') Game.attackNearest(); else if (k === 'tgt') Game.cycleTarget(); else if (k === 'auto') AutoBattle.toggle(); else if (k === 'ride') Mounts.ride(); else if (k === 'loot') Loot.pickAround(6);
+    });
+    this.apply();
+  },
+  apply() {
+    const on = this.on(); document.body.classList.toggle('hud2', on); if (!this.built) return;
+    const coin = $('#coinbox'), gem = $('#gembox'), tr = $('#tracker');
+    if (on) { $('#h2cur').append(coin, gem); $('#h2quest').append(tr); }
+    else { const bf = $('#buffs'); bf.parentNode.insertBefore(coin, bf); bf.parentNode.insertBefore(gem, bf); $('#mapcol').append(tr); }
+  },
+  sync() {
+    if (!this.built || !Save.d) return; const S = Save.d, P = Player;
+    const set = (id, v) => { const e = document.getElementById(id); if (e && e.textContent !== v) e.textContent = v; };
+    set('h2lv', String(S.level)); const st = P.stats || {}; const cp = Math.round((st.atk || 0) * 12 + (st.def || 0) * 9 + (st.maxhp || 0) * 1.4 + (st.maxmp || 0) * .7 + S.level * 25);
+    set('h2cp', '⚔ ' + fmt(cp)); set('h2xp', 'EXP ' + (S.xp / xpNeed(S.level) * 100).toFixed(2) + '%');
+    const d = new Date(); set('h2clock', String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'));
+    set('h2bag', Math.min(100, Object.keys(S.inv).length) + '%');
+    const a = document.querySelector('#h2act [data-x="auto"]'); if (a) a.classList.toggle('on', AutoBattle.on);
+    const r = document.querySelector('#h2act [data-x="ride"]'); if (r) { r.hidden = !Mounts.cur(); r.classList.toggle('on', Mounts.riding()); }
+    const l = document.querySelector('#h2act [data-x="loot"]'); if (l) l.classList.toggle('on', Loot.list.some(x => x.zone === P.zone && dist2(x.x, x.z, P.x, P.z) < 36));
+    // mirror notification dots from the classic menu buttons
+    for (const b of document.querySelectorAll('.h2 [data-p]')) { const o = document.querySelector(`#menubtns [data-p="${b.dataset.p}"]`); b.classList.toggle('dot', !!(o && o.classList.contains('dot')) || (b.dataset.p === 'menu' && Friends.reqs.length > 0)); }
+    const fb = document.querySelector('#h2left .fbadge'); if (fb) { const n = Friends.reqs.length; fb.textContent = n; fb.hidden = !n; }
+  }
+};
+{
+  const oi = UI.init.bind(UI); UI.init = function () { oi(); try { HUD2.build(); } catch (e) { console.error('hud2', e); } };
+  const ou = Game.update.bind(Game); Game.update = function (dt) { ou(dt); if (!this.started || !Save.d) return; AutoBattle.update(dt); this._h2T = (this._h2T || 0) + dt; if (this._h2T > .5) { this._h2T = 0; HUD2.sync(); } };
+  const ol = Settings.load.bind(Settings); Settings.load = function () { ol(); HUD2.apply(); };
+  const os = UI.pSettings.bind(UI);
+  UI.pSettings = function () {
+    os(); const b = this.el.pbody, fs = document.createElement('fieldset');
+    fs.innerHTML = `<legend>รูปแบบ HUD</legend>${[['mmo', 'แบบเกม MMO มือถือ (ปุ่มโจมตีใหญ่ขวาล่าง, AUTO, ไอคอนเมนูบนขวา)'], ['classic', 'แบบคลาสสิก (แถบสกิลกลางจอ, เมนูใต้แผนที่)']].map(([v, l]) => `<label class="radio"><input type="radio" name="hudl" value="${v}" ${(Settings.d.hud || 'mmo') === v ? 'checked' : ''}> ${l}</label>`).join('')}`;
+    const first = b.querySelector('fieldset'); b.insertBefore(fs, first ? first.nextSibling : null);
+    fs.querySelectorAll('[name=hudl]').forEach(r => r.onchange = () => { Settings.d.hud = r.value; Settings.save(); HUD2.apply(); });
+  };
+  // keyboard: Tab already cycles targets; add A? no — use Backquote for AUTO
+  document.addEventListener('keydown', e => { if (e.code === 'Backquote' && Game.started && !e.repeat && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) AutoBattle.toggle(); });
+  // manual moving with the keyboard / joystick doesn't fight AUTO, but death or teleport turns it off
+  const od = Game.die.bind(Game); Game.die = function () { AutoBattle.on = false; return od(); };
+}
+/* bell → news window */
+UI.extraPanels = UI.extraPanels || {}; UI.extraPanels.news = 'pNews';
+UI.pNews = function () {
+  const ann = ANNOUNCE.slice(0, 8).map(a => `<li class="nw"><i class="ntag">${esc(a.tag || 'ข่าว')}</i><b>${esc(a.title)}</b><p>${esc(a.body || '')}</p></li>`).join('');
+  const pn = PATCH.slice(0, 10).map(p => `<li class="nw pn"><b>${icon(p.ic || 'star')} ${esc(p.t)}</b><p>${esc(p.x || '')}</p><small>${p.d || ''}</small></li>`).join('');
+  this.setPanel(`${icon('bell')} ประกาศและอัปเดต`, `<ul class="newslist">${ann}</ul><h4>บันทึกอัปเดตล่าสุด</h4><ul class="newslist">${pn}</ul>`, true);
+};
 /* ============================================================
    Boot
    ============================================================ */
