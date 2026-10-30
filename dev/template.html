@@ -1462,6 +1462,9 @@ body #portrait.pf-smith::before, .pfport.pf-smith::before { content: ''; positio
 .evlist { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
 .evrow { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; padding: 8px 10px; border-radius: 10px; background: rgba(0,0,0,.22); border-left: 4px solid var(--ec); }
 .evrow b { color: var(--ec); } .evrow small { flex: 1; opacity: .75; } .evrow span { font-weight: 700; } .evrow.on { background: linear-gradient(90deg, color-mix(in srgb, var(--ec) 25%, transparent), rgba(0,0,0,.2)); } .evrow.on span { color: #8ae07a; }
+/* many emotes */
+#emopop { grid-template-columns: repeat(8, 40px); max-height: min(300px, 60cqh); overflow-y: auto; overscroll-behavior: contain; pointer-events: auto; }
+body.compact #emopop { grid-template-columns: repeat(7, 34px); max-height: 55cqh; }
 /* news */
 .newslist { list-style: none; padding: 0; margin: 0 0 10px; display: grid; gap: 8px; }
 .newslist .nw { padding: 8px 10px; border-radius: 8px; background: rgba(0,0,0,.2); } .newslist .nw p { margin: 3px 0 0; opacity: .85; font-size: .92em; line-height: 1.5; }

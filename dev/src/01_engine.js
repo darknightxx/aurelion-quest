@@ -184,7 +184,7 @@ vec3 c=vC*uTint.rgb*t.rgb*1.15;
 if(uWave>0.){float w=sin(vW.x*.7+uTime*1.6)*sin(vW.z*.9-uTime*1.1);c+=vec3(.08,.12,.14)*w+vec3(.15)*smoothstep(.75,1.,w);}
 c=c*l+uEmis;float lum=dot(c,vec3(.299,.587,.114));c=mix(vec3(lum),c,1.06);c=mix(c,vec3(1.,1.,.95),uFlash);
 float f=clamp((length(vW-uCam)-uFog.x)/(uFog.y-uFog.x),0.,1.);c=mix(c,uFogC,f);gl_FragColor=vec4(c,uAlpha*t.a);}`,
-  sprV: `attribute vec2 aC;uniform mat4 uVP;uniform vec3 uPos,uRight,uUp;uniform vec2 uSize;uniform vec4 uUV;uniform float uFlip;uniform vec4 uAnim;uniform vec2 uAnim2;varying vec2 vUV;varying vec3 vW;
+  sprV: `attribute vec2 aC;uniform mat4 uVP;uniform vec3 uPos,uRight,uUp;uniform vec2 uSize;uniform vec4 uUV;uniform float uFlip;uniform vec4 uAnim;uniform vec2 uAnim2;uniform float uRot;varying vec2 vUV;varying vec3 vW;
 void main(){
  float ph=uAnim.x,amp=uAnim.y,lean=uAnim.z,br=uAnim.w,stride=uAnim2.x,sq=uAnim2.y;
  vec2 p=aC;
@@ -197,7 +197,8 @@ void main(){
  p.x+=amp*.014*sin(ph)*up+lean*p.y*p.y;
  p.y*=1.+br*.018*up-amp*.012*abs(cos(ph));
  p.x*=sq;
- vec3 w=uPos+uRight*(p.x*uSize.x)+uUp*(p.y*uSize.y);vW=w;
+ float cr=cos(uRot),sr=sin(uRot);vec2 q=vec2(p.x*uSize.x,(p.y-.42)*uSize.y);q=vec2(q.x*cr-q.y*sr,q.x*sr+q.y*cr);
+ vec3 w=uPos+uRight*q.x+uUp*(q.y+.42*uSize.y);vW=w;
  float u=uFlip>.5?(.5-aC.x):(aC.x+.5);vUV=vec2(mix(uUV.x,uUV.z,u),mix(uUV.w,uUV.y,aC.y));gl_Position=uVP*vec4(w,1.);}`,
   sprF: `precision highp float;varying vec2 vUV;varying vec3 vW;uniform sampler2D uTex;uniform vec4 uTint;uniform float uFlash,uLight,uAlpha;uniform vec3 uFogC,uCam;uniform vec2 uFog;
 void main(){vec4 t=texture2D(uTex,vUV);if(t.a<.5)discard;vec3 c=t.rgb*uTint.rgb*uLight;c=mix(c,vec3(1.,.95,.9),uFlash);
@@ -371,7 +372,7 @@ class Renderer {
     if (an) { gl.uniform4f(S.u.uAnim, an.ph || 0, an.amp || 0, an.lean || 0, an.br || 0); gl.uniform2f(S.u.uAnim2, an.stride || 0, an.sq || 1); }
     else { gl.uniform4f(S.u.uAnim, 0, 0, 0, 0); gl.uniform2f(S.u.uAnim2, 0, 1); }
     if (this.curTex !== tex) { gl.bindTexture(gl.TEXTURE_2D, tex); this.curTex = tex; }
-    gl.uniform3f(S.u.uPos, x, y, z); gl.uniform2f(S.u.uSize, w, h); gl.uniform4fv(S.u.uUV, uv); gl.uniform1f(S.u.uFlip, flip ? 1 : 0);
+    gl.uniform3f(S.u.uPos, x, y, z); gl.uniform2f(S.u.uSize, w, h); gl.uniform4fv(S.u.uUV, uv); gl.uniform1f(S.u.uFlip, flip ? 1 : 0); if (S.u.uRot) gl.uniform1f(S.u.uRot, this.sprRot || 0);
     gl.uniform4f(S.u.uTint, tint ? tint[0] : 1, tint ? tint[1] : 1, tint ? tint[2] : 1, 1); gl.uniform1f(S.u.uFlash, flash); gl.uniform1f(S.u.uLight, light * this.env.sprLight); gl.uniform1f(S.u.uAlpha, alpha);
     gl.drawArrays(gl.TRIANGLES, 0, this.quadN);
   }
