@@ -1345,6 +1345,33 @@ body.hud2.compact #skillbar .sk.art .skart, body.hud2.compact #skillbar .sk.art 
 body.hud2.compact #h2left { flex-direction: row; top: calc(max(4px, var(--st)) + 124px); }
 body.hud2.compact #mapcol { top: calc(max(4px, var(--st)) + 52px); }
 body.hud2.compact #netbar { font-size: 9px; }
+/* refine & cards */
+.rfwrap { display: grid; grid-template-columns: 230px 1fr; gap: 12px; }
+@container (max-width: 640px) { .rfwrap { grid-template-columns: 1fr; } }
+.rflist { display: flex; flex-direction: column; gap: 4px; max-height: 360px; overflow: auto; }
+.rfit { display: flex; gap: 8px; align-items: center; text-align: left; padding: 6px; border-radius: 8px; border: 1px solid rgba(255,255,255,.08); background: rgba(0,0,0,.2); color: inherit; font: inherit; cursor: pointer; }
+.rfit.on { border-color: var(--brass); background: rgba(150,110,40,.25); } .rfit span { display: flex; flex-direction: column; min-width: 0; } .rfit small { opacity: .7; font-size: .8em; }
+.rfbox { padding: 10px 14px; border-radius: 10px; background: rgba(0,0,0,.2); text-align: center; }
+.rfbox p { margin: 6px 0; } .rfbox .up { color: #8ae07a; } .rfbox .dn { color: #ff8a7a; } .rfp { color: #ffd45a; font-size: 1.15em; }
+.rfbig { position: relative; display: inline-grid; place-items: center; width: 92px; height: 92px; border-radius: 16px; background: radial-gradient(circle, rgba(255,220,140,.25), rgba(0,0,0,.3)); }
+.rfbig .ic, .rfbig .eggic { width: 56px; height: 56px; }
+.rfbig.hit { animation: rfhit .16s 4; } @keyframes rfhit { 50% { transform: rotate(-6deg) scale(1.08); filter: brightness(1.8); } }
+.rflv { position: absolute; right: -10px; top: -8px; font: 700 18px var(--f-display); color: #fff; text-shadow: 0 0 6px #000; }
+.rflv.l1 { color: #8ac8ff; } .rflv.l2 { color: #d08aff; } .rflv.l3 { color: #ffd45a; text-shadow: 0 0 10px #ffb02e; }
+.rfmsg { font: 700 18px var(--f-display); } .rfmsg.ok { color: #ffd45a; } .rfmsg.bad { color: #ff8a7a; }
+.btn.big { font-size: 16px; padding: 10px 26px; margin-top: 6px; }
+.cardart { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; width: 118px; min-height: 160px; padding: 8px 6px 18px; border-radius: 8px; background: linear-gradient(160deg, #fbf3df, #e8d6b0); color: #3a2a1a; border: 3px solid var(--cc); box-shadow: inset 0 0 0 1px rgba(0,0,0,.25), 0 3px 8px rgba(0,0,0,.4); text-align: center; }
+.cardart .ce { font-size: 44px; line-height: 64px; width: 100%; border-radius: 4px; background: radial-gradient(circle, rgba(255,255,255,.9), rgba(0,0,0,.08)); box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); }
+.cardart b { font-size: 12px; } .cardart small { font-size: 10.5px; line-height: 1.3; color: #5a3a1a; }
+.cardart i { position: absolute; bottom: 2px; left: 0; right: 0; font-style: normal; font-size: 9.5px; font-weight: 700; color: var(--cc); filter: brightness(.75); }
+.cardart.t-b { background: linear-gradient(160deg, #fff3c8, #f0c868); } .cardart.t-m { background: linear-gradient(160deg, #f6e8ff, #d8b8f0); }
+.cardart.sm { width: 92px; min-height: 124px; } .cardart.sm .ce { font-size: 32px; line-height: 46px; }
+.cardgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 8px; justify-items: center; }
+.cbk { position: relative; } .cbk.no .cardart { filter: grayscale(1) brightness(.45); } .cbk em { position: absolute; top: 4px; right: 6px; font-style: normal; font-weight: 700; color: #fff; background: #3a7a3a; border-radius: 8px; padding: 0 5px; font-size: 11px; }
+.cslots, .cpicks { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 8px 0; }
+.cslot { display: flex; flex-direction: column; align-items: center; gap: 4px; } .cslot:not(.on) span { display: grid; place-items: center; width: 92px; height: 124px; border-radius: 8px; border: 2px dashed rgba(255,255,255,.25); opacity: .6; }
+.cpick { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.iirf { margin: 6px 0; padding: 6px 8px; border-radius: 6px; background: rgba(120,90,30,.2); font-size: .9em; }
 /* news */
 .newslist { list-style: none; padding: 0; margin: 0 0 10px; display: grid; gap: 8px; }
 .newslist .nw { padding: 8px 10px; border-radius: 8px; background: rgba(0,0,0,.2); } .newslist .nw p { margin: 3px 0 0; opacity: .85; font-size: .92em; line-height: 1.5; }
