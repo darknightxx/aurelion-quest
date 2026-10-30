@@ -1445,6 +1445,21 @@ body #portrait.pf-smith::before, .pfport.pf-smith::before { content: ''; positio
 .pfpick { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 6px; border-radius: 10px; background: rgba(0,0,0,.2); border: 1px solid rgba(255,255,255,.08); color: inherit; font: inherit; cursor: pointer; }
 .pfpick.on { border-color: var(--brass); background: rgba(150,110,40,.25); } .pfpick.lock { opacity: .55; cursor: default; } .pfpick small { font-size: 10.5px; opacity: .8; text-align: center; }
 @container (max-width: 620px) { .pfeq { grid-template-columns: 1fr 1fr; } .pfmid { grid-column: 1 / -1; order: -1; } .pfart { height: 150px; } }
+/* skill tree */
+.tree { display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap; }
+.tgrid { position: relative; flex: none; margin: 0 auto; background: radial-gradient(ellipse at 50% 40%, rgba(255,230,170,.07), transparent 70%); border-radius: 12px; }
+.tlines { position: absolute; inset: 0; pointer-events: none; } .tl { fill: none; stroke: rgba(255,255,255,.18); stroke-width: 2.5; stroke-dasharray: 5 4; } .tl.ok { stroke: #ffd45a; stroke-dasharray: none; filter: drop-shadow(0 0 3px rgba(255,200,80,.6)); }
+.tnode { position: absolute; width: 72px; display: flex; flex-direction: column; align-items: center; gap: 2px; background: none; border: 0; color: inherit; font: inherit; cursor: pointer; padding: 0; }
+.tnode .skart { position: relative !important; width: 54px; height: 54px; border-radius: 10px; box-shadow: 0 0 0 2px rgba(0,0,0,.6); } .tnode svg { width: 54px; height: 54px; border-radius: 10px; }
+.tnode.pas svg { border-radius: 50%; box-shadow: 0 0 0 2px #8a93a6; } .tnode:not(.got) svg { filter: grayscale(.85) brightness(.6); } .tnode.lock svg { filter: grayscale(1) brightness(.35); }
+.tnode.on svg { box-shadow: 0 0 0 2.5px #ffd45a, 0 0 12px rgba(255,210,90,.7); }
+.tnode span { font-size: 10.5px; line-height: 1.15; text-align: center; max-width: 84px; text-shadow: 0 1px 2px #000; }
+.tnode .tlv { position: absolute; top: 40px; right: 4px; font-size: 10px; background: rgba(0,0,0,.75); padding: 0 4px; border-radius: 6px; color: #ffe7a6; }
+.tnode kbd { position: absolute; top: -4px; left: 4px; font-size: 10px; } .tnode .tlk { position: absolute; top: 14px; font-style: normal; font-size: 18px; }
+.tdet { flex: 1; min-width: 230px; padding: 10px 12px; border-radius: 10px; background: rgba(0,0,0,.22); }
+.tdh { display: flex; gap: 10px; align-items: center; } .tdh svg { width: 56px; height: 56px; border-radius: 10px; flex: none; } .tdh h3 { margin: 0; } .tdh h3 small { color: #ffd45a; }
+.tfx { margin: 6px 0; padding-left: 18px; font-size: .92em; } .treq { color: #ff8a7a; font-size: .9em; } .treq.ok { color: #8ae07a; }
+.tbtn, .tbar { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
 /* news */
 .newslist { list-style: none; padding: 0; margin: 0 0 10px; display: grid; gap: 8px; }
 .newslist .nw { padding: 8px 10px; border-radius: 8px; background: rgba(0,0,0,.2); } .newslist .nw p { margin: 3px 0 0; opacity: .85; font-size: .92em; line-height: 1.5; }
@@ -8322,9 +8337,9 @@ const Input = {
     if (UI.quizOpen) { const n = { Digit1: 0, Digit2: 1, Digit3: 2, Digit4: 3, Numpad1: 0, Numpad2: 1, Numpad3: 2, Numpad4: 3 }[code]; if (n !== undefined) UI.quizPick(n); return; }
     if (code === 'Escape') { if (UI.panelOpen) UI.closePanel(); else if (Game.started) UI.openPanel('menu'); return; }
     if (!Game.started || UI.summaryOpen) return;
-    { const pmap = { KeyI: 'inv', KeyC: 'char', KeyL: 'quest', KeyM: 'map', KeyK: 'ach', KeyJ: 'jobs', KeyB: 'ghost', KeyH: 'help', KeyP: 'skills', KeyO: 'wardrobe', KeyY: 'friends', KeyU: 'pets', KeyN: 'npcs' }; if (pmap[code] && WM.isOpen(pmap[code])) { WM.close(pmap[code]); return; } if (UI.panelOpen && Game.paused) { if (pmap[code]) UI.openPanel(pmap[code]); return; } }
+    { const pmap = { KeyI: 'inv', KeyC: 'char', KeyL: 'quest', KeyM: 'map', KeyK: 'ach', KeyJ: 'jobs', KeyB: 'ghost', KeyH: 'help', KeyP: 'tree', KeyO: 'wardrobe', KeyY: 'friends', KeyU: 'pets', KeyN: 'npcs' }; if (pmap[code] && WM.isOpen(pmap[code])) { WM.close(pmap[code]); return; } if (UI.panelOpen && Game.paused) { if (pmap[code]) UI.openPanel(pmap[code]); return; } }
     switch (code) {
-      case 'KeyQ': Skills.use(0); break; case 'KeyE': Skills.use(1); break; case 'KeyR': Skills.use(2); break; case 'KeyT': Skills.use(3); break; case 'KeyX': Skills.use(4); break; case 'KeyP': UI.openPanel('skills'); break;
+      case 'KeyQ': Skills.use(0); break; case 'KeyE': Skills.use(1); break; case 'KeyR': Skills.use(2); break; case 'KeyT': Skills.use(3); break; case 'KeyX': Skills.use(4); break; case 'KeyP': UI.openPanel('tree'); break;
       case 'Space': e.preventDefault(); Game.attackNearest(); break;
       case 'Digit1': Game.useItem('hp_s', true); break; case 'Digit2': Game.useItem('mp_s', true); break;
       case 'KeyF': Game.interactNearest(); break;
@@ -9407,7 +9422,7 @@ const UI = {
   setPanel(title, html, wide) { this.el.ptitle.innerHTML = title; this.el.pbody.innerHTML = html; this.el.panel.querySelector('.pwin').classList.toggle('wide', !!wide); },
   pMenu() {
     this.setPanel('เมนู', `<div class="menugrid">
-      ${[['season', 'pass', 'Season Pass', ''], ['gemshop', 'gem', 'ร้านเพชร', ''], ['topup', 'gem', 'เติมเพชร', ''], ['inv', 'bag', 'กระเป๋า', 'I'], ['char', 'person', 'ตัวละคร', 'C'], ['quest', 'book', 'เควส', 'L'], ['map', 'map', 'แผนที่โลก', 'M'], ['jobs', 'person', 'สายอาชีพ', 'J'], ['wardrobe', 'outfit', 'ตู้เสื้อผ้า', 'O'], ['pets', 'paw', 'สัตว์เลี้ยง', 'U'], ['friends', 'person', 'เพื่อน', 'Y'], ['refine', 'gear', 'ตีบวก/การ์ด', ''], ['mvp', 'crown', 'บอส MVP', ''], ['cards', 'book', 'สมุดการ์ด', ''], ['ghost', 'ghost', 'ตำราผีไทย', 'B'], ['ach', 'trophy', 'ความสำเร็จ', 'K'], ['settings', 'gear', 'ตั้งค่า', ''], ['help', 'help', 'วิธีเล่น', 'H']].map(([p, ic, l, kb]) => `<button class="mbtn" data-go="${p}">${icon(ic)}<span>${l}</span>${kb ? `<kbd>${kb}</kbd>` : ''}</button>`).join('')}
+      ${[['season', 'pass', 'Season Pass', ''], ['gemshop', 'gem', 'ร้านเพชร', ''], ['topup', 'gem', 'เติมเพชร', ''], ['inv', 'bag', 'กระเป๋า', 'I'], ['char', 'person', 'ตัวละคร', 'C'], ['quest', 'book', 'เควส', 'L'], ['map', 'map', 'แผนที่โลก', 'M'], ['jobs', 'person', 'สายอาชีพ', 'J'], ['wardrobe', 'outfit', 'ตู้เสื้อผ้า', 'O'], ['pets', 'paw', 'สัตว์เลี้ยง', 'U'], ['friends', 'person', 'เพื่อน', 'Y'], ['refine', 'gear', 'ตีบวก/การ์ด', ''], ['mvp', 'crown', 'บอส MVP', ''], ['tree', 'star', 'สกิลทรี', ''], ['cards', 'book', 'สมุดการ์ด', ''], ['ghost', 'ghost', 'ตำราผีไทย', 'B'], ['ach', 'trophy', 'ความสำเร็จ', 'K'], ['settings', 'gear', 'ตั้งค่า', ''], ['help', 'help', 'วิธีเล่น', 'H']].map(([p, ic, l, kb]) => `<button class="mbtn" data-go="${p}">${icon(ic)}<span>${l}</span>${kb ? `<kbd>${kb}</kbd>` : ''}</button>`).join('')}
       <button class="mbtn" data-go="title">${icon('close')}<span>บันทึกและกลับหน้าแรก</span></button></div>`);
     this.el.pbody.onclick = e => { const b = e.target.closest('[data-go]'); if (!b) return; if (b.dataset.go === 'title') { Save.write(); location.reload(); return; } this.openPanel(b.dataset.go); };
   },
@@ -11748,6 +11763,7 @@ KIND_ICON.vehicle = 'star';
    PATCH_NEW for every game update (shown in lobby → บันทึกอัปเดต)
    ============================================================ */
 const PATCH_NEW = [
+  { d: '30/10', ic: 'star', t: 'สกิลทรีแบบ RO (กด P)', x: 'ทุกอาชีพมีสกิลเพิ่ม: สกิลติดตัว (Passive) 4 สกิล สูงสุด Lv.10 เช่น ความชำนาญอาวุธ ร่างกายเหล็กไหล จุดตาย ฟื้นฟูมานา พลังรักษา และสกิลกดใช้ใหม่อีก 2 สกิล เช่น แทงทะลวง ออร่าศักดิ์สิทธิ์ มีดอาบพิษ ศรเพลิง สายฟ้าฟาด แสงศักดิ์สิทธิ์ · สกิลมีเงื่อนไขก่อนเรียน แสดงเป็นเส้นเชื่อมในทรี พร้อมสกิลอาชีพขั้นสอง · เลือกสกิลใส่ปุ่ม Q E R T เองได้' },
   { d: '30/10', ic: 'crown', t: 'บอส MVP และมินิบอสเกิดตามเวลา + ประกาศทั้งเซิร์ฟเวอร์', x: 'ราชาสไลม์ หมาป่าเขี้ยวเงิน ราชินีค้างคาวผลึก (มินิบอส) และเห็ดยักษ์โบราณ จอมทัพก็อบลิน อัศวินกระดูกมรณะ (บอส MVP) เกิดตามเวลาเดียวกันทั้งเซิร์ฟเวอร์ ตอนเกิดจะประกาศให้ทุกคนรู้ ผู้ที่ปิดฉากได้ MVP รับ EXP โบนัส ของรางวัล เพชร และฉายา "MVP" ชื่อผู้กำจัดและของดรอปที่หายากที่สุด 2 ชิ้นจะถูกประกาศทั้งเซิร์ฟเวอร์ · ดูเวลาเกิดและนำทางได้ที่เมนู → บอส MVP (ไอคอนมงกุฎ)' },
   { d: '30/10', ic: 'person', t: 'แตะรูปตัวละคร: ดูข้อมูลและอุปกรณ์แบบ RO + กรอบโปรไฟล์ 17 แบบ', x: 'แตะรูปตัวละครมุมซ้ายบนเพื่อเปิดหน้าต่างอุปกรณ์แบบ RO มีภาพตัวละครตรงกลาง ช่องอุปกรณ์ แฟชั่น สัตว์เลี้ยง และพาหนะสองข้าง พร้อมสถานะครบ · กรอบโปรไฟล์ปลดล็อกจากเลเวล เควส กิจกรรมฮาโลวีน บอส MVP สัตว์เลี้ยง การ์ด การตีบวก และการเติมเพชร บางกรอบมีแสงหมุนเคลื่อนไหว' },
   { d: '30/10', ic: 'gear', t: 'ระบบตีบวก +0 ถึง +20 แบบ RO', x: 'คุยกับช่างโบรันในเมืองหลวง → ตีบวกอุปกรณ์ ใช้หินตีบวก (+1–+10) และหินตีบวกขั้นสูง (+11–+20) ปลอดภัยถึง +4 หลังจากนั้นโอกาสลดลงเรื่อยๆ ล้มเหลวที่ +5–+9 ระดับลด −1 ตั้งแต่ +10 ขึ้นไปอุปกรณ์แตก! เว้นแต่ใช้หินกันแตก · อาวุธ +7 ขึ้นไปมีประกายแสงรอบตัว (+7 ฟ้า +10 ม่วง +15 ทอง +20 สายรุ้ง) · ตีบวก +10 ขึ้นไปประกาศทั้งเซิร์ฟเวอร์' },
@@ -11785,6 +11801,7 @@ ANNOUNCE.unshift({ tag: 'อัปเดต', title: 'NPC ใหม่ 10 คน
 ANNOUNCE.unshift({ tag: 'อัปเดต', title: 'หน้าจอใหม่แบบเกม MMO มือถือ + ปุ่ม AUTO', body: 'ปุ่มโจมตีใหญ่มุมขวาล่าง กด AUTO ให้ตัวละครสู้เอง ใช้สกิลและยาเอง · ชอบแบบเดิมเปลี่ยนกลับได้ที่ ตั้งค่า → รูปแบบ HUD' });
 ANNOUNCE.unshift({ tag: 'อัปเดตใหญ่', title: 'ตีบวก +20 และการ์ดมอนสเตอร์มาแล้ว!', body: 'ไปหาช่างโบรันในเมืองหลวงเพื่อตีบวกอาวุธ ระวัง! +10 ขึ้นไปอุปกรณ์อาจแตก · ล่ามอนเพื่อสะสมการ์ด ใส่การ์ดเพิ่มพลังให้อุปกรณ์' });
 ANNOUNCE.unshift({ tag: 'อัปเดตใหญ่', title: 'บอส MVP มาแล้ว! และกรอบโปรไฟล์ 17 แบบ', body: 'บอส MVP เกิดตามเวลาทั้งเซิร์ฟเวอร์ ใครปิดฉากได้ชื่อประกาศให้ทุกคนเห็น · แตะรูปตัวละครเพื่อดูอุปกรณ์แบบ RO และเปลี่ยนกรอบโปรไฟล์' });
+ANNOUNCE.unshift({ tag: 'อัปเดต', title: 'สกิลทรีแบบ RO มาแล้ว (กด P)', body: 'ทุกอาชีพได้สกิลติดตัว 4 สกิล และสกิลใหม่อีก 2 สกิล เรียนตามเงื่อนไขในทรี และเลือกใส่ปุ่มลัดได้เอง' });
 /* ============================================================
    RO-style presentation: casting circles, hit sparks, level-up
    column, skill shout, RO click/hit sounds
@@ -12574,7 +12591,7 @@ const HUD2 = {
     const ib = (p, ic, label, extra = '') => `<button data-p="${p}" title="${label}" aria-label="${label}">${icon(ic)}${extra}</button>`;
     mk('h2cur', '');
     mk('h2top', ib('news', 'bell', 'ประกาศ') + ib('season', 'pass', 'Season Pass') + ib('gemshop', 'shop', 'ร้านเพชร') + ib('inv', 'bag', 'กระเป๋า (I)', '<small id="h2bag">0%</small>') + ib('menu', 'menu', 'เมนู'));
-    mk('h2right', `<div id="h2quest"></div><div id="h2side">${ib('skills', 'star', 'สกิล (P)')}${ib('char', 'person', 'ตัวละคร (C)')}${ib('quest', 'book', 'เควส (L)')}${ib('map', 'map', 'แผนที่ (M)')}${ib('pets', 'paw', 'สัตว์เลี้ยง (U)')}${ib('mvp', 'crown', 'บอส MVP')}${ib('ach', 'chart', 'ความสำเร็จ (K)')}</div>`);
+    mk('h2right', `<div id="h2quest"></div><div id="h2side">${ib('tree', 'star', 'สกิลทรี (P)')}${ib('char', 'person', 'ตัวละคร (C)')}${ib('quest', 'book', 'เควส (L)')}${ib('map', 'map', 'แผนที่ (M)')}${ib('pets', 'paw', 'สัตว์เลี้ยง (U)')}${ib('mvp', 'crown', 'บอส MVP')}${ib('ach', 'chart', 'ความสำเร็จ (K)')}</div>`);
     mk('h2left', ib('friends', 'person', 'เพื่อน (Y)', '<b class="fbadge" hidden>0</b>') + ib('wardrobe', 'outfit', 'ตู้เสื้อผ้า (O)') + ib('jobs', 'trophy', 'สายอาชีพ (J)'));
     mk('h2bl', `<b id="h2lv">1</b><div><span id="h2cp">⚔ 0</span><span><em id="h2xp">EXP 0.00%</em> · <em id="h2clock">00:00</em></span></div>`);
     mk('h2act', `<button class="h2big" data-x="atk" aria-label="โจมตี (Space)">${icon('claw')}</button><button class="h2c c1" data-x="tgt" aria-label="เปลี่ยนเป้าหมาย (Tab)">${icon('target')}</button><button class="h2c c2" data-x="auto" aria-label="ต่อสู้อัตโนมัติ">${icon('auto')}</button><button class="h2c c3" data-x="ride" aria-label="ขี่สัตว์ (V)">${icon('ride')}</button><button class="h2c c4" data-x="loot" aria-label="เก็บของรอบตัว (Z)">${icon('bag')}</button>`);
@@ -12602,13 +12619,13 @@ const HUD2 = {
     const r = document.querySelector('#h2act [data-x="ride"]'); if (r) { r.hidden = !Mounts.cur(); r.classList.toggle('on', Mounts.riding()); }
     const l = document.querySelector('#h2act [data-x="loot"]'); if (l) l.classList.toggle('on', Loot.list.some(x => x.zone === P.zone && dist2(x.x, x.z, P.x, P.z) < 36));
     // mirror notification dots from the classic menu buttons
-    for (const b of document.querySelectorAll('.h2 [data-p]')) { const o = document.querySelector(`#menubtns [data-p="${b.dataset.p}"]`); b.classList.toggle('dot', !!(o && o.classList.contains('dot')) || (b.dataset.p === 'menu' && Friends.reqs.length > 0)); }
+    for (const b of document.querySelectorAll('.h2 [data-p]')) { const o = document.querySelector(`#menubtns [data-p="${b.dataset.p === "tree" ? "skills" : b.dataset.p}"]`); b.classList.toggle('dot', !!(o && o.classList.contains('dot')) || (b.dataset.p === 'menu' && Friends.reqs.length > 0)); }
     const fb = document.querySelector('#h2left .fbadge'); if (fb) { const n = Friends.reqs.length; fb.textContent = n; fb.hidden = !n; }
   }
 };
 {
   const oi = UI.init.bind(UI); UI.init = function () { oi(); try { HUD2.build(); } catch (e) { console.error('hud2', e); } };
-  const ou = Game.update.bind(Game); Game.update = function (dt) { ou(dt); if (!this.started || !Save.d) return; AutoBattle.update(dt); this._h2T = (this._h2T || 0) + dt; if (this._h2T > .5) { this._h2T = 0; HUD2.sync(); } };
+  const ou = Game.update.bind(Game); Game.update = function (dt) { ou(dt); if (!this.started || !Save.d) return; AutoBattle.update(dt); const n = performance.now(); if (n - (this._h2N || 0) > 500) { this._h2N = n; HUD2.sync(); } };
   const ol = Settings.load.bind(Settings); Settings.load = function () { ol(); HUD2.apply(); };
   const os = UI.pSettings.bind(UI);
   UI.pSettings = function () {
@@ -13029,6 +13046,116 @@ UI.pCards = function (o) {
   GEM_ITEMS.push({ id: 'g_rfguard', cat: 'conv', gems: 40, give: [['rf_guard', 1]], name: 'หินกันแตก', desc: 'กันอุปกรณ์แตกตอนตีบวก +10 ขึ้นไป', icon: 'shield' });
   GEM_ITEMS.push({ id: 'g_rfstone2', cat: 'conv', gems: 25, give: [['rf_stone2', 1]], name: 'หินตีบวกขั้นสูง', desc: 'ใช้ตีบวก +11 ถึง +20', icon: 'gem' });
 }
+
+/* ============================================================
+   RO-style skill tree: every class gets 4 passive skills and 2
+   extra active skills on top of its 5 class skills, plus the
+   skills of its 2nd job. Skills have prerequisites (lines in the
+   tree), passives go to Lv.10, and the player chooses which
+   actives sit on the Q E R T keys (X stays the quiz ultimate).
+   ============================================================ */
+const PASSIVE_TH = { atkP: 'ATK', defP: 'DEF', hpP: 'HP สูงสุด', mpP: 'MP สูงสุด', spdP: 'ความเร็ว', crit: 'คริติคอล', reduce: 'ลดความเสียหาย', regen: 'ฟื้น HP/วิ', mpregen: 'ฟื้น MP/วิ', coin: 'เหรียญ', xp: 'EXP', heal: 'พลังฟื้นฟู' };
+const TREE_SK = {
+  adventurer: {
+    p: [['p_adv1', 'ความชำนาญอาวุธ', 'combo', { atkP: .03 }, 'ฝึกใช้อาวุธทุกชนิดจนคล่องมือ'], ['p_adv2', 'ร่างกายแข็งแรง', 'guard', { hpP: .03 }, 'ออกกำลังกายทุกเช้า ร่างกายทนทานขึ้น'], ['p_adv3', 'โชคของนักผจญภัย', 'focus', { coin: .03, xp: .01 }, 'โชคเข้าข้างคนกล้าเสมอ'], ['p_adv4', 'พักฟื้นเร็ว', 'heal', { regen: .0015 }, 'ฟื้นตัวจากบาดแผลได้รวดเร็ว']],
+    a: [['a_quake', 'ผ่าปฐพี', { type: 'cone', mp: 14, cd: 8, mult: 2.6, r: 5.5, ang: .45, col: [1, .75, .4], icon: 'slash', glyph: 'cleave', cat: 'โจมตีแนวตรง', desc: 'ฟาดอาวุธลงพื้นจนแผ่นดินแยกเป็นแนวยาวไปข้างหน้า', fx: ['แนวยาว 5.5 เมตร ATK ×2.6'] }], ['a_cry', 'ตะโกนปลุกใจ', { type: 'buff', mp: 12, cd: 22, buffs: [['atk', 12]], col: [1, .6, .3], icon: 'star', glyph: 'focus', cat: 'บัฟตัวเอง', desc: 'ตะโกนปลุกพลังในตัวให้ลุกโชน', fx: ['พลังโจมตี +20% นาน 12 วินาที'] }]]
+  },
+  knight: {
+    p: [['p_kn1', 'ความชำนาญดาบ', 'cleave', { atkP: .025 }, 'อัศวินฝึกฟันดาบวันละพันครั้ง'], ['p_kn2', 'ร่างกายเหล็กไหล', 'guard', { defP: .04 }, 'เกราะและกายแกร่งดั่งเหล็ก'], ['p_kn3', 'ความอดทน', 'bash', { hpP: .04 }, 'ยืนหยัดได้นานกว่าใคร'], ['p_kn4', 'ฟื้นฟู HP', 'heal', { regen: .002 }, 'ฟื้นพลังชีวิตได้แม้ยืนนิ่ง']],
+    a: [['k_pierce', 'แทงทะลวง', { type: 'cone', mp: 12, cd: 7, mult: 2.7, r: 6.5, ang: .3, col: [.8, .9, 1], icon: 'sword', glyph: 'charge', cat: 'โจมตีแนวตรง', desc: 'แทงดาบไปข้างหน้าอย่างรุนแรง ทะลุศัตรูที่เรียงกัน', fx: ['แนวยาว 6.5 เมตร ATK ×2.7'] }], ['k_aura', 'ออร่าศักดิ์สิทธิ์', { type: 'heal', mp: 16, cd: 20, heal: .18, buffs: [['def', 10]], col: [1, .95, .6], icon: 'heart', glyph: 'guard', cat: 'ฟื้นฟู + ป้องกัน', desc: 'แสงศักดิ์สิทธิ์โอบล้อม รักษาบาดแผลและเสริมเกราะ', fx: ['ฟื้น HP 18%', 'DEF +25% นาน 10 วินาที'] }]]
+  },
+  ninja: {
+    p: [['p_nj1', 'ความชำนาญมีด', 'crescent', { atkP: .025 }, 'มีดสั้นคือส่วนหนึ่งของร่างกาย'], ['p_nj2', 'วิชาหลบหลีก', 'smoke', { reduce: .015 }, 'หลบการโจมตีได้อย่างพลิ้วไหว'], ['p_nj3', 'จุดตาย', 'assassin', { crit: .012 }, 'มองเห็นจุดอ่อนของศัตรู'], ['p_nj4', 'ฝีเท้าเงา', 'shadow', { spdP: .015 }, 'เคลื่อนไหวเร็วดั่งเงา']],
+    a: [['n_venom', 'มีดอาบพิษ', { type: 'proj', mp: 10, cd: 5, mult: 1.9, n: 1, proj: 'star', dot: { k: .25, t: 5 }, col: [.5, 1, .35], icon: 'dagger', glyph: 'venom', cat: 'โจมตี + พิษ', desc: 'ขว้างมีดที่อาบพิษร้ายใส่เป้าหมาย', fx: ['ATK ×1.9', 'พิษต่อเนื่อง 5 วินาที'] }], ['n_phantom', 'เงาพันร่าง', { type: 'nova', mp: 18, cd: 11, mult: 2.0, r: 5, col: [.6, .4, .9], icon: 'burst', glyph: 'blades', cat: 'โจมตีหมู่ (AoE)', desc: 'แยกร่างเงาโจมตีศัตรูรอบตัวพร้อมกัน', fx: ['รัศมี 5 เมตร ATK ×2.0'] }]]
+  },
+  archer: {
+    p: [['p_ar1', 'ตาเหยี่ยว', 'power', { atkP: .025 }, 'มองเห็นเป้าหมายได้ชัดแม้อยู่ไกล'], ['p_ar2', 'ยิงจุดตาย', 'venom', { crit: .01 }, 'ลูกศรพุ่งเข้าจุดสำคัญ'], ['p_ar3', 'ฝีเท้าพราน', 'leap', { spdP: .015 }, 'วิ่งในป่าได้คล่องแคล่ว'], ['p_ar4', 'สมาธินักธนู', 'multi', { mpP: .04 }, 'ใจนิ่ง ลมหายใจสงบ']],
+    a: [['r_flame', 'ศรเพลิง', { type: 'proj', mp: 12, cd: 6, mult: 2.2, n: 1, splash: 2.6, proj: 'fire', col: [1, .5, .15], icon: 'fire', glyph: 'fire', cat: 'โจมตี + กระจาย', desc: 'ยิงลูกศรติดไฟที่ระเบิดเมื่อโดนเป้าหมาย', fx: ['ATK ×2.2', 'ระเบิดกระจาย 2.6 เมตร'] }], ['r_bolt', 'ศรสายฟ้า', { type: 'proj', mp: 14, cd: 8, mult: 1.35, n: 3, spread: .12, pierce: true, proj: 'arrow', col: [.6, .8, 1], icon: 'fan', glyph: 'multi', cat: 'โจมตีทะลุ', desc: 'ยิงศรสายฟ้า 3 ดอกที่ทะลุศัตรูทุกตัว', fx: ['3 ดอก ดอกละ ATK ×1.35', 'ทะลุเป้าหมาย'] }]]
+  },
+  mage: {
+    p: [['p_mg1', 'สมาธิแห่งมานา', 'blink', { mpP: .05 }, 'จิตใจสงบ มานาไหลเวียนดี'], ['p_mg2', 'ฟื้นฟูมานา', 'frost', { mpregen: .002 }, 'ดึงมานาจากธรรมชาติรอบตัว'], ['p_mg3', 'พลังเวทลึกล้ำ', 'fire', { atkP: .03 }, 'คาถาแรงขึ้นทุกครั้งที่ฝึก'], ['p_mg4', 'เกราะมานา', 'storm', { reduce: .012 }, 'มานาห่อหุ้มร่างกายกันความเสียหาย']],
+    a: [['m_thunder', 'สายฟ้าฟาด', { type: 'rain', mp: 18, cd: 10, mult: 2.6, r: 4.5, col: [.7, .8, 1], icon: 'rain', glyph: 'storm', cat: 'โจมตีหมู่ระยะไกล', desc: 'เรียกสายฟ้าฟาดลงจุดที่เป้าหมายอยู่', fx: ['รัศมี 4.5 เมตร ATK ×2.6'] }], ['m_blizzard', 'พายุหิมะ', { type: 'nova', mp: 20, cd: 12, mult: 1.7, r: 6, slow: 4, col: [.6, .9, 1], icon: 'snow', glyph: 'frost', cat: 'โจมตีหมู่ + ชะลอ', desc: 'ปลดปล่อยพายุหิมะรอบตัว ศัตรูช้าลง', fx: ['รัศมี 6 เมตร ATK ×1.7', 'ชะลอ 4 วินาที'] }]]
+  },
+  priest: {
+    p: [['p_pr1', 'ศรัทธาแรงกล้า', 'bless', { hpP: .03 }, 'ศรัทธาทำให้ร่างกายแข็งแกร่ง'], ['p_pr2', 'ฟื้นฟูมานา', 'cleanse', { mpregen: .002 }, 'สวดภาวนาฟื้นพลังจิต'], ['p_pr3', 'พลังรักษา', 'heal', { heal: .05 }, 'การรักษาแรงขึ้นทุกครั้งที่ฝึก'], ['p_pr4', 'เกราะศักดิ์สิทธิ์', 'angel', { defP: .03 }, 'พรจากเบื้องบนปกป้องร่างกาย']],
+    a: [['p_holy', 'แสงศักดิ์สิทธิ์', { type: 'proj', mp: 10, cd: 4, mult: 2.2, n: 1, proj: 'holy', col: [1, 1, .7], icon: 'sun', glyph: 'judge', cat: 'โจมตีเดี่ยว', desc: 'ยิงลำแสงศักดิ์สิทธิ์ใส่ศัตรู', fx: ['ATK ×2.2'] }], ['p_agi', 'พรแห่งความว่องไว', { type: 'buff', mp: 12, cd: 25, buffs: [['haste', 15]], col: [.6, 1, .8], icon: 'boots', glyph: 'bless', cat: 'บัฟตัวเอง', desc: 'ขอพรให้ร่างกายเบาดั่งขนนก', fx: ['ความเร็ว +30% นาน 15 วินาที'] }]]
+  }
+};
+const TREE_EXTRA = new Set(), TREE_PASSIVE = {};
+for (const cls in TREE_SK) {
+  for (const [id, name, glyph, fx, desc] of TREE_SK[cls].p) { TREE_EXTRA.add(id); TREE_PASSIVE[id] = fx; SKILLS[id] = { name, type: 'passive', passive: true, mp: 0, cd: 0, col: [.8, .8, .9], icon: 'star', glyph, cat: 'สกิลติดตัว (Passive)', desc, fx: Object.entries(fx).map(([k, v]) => `${PASSIVE_TH[k]} +${k === 'regen' || k === 'mpregen' ? (v * 100).toFixed(2) + '%' : Math.round(v * 1000) / 10 + '%'} ต่อเลเวล (สูงสุด Lv.10)`) }; }
+  for (const [id, name, def] of TREE_SK[cls].a) { TREE_EXTRA.add(id); SKILLS[id] = Object.assign({ name }, def); }
+}
+const passiveV = k => { const S = Save.d; if (!S || !S.skillLv) return 0; const T = TREE_SK[S.cls]; if (!T) return 0; let v = 0; for (const [id] of T.p) { const lv = S.skillLv[id] || 0, f = TREE_PASSIVE[id][k]; if (lv && f) v += f * lv; } return v; };
+const Tree = {
+  // layout: [id, row, col, req [[id, lv]], minLv]
+  layout(S) {
+    const cls = S.cls, C = CLASSES[cls], T = TREE_SK[cls]; const base = C.skills, L = [];
+    base.forEach((id, i) => L.push([id, 0, i, [], 1]));
+    L.push([T.a[0][0], 1, 0, [[base[0], 3]], 4]); L.push([T.a[1][0], 1, 1, [[base[1], 3]], 6]);
+    L.push([T.p[0][0], 1, 2, [], 2]); L.push([T.p[1][0], 1, 3, [[T.p[0][0], 3]], 4]); L.push([T.p[2][0], 1, 4, [[base[2], 2]], 6]);
+    L.push([T.p[3][0], 2, 4, [[T.p[1][0], 3]], 8]);
+    const job = S.job && JOBS[S.job]; if (job) { const extra = job.skills.filter(x => !base.includes(x)); extra.forEach((id, i) => L.push([id, 2, i, [], JOB_LV])); }
+    return L;
+  },
+  avail(S, id) { const C = CLASSES[S.cls]; if (C.skills.includes(id)) return true; const j = S.job && JOBS[S.job]; if (j && j.skills.includes(id)) return true; return TREE_EXTRA.has(id) && (S.skillLv[id] || 0) > 0; },
+  node(S, id) { return this.layout(S).find(n => n[0] === id); },
+  reqOk(S, id) { const n = this.node(S, id); if (!n) return true; if (S.level < n[4]) return false; return n[3].every(([r, lv]) => SkillLv.get(r) >= lv); },
+  maxOf(id) { return SKILLS[id] && SKILLS[id].passive ? 10 : SkillLv.max(); }
+};
+{
+  const og = SkillLv.get.bind(SkillLv); SkillLv.get = function (id) { if (TREE_EXTRA.has(id)) { const S = Save.d; return (S && S.skillLv && S.skillLv[id]) || 0; } return og(id); };
+  const ocu = SkillLv.canUp.bind(SkillLv); SkillLv.canUp = function (id) { const S = Save.d; if (!S || !(S.skillPts > 0)) return false; if (!Tree.reqOk(S, id)) return false; if (TREE_EXTRA.has(id)) return this.get(id) < Tree.maxOf(id); return ocu(id); };
+  const of = SkillLv.f.bind(SkillLv); SkillLv.f = function (id, lv) { const r = of(id, lv || Math.max(1, this.get(id))); const h = passiveV('heal'); if (h) r.heal *= 1 + h; return r; };
+  // skill bar: player-chosen actives on Q E R T
+  const oo = Cls.of.bind(Cls); const barCache = new Map();
+  Cls.of = function (S) {
+    const c = oo(S); if (!S || !S.bar || !S.skillLv) return c; const sk = c.skills.slice();
+    for (let i = 0; i < 4; i++) { const id = S.bar[i]; if (id && SKILLS[id] && !SKILLS[id].passive && !SKILLS[id].quiz && Tree.avail(S, id)) { const j = sk.indexOf(id); if (j >= 0 && j !== i) sk[j] = sk[i]; sk[i] = id; } }
+    const key = (c.id || S.cls) + '|' + sk.join(','); let o = barCache.get(key); if (!o) { o = Object.assign(Object.create(c), { skills: sk }); barCache.set(key, o); } return o;
+  };
+  // passive stats
+  const orc = Player.recalc.bind(Player);
+  Player.recalc = function () {
+    orc(); const st = this.stats, S = Save.d; if (!S || !S.skillLv) return;
+    const a = passiveV('atkP'), d = passiveV('defP'), h = passiveV('hpP'), m = passiveV('mpP'), s = passiveV('spdP');
+    if (a) st.atk = Math.round(st.atk * (1 + a)); if (d) st.def = Math.round(st.def * (1 + d)); if (h) st.maxhp = Math.round(st.maxhp * (1 + h)); if (m) st.maxmp = Math.round(st.maxmp * (1 + m)); if (s) st.spd *= 1 + s;
+    S.hp = Math.min(S.hp, st.maxhp); S.mp = Math.min(S.mp, st.maxmp);
+  };
+  const ocb = RoleSys.critBonus.bind(RoleSys); RoleSys.critBonus = function () { return ocb() + passiveV('crit'); };
+  const ox = Game.gainXP.bind(Game); Game.gainXP = function (n) { return ox(n * (1 + passiveV('xp'))); };
+  const oc = Game.gainCoins.bind(Game); Game.gainCoins = function (n) { return oc(n * (1 + passiveV('coin'))); };
+  const ohp = Combat.hitPlayer.bind(Combat); Combat.hitPlayer = function (raw, src) { const r = passiveV('reduce'); return ohp(r ? raw * (1 - Math.min(.3, r)) : raw, src); };
+  const ou = Game.update.bind(Game);
+  Game.update = function (dt) { ou(dt); if (!this.started || this.paused || !Save.d || Player.dead) return; this._psT = (this._psT || 0) + dt; if (this._psT >= 1) { this._psT = 0; const S = Save.d, st = Player.stats, r = passiveV('regen'), m = passiveV('mpregen'); if (r) S.hp = Math.min(st.maxhp, S.hp + st.maxhp * r); if (m) S.mp = Math.min(st.maxmp, S.mp + st.maxmp * m); } };
+  // the old skills window gets a button to the tree
+  const ops = UI.pSkills.bind(UI); UI.pSkills = function () { ops(); const h = this.el.pbody.querySelector('.skhead'); if (h) { const b = document.createElement('button'); b.className = 'btn primary'; b.textContent = '🌳 เปิดสกิลทรีแบบ RO'; b.onclick = () => this.openPanel('tree'); h.after(b); } };
+}
+UI.extraPanels = UI.extraPanels || {}; UI.extraPanels.tree = 'pTree';
+UI.pTree = function (o) {
+  const S = Save.d; SkillLv.ensure(S); const L = Tree.layout(S), cls = Cls.of(S), bar = cls.skills; const sel = o.sel && SKILLS[o.sel] ? o.sel : L[0][0]; this.panelOpt.sel = sel;
+  const CW = 96, RH = 112, pos = (r, c) => [c * CW + CW / 2, r * RH + 40];
+  let lines = '';
+  for (const [id, r, c, req] of L) for (const [q] of req) { const n = L.find(x => x[0] === q); if (!n) continue; const [x1, y1] = pos(n[1], n[2]), [x2, y2] = pos(r, c); const ok = Tree.reqOk(S, id); lines += `<path d="M${x1} ${y1 + 30}C${x1} ${(y1 + y2) / 2 + 20},${x2} ${(y1 + y2) / 2 - 20},${x2} ${y2 - 30}" class="tl ${ok ? 'ok' : ''}"/>`; }
+  const nodes = L.map(([id, r, c, req, minLv]) => { const sk = SKILLS[id], lv = SkillLv.get(id), mx = Tree.maxOf(id), ok = Tree.reqOk(S, id), slot = bar.indexOf(id); const [x, y] = pos(r, c);
+    return `<button class="tnode ${sk.passive ? 'pas' : ''} ${lv ? 'got' : ''} ${ok ? '' : 'lock'} ${id === sel ? 'on' : ''}" style="left:${x - 36}px;top:${y - 34}px" data-tn="${id}">${SkillArt.art(id)}<b class="tlv">${lv}/${mx}</b>${slot >= 0 ? `<kbd>${SKILL_KEYS[slot]}</kbd>` : ''}${!ok ? '<i class="tlk">🔒</i>' : ''}<span>${sk.name}</span></button>`; }).join('');
+  const rows = Math.max(...L.map(n => n[1])) + 1;
+  const sk = SKILLS[sel], lv = SkillLv.get(sel), n = Tree.node(S, sel), reqT = n ? [n[4] > 1 ? `เลเวลตัวละคร ${n[4]}` : '', ...n[3].map(([q, l]) => `${SKILLS[q].name} Lv.${l}`)].filter(Boolean) : [];
+  const canBar = !sk.passive && !sk.quiz && Tree.avail(S, sel) && lv > 0;
+  const det = `<div class="tdet"><div class="tdh">${SkillArt.art(sel)}<div><h3>${sk.name} <small>Lv.${lv}/${Tree.maxOf(sel)}</small></h3><small>${sk.cat || ''}${sk.passive ? '' : ` · MP ${SkillLv.mp(sel)} · คูลดาวน์ ${SkillLv.cd(sel)} วิ`}</small></div></div>
+    <p>${sk.desc || ''}</p>${sk.fx ? `<ul class="tfx">${sk.fx.map(f => `<li>${f}</li>`).join('')}</ul>` : ''}${reqT.length ? `<p class="treq ${Tree.reqOk(S, sel) ? 'ok' : ''}">ต้องการ: ${reqT.join(' · ')}</p>` : ''}
+    <div class="tbtn"><button class="btn primary" data-tu="${sel}" ${SkillLv.canUp(sel) ? '' : 'disabled'}>${lv ? 'อัปเลเวล' : 'เรียนสกิล'} (แต้ม ${S.skillPts || 0})</button>${sk.passive ? '' : `<button class="btn ghost" data-ti="${sel}">รายละเอียด</button>`}</div>
+    ${canBar ? `<div class="tbar"><small>ใส่ปุ่มลัด:</small>${[0, 1, 2, 3].map(i => `<button class="btn sm ${bar[i] === sel ? 'primary' : ''}" data-tb="${i}">${SKILL_KEYS[i]}</button>`).join('')}</div>` : sk.quiz ? '<p class="muted">สกิลใหญ่อยู่ที่ปุ่ม X เสมอ</p>' : ''}
+    </div>`;
+  this.setPanel(`🌳 สกิลทรี · ${Cls.name(S)} <span class="coin">แต้มสกิล <b>${S.skillPts || 0}</b></span>`, `<div class="tree"><div class="tgrid" style="width:${5 * CW}px;height:${rows * RH + 20}px"><svg class="tlines" width="${5 * CW}" height="${rows * RH + 20}">${lines}</svg>${nodes}</div>${det}</div>
+    <p class="muted">แถวบน: สกิลประจำอาชีพ · แถวกลาง: สกิลเสริมและสกิลติดตัว (Passive) · แถวล่าง: สกิลอาชีพขั้นสอง ${S.job ? '' : '(เปลี่ยนอาชีพที่ Lv.' + JOB_LV + ')'} · เส้นเชื่อมคือเงื่อนไขก่อนเรียน</p>`, true);
+  this.el.pbody.onclick = e => {
+    const t = e.target.closest('[data-tn]'); if (t) { this.panelOpt.sel = t.dataset.tn; Audio.sfx('ui'); this.renderPanel(); return; }
+    const u = e.target.closest('[data-tu]'); if (u) { if (SkillLv.up(u.dataset.tu)) { Player.recalc(); this.buildSkillbar(); } this.renderPanel(); return; }
+    const i = e.target.closest('[data-ti]'); if (i) { SkillInfo.open(i.dataset.ti); return; }
+    const b = e.target.closest('[data-tb]'); if (b) { const k = +b.dataset.tb; S.bar = (S.bar || Cls.of(S).skills.slice(0, 4)).slice(0, 4); const cur = Cls.of(S).skills.slice(0, 4); for (let j = 0; j < 4; j++) S.bar[j] = S.bar[j] || cur[j]; const j0 = S.bar.indexOf(sel); if (j0 >= 0) S.bar[j0] = S.bar[k]; S.bar[k] = sel; Skills.cd[k] = Math.max(Skills.cd[k], 1); this.buildSkillbar(); Audio.sfx('ui'); UI.toast(`ใส่ ${sk.name} ที่ปุ่ม ${SKILL_KEYS[k]} แล้ว`, 'quest'); this.renderPanel(); }
+  };
+};
 /* ============================================================
    Boot
    ============================================================ */
