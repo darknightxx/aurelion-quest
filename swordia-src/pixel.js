@@ -6,7 +6,7 @@
    Names, HP bars, damage numbers and glow effects are drawn crisp on top.
    ========================================================================== */
 const PX = {
-  S: 3,
+  S: (typeof innerWidth !== 'undefined' && Math.min(innerWidth, innerHeight * 1.6) < 900) ? 2 : 3,
   cache: new Map(),
   hex(c) { const n = parseInt(c.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; },
   canvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; const x = c.getContext('2d'); x.imageSmoothingEnabled = false; return c; },
@@ -646,7 +646,17 @@ PX.K = 1.6;
     return v;
   };
   const om = CP.componentDidMount;
-  CP.componentDidMount = function () { om.call(this); window.__swordia = this; };
+  CP.componentDidMount = function () {
+    om.call(this); window.__swordia = this;
+    // shrink the HUD (not the world canvas) on small screens so panels do not overlap
+    const fit = () => {
+      const cv = this.canvasRef.current, root = cv && cv.parentElement; if (!root) return;
+      const k = Math.max(.5, Math.min(1, innerWidth / 1280, innerHeight / 820));
+      for (const el of root.children) if (el !== cv) el.style.zoom = k;
+    };
+    this.hudFit = fit; fit(); addEventListener('resize', fit);
+    this.hudObs = new MutationObserver(fit); const cv = this.canvasRef.current; if (cv) this.hudObs.observe(cv.parentElement, { childList: true });
+  };
   const od = CP.derived;
   CP.derived = function () { const D = od.call(this); D.spd *= 1.35; return D; };
 }
