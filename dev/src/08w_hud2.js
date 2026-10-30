@@ -43,7 +43,7 @@ const HUD2 = {
     mk('h2cur', '');
     mk('h2top', ib('news', 'bell', 'ประกาศ') + ib('season', 'pass', 'Season Pass') + ib('gemshop', 'shop', 'ร้านเพชร') + ib('inv', 'bag', 'กระเป๋า (I)', '<small id="h2bag">0%</small>') + ib('menu', 'menu', 'เมนู'));
     mk('h2right', `<div id="h2quest"></div><div id="h2side">${ib('tree', 'star', 'สกิลทรี (P)')}${ib('char', 'person', 'ตัวละคร (C)')}${ib('quest', 'book', 'เควส (L)')}${ib('map', 'map', 'แผนที่ (M)')}${ib('pets', 'paw', 'สัตว์เลี้ยง (U)')}${ib('mvp', 'crown', 'บอส MVP')}${ib('ach', 'chart', 'ความสำเร็จ (K)')}</div>`);
-    mk('h2left', ib('friends', 'person', 'เพื่อน (Y)', '<b class="fbadge" hidden>0</b>') + ib('wardrobe', 'outfit', 'ตู้เสื้อผ้า (O)') + ib('jobs', 'trophy', 'สายอาชีพ (J)'));
+    mk('h2left', ib('friends', 'person', 'เพื่อน (Y)', '<b class="fbadge" hidden>0</b>') + ib('wardrobe', 'outfit', 'ตู้เสื้อผ้า (O)') + ib('jobs', 'trophy', 'สายอาชีพ (J)') + ib('events', 'star4', 'กิจกรรม'));
     mk('h2bl', `<b id="h2lv">1</b><div><span id="h2cp">⚔ 0</span><span><em id="h2xp">EXP 0.00%</em> · <em id="h2clock">00:00</em></span></div>`);
     mk('h2act', `<button class="h2big" data-x="atk" aria-label="โจมตี (Space)">${icon('claw')}</button><button class="h2c c1" data-x="tgt" aria-label="เปลี่ยนเป้าหมาย (Tab)">${icon('target')}</button><button class="h2c c2" data-x="auto" aria-label="ต่อสู้อัตโนมัติ">${icon('auto')}</button><button class="h2c c3" data-x="ride" aria-label="ขี่สัตว์ (V)">${icon('ride')}</button><button class="h2c c4" data-x="loot" aria-label="เก็บของรอบตัว (Z)">${icon('bag')}</button>`);
     hud.addEventListener('click', e => {

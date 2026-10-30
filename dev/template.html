@@ -1449,6 +1449,19 @@ body #portrait.pf-smith::before, .pfport.pf-smith::before { content: ''; positio
 .tdh { display: flex; gap: 10px; align-items: center; } .tdh svg { width: 56px; height: 56px; border-radius: 10px; flex: none; } .tdh h3 { margin: 0; } .tdh h3 small { color: #ffd45a; }
 .tfx { margin: 6px 0; padding-left: 18px; font-size: .92em; } .treq { color: #ff8a7a; font-size: .9em; } .treq.ok { color: #8ae07a; }
 .tbtn, .tbar { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+/* tier gear + events */
+.ic.r-tier.tt0 { color: #c9c9c9; filter: drop-shadow(0 0 2px #c9c9c9); }
+.ic.r-tier.tt1 { color: #9ab4c8; filter: drop-shadow(0 0 3px #9ab4c8); }
+.ic.r-tier.tt2 { color: #d88a4a; filter: drop-shadow(0 0 4px #d88a4a); }
+.ic.r-tier.tt3 { color: #e6eef8; filter: drop-shadow(0 0 5px #e6eef8); }
+.ic.r-tier.tt4 { color: #ffd24a; filter: drop-shadow(0 0 6px #ffd24a); }
+.ic.r-tier.tt5 { color: #7ae8e0; filter: drop-shadow(0 0 7px #7ae8e0); }
+.ic.r-tier.tt6 { color: #9ad0ff; filter: drop-shadow(0 0 8px #9ad0ff); }
+.ic.r-tier.tt7 { color: #ff6ad8; filter: drop-shadow(0 0 9px #ff6ad8); }
+.ic.r-tier.tt7 { animation: ttrain 2s linear infinite; } @keyframes ttrain { 0% { color: #ff6ad8; } 25% { color: #ffd24a; } 50% { color: #7ae8e0; } 75% { color: #9ad0ff; } 100% { color: #ff6ad8; } }
+.evlist { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.evrow { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; padding: 8px 10px; border-radius: 10px; background: rgba(0,0,0,.22); border-left: 4px solid var(--ec); }
+.evrow b { color: var(--ec); } .evrow small { flex: 1; opacity: .75; } .evrow span { font-weight: 700; } .evrow.on { background: linear-gradient(90deg, color-mix(in srgb, var(--ec) 25%, transparent), rgba(0,0,0,.2)); } .evrow.on span { color: #8ae07a; }
 /* news */
 .newslist { list-style: none; padding: 0; margin: 0 0 10px; display: grid; gap: 8px; }
 .newslist .nw { padding: 8px 10px; border-radius: 8px; background: rgba(0,0,0,.2); } .newslist .nw p { margin: 3px 0 0; opacity: .85; font-size: .92em; line-height: 1.5; }
